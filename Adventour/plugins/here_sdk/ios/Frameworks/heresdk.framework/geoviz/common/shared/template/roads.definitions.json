@@ -1,0 +1,194 @@
+{
+    "extends": ["railroads.definitions.json"],
+    "definitions": {
+        "tunnelDashArray1": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                8, 2,
+                11, 4,
+                20, 8]
+        },
+        "tunnelDashArray2": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                8, 2,
+                11, 4,
+                20, 8]
+        },
+        "Ferry.PolylineStyles.DashArray1": {
+            "value": 12
+        },
+        "Ferry.PolylineStyles.DashArray2": {
+            "value": 12
+        },
+        "Ferry.PolylineStyles.SecondaryColor": {
+            "value": "#00000000"
+        },
+        "zoomWidthPpiScaled": {
+            "value": ["ppi-scale", ["ref", "zoomWidth"], ["ref", "ScalePpi.ppi.scale"]]
+        },
+        "zoomWidthDiscretePpiScaled": {
+            "value": ["ppi-scale", ["ref", "zoomWidthDiscrete"], ["ref", "ScalePpi.ppi.scale"]]
+        },
+        "road4LineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Category4.Width"]]
+        },
+        "road3LineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Category3.Width"]]
+        },
+        "road2LineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Category2.Width"]]
+        },
+        "road1LineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Category1.Width"]]
+        },
+        "road0LineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Category0.Width"]]
+        },
+        "road0CenterLineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Category0.CenterLine.Width"]]
+        },
+        "ferryLineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Ferry.PolylineStyles.Width"]]
+        },
+        "walkwayLineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Walkway.Width"]]
+        },
+        "pedestrianOnlyLineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Street.Pedestrian.Width"]]
+        },
+        "road4OutlineWidthZoom": {
+            "value": [
+                "world-ppi-scale",
+                [
+                    "+",
+                    ["*", 2, ["ref", "Street.Category4.Outline.Width"]],
+                    ["ref", "Street.Category4.Width"]
+                ]
+            ]
+        },
+        "road3OutlineWidthZoom": {
+            "value": [
+                "world-ppi-scale",
+                [
+                    "+",
+                    ["*", 2, ["ref", "Street.Category3.Outline.Width"]],
+                    ["ref", "Street.Category3.Width"]
+                ]
+            ]
+        },
+        "road2OutlineWidthZoom": {
+            "value": [
+                "world-ppi-scale",
+                [
+                    "+",
+                    ["*", 2, ["ref", "Street.Category2.Outline.Width"]],
+                    ["ref", "Street.Category2.Width"]
+                ]
+            ]
+        },
+        "road1OutlineWidthZoom": {
+            "value": [
+                "world-ppi-scale",
+                [
+                    "+",
+                    ["*", 2, ["ref", "Street.Category1.Outline.Width"]],
+                    ["ref", "Street.Category1.Width"]
+                ]
+            ]
+        },
+        "road0OutlineWidthZoom": {
+            "value": [
+                "world-ppi-scale",
+                [
+                    "+",
+                    ["*", 2, ["ref", "Street.Category0.Outline.Width"]],
+                    ["ref", "Street.Category0.Width"]
+                ]
+            ]
+        },
+        "walkwayOutlineWidthZoom": {
+            "value": [
+                "world-ppi-scale",
+                [
+                    "+",
+                    ["*", 2, ["ref", "Street.Walkway.Outline.Width"]],
+                    ["ref", "Street.Walkway.Width"]
+                ]
+            ]
+        },
+        "Street.Category0.TextFarThreshold": {
+            "value": 0.95
+        },
+        "Street.Category1.TextFarThreshold": {
+            "value": 0.92
+        },
+        "Street.Category2.TextFarThreshold": {
+            "value": 0.9
+        },
+        "Street.Category3.TextFarThreshold": {
+            "value": 0.88
+        },
+        "Street.Category4.TextFarThreshold": {
+            "value": 0.85
+        },
+        "transparent": {
+            "value": "#00000000"
+        },
+        "ferryDashArray": {
+            "value": [
+                "make-vector",
+                ["world-discrete-ppi-scale", ["ref", "Ferry.PolylineStyles.DashArray1"]],
+                ["world-discrete-ppi-scale", ["ref", "Ferry.PolylineStyles.DashArray2"]],
+                0,
+                0
+            ]
+        },
+        "tunnelDashArray": {
+            "value": [
+                "make-vector",
+                ["world-discrete-ppi-scale", ["ref", "tunnelDashArray1"]],
+                ["world-discrete-ppi-scale", ["ref", "tunnelDashArray2"]],
+                0,
+                0
+            ]
+        },
+        "Street.Category0.TunnelOutlineColor": {
+            "value": ["ref", "Street.Category0.OutlineColor"]
+        },
+        "Street.Category1.TunnelOutlineColor": {
+            "value": ["ref", "Street.Category1.OutlineColor"]
+        },
+        "Street.Category2.TunnelOutlineColor": {
+            "value": ["ref", "Street.Category2.OutlineColor"]
+        },
+        "Street.Category3.TunnelOutlineColor": {
+            "value": ["ref", "Street.Category3.OutlineColor"]
+        },
+        "Street.Category4.TunnelOutlineColor": {
+            "value": ["ref", "Street.Category4.OutlineColor"]
+        },
+        "Street.Category0.TollBridgeColor": {
+            "value": ["ref", "Street.Category0.BridgeColor"]
+        },
+        "Street.Category0.TollTunnelCenterlineColor": {
+            "value": ["ref", "Street.Category0.TollCenterlineColor"]
+        },
+        "Street.Category0.TollTunnelOutlineColor": {
+            "value": ["ref", "Street.Category0.TollOutlineColor"]
+        },
+        "Street.Category0.FontStyle.TollColor": {
+            "value": ["ref", "Street.Category0.FontStyle.Color"]
+        },
+        "Street.Category1.FontStyle.TollColor": {
+            "value": ["ref", "Street.Category1.FontStyle.Color"]
+        },
+        "Street.Category2.FontStyle.TollColor": {
+            "value": ["ref", "Street.Category2.FontStyle.Color"]
+        },
+        "Street.Category3.FontStyle.TollColor": {
+            "value": ["ref", "Street.Category3.FontStyle.Color"]
+        },
+        "Street.Category4.FontStyle.TollColor": {
+            "value": ["ref", "Street.Category4.FontStyle.Color"]
+        }
+    }
+}

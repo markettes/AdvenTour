@@ -1,0 +1,99 @@
+{
+    "definitions": {
+        "Is.Admin.Country": {
+            "value": ["==", ["get", "kind"], "country"]
+        },
+        "Is.Admin.State": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "region"],
+                ["==", ["get", "kind_detail"], "state"]
+            ]
+        },
+        "Is.CityCenter": {
+            "value": ["==", ["get", "kind"], "locality"]
+        },
+        "Is.CityCenter.Class1": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "locality"],
+                [">=", ["get", "population"], 1000000]
+            ]
+        },
+        "Is.CityCenter.Class2": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "locality"],
+                [">=", ["get", "population"], 250000]
+            ]
+        },
+        "Is.CityCenter.Class3": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "locality"],
+                [">=", ["get", "population"], 100000]
+            ]
+        },
+        "Is.CityCenter.Class4": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "locality"],
+                [">=", ["get", "population"], 30000]
+            ]
+        },
+        "Is.CityCenter.Class5": {
+            "value": [
+                "any",
+                ["==", ["get", "kind"], "locality"],
+                ["==", ["get", "kind"], "borough"]
+            ]
+        },
+        "Is.CityDistrict.Class1": {
+            "value": ["==", ["get", "kind_detail"], "hamlet"]
+        },
+        "Is.CityDistrict.Class2": {
+            "value": ["==", ["get", "kind"], "neighbourhood"]
+        },
+        "Is.CityDistrict.Class3": {
+            "value": ["==", ["get", "kind"], "microhood"]
+        },
+        "Is.CityDistrict.Japan.Block": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "microhood"],
+                ["==", ["get", "kind_detail"], "block"]
+            ]
+        },
+        "Is.CityDistrict.Japan.Parcel": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "microhood"],
+                ["==", ["get", "kind_detail"], "parcel"]
+            ]
+        },
+        "Is.CityDistrict.Japan.Oaza": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "oaza"]
+            ]
+        },
+        "Is.CityDistrict.Japan.Aza": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "aza"]
+            ]
+        },
+        "CityCenter.IconKind": {
+            "value": [
+                "case",
+                ["!", ["ref", "Is.CityCenter"]],
+                null,
+                ["get", "country_capital"],
+                "country_capital",
+                ["get", "region_capital"],
+                "state_capital",
+                "city"
+            ]
+        }
+    }
+}

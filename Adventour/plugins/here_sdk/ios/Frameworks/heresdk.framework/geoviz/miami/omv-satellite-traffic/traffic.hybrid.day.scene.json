@@ -1,0 +1,9 @@
+{
+  "inherit": "scene.json",
+  "extends": [
+    "common.json",
+    "../schemes/normal.day.definitions.json",
+    "../schemes/satellite.day.definitions.json",
+    "../schemes/hybrid.day.definitions.json"
+  ]
+}

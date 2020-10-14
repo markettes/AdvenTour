@@ -1,0 +1,5 @@
+{
+    "traffic_flow": { "factory": "tilezen_traffic_flow.line" },
+    "traffic_incidents": { "factory": "tilezen_traffic_incident.line" },
+    "incident_icons": { "factory": "tilezen_traffic_incident.point" }
+}

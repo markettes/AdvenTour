@@ -1,0 +1,189 @@
+{
+    "definitions": {
+        "areaIconMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "aerodrome": {
+                        "iconName": "airport_area"
+                    },
+                    "theme_park": {
+                        "iconName": "amusement_park"
+                    },
+                    "zoo": {
+                        "iconName": "animal_park"
+                    },
+                    "golf_course": {
+                        "iconName": "golf_course"
+                    },
+                    "hospital": {
+                        "iconName": "hospital_complex"
+                    },
+                    "park": {
+                        "iconName": "park"
+                    },
+                    "commercial": {
+                        "iconName": "shopping_complex"
+                    },
+                    "sports_centre": {
+                        "iconName": "sport_complex"
+                    },
+                    "university": {
+                        "iconName": "university_campus"
+                    }
+                }
+            ]
+        },
+        "cityCenterMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "city": {
+                        "iconName": "circle"
+                    },
+                    "country_capital": {
+                        "iconName": "square_capital"
+                    },
+                    "state_capital": {
+                        "iconName": "square"
+                    }
+                }
+            ]
+        },
+        "truckMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "weight": {
+                        "iconName": "weight_restriction"
+                    },
+                    "height": {
+                        "iconName": "height_restriction"
+                    },
+                    "length": {
+                        "iconName": "length_restriction"
+                    },
+                    "width": {
+                        "iconName": "width_restriction"
+                    },
+                    "wpa": {
+                        "iconName": "weight_per_axle_restriction"
+                    },
+                    "hazmat": {
+                        "iconName": "hazmat_general"
+                    },
+                    "other": {
+                        "iconName": "general_truck_restriction"
+                    },
+                    "multiple": {
+                        "iconName": "general_truck_restriction"
+                    },
+                    "kpra": {
+                        "iconName": "length_restriction_kpra"
+                    }
+                }
+            ]
+        },
+        "tmcMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "accident": {
+                        "iconName": "tmc_blocking_accident"
+                    },
+                    "disabled_vehicle": {
+                        "iconName": "tmc_blocking_accident"
+                    },
+                    "planned_event": {
+                        "iconName": "tmc_blocking_closure"
+                    },
+                    "road_closure": {
+                        "iconName": "tmc_blocking_closure"
+                    },
+                    "congestion": {
+                        "iconName": "tmc_blocking_congestion"
+                    },
+                    "mass_transit": {
+                        "iconName": "tmc_blocking_other"
+                    },
+                    "road_hazard": {
+                        "iconName": "tmc_blocking_other"
+                    },
+                    "weather": {
+                        "iconName": "tmc_blocking_other"
+                    },
+                    "other": {
+                        "iconName": "tmc_blocking_other"
+                    },
+                    "construction": {
+                        "iconName": "tmc_blocking_roadworks"
+                    },
+                    "tmc_pattern": {
+                        "iconName": "tmc_pattern"
+                    }
+                }
+            ]
+        },
+        "weatherMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {}
+            ]
+        },
+        "ospMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "on_street_parking_pattern": {
+                        "iconName": "restrictedparking_pattern"
+                    }
+                }
+            ]
+        },
+        "exitInfoMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "exit_info_simplified": {
+                        "iconName": "exit_info_simplified"
+                    }
+                }
+            ]
+        },
+        "variousMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "mountain": {
+                        "iconName": "mountain"
+                    },
+                    "volcano": {
+                        "iconName": "volcano"
+                    },
+                    "one_way_arrow": {
+                        "iconName": "arrow"
+                    }
+                }
+            ]
+        },
+        "poiMapping": {
+            "type": "selector",
+            "value": [
+                "literal",
+                {
+                    "poi_generic_empty": {
+                        "iconName": "generic_empty"
+                    }
+                }
+            ]
+        }
+    }
+}

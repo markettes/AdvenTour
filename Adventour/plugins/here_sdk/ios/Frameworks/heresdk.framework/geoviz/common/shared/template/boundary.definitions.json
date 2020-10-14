@@ -1,0 +1,20 @@
+{
+    "definitions": {
+        "CountryBoundary.SoftDepthThreshold": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                2, 300000,
+                7, 16000,
+                10, 7500,
+                12, 5000,
+                14, 4500,
+                16, 3000,
+                18, 2000]
+        },
+        "zoomWidthPpiScaled": {
+            "value": ["ppi-scale", ["ref", "zoomWidth"], ["ref", "ScalePpi.ppi.scale"]]
+        },
+        "aaScaleAdjustment": {
+            "value": 0.5
+        }
+    }
+}

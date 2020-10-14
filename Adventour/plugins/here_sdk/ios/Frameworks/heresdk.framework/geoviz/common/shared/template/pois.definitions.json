@@ -1,0 +1,61 @@
+{
+    "definitions": {
+        "PointOfInterest.FontStyle.Leading": {
+            "value": 2
+        },
+        "PoiIconPathPrefix": {
+            "value": "day_grey/"
+        },
+        "PoiIconSize": {
+            "value": ["ppi-scale", ["ref", "PointOfInterest.General.IconSize"], ["ref", "ScalePpi.labels"]]
+        },
+        "Icon.POI.Brightness": {
+            "value": 1
+        },
+        "IconText.Icon.POI.Brightness": {
+            "value": 1
+        },
+        "IconText.Text.POI.Brightness": {
+            "value": 1
+        },
+        "poiPerspectiveScaleMax": {
+            "value": ["ref", "Icon.SmoothScaling.Max"]
+        },
+        "poiPerspectiveScaleMin": {
+            "value": ["ref", "Icon.SmoothScaling.Min"]
+        },
+        "IconShadow.Enabled.POI": {
+            "value": false
+        },
+        "IconShadow.Color": {
+            "value": "#505050a1"
+        },
+        "IconShadow.BlurRadius": {
+            "value": 3
+        },
+        "IconShadow.SizeIncrement": {
+            "value": 0
+        },
+        "IconShadow.POI.SizeIncrement": {
+            "value": 0
+        },
+        "IconShadow.ShearFactor.X": {
+            "value": 0.4
+        },
+        "IconShadow.ShearFactor.Y": {
+            "value": 0.4
+        },
+        "IconShadow.Distance.X": {
+            "value": 3
+        },
+        "IconShadow.Distance.Y": {
+            "value": 3
+        },
+        "IconShadow.POI.Distance.X": {
+            "value": 4
+        },
+        "IconShadow.POI.Distance.Y": {
+            "value": 5
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "definitions": {
+        "Polygon.Land.Disable.Shading": {
+            "value": false
+        },
+        "Polygon.Ambient.Factor": {
+            "value": 1
+        },
+        "Polygon.Diffuse.Factor": {
+            "value": 1
+        }
+    }
+}

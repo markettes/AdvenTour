@@ -1,0 +1,13 @@
+{
+    "styles": [
+        {
+            "styleSet": "geogrid",
+            "technique": "geogrid",
+            "attr": {
+                "grid-thickness": 2,
+                "grid-color": "#c8c8c8",
+                "rows-per-tile": 10
+            }
+        }
+    ]
+}

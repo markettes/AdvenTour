@@ -1,0 +1,16 @@
+{
+    "styles": [
+        {
+            "styleSet": "terrain",
+            "technique": "terrain",
+            "attr": {
+                "gradient": ["ref", "TerrainGradient"],
+                "far-fade-distance": ["ref", "FadeDistanceFar"],
+                "start-fade-distance": ["ref", "FadeDistanceStart"],
+                "ambient": ["ref", "Terrain.Ambient.Factor"],
+                "diffuse": ["ref", "Terrain.Diffuse.Factor"],
+                "interpolate-colors": ["ref", "ElevationMap.Color.Interpolation"]
+            }
+        }
+    ]
+}

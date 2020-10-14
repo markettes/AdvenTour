@@ -1,0 +1,10 @@
+[
+    { "group": "spacebackground" },
+    { "group": "geohalo" },
+    { "group": "northpole" },
+    { "group": "southpole" },
+    { "group": "depthsky" },
+    { "group": "rasterterrain" },
+    { "group": "geofog" },
+    { "group": "labels" }
+]

@@ -1,0 +1,32 @@
+{
+    "definitions": {
+        "RefPpi": {
+            "value": 72
+        },
+        "ScalePpi.none": {
+            "value": 1
+        },
+        "ScalePpi.labels": {
+            "value": [
+                "+",
+                [
+                    "*",
+                    ["-", ["ppi"], ["ref", "RefPpi"]],
+                    0.005
+                ],
+                1
+            ]
+        },
+        "ScalePpi.ppi.scale": {
+            "value": [
+                "+",
+                [
+                    "*",
+                    ["-", ["ppi"], ["ref", "RefPpi"]],
+                    0.0025
+                ],
+                1
+            ]
+        }
+    }
+}

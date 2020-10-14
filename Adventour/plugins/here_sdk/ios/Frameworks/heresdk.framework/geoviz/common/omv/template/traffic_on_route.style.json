@@ -1,0 +1,54 @@
+{
+    "styles": [
+        {
+            "styleSet": "traffic_on_route",
+            "technique": "line",
+            "category": ["match", ["get", "traffic"],
+                "none", "traffic-on-route-blocking",
+                ["stationary", "queuing"], "traffic-on-route-very-high",
+                ["slow", "minor"], "traffic-on-route-high",
+                ["free", "unknown"], "traffic-on-route-normal",
+                "traffic-on-route"],
+            "attr": {
+                "width": ["world-ppi-scale", ["ref", "TrafficStyle.OnRoute.Category0.Width"]],
+                "antialias": true,
+                "color": [
+                    "case",
+                    ["==", ["get", "id"], "route-traveled"],
+                    ["ref", "TrafficStyle.OnRoute.TraveledColor"],
+                    ["==", ["get", "traffic"], "none"],
+                    ["ref", "TrafficStyle.OnRoute.BlockingColor"],
+                    [
+                        "any",
+                        ["==", ["get", "traffic"], "stationary"],
+                        ["==", ["get", "traffic"], "queuing"]
+                    ],
+                    ["ref", "TrafficStyle.OnRoute.VeryHighColor"],
+                    [
+                        "any",
+                        ["==", ["get", "traffic"], "slow"],
+                        ["==", ["get", "traffic"], "minor"]
+                    ],
+                    ["ref", "TrafficStyle.OnRoute.HighColor"],
+                    ["ref", "TrafficStyle.OnRoute.NormalColor"]
+                ]
+            }
+        },
+        {
+            "styleSet": "traffic_on_route",
+            "technique": "line",
+            "description": "outline",
+            "category": "traffic-on-route-outline",
+            "attr": {
+                "width": [
+                    "world-ppi-scale",
+                    ["+", ["ref", "TrafficStyle.OnRoute.Category0.OutlineWidth"], ["ref", "TrafficStyle.OnRoute.Category0.Width"]]
+                ],
+                "antialias": true,
+                "color": ["match", ["get", "id"],
+                    "route-traveled", ["ref", "TrafficStyle.OnRoute.TraveledOutlineColor"],
+                    ["ref", "TrafficStyle.OnRoute.OutlineColor"]]
+            }
+        }
+    ]
+}

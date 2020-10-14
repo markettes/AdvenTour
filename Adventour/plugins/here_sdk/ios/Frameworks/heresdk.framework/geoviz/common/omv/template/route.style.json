@@ -1,0 +1,44 @@
+{
+    "styles": [
+        {
+            "styleSet": "route",
+            "technique": "line",
+            "category": ["match", ["get", "id"],
+                "route-upcoming", "route-upcoming",
+                "route-traveled", "route-traveled",
+                "route"],
+            "attr": {
+                "width": ["world-ppi-scale", ["ref", "RouteStyle.1.Route.Width"]],
+                "antialias": true,
+                "color": ["match", ["get", "id"],
+                    "route-upcoming", ["ref", "RouteStyle.1.Route.UpcomingColor"],
+                    "route-traveled", ["ref", "RouteStyle.1.Route.TraveledColor"],
+                    ["ref", "RouteStyle.1.Route.Color"]]
+            }
+        },
+        {
+            "styleSet": "route",
+            "technique": "line",
+            "description": "outline",
+            "category": ["match", ["get", "id"],
+                "route-upcoming", "route-upcoming-outline",
+                "route-traveled", "route-traveled-outline",
+                "route-outline"],
+            "attr": {
+                "width": [
+                    "world-ppi-scale",
+                    [
+                        "+",
+                        ["*", 2, ["ref", "RouteStyle.1.Route.OutlineWidth"]],
+                        ["ref", "RouteStyle.1.Route.Width"]
+                    ]
+                ],
+                "antialias": true,
+                "color": ["match", ["get", "id"],
+                    "route-upcoming", ["ref", "RouteStyle.1.Route.UpcomingOutlineColor"],
+                    "route-traveled", ["ref", "RouteStyle.1.Route.TraveledOutlineColor"],
+                    ["ref", "RouteStyle.1.Route.OutlineColor"]]
+            }
+        }
+    ]
+}

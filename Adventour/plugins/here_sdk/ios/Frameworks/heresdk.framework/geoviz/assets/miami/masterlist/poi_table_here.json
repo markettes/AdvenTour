@@ -1,0 +1,2604 @@
+{
+    "name": "poiMasterList",
+    "poiList": [
+        {
+            "pdsId": "100-1000-0000",
+            "name": "Restaurant",
+            "altNames": [
+                "bbq",
+                "ice_cream",
+                "restaurant"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 264,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0001",
+            "name": "Casual Dining",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 267,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0002",
+            "name": "Fine Dining",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 270,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0003",
+            "name": "Take Out and Delivery Only",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 273,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0003",
+            "name": "Take Out and Delivery Only",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconMinLevel": 24,
+            "iconMaxLevel": 0,
+            "textMinLevel": 24,
+            "textMaxLevel": 0
+        },
+        {
+            "pdsId": "100-1000-0004",
+            "name": "Food Market-Stall",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 276,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0005",
+            "name": "Taqueria",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 279,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0006",
+            "name": "Deli",
+            "altNames": [
+                "deli"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 282,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0007",
+            "name": "Cafeteria",
+            "altNames": [
+                "cafe"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 285,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0008",
+            "name": "Bistro",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_main",
+            "priority": 288,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1000-0009",
+            "name": "Fast Food",
+            "altNames": [
+                "fast_food"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_fastfood",
+            "priority": 291,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1100-0000",
+            "name": "Coffee-Tea",
+            "altNames": [
+                "coffee"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_coffee",
+            "priority": 297,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1100-0010",
+            "name": "Coffee Shop",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_coffee",
+            "priority": 300,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "100-1100-0331",
+            "name": "Tea House",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_coffee",
+            "priority": 303,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0000",
+            "name": "Nightlife-Entertainment",
+            "altNames": [
+                "nightclub"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_nightclub",
+            "priority": 306,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0011",
+            "name": "Bar or Pub",
+            "altNames": [
+                "alcohol",
+                "bar",
+                "biergarten",
+                "pub"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_pub",
+            "priority": 309,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0012",
+            "name": "Night Club",
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_nightclub",
+            "priority": 312,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0013",
+            "name": "Dancing",
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_nightclub",
+            "priority": 315,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0014",
+            "name": "Karaoke",
+            "altNames": [
+                "karaoke_box",
+                "karaoke"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_karaoke",
+            "priority": 318,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0016",
+            "name": "Billiards-Pool Hall",
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_pool",
+            "priority": 324,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0017",
+            "name": "Video Arcade-Game Room",
+            "altNames": [
+                "adult_gaming_centre"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_arcadegame",
+            "priority": 327,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0306",
+            "name": "Adult Entertainment",
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_nightclub",
+            "priority": 333,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2000-0368",
+            "name": "Cocktail Lounge",
+            "iconNextToEachOther": "no",
+            "iconName": "eatdrink_cocktail",
+            "priority": 336,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2100-0019",
+            "name": "Cinema",
+            "altNames": [
+                "cinema"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_cinema",
+            "priority": 111,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2200-0000",
+            "name": "Theatre, Music and Culture",
+            "altNames": [
+                "theatre"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_main",
+            "priority": 339,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2200-0020",
+            "name": "Performing Arts",
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_main",
+            "priority": 342,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2300-0000",
+            "name": "Gambling-Lottery-Betting",
+            "altNames": [
+                "gambling"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_casino",
+            "priority": 345,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2300-0000",
+            "name": "Gambling-Lottery-Betting",
+            "altNames": [
+                "gambling"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconMinLevel": 24,
+            "iconMaxLevel": 0,
+            "textMinLevel": 24,
+            "textMaxLevel": 0
+        },
+        {
+            "pdsId": "200-2300-0021",
+            "name": "Casino",
+            "altNames": [
+                "casino"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "goingout_casino",
+            "priority": 348,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "200-2300-0022",
+            "name": "Lottery Booth",
+            "altNames": [
+                "lottery"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "service_ticketing",
+            "priority": 351,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3000-0000",
+            "name": "Landmark-Attraction",
+            "altNames": [
+                "archaeological_site",
+                "geyser",
+                "landmark",
+                "lighthouse",
+                "obelisk",
+                "windmill"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 45,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3000-0023",
+            "name": "Tourist Attraction",
+            "altNames": [
+                "attraction",
+                "memorial"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 77,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3000-0024",
+            "name": "Gallery",
+            "altNames": [
+                "arts_centre",
+                "artwork",
+                "gallery"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sights_gallery",
+            "priority": 354,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3000-0025",
+            "name": "Historical Monument",
+            "altNames": [
+                "monument",
+                "stone"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 108,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3000-0351",
+            "name": "Distillery",
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 189,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3100-0000",
+            "name": "Museum",
+            "altNames": [
+                "museum"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 168,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3100-0026",
+            "name": "Science Museum",
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 171,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3100-0027",
+            "name": "Children's Museum",
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 174,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3100-0028",
+            "name": "History Museum",
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 177,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3100-0029",
+            "name": "Art Museum",
+            "iconNextToEachOther": "no",
+            "iconName": "sights_attraction",
+            "priority": 180,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0000",
+            "name": "Religious Place",
+            "altNames": [
+                "place_of_worship",
+                "religion"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 444,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0030",
+            "name": "Church",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 447,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0031",
+            "name": "Temple",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 450,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0031",
+            "name": "Temple",
+            "kindDetail": "Buddhist",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_temple_buddhist_jpn",
+            "priority": 85,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0032",
+            "name": "Synagogue",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 453,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0033",
+            "name": "Ashram",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 456,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0034",
+            "name": "Mosque",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 459,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0035",
+            "name": "Shrine",
+            "kindDetail": "Shinto",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_shinto_jpn",
+            "priority": 137,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0309",
+            "name": "Other Place of Worship",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 462,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "300-3200-0375",
+            "name": "Gurdwara",
+            "iconNextToEachOther": "no",
+            "iconName": "religious_main",
+            "priority": 465,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "350-3500-0300",
+            "name": "Bay-Harbor",
+            "altNames": [
+                "boat_storage",
+                "boatyard",
+                "mooring"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_harbor",
+            "priority": 150,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "350-3510-0237",
+            "name": "Mountain Passes",
+            "altNames": [
+                "saddle"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "address",
+            "priority": 195,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4000-4580",
+            "name": "Public Sports Airport",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_airport",
+            "priority": 357,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4000-4581",
+            "name": "Airport",
+            "altNames": [
+                "aerodrome",
+                "airport"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_airport",
+            "priority": 3,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4000-4581",
+            "name": "Airport",
+            "altNames": [
+                "aerodrome",
+                "airport"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_airport",
+            "priority": 3,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4000-4582",
+            "name": "Airport Terminal",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_airport",
+            "priority": 30,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4000-4582",
+            "name": "Airport Terminal",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_airport",
+            "priority": 30,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0035",
+            "name": "Train Station",
+            "altNames": [
+                "station"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_train",
+            "priority": 21,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0035",
+            "name": "Train Station",
+            "altNames": [
+                "station"
+            ],
+            "booleanFlag": "is_speed_rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_shinkansen_jpn",
+            "priority": 21,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0035",
+            "name": "Train Station",
+            "altNames": [
+                "station"
+            ],
+            "booleanFlag": "is_state_rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_train",
+            "priority": 23,
+            "iconMinLevel": 12,
+            "iconMaxLevel": 24,
+            "textMinLevel": 12,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0035",
+            "name": "Train Station",
+            "altNames": [
+                "station"
+            ],
+            "booleanFlag": "is_private_rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_train",
+            "priority": 26,
+            "iconMinLevel": 12,
+            "iconMaxLevel": 24,
+            "textMinLevel": 12,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0036",
+            "name": "Bus Station",
+            "altNames": [
+                "bus_station"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_bus",
+            "priority": 81,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0037",
+            "name": "Underground Train-Subway",
+            "altNames": [
+                "substation"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_citymetro",
+            "priority": 84,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0037",
+            "name": "Underground Train-Subway",
+            "altNames": [
+                "substation"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_citymetro",
+            "priority": 84,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0038",
+            "name": "Commuter Rail Station",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_regional",
+            "priority": 87,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0038",
+            "name": "Commuter Rail Station",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_light",
+            "priority": 87,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0039",
+            "name": "Commuter Train",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_regional",
+            "priority": 90,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Transport Access",
+            "pdsId": "400-4100-0040",
+            "name": "Public Transit Access",
+            "altNames": [
+                "subway_entrance"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "priority": 27,
+            "iconMinLevel": 24,
+            "iconMaxLevel": 0,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0042",
+            "name": "Bus Stop",
+            "altNames": [
+                "bus_stop"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_bus",
+            "priority": 93,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_speed_rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_shinkansen_jpn",
+            "priority": 20,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_state_rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_train",
+            "priority": 22,
+            "iconMinLevel": 12,
+            "iconMaxLevel": 24,
+            "textMinLevel": 12,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_private_rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_train",
+            "priority": 24,
+            "iconMinLevel": 12,
+            "iconMaxLevel": 24,
+            "textMinLevel": 12,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_subway",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_rail_citymetro",
+            "priority": 83,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_suburban",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_rail_light",
+            "priority": 86,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_tram",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_rail_light",
+            "priority": 97,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_monorail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_monorail",
+            "priority": 99,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_aerial",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_aerial",
+            "priority": 101,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Multi-modal Japan Public Transport",
+            "pdsId": "400-4100-0043",
+            "name": "Local Transit",
+            "booleanFlag": "is_funicular",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "yes",
+            "iconName": "transport_inclined",
+            "priority": 103,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0044",
+            "name": "Ferry Terminal",
+            "altNames": [
+                "ferry_terminal"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_ferry",
+            "priority": 141,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0045",
+            "name": "Boat Ferry",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_ferry",
+            "priority": 95,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0046",
+            "name": "Rail Ferry",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_ferry",
+            "priority": 96,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4100-0047",
+            "name": "Taxi Stand",
+            "altNames": [
+                "taxi"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_taxi",
+            "priority": 204,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 0,
+            "textMaxLevel": 0
+        },
+        {
+            "pdsId": "400-4100-0326",
+            "name": "Tollbooth",
+            "altNames": [
+                "toll_booth"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "toll_booth",
+            "priority": 105,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 24,
+            "textMaxLevel": 0
+        },
+        {
+            "group": "Japan Toll Booth",
+            "pdsId": "400-4100-0326",
+            "name": "Tollbooth",
+            "altNames": [
+                "toll_booth"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "toll_booth_jpn",
+            "priority": 105,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 24,
+            "textMaxLevel": 0
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0337",
+            "name": "Lightrail",
+            "altNames": [
+                "tram_stop"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_light",
+            "priority": 98,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0337",
+            "name": "Lightrail",
+            "altNames": [
+                "tram_stop"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_rail_light",
+            "priority": 98,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0339",
+            "name": "Monorail",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_monorail",
+            "priority": 100,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0339",
+            "name": "Monorail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_monorail",
+            "priority": 100,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0340",
+            "name": "Aerial Tramway",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_aerial",
+            "priority": 102,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0340",
+            "name": "Aerial Tramway",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_aerial",
+            "priority": 102,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Public Transport",
+            "pdsId": "400-4100-0342",
+            "name": "Inclined Rail",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_inclined",
+            "priority": 104,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Public Transport",
+            "pdsId": "400-4100-0342",
+            "name": "Inclined Rail",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "transport_inclined",
+            "priority": 104,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4300-0000",
+            "name": "Rest Area",
+            "altNames": [
+                "rest_area"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_picnicarea",
+            "priority": 6,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4300-0199",
+            "name": "Complete Rest Area",
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_picnicarea",
+            "priority": 9,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "400-4300-0199",
+            "name": "Complete Rest Area",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_sa_jpn",
+            "priority": 9,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4300-0200",
+            "name": "Parking and Restroom Only Rest Area",
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_picnicarea",
+            "priority": 12,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "400-4300-0200",
+            "name": "Parking and Restroom Only Rest Area",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_pa_jpn",
+            "priority": 12,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4300-0201",
+            "name": "Parking Only Rest Area",
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_picnicarea",
+            "priority": 25,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "400-4300-0201",
+            "name": "Parking Only Rest Area",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_pa_jpn",
+            "priority": 25,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4300-0202",
+            "name": "Motorway Service Rest Area",
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_picnicarea",
+            "priority": 14,
+            "iconMinLevel": 11,
+            "iconMaxLevel": 24,
+            "textMinLevel": 11,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "400-4300-0308",
+            "name": "Scenic Overlook Rest Area",
+            "altNames": [
+                "viewpoint"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "nature_overlook",
+            "priority": 51,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5000-0000",
+            "name": "Hotel or Motel",
+            "altNames": [
+                "hotel",
+                "love_hotel"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 207,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5000-0053",
+            "name": "Hotel",
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 210,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5000-0054",
+            "name": "Motel",
+            "altNames": [
+                "motel"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 213,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0000",
+            "name": "Lodging",
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 216,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0055",
+            "name": "Hostel",
+            "altNames": [
+                "hostel"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 219,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0056",
+            "name": "Campground",
+            "altNames": [
+                "summer_camp"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_camping",
+            "priority": 153,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0057",
+            "name": "Guest House",
+            "altNames": [
+                "chalet",
+                "guest_house"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 222,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0058",
+            "name": "Bed and Breakfast",
+            "altNames": [
+                "bed_and_breakfast"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 225,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0059",
+            "name": "Holiday Park",
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 228,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0060",
+            "name": "Short-Time Motel",
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_hotel",
+            "priority": 231,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "500-5100-0061",
+            "name": "Ryokan",
+            "altNames": [
+                "motel"
+            ],
+            "iconNextToEachOther": "no",
+            "iconMinLevel": 24,
+            "iconMaxLevel": 0,
+            "textMinLevel": 24,
+            "textMaxLevel": 0
+        },
+        {
+            "pdsId": "500-5100-0061",
+            "name": "Ryokan",
+            "altNames": [
+                "motel"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_main",
+            "priority": 231,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5510-0000",
+            "name": "Outdoor-Recreation",
+            "altNames": [
+                "national_park",
+                "nature_reserve"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "nature_main",
+            "priority": 144,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5510-0202",
+            "name": "Park-Recreation Area",
+            "altNames": [
+                "park",
+                "picnic_site"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "nature_main",
+            "priority": 147,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5510-0204",
+            "name": "Garden",
+            "altNames": [
+                "garden",
+                "orchard"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "nature_main",
+            "priority": 234,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5510-0205",
+            "name": "Beach",
+            "altNames": [
+                "beach_resort"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_main",
+            "priority": 132,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5510-0242",
+            "name": "Scenic Point",
+            "altNames": [
+                "volcano"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "nature_overlook",
+            "priority": 114,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5510-0378",
+            "name": "Campsite",
+            "altNames": [
+                "camp_site"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "accommodation_camping",
+            "priority": 156,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5520-0000",
+            "name": "Leisure",
+            "altNames": [
+                "amusement_ride",
+                "roller_coaster",
+                "theme_park"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_amusement",
+            "priority": 66,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5520-0207",
+            "name": "Amusement Park",
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_amusement",
+            "priority": 72,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5520-0208",
+            "name": "Zoo",
+            "altNames": [
+                "animal",
+                "zoo"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_zoo",
+            "priority": 123,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5520-0212",
+            "name": "Ski Resort",
+            "altNames": [
+                "ski",
+                "winter_sports"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sport_ski_run",
+            "priority": 165,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "550-5520-0228",
+            "name": "Animal Park",
+            "iconNextToEachOther": "no",
+            "iconName": "leisure_zoo",
+            "priority": 126,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6100-0062",
+            "name": "Shopping Mall",
+            "altNames": [
+                "mall",
+                "supermarket"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "shopping_main",
+            "priority": 42,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6300-0066",
+            "name": "Grocery",
+            "altNames": [
+                "greengrocer",
+                "grocery",
+                "shop"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "shopping_main",
+            "priority": 363,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6400-0000",
+            "name": "Drugstore or Pharmacy",
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_pharmacy",
+            "priority": 366,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6400-0069",
+            "name": "Drugstore",
+            "altNames": [
+                "chemist"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "shopping_main",
+            "priority": 369,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6400-0070",
+            "name": "Pharmacy",
+            "altNames": [
+                "pharmacy"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_pharmacy",
+            "priority": 372,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6700-0000",
+            "name": "Other Bookshop",
+            "iconNextToEachOther": "no",
+            "iconName": "shopping_books",
+            "priority": 375,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "600-6700-0087",
+            "name": "Bookstore",
+            "altNames": [
+                "books"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "shopping_books",
+            "priority": 378,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7000-0107",
+            "name": "Bank",
+            "altNames": [
+                "bank"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_bank",
+            "priority": 381,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7010-0108",
+            "name": "ATM",
+            "altNames": [
+                "atm"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "business_atm",
+            "priority": 384,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7300-0110",
+            "name": "Police Boxes",
+            "iconNextToEachOther": "no",
+            "iconMinLevel": 24,
+            "iconMaxLevel": 0,
+            "textMinLevel": 24,
+            "textMaxLevel": 0
+        },
+        {
+            "pdsId": "700-7300-0110",
+            "name": "Police Boxes",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_policebox_jpn",
+            "priority": 133,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7300-0111",
+            "name": "Police Station",
+            "altNames": [
+                "police"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_police",
+            "priority": 255,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7300-0111",
+            "name": "Police Station",
+            "altNames": [
+                "police"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_police_jpn",
+            "priority": 79,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7300-0113",
+            "name": "Fire Department",
+            "altNames": [
+                "fire_station"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_firedepartment_jpn",
+            "priority": 80,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7400-0137",
+            "name": "Dry Cleaning and Laundry",
+            "altNames": [
+                "dry_cleaning",
+                "laundry"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "business_laundry",
+            "priority": 471,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7450-0114",
+            "name": "Post Office",
+            "altNames": [
+                "post_office"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "business_post",
+            "priority": 390,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7450-0114",
+            "name": "Post Office",
+            "altNames": [
+                "post_office"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "business_post_jpn",
+            "priority": 134,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7460-0115",
+            "name": "Tourist Information",
+            "altNames": [
+                "information"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "business_touristinformation",
+            "priority": 106,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7600-0000",
+            "name": "Fueling Station",
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_petrolstation",
+            "priority": 33,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7600-0116",
+            "name": "Petrol-Gasoline Station",
+            "altNames": [
+                "fuel"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_petrolstation",
+            "priority": 36,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7600-0322",
+            "name": "EV Charging Station",
+            "altNames": [
+                "charging_station"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_charging",
+            "priority": 39,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7800-0118",
+            "name": "Automobile Dealership-New Cars",
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_dealership_car",
+            "priority": 394,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7800-0119",
+            "name": "Automobile Dealership-Used Cars",
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_dealership_car",
+            "priority": 395,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7850-0000",
+            "name": "Car Repair-Service",
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_repair_car",
+            "priority": 117,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7850-0121",
+            "name": "Car Wash-Detailing",
+            "altNames": [
+                "car_wash"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_wash_car",
+            "priority": 393,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7850-0122",
+            "name": "Car Repair",
+            "altNames": [
+                "car_repair"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_repair_car",
+            "priority": 120,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "700-7851-0117",
+            "name": "Rental Car Agency",
+            "altNames": [
+                "car_rental"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "automotive_carrental",
+            "priority": 138,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8000-0000",
+            "name": "Hospital or Health Care Facility",
+            "altNames": [
+                "ambulatory_care",
+                "doctor",
+                "health_centre",
+                "healthcare_centre",
+                "hospital"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_hospital",
+            "priority": 60,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8000-0000",
+            "name": "Hospital or Health Care Facility",
+            "altNames": [
+                "ambulatory_care",
+                "doctor",
+                "health_centre",
+                "healthcare_centre",
+                "hospital"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "address",
+            "priority": 70,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8000-0159",
+            "name": "Hospital",
+            "altNames": [
+                "field_hospital"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_hospital",
+            "priority": 63,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8000-0159",
+            "name": "Hospital",
+            "altNames": [
+                "field_hospital"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "emergency_hospital_jpn",
+            "priority": 69,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0000",
+            "name": "Government or Community Facility",
+            "altNames": [
+                "government"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_main",
+            "priority": 396,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0163",
+            "name": "City Hall",
+            "altNames": [
+                "townhall"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_main",
+            "priority": 399,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0163",
+            "name": "City Hall",
+            "altNames": [
+                "townhall"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_cityhall_jpn",
+            "priority": 17,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0168",
+            "name": "County Council",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_main",
+            "priority": 403,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0170",
+            "name": "Court House",
+            "altNames": [
+                "courthouse"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_main",
+            "priority": 405,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0171",
+            "name": "Government Office",
+            "kindDetail": "Prefectural Office﻿",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_office_prefectural_jpn",
+            "priority": 16,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0171",
+            "name": "Government Office",
+            "kindDetail": "Ward Office﻿﻿",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_office_ward_jpn",
+            "priority": 19,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0171",
+            "name": "Government Office",
+            "kindDetail": "﻿Town/Village Office",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_office_townvillage_jpn",
+            "priority": 18,
+            "iconMinLevel": 14,
+            "iconMaxLevel": 24,
+            "textMinLevel": 14,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8100-0172",
+            "name": "Border Crossing",
+            "altNames": [
+                "border_control"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_frontiercrossing",
+            "priority": 15,
+            "iconMinLevel": 13,
+            "iconMaxLevel": 24,
+            "textMinLevel": 13,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8200-0000",
+            "name": "Education Facility",
+            "altNames": [
+                "college",
+                "educational_institution"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_education",
+            "priority": 408,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8200-0000",
+            "name": "Education Facility",
+            "altNames": [
+                "college",
+                "educational_institution"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "address",
+            "priority": 82,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8200-0173",
+            "name": "Higher Education",
+            "altNames": [
+                "university"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_education",
+            "priority": 252,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8200-0173",
+            "name": "Higher Education",
+            "altNames": [
+                "university"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_education_higher_jpn",
+            "priority": 71,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8200-0174",
+            "name": "School",
+            "altNames": [
+                "school"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_education",
+            "priority": 411,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8200-0174",
+            "name": "School",
+            "altNames": [
+                "school"
+            ],
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_education_school_jpn",
+            "priority": 136,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8300-0175",
+            "name": "Library",
+            "altNames": [
+                "library"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_library",
+            "priority": 253,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8400-0000",
+            "name": "Event Spaces",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_exhibition_center",
+            "priority": 54,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8400-0176",
+            "name": "Convention-Exhibition Center",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_exhibition_center",
+            "priority": 57,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8500-0000",
+            "name": "Parking",
+            "altNames": [
+                "parking"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_parking",
+            "priority": 414,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8500-0177",
+            "name": "Parking Garage-Parking House",
+            "altNames": [
+                "parking_garage"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_parking_garage",
+            "priority": 417,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8500-0178",
+            "name": "Parking Lot",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_parking",
+            "priority": 420,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8500-0179",
+            "name": "Park and Ride",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_parknride",
+            "priority": 423,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8500-0315",
+            "name": "Cellphone Parking Lot",
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_parking",
+            "priority": 426,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0000",
+            "name": "Sports Facility-Venue",
+            "altNames": [
+                "sports"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sport_main",
+            "priority": 159,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0180",
+            "name": "Sports Complex-Stadium",
+            "altNames": [
+                "stadium"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sport_main",
+            "priority": 162,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0181",
+            "name": "Ice Skating Rink",
+            "iconNextToEachOther": "no",
+            "iconName": "sport_main",
+            "priority": 429,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0182",
+            "name": "Swimming Pool",
+            "altNames": [
+                "swimming_area"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sport_swimming",
+            "priority": 432,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0184",
+            "name": "Bowling Center",
+            "iconNextToEachOther": "no",
+            "iconName": "sport_bowling",
+            "priority": 261,
+            "iconMinLevel": 17,
+            "iconMaxLevel": 24,
+            "textMinLevel": 17,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0191",
+            "name": "Fitness-Health Club",
+            "altNames": [
+                "fitness"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sport_fitness",
+            "priority": 438,
+            "iconMinLevel": 18,
+            "iconMaxLevel": 24,
+            "textMinLevel": 18,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8600-0193",
+            "name": "Golf Course",
+            "altNames": [
+                "golf_course",
+                "miniature_golf"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "sport_golfcourse",
+            "priority": 76,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8700-0166",
+            "name": "Cemetery",
+            "altNames": [
+                "cemetery",
+                "grave_yard"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_cemetry",
+            "priority": 468,
+            "iconMinLevel": 19,
+            "iconMaxLevel": 24,
+            "textMinLevel": 19,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "800-8700-0198",
+            "name": "Public Restroom-Toilets",
+            "altNames": [
+                "toilets"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_publictoilet",
+            "priority": 107,
+            "iconMinLevel": 16,
+            "iconMaxLevel": 24,
+            "textMinLevel": 16,
+            "textMaxLevel": 24
+        },
+        {
+            "pdsId": "900-9200-0219",
+            "name": "Marina",
+            "altNames": [
+                "marina"
+            ],
+            "iconNextToEachOther": "no",
+            "iconName": "facilities_harbor",
+            "priority": 75,
+            "iconMinLevel": 15,
+            "iconMaxLevel": 24,
+            "textMinLevel": 15,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Traffic Light",
+            "pdsId": "900-9400-0402",
+            "name": "Intersection",
+            "booleanFlag": "has_traffic_lights",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "traffic_light",
+            "priority": 78,
+            "iconMinLevel": 10,
+            "iconMaxLevel": 24,
+            "textMinLevel": 10,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Named Intersection",
+            "pdsId": "900-9400-0402",
+            "name": "Intersection",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "priority": 78,
+            "iconMinLevel": 24,
+            "iconMaxLevel": 0,
+            "textMinLevel": 10,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "900-9400-0402",
+            "name": "Intersection",
+            "kindDetail": "junction",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_jct_jpn",
+            "priority": 77,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "900-9400-0402",
+            "name": "Intersection",
+            "kindDetail": "interchange",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_ic_jpn",
+            "priority": 77,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "900-9400-0402",
+            "name": "Intersection",
+            "kindDetail": "interchange_toll",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_ic_jpn",
+            "priority": 77,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        },
+        {
+            "group": "Japan Road Facility",
+            "pdsId": "900-9400-0402",
+            "name": "Intersection",
+            "kindDetail": "smart_interchange",
+            "IsoCountryCode": "JPN",
+            "iconNextToEachOther": "no",
+            "iconName": "road_facilities_smart_ic_jpn",
+            "priority": 77,
+            "iconMinLevel": 9,
+            "iconMaxLevel": 24,
+            "textMinLevel": 9,
+            "textMaxLevel": 24
+        }
+    ]
+}

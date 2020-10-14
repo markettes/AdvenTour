@@ -1,0 +1,16 @@
+{
+    "extends": [
+        "../omv/common.json",
+        "../../common/satellite/template/satellite.definitions.json",
+        "../../common/satellite/template/satellite.style.json",
+        "../../common/satellite/template/polecaps.definitions.json",
+        "../../common/satellite/template/polecaps.style.1.json",
+        "../../common/shared/template/background-offscreen.style.json",
+        "../../common/shared/template/buildings.style.json",
+        "../../common/omv/template/linetype.conditions.json",
+        "../../common/shared/template/roads.style.json",
+        "../../common/shared/template/roads.definitions.json",
+        "../../common/shared/template/terrain-common.style.json",
+        "../../common/shared/template/terrain-common.definitions.json"
+    ]
+}

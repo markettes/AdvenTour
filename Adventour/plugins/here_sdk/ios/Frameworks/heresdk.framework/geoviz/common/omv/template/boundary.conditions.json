@@ -1,0 +1,36 @@
+{
+    "definitions": {
+        "State.Boundary.Disputed": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "disputed"],
+                ["==", ["get", "kind_detail"], 4]
+            ]
+        },
+        "Country.Boundary.Disputed": {
+            "value": [
+                "all",
+                ["==", ["get", "kind"], "disputed"],
+                ["==", ["get", "kind_detail"], 2]
+            ]
+        },
+        "State.Boundary": {
+            "value": ["==", ["get", "kind"], "region"]
+        },
+        "Country.Boundary": {
+            "value": ["==", ["get", "kind"], "country"]
+        },
+        "Municipality.Boundary.Japan": {
+            "value": ["==", ["get", "kind"], "locality"]
+        },
+        "District.Boundary.Japan": {
+            "value": ["==", ["get", "kind"], "oaza"]
+        },
+        "Neighbourhood.Boundary.Japan": {
+            "value": ["==", ["get", "kind"], "aza"]
+        },
+        "Microhood.Boundary.Japan": {
+            "value": ["==", ["get", "kind"], "block"]
+        }
+    }
+}

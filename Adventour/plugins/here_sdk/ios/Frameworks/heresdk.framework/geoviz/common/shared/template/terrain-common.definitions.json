@@ -1,0 +1,405 @@
+{
+    "definitions": {
+        "Terrain.Diffuse.Factor": {
+            "value": 1
+        },
+        "Terrain.Ambient.Factor": {
+            "value": 1
+        },
+        "ElevationMap.Height0": {
+            "value": 1000000
+        },
+        "ElevationMap.Height1": {
+            "value": 1000001
+        },
+        "ElevationMap.Height2": {
+            "value": 1000002
+        },
+        "ElevationMap.Height3": {
+            "value": 1000003
+        },
+        "ElevationMap.Height4": {
+            "value": 1000004
+        },
+        "ElevationMap.Height5": {
+            "value": 1000005
+        },
+        "ElevationMap.Height6": {
+            "value": 1000006
+        },
+        "ElevationMap.Height7": {
+            "value": 1000007
+        },
+        "ElevationMap.Height8": {
+            "value": 1000008
+        },
+        "ElevationMap.Height9": {
+            "value": 1000009
+        },
+        "ElevationMap.Height10": {
+            "value": 1000010
+        },
+        "ElevationMap.Height11": {
+            "value": 1000011
+        },
+        "ElevationMap.Height12": {
+            "value": 1000012
+        },
+        "ElevationMap.Height13": {
+            "value": 1000013
+        },
+        "ElevationMap.Height14": {
+            "value": 1000014
+        },
+        "ElevationMap.Height15": {
+            "value": 1000015
+        },
+        "ElevationMap.Height16": {
+            "value": 1000016
+        },
+        "ElevationMap.Height17": {
+            "value": 1000017
+        },
+        "ElevationMap.Height18": {
+            "value": 1000018
+        },
+        "ElevationMap.Height19": {
+            "value": 1000019
+        },
+        "ElevationMap.Color0": {
+            "value": "#ff0000"
+        },
+        "ElevationMap.Color1": {
+            "value": ["ref", "ElevationMap.Color0"]
+        },
+        "ElevationMap.Color2": {
+            "value": ["ref", "ElevationMap.Color1"]
+        },
+        "ElevationMap.Color3": {
+            "value": ["ref", "ElevationMap.Color2"]
+        },
+        "ElevationMap.Color4": {
+            "value": ["ref", "ElevationMap.Color3"]
+        },
+        "ElevationMap.Color5": {
+            "value": ["ref", "ElevationMap.Color4"]
+        },
+        "ElevationMap.Color6": {
+            "value": ["ref", "ElevationMap.Color5"]
+        },
+        "ElevationMap.Color7": {
+            "value": ["ref", "ElevationMap.Color6"]
+        },
+        "ElevationMap.Color8": {
+            "value": ["ref", "ElevationMap.Color7"]
+        },
+        "ElevationMap.Color9": {
+            "value": ["ref", "ElevationMap.Color8"]
+        },
+        "ElevationMap.Color10": {
+            "value": ["ref", "ElevationMap.Color9"]
+        },
+        "ElevationMap.Color11": {
+            "value": ["ref", "ElevationMap.Color10"]
+        },
+        "ElevationMap.Color12": {
+            "value": ["ref", "ElevationMap.Color11"]
+        },
+        "ElevationMap.Color13": {
+            "value": ["ref", "ElevationMap.Color12"]
+        },
+        "ElevationMap.Color14": {
+            "value": ["ref", "ElevationMap.Color13"]
+        },
+        "ElevationMap.Color15": {
+            "value": ["ref", "ElevationMap.Color14"]
+        },
+        "ElevationMap.Color16": {
+            "value": ["ref", "ElevationMap.Color15"]
+        },
+        "ElevationMap.Color17": {
+            "value": ["ref", "ElevationMap.Color16"]
+        },
+        "ElevationMap.Color18": {
+            "value": ["ref", "ElevationMap.Color17"]
+        },
+        "ElevationMap.Color19": {
+            "value": ["ref", "ElevationMap.Color18"]
+        },
+        "TerrainGradient": {
+            "value": [
+                "case",
+                ["ref", "ElevationMap.UseColor"],
+                [
+                    "gradient",
+                    ["ref", "ElevationMap.Height0"],
+                    ["ref", "ElevationMap.Color0"],
+                    ["ref", "ElevationMap.Height1"],
+                    ["ref", "ElevationMap.Color1"],
+                    ["ref", "ElevationMap.Height2"],
+                    ["ref", "ElevationMap.Color2"],
+                    ["ref", "ElevationMap.Height3"],
+                    ["ref", "ElevationMap.Color3"],
+                    ["ref", "ElevationMap.Height4"],
+                    ["ref", "ElevationMap.Color4"],
+                    ["ref", "ElevationMap.Height5"],
+                    ["ref", "ElevationMap.Color5"],
+                    ["ref", "ElevationMap.Height6"],
+                    ["ref", "ElevationMap.Color6"],
+                    ["ref", "ElevationMap.Height7"],
+                    ["ref", "ElevationMap.Color7"],
+                    ["ref", "ElevationMap.Height8"],
+                    ["ref", "ElevationMap.Color8"],
+                    ["ref", "ElevationMap.Height9"],
+                    ["ref", "ElevationMap.Color9"],
+                    ["ref", "ElevationMap.Height10"],
+                    ["ref", "ElevationMap.Color10"],
+                    ["ref", "ElevationMap.Height11"],
+                    ["ref", "ElevationMap.Color11"],
+                    ["ref", "ElevationMap.Height12"],
+                    ["ref", "ElevationMap.Color12"],
+                    ["ref", "ElevationMap.Height13"],
+                    ["ref", "ElevationMap.Color13"],
+                    ["ref", "ElevationMap.Height14"],
+                    ["ref", "ElevationMap.Color14"],
+                    ["ref", "ElevationMap.Height15"],
+                    ["ref", "ElevationMap.Color15"],
+                    ["ref", "ElevationMap.Height16"],
+                    ["ref", "ElevationMap.Color16"],
+                    ["ref", "ElevationMap.Height17"],
+                    ["ref", "ElevationMap.Color17"],
+                    ["ref", "ElevationMap.Height18"],
+                    ["ref", "ElevationMap.Color18"],
+                    ["ref", "ElevationMap.Height19"],
+                    ["ref", "ElevationMap.Color19"]
+                ],
+                [
+                    "gradient",
+                    ["ref", "ElevationMap.Height0"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color0"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color0"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height1"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color1"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color1"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height2"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color2"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color2"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height3"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color3"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color3"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height4"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color4"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color4"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height5"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color5"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color5"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height6"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color6"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color6"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height7"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color7"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color7"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height8"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color8"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color8"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height9"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color9"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color9"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height10"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color10"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color10"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height11"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color11"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color11"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height12"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color12"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color12"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height13"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color13"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color13"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height14"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color14"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color14"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height15"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color15"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color15"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height16"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color16"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color16"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height17"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color17"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color17"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height18"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color18"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color18"]]
+                        ]
+                    ],
+                    ["ref", "ElevationMap.Height19"],
+                    [
+                        "mix",
+                        ["ref", "Land.Color"],
+                        ["desaturate", ["ref", "ElevationMap.Color19"], 0.9999999776],
+                        [
+                            "*",
+                            0.0099999997,
+                            ["alpha", ["ref", "ElevationMap.Color19"]]
+                        ]
+                    ]
+                ]
+            ]
+        },
+        "ElevationMap.Color.Interpolation": {
+            "value": false
+        }
+    }
+}

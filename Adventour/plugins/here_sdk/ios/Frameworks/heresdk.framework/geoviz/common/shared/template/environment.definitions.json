@@ -1,0 +1,215 @@
+{
+    "definitions": {
+        "Sky.ColorIntermediatePercent": {
+            "value": 30
+        },
+        "Sky.ColorBottom": {
+            "value": "#bfd7ef"
+        },
+        "Sky.ColorTop": {
+            "value": "#347bc0"
+        },
+        "Sky.ColorIntermediate": {
+            "value": "#72a4d6"
+        },
+        "Sky.Reference.Horizon": {
+            "value": 0.55
+        },
+        "Sky.Reference.Top": {
+            "value": 1
+        },
+        "Sky.Horizon.Blend.Range": {
+            "value": 0.4
+        },
+        "NG.Sky.AltitudeFadeStart": {
+            "value": 50000
+        },
+        "NG.Sky.AltitudeFadeEnd": {
+            "value": 750000
+        },
+        "NG.Terrain.AltitudeFadeEnd": {
+            "value": 750000
+        },
+        "NG.Spacebackground.StarDensity": {
+            "value": 0.0001
+        },
+        "NG.Spacebackground.StarBrightness": {
+            "value": 0.2
+        },
+        "NG.Spacebackground.UseNebula": {
+            "value": false
+        },
+        "NG.Spacebackground.NebulaDensity": {
+            "value": 0.12
+        },
+        "NG.Spacebackground.NebulaFalloff": {
+            "value": 15
+        },
+        "NG.Spacebackground.NebulaSteps": {
+            "value": 5
+        },
+        "NG.Spacebackground.NebulaOffset": {
+            "value": ["make-vector", 0, 0, 0]
+        },
+        "NG.Spacebackground.NebulaColor": {
+            "value": "#646478"
+        },
+        "Fog.DistanceColor": {
+            "value": "#c8e1fa"
+        },
+        "NG.Ambient.Color": {
+            "value": "#ffffff"
+        },
+        "NG.Ambient.Intensity": {
+            "value": 0.3
+        },
+        "NG.Light1.Color": {
+            "value": "#ffffff"
+        },
+        "NG.Light1.Intensity": {
+            "value": 1
+        },
+        "NG.Light1.Azimuth": {
+            "value": 310
+        },
+        "NG.Light1.Altitude": {
+            "value": 30
+        },
+        "NG.Light2.Color": {
+            "value": "#ffffff"
+        },
+        "NG.Light2.Intensity": {
+            "value": 0.4
+        },
+        "NG.Light2.Azimuth": {
+            "value": 180
+        },
+        "NG.Light2.Altitude": {
+            "value": 10
+        },
+        "NG.Light3.Color": {
+            "value": "#ffffff"
+        },
+        "NG.Light3.Intensity": {
+            "value": 0.5
+        },
+        "NG.Light3.Azimuth": {
+            "value": 60
+        },
+        "NG.Light3.Altitude": {
+            "value": 45
+        },
+        "FogColor": {
+            "value": ["ref", "Fog.DistanceColor"]
+        },
+        "FogStartDistance": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                7.5, 1,
+                11, 0.96,
+                14, 0.8]
+        },
+        "FogFarDistance": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                7.5, 1,
+                11, 0.86667,
+                14, 0.796]
+        },
+        "FogFarDistanceFactor": {
+            "value": 1
+        },
+        "FogDensity": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                15, 0.3,
+                20, 1]
+        },
+        "FogGlobalHorizonDensity": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                0, 2,
+                2, 1.15,
+                3, 0.8,
+                4, 0.75,
+                5, 0.5,
+                7, 0.5,
+                8, 0.5,
+                9, 0.6,
+                10, 1,
+                11, 1.3,
+                12, 2,
+                13, 0]
+        },
+        "FogGlobalWidth": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                0, 0.2,
+                2, 0.25,
+                4, 0.25,
+                5, 0.25,
+                6, 0.25,
+                7, 0.22,
+                8, 0.25,
+                9, 0.25,
+                10, 0.25,
+                11, 0.18,
+                12, 0.18,
+                13, 0]
+        },
+        "HaloLowOrbit": {
+            "value": 12000000
+        },
+        "HaloHighOrbit": {
+            "value": ["*", 3, ["ref", "HaloLowOrbit"]]
+        },
+        "HaloLowOrbitSize": {
+            "value": 1.1
+        },
+        "HaloHighOrbitSize": {
+            "value": 1.05
+        },
+        "HaloSpaceFadeStart": {
+            "value": ["/", ["ref", "NG.Sky.AltitudeFadeStart"], 2]
+        },
+        "HaloSpaceFadeEnd": {
+            "value": ["ref", "NG.Sky.AltitudeFadeStart"]
+        },
+        "HaloHorizonColor": {
+            "value": ["ref", "Fog.DistanceColor"]
+        },
+        "HaloSkyColor": {
+            "value": "#007dff"
+        },
+        "HaloDensity": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                0, 1,
+                2, 1,
+                2, 3.6]
+        },
+        "HaloDistribution": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                0, 0.25,
+                2, 0.25,
+                2, 0.175]
+        },
+        "FadeOutZoomStart": {
+            "value": 15.7
+        },
+        "FadeOutZoomEnd": {
+            "value": 15.5
+        },
+        "ShadowFadeDistanceStart": {
+            "value": 0.87
+        },
+        "ShadowFadeDistanceFar": {
+            "value": 0.92
+        },
+        "FadeDistanceStart": {
+            "value": ["ref", "ShadowFadeDistanceStart"]
+        },
+        "FadeDistanceFar": {
+            "value": ["ref", "ShadowFadeDistanceFar"]
+        },
+        "ZoomDependentShadowColor": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                ["ref", "FadeOutZoomEnd"], "#00000000",
+                ["ref", "FadeOutZoomStart"], "#000000"]
+        }
+    }
+}

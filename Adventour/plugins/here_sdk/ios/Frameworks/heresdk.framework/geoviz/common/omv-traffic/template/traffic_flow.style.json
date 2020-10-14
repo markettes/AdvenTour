@@ -1,0 +1,349 @@
+{
+    "styles": [
+        {
+            "styleSet": "traffic_flow",
+            "technique": "line",
+            "category": ["match", ["get", "kind"],
+                "none", "traffic-blocking",
+                ["stationary", "queuing"], "traffic-very-high",
+                ["slow", "minor"], "traffic-high",
+                ["free", "unknown"], "traffic-normal",
+                "traffic"],
+            "attr": {
+                "offset": ["*", ["ref", "TrafficOffsetDirection"], [
+                    "case",
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "minor_road"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category4.RampOffset"]],
+                    ["==", ["get", "road_kind"], "minor_road"],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category4.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "tertiary"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category3.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "tertiary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category3.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "secondary"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category2.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "secondary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category2.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["==", ["get", "road_kind_detail"], "trunk"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["==", ["get", "road_kind_detail"], "trunk"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "primary"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "primary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["!=", ["get", "road_kind_detail"], "trunk"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category0.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["!=", ["get", "road_kind_detail"], "trunk"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category0.Offset"]],
+                    null
+                ]],
+                "width": [
+                    "case",
+                    ["==", ["get", "road_kind"], "minor_road"],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category4.Width"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "tertiary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category3.Width"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "secondary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category2.Width"]],
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "highway"],
+                            ["==", ["get", "road_kind_detail"], "trunk"]
+                        ],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "primary"]
+                        ]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.Width"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["!=", ["get", "road_kind_detail"], "trunk"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category0.Width"]],
+                    null
+                ],
+                "antialias": [
+                    "case",
+                    [
+                        "any",
+                        ["==", ["get", "road_kind"], "minor_road"],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "tertiary"]
+                        ],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "secondary"]
+                        ],
+                        ["==", ["get", "road_kind"], "highway"],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "primary"]
+                        ]
+                    ],
+                    true,
+                    null
+                ],
+                "color": ["match", ["get", "kind"],
+                    "none", ["ref", "TrafficStyle.NoRoute.BlockingColor"],
+                    ["stationary", "queuing"], ["ref", "TrafficStyle.NoRoute.VeryHighColor"],
+                    ["slow", "minor"], ["ref", "TrafficStyle.NoRoute.HighColor"],
+                    ["ref", "TrafficStyle.NoRoute.NormalColor"]]
+            }
+        },
+        {
+            "styleSet": "traffic_flow",
+            "technique": "line",
+            "description": "outline",
+            "category": "traffic-outline",
+            "attr": {
+                "offset": ["*", ["ref", "TrafficOffsetDirection"], [
+                    "case",
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "minor_road"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category4.RampOffset"]],
+                    ["==", ["get", "road_kind"], "minor_road"],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category4.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "tertiary"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category3.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "tertiary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category3.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "secondary"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category2.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "secondary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category2.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["==", ["get", "road_kind_detail"], "trunk"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["==", ["get", "road_kind_detail"], "trunk"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "primary"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "primary"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category1.Offset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["!=", ["get", "road_kind_detail"], "trunk"],
+                        ["get", "is_link"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category0.RampOffset"]],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["!=", ["get", "road_kind_detail"], "trunk"]
+                    ],
+                    ["world-ppi-scale", ["ref", "TrafficStyle.NoRoute.Category0.Offset"]],
+                    null
+                ]],
+                "width": [
+                    "case",
+                    ["==", ["get", "road_kind"], "minor_road"],
+                    [
+                        "world-ppi-scale",
+                        [
+                            "+",
+                            ["*", 2, ["ref", "TrafficStyle.NoRoute.Category4.OutlineWidth"]],
+                            ["ref", "TrafficStyle.NoRoute.Category4.Width"]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "tertiary"]
+                    ],
+                    [
+                        "world-ppi-scale",
+                        [
+                            "+",
+                            ["*", 2, ["ref", "TrafficStyle.NoRoute.Category3.OutlineWidth"]],
+                            ["ref", "TrafficStyle.NoRoute.Category3.Width"]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "major_road"],
+                        ["==", ["get", "road_kind_detail"], "secondary"]
+                    ],
+                    [
+                        "world-ppi-scale",
+                        [
+                            "+",
+                            ["*", 2, ["ref", "TrafficStyle.NoRoute.Category2.OutlineWidth"]],
+                            ["ref", "TrafficStyle.NoRoute.Category2.Width"]
+                        ]
+                    ],
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "highway"],
+                            ["==", ["get", "road_kind_detail"], "trunk"]
+                        ],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "primary"]
+                        ]
+                    ],
+                    [
+                        "world-ppi-scale",
+                        [
+                            "+",
+                            ["*", 2, ["ref", "TrafficStyle.NoRoute.Category1.OutlineWidth"]],
+                            ["ref", "TrafficStyle.NoRoute.Category1.Width"]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["==", ["get", "road_kind"], "highway"],
+                        ["!=", ["get", "road_kind_detail"], "trunk"]
+                    ],
+                    [
+                        "world-ppi-scale",
+                        [
+                            "+",
+                            ["*", 2, ["ref", "TrafficStyle.NoRoute.Category0.OutlineWidth"]],
+                            ["ref", "TrafficStyle.NoRoute.Category0.Width"]
+                        ]
+                    ],
+                    null
+                ],
+                "antialias": [
+                    "case",
+                    [
+                        "any",
+                        ["==", ["get", "road_kind"], "minor_road"],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "tertiary"]
+                        ],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "secondary"]
+                        ],
+                        ["==", ["get", "road_kind"], "highway"],
+                        [
+                            "all",
+                            ["==", ["get", "road_kind"], "major_road"],
+                            ["==", ["get", "road_kind_detail"], "primary"]
+                        ]
+                    ],
+                    true,
+                    null
+                ],
+                "color": ["match", ["get", "kind"],
+                    "none", ["ref", "TrafficStyle.NoRoute.BlockingOutlineColor"],
+                    ["stationary", "queuing"], ["ref", "TrafficStyle.NoRoute.VeryHighOutlineColor"],
+                    ["slow", "minor"], ["ref", "TrafficStyle.NoRoute.HighOutlineColor"],
+                    ["ref", "TrafficStyle.NoRoute.NormalOutlineColor"]]
+            }
+        }
+    ]
+}

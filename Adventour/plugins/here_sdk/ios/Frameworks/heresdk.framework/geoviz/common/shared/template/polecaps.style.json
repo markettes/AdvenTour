@@ -1,0 +1,40 @@
+{
+    "styles": [
+        {
+            "styleSet": "northpole",
+            "technique": "polygon",
+            "attr": {
+                "disable-shading": ["ref", "Polygon.Water.Disable.Shading"],
+                "ambient": ["ref", "Polygon.Ambient.Factor"],
+                "color": ["ref", "Water.Color.0m"],
+                "diffuse": ["ref", "Polygon.Diffuse.Factor"]
+            }
+        },
+        {
+            "styleSet": "northpole",
+            "technique": "polygon",
+            "category": "offscreen-depth",
+            "attr": {
+                "enforce-ztest": true
+            }
+        },
+        {
+            "styleSet": "southpole",
+            "technique": "polygon",
+            "attr": {
+                "disable-shading": ["ref", "Polygon.Land.Disable.Shading"],
+                "ambient": ["ref", "Polygon.Ambient.Factor"],
+                "color": ["ref", "Land.Color"],
+                "diffuse": ["ref", "Polygon.Diffuse.Factor"]
+            }
+        },
+        {
+            "styleSet": "southpole",
+            "technique": "polygon",
+            "category": "offscreen-depth",
+            "attr": {
+                "enforce-ztest": true
+            }
+        }
+    ]
+}

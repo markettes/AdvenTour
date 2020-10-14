@@ -1,0 +1,13 @@
+{
+    "styles": [
+        {
+            "styleSet": "background",
+            "technique": "polygon",
+            "description": "offscreen-depth",
+            "category": "offscreen-depth",
+            "attr": {
+                "enforce-ztest": true
+            }
+        }
+    ]
+}

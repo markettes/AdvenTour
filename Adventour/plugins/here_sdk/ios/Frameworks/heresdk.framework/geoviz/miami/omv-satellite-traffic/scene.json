@@ -1,0 +1,45 @@
+{
+  "inherit": "../../common/omv/hybrid.scene.json",
+  "objects": {
+    "$concat": [
+      {
+        "$ref": "../../common/omv/hybrid.scene.json#/objects"
+      },
+      {
+        "$ref": "../../common/omv-traffic/traffic.scene.json#/objects"
+      },
+      {
+        "rasterterrain": {}
+      }
+    ]
+  },
+  "bucketPriorities": {
+    "$insert": {
+      "after": {
+        "group": "southpole"
+      },
+      "into": {
+        "$insert": {
+          "before": {
+            "group": "tilezen_lines",
+            "category": "state-border-outline"
+          },
+          "into": {
+            "$ref": "../../common/omv/hybrid.scene.json#/bucketPriorities"
+          },
+          "value": {
+            "$ref": "../../common/omv-traffic/traffic.scene.json#/bucketPriorities"
+          }
+        }
+      },
+      "value": [
+        {
+          "group": "rasterterrain"
+        }
+      ]
+    }
+  },
+  "assets": {
+    "path": "assets/miami"
+  }
+}

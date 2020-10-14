@@ -1,0 +1,52 @@
+{
+    "definitions": {
+        "ExtrudedBuilding.Roof.Color": {
+            "value": "#f0f0f0b3"
+        },
+        "ExtrudedBuilding.Wall.Color": {
+            "value": "#b4b4b4b3"
+        },
+        "ExtrudedBuilding.Roof.Shininess": {
+            "value": 100
+        },
+        "ExtrudedBuilding.Wall.Shininess": {
+            "value": 2
+        },
+        "ExtrudedBuilding.FakeAO.Height": {
+            "value": 10
+        },
+        "ExtrudedBuilding.FakeAO.Color": {
+            "value": "#d2e3e833"
+        },
+        "ExtrudedBuilding.Gradient.Color": {
+            "value": "#afbbc2"
+        },
+        "ExtrudedBuilding.Scale": {
+            "value": 1
+        },
+        "BuildingOutline.Width": {
+            "value": 0.5
+        },
+        "ExtrudedBuilding.Ambient.Factor": {
+            "value": 1
+        },
+        "ExtrudedBuilding.Diffuse.Factor": {
+            "value": 1
+        },
+        "ExtrudedBuilding.Specular.Factor": {
+            "value": 1
+        },
+        "Polygon.Ambient.Factor": {
+            "value": 1
+        },
+        "Polygon.Diffuse.Factor": {
+            "value": 1
+        },
+        "NumbersMargin": {
+            "value": 10
+        },
+        "NumbersMarginReducing": {
+            "value": 4
+        }
+    }
+}

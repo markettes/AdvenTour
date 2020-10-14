@@ -1,0 +1,13 @@
+{
+    "extends": [
+        "common.json",
+        "../../common/shared/template/polecaps.style.json",
+        "../../common/shared/template/background-offscreen.style.json",
+        "../../common/shared/template/buildings.style.json",
+        "../../common/shared/template/terrain-common.style.json",
+        "../../common/shared/template/terrain-common.definitions.json",
+        "../../common/omv/template/linetype.conditions.json",
+        "../../common/shared/template/roads.style.json",
+        "../../common/shared/template/roads.definitions.json"
+    ]
+}

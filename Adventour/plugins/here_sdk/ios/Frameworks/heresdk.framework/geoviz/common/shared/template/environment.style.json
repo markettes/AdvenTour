@@ -1,0 +1,86 @@
+{
+    "styles": [
+        {
+            "styleSet": "depthsky",
+            "technique": "depthsky",
+            "attr": {
+                "fade-end": ["ref", "NG.Sky.AltitudeFadeEnd"],
+                "gradient-intermediate": ["ref", "Sky.ColorIntermediate"],
+                "gradient-sky": ["ref", "Sky.ColorTop"],
+                "gradient-horizon": ["ref", "Sky.ColorBottom"],
+                "gradient-intermediate-slider": ["ref", "Sky.ColorIntermediatePercent"],
+                "horizon-blend-range": ["ref", "Sky.Horizon.Blend.Range"],
+                "reference-top": ["ref", "Sky.Reference.Top"],
+                "fade-start": ["ref", "NG.Sky.AltitudeFadeStart"],
+                "reference-horizon": ["ref", "Sky.Reference.Horizon"]
+            }
+        },
+        {
+            "styleSet": "environment",
+            "technique": "outdoor",
+            "attr": {
+                "ambient-intensity": ["ref", "NG.Ambient.Intensity"],
+                "main-visual-enabled": false,
+                "back-direction": ["make-vector", ["ref", "NG.Light2.Azimuth"], ["ref", "NG.Light2.Altitude"]],
+                "main-direction": ["make-vector", ["ref", "NG.Light1.Azimuth"], ["ref", "NG.Light1.Altitude"]],
+                "rim-intensity": ["ref", "NG.Light3.Intensity"],
+                "ambient-color": ["ref", "NG.Ambient.Color"],
+                "rim-visual-enabled": false,
+                "main-intensity": ["ref", "NG.Light1.Intensity"],
+                "back-visual-enabled": false,
+                "back-color": ["ref", "NG.Light2.Color"],
+                "rim-direction": ["make-vector", ["ref", "NG.Light3.Azimuth"], ["ref", "NG.Light3.Altitude"]],
+                "main-has-lens-flare": false,
+                "rim-color": ["ref", "NG.Light3.Color"],
+                "back-intensity": ["ref", "NG.Light2.Intensity"],
+                "main-color": ["ref", "NG.Light1.Color"]
+            }
+        },
+        {
+            "styleSet": "geofog",
+            "technique": "geofog",
+            "attr": {
+                "ground-density": ["ref", "FogDensity"],
+                "far-factor": ["interpolate", ["linear"], ["zoom"],
+                    5, 40,
+                    10, 20],
+                "top-down-density": 0,
+                "start-distance": ["ref", "FogStartDistance"],
+                "color": ["ref", "Fog.DistanceColor"],
+                "far-distance": ["*", ["ref", "FogFarDistance"], ["ref", "FogFarDistanceFactor"]]
+            }
+        },
+        {
+            "styleSet": "geohalo",
+            "technique": "geohalo",
+            "attr": {
+                "sky-color": ["ref", "HaloSkyColor"],
+                "low-orbit-size": ["ref", "HaloLowOrbitSize"],
+                "high-orbit-size": ["ref", "HaloHighOrbitSize"],
+                "halo-density": ["ref", "HaloDensity"],
+                "space-fade-end": ["ref", "HaloSpaceFadeEnd"],
+                "low-orbit": ["ref", "HaloLowOrbit"],
+                "global-fog-horizon-density": ["ref", "FogGlobalHorizonDensity"],
+                "horizon-color": ["ref", "HaloHorizonColor"],
+                "high-orbit": ["ref", "HaloHighOrbit"],
+                "space-fade-start": ["ref", "HaloSpaceFadeStart"],
+                "global-fog-width": ["ref", "FogGlobalWidth"],
+                "halo-distribution": ["ref", "HaloDistribution"]
+            }
+        },
+        {
+            "styleSet": "spacebackground",
+            "technique": "spacebackground",
+            "attr": {
+                "nebula-density": ["ref", "NG.Spacebackground.NebulaDensity"],
+                "star-density": ["ref", "NG.Spacebackground.StarDensity"],
+                "use-nebula": ["ref", "NG.Spacebackground.UseNebula"],
+                "nebula-falloff": ["ref", "NG.Spacebackground.NebulaFalloff"],
+                "nebula-color": ["ref", "NG.Spacebackground.NebulaColor"],
+                "nebula-steps": ["ref", "NG.Spacebackground.NebulaSteps"],
+                "star-brightness": ["ref", "NG.Spacebackground.StarBrightness"],
+                "nebula-offset": ["ref", "NG.Spacebackground.NebulaOffset"]
+            }
+        }
+    ]
+}

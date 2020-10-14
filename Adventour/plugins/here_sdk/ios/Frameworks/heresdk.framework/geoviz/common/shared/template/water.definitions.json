@@ -1,0 +1,106 @@
+{
+    "definitions": {
+        "Water.Polygon.Ambient.Factor": {
+            "value": 0.69
+        },
+        "Water.Polygon.Diffuse.Factor": {
+            "value": 1
+        },
+        "Polygon.Water.Disable.Shading": {
+            "value": true
+        },
+        "zoomWidthPpiScaled": {
+            "value": ["ppi-scale", ["ref", "zoomWidth"], ["ref", "ScalePpi.ppi.scale"]]
+        },
+        "TextSlant0Degrees": {
+            "value": 0
+        },
+        "TextSlant10Degrees": {
+            "value": 0.22
+        },
+        "LineAreaLabel.FontStyle.Size": {
+            "value": 0
+        },
+        "Ocean.FontStyle.OutlineWidth": {
+            "value": 0
+        },
+        "Ocean.FontStyle.OutlineColor": {
+            "value": "#ff0000"
+        },
+        "Sea.FontStyle.OutlineWidth": {
+            "value": 0
+        },
+        "Sea.FontStyle.OutlineColor": {
+            "value": "#ff0000"
+        },
+        "Fjord.FontStyle.Size": {
+            "value": ["ref", "Sea.FontStyle.Size"]
+        },
+        "Fjord.FontStyle.OutlineWidth": {
+            "value": ["ref", "Sea.FontStyle.OutlineWidth"]
+        },
+        "Fjord.FontStyle.Color": {
+            "value": ["ref", "Sea.FontStyle.Color"]
+        },
+        "Fjord.FontStyle.OutlineColor": {
+            "value": ["ref", "Sea.FontStyle.OutlineColor"]
+        },
+        "Strait.FontStyle.Size": {
+            "value": ["ref", "Sea.FontStyle.Size"]
+        },
+        "Strait.FontStyle.OutlineWidth": {
+            "value": ["ref", "Sea.FontStyle.OutlineWidth"]
+        },
+        "Strait.FontStyle.Color": {
+            "value": ["ref", "Sea.FontStyle.Color"]
+        },
+        "Strait.FontStyle.OutlineColor": {
+            "value": ["ref", "Sea.FontStyle.OutlineColor"]
+        },
+        "River.FontStyle.Tracking": {
+            "value": 0
+        },
+        "CanalWaterChannel.FontStyle.Tracking": {
+            "value": ["ref", "River.FontStyle.Tracking"]
+        },
+        "IntermittentRiver.FontStyle.Tracking": {
+            "value": ["ref", "River.FontStyle.Tracking"]
+        },
+        "Lake.FontStyle.Tracking": {
+            "value": ["ref", "River.FontStyle.Tracking"]
+        },
+        "Ocean.FontStyle.Tracking": {
+            "value": ["ref", "River.FontStyle.Tracking"]
+        },
+        "BayHarbour.FontStyle.Tracking": {
+            "value": ["ref", "River.FontStyle.Tracking"]
+        },
+        "Sea.FontStyle.Tracking": {
+            "value": ["ref", "River.FontStyle.Tracking"]
+        },
+        "Fjord.FontStyle.Tracking": {
+            "value": ["ref", "Sea.FontStyle.Tracking"]
+        },
+        "Strait.FontStyle.Tracking": {
+            "value": ["ref", "Sea.FontStyle.Tracking"]
+        },
+        "Fjord.FontStyle.Leading": {
+            "value": ["ref", "Sea.FontStyle.Leading"]
+        },
+        "Strait.FontStyle.Leading": {
+            "value": ["ref", "Sea.FontStyle.Leading"]
+        },
+        "Fjord.FontStyle.Oblique": {
+            "value": ["ref", "Sea.FontStyle.Oblique"]
+        },
+        "Strait.FontStyle.Oblique": {
+            "value": ["ref", "Sea.FontStyle.Oblique"]
+        },
+        "Water.Font": {
+            "value": ["ref", "defaultFont"]
+        },
+        "Water.CountryCode": {
+            "value": "name"
+        }
+    }
+}

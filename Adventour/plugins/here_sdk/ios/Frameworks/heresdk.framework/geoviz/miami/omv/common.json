@@ -1,0 +1,33 @@
+{
+    "extends": [
+        "../../common/shared/template/background.style.json",
+        "../../common/omv/template/boundary.conditions.json",
+        "../../common/shared/template/boundary.style.json",
+        "../../common/shared/template/earth.style.json",
+        "../../common/shared/template/landuse.style.json",
+        "../../common/shared/template/places.style.json",
+        "../../common/shared/template/pois.style.json",
+        "../../common/omv/template/route.style.json",
+        "../../common/omv/template/traffic_on_route.style.json",
+        "../../common/shared/template/water.style.json",
+        "../../common/shared/template/environment.style.json",
+        "../../common/shared/template/boundary.definitions.json",
+        "../../common/shared/template/buildings.definitions.json",
+        "../../common/shared/template/earth.definitions.json",
+        "../../common/shared/template/landuse.definitions.json",
+        "../../common/shared/template/places.definitions.json",
+        "../../common/omv/template/places.conditions.json",
+        "../../common/shared/template/pois.definitions.json",
+        "../../common/shared/template/polecaps.definitions.json",
+        "../../common/shared/template/water.definitions.json",
+        "../../common/shared/template/background.definitions.json",
+        "../../common/omv/template/route.definitions.json",
+        "../../common/omv/template/traffic_on_route.definitions.json",
+        "../../common/shared/template/environment.definitions.json",
+        "../../common/shared/template/scaling-factors.definitions.json",
+        "../../common/shared/template/shared.definitions.json",
+        "../../common/shared/template/fontset.definitions.json",
+        "../masterlist/poi_table_here_expression.json",
+        "../masterlist/icon_table_here.json"
+    ]
+}

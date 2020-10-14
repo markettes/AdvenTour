@@ -1,0 +1,2269 @@
+{
+    "extends": ["railroads.style.json"],
+    "styles": [
+        {
+            "id": "road_labels",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["ref", "Is.Road"],
+                [
+                    "any",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Walkway"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "StreetCategory0"]
+                ]
+            ],
+            "technique": "text",
+            "description": "Road Labels",
+            "category": [
+                "case",
+                ["ref", "PedestrianWay"],
+                "pedestrian-labels",
+                ["ref", "Walkway"],
+                "walkway-labels",
+                ["ref", "StreetCategory4"],
+                "road4-labels",
+                ["ref", "StreetCategory3"],
+                "road3-labels",
+                ["ref", "StreetCategory2"],
+                "road2-labels",
+                ["ref", "StreetCategory1"],
+                "road1-labels",
+                ["ref", "StreetCategory0"],
+                "road0-labels",
+                null
+            ],
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": [
+                    "case",
+                    ["ref", "PedestrianWay"],
+                    ["ppi-scale", ["ref", "Street.Pedestrian.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Walkway"],
+                    ["ppi-scale", ["ref", "Street.Walkway.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory4"],
+                    ["ppi-scale", ["ref", "Street.Category4.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory3"],
+                    ["ppi-scale", ["ref", "Street.Category3.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory2"],
+                    ["ppi-scale", ["ref", "Street.Category2.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory1"],
+                    ["ppi-scale", ["ref", "Street.Category1.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory0"],
+                    ["ppi-scale", ["ref", "Street.Category0.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    null
+                ],
+                "vertical-alignment": "Dynamic",
+                "polyline-padding-px": 2,
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "line-width": [
+                    "case",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "pedestrianOnlyLineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Pedestrian.UnpavedWidth"]],
+                    ["ref", "Walkway"],
+                    ["ref", "walkwayLineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Walkway.UnpavedWidth"]],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "road4LineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category4.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category4.RampWidth"]],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "road3LineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category3.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category3.RampWidth"]],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "road2LineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category2.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category2.RampWidth"]],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "road1LineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category1.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category1.RampWidth"]],
+                    ["ref", "StreetCategory0"],
+                    ["ref", "road0LineWidthZoom"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category0.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category0.RampWidth"]],
+                    null
+                ],
+                "softdepth": ["ref", "softDepthThreshold"],
+                "outline-color": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Pedestrian.FontStyle.UnpavedOutlineColor"],
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Street.Pedestrian.FontStyle.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Walkway.FontStyle.UnpavedOutlineColor"],
+                    ["ref", "Walkway"],
+                    ["ref", "Street.Walkway.FontStyle.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category4.FontStyle.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category4.FontStyle.TollOutlineColor"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Street.Category4.FontStyle.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category3.FontStyle.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category3.FontStyle.TollOutlineColor"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Street.Category3.FontStyle.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category2.FontStyle.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category2.FontStyle.TollOutlineColor"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Street.Category2.FontStyle.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category1.FontStyle.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category1.FontStyle.TollOutlineColor"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Street.Category1.FontStyle.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category0.FontStyle.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category0.FontStyle.TollOutlineColor"],
+                    ["ref", "StreetCategory0"],
+                    ["ref", "Street.Category0.FontStyle.OutlineColor"],
+                    null
+                ],
+                "far-threshold": 0.85,
+                "color": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Pedestrian.FontStyle.UnpavedColor"],
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Street.Pedestrian.FontStyle.Color"],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Walkway.FontStyle.UnpavedColor"],
+                    ["ref", "Walkway"],
+                    ["ref", "Street.Walkway.FontStyle.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category4.FontStyle.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category4.FontStyle.TollColor"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Street.Category4.FontStyle.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category3.FontStyle.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category3.FontStyle.TollColor"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Street.Category3.FontStyle.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category2.FontStyle.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category2.FontStyle.TollColor"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Street.Category2.FontStyle.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category1.FontStyle.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category1.FontStyle.TollColor"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Street.Category1.FontStyle.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category0.FontStyle.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category0.FontStyle.TollColor"],
+                    ["ref", "StreetCategory0"],
+                    ["ref", "Street.Category0.FontStyle.Color"],
+                    null
+                ],
+                "size": [
+                    "case",
+                    ["ref", "PedestrianWay"],
+                    ["ppi-scale", ["ref", "Street.Pedestrian.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Walkway"],
+                    ["ppi-scale", ["ref", "Street.Walkway.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["ppi-scale", ["ref", "Street.Category4.FontStyle.RampSize"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory4"],
+                    ["ppi-scale", ["ref", "Street.Category4.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["ppi-scale", ["ref", "Street.Category3.FontStyle.RampSize"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory3"],
+                    ["ppi-scale", ["ref", "Street.Category3.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["ppi-scale", ["ref", "Street.Category2.FontStyle.RampSize"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory2"],
+                    ["ppi-scale", ["ref", "Street.Category2.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["ppi-scale", ["ref", "Street.Category1.FontStyle.RampSize"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory1"],
+                    ["ppi-scale", ["ref", "Street.Category1.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["ppi-scale", ["ref", "Street.Category0.FontStyle.RampSize"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "StreetCategory0"],
+                    ["ppi-scale", ["ref", "Street.Category0.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    null
+                ],
+                "font": ["ref", "defaultFont"],
+                "shape": "line",
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"]
+            }
+        },
+        {
+            "id": "ferry_labels",
+            "styleSet": "tilezen_lines",
+            "when": ["ref", "Ferry"],
+            "technique": "text",
+            "category": "ferry-labels",
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": ["ppi-scale", ["ref", "Ferry.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                "vertical-alignment": "Top",
+                "polyline-padding-px": 2,
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "softdepth": ["ref", "softDepthThreshold"],
+                "outline-color": ["ref", "Ferry.FontStyle.OutlineColor"],
+                "far-threshold": 0.85,
+                "color": ["ref", "Ferry.FontStyle.Color"],
+                "size": ["ppi-scale", ["ref", "Ferry.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                "font": ["ref", "defaultFont"],
+                "shape": "line",
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"]
+            },
+            "description": "Ferry Labels"
+        },
+        {
+            "id": "road_outlines",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["ref", "Is.Road"],
+                ["!", ["ref", "Is.AlsoPolygon"]],
+                [
+                    "any",
+                    [
+                        "all",
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["ref", "Is.UnderConstruction"]]
+                    ],
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Walkway"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "StreetCategory0"]
+                ]
+            ],
+            "technique": "line",
+            "description": "road_outline",
+            "category": [
+                "case",
+                [
+                    "all",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-outline-pedestrian",
+                [
+                    "all",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-pedestrian",
+                ["ref", "PedestrianWay"],
+                "pedestrian-outline",
+                [
+                    "all",
+                    ["ref", "Walkway"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-outline-walkway",
+                [
+                    "all",
+                    ["ref", "Walkway"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-walkway",
+                ["ref", "Walkway"],
+                "walkway-outline",
+                [
+                    "all",
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-4",
+                [
+                    "any",
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Ramp"],
+                        ["ref", "Is.Bridge"]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Bridge"]
+                    ]
+                ],
+                "bridge-outline-4",
+                ["ref", "StreetCategory4"],
+                "road-outline-4",
+                [
+                    "all",
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-3",
+                [
+                    "any",
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Ramp"],
+                        ["ref", "Is.Bridge"]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Bridge"]
+                    ]
+                ],
+                "bridge-outline-3",
+                ["ref", "StreetCategory3"],
+                "road-outline-3",
+                [
+                    "all",
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-2",
+                [
+                    "any",
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Ramp"],
+                        ["ref", "Is.Bridge"]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Bridge"]
+                    ]
+                ],
+                "bridge-outline-2",
+                ["ref", "StreetCategory2"],
+                "road-outline-2",
+                [
+                    "all",
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-1",
+                [
+                    "any",
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Ramp"],
+                        ["ref", "Is.Bridge"]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Bridge"]
+                    ]
+                ],
+                "bridge-outline-1",
+                ["ref", "StreetCategory1"],
+                "road-outline-1",
+                [
+                    "all",
+                    ["ref", "StreetCategory0"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-outline-0",
+                [
+                    "any",
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Ramp"],
+                        ["ref", "Is.Bridge"]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Bridge"]
+                    ]
+                ],
+                "bridge-outline-0",
+                ["ref", "StreetCategory0"],
+                "road-outline-0",
+                null
+            ],
+            "attr": {
+                "cap": [
+                    "case",
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["ref", "PedestrianWay"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        ["ref", "PedestrianWay"],
+                        [
+                            "all",
+                            ["ref", "Walkway"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory4"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory4"],
+                            ["ref", "Is.Bridge"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory3"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory3"],
+                            ["ref", "Is.Bridge"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory2"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory2"],
+                            ["ref", "Is.Bridge"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory1"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory1"],
+                            ["ref", "Is.Bridge"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory0"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory0"],
+                            ["ref", "Is.Bridge"]
+                        ]
+                    ],
+                    "butt",
+                    null
+                ],
+                "dasharray": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["ref", "Is.UnderConstruction"]]
+                    ],
+                    ["ref", "tunnelDashArray"],
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    ["ref", "PedestrianWay"],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.LineLength"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.GapLength"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Walkway.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Walkway.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category4.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category4.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category3.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category3.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category2.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category2.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category1.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category1.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category0.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category0.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    null
+                ],
+                "fillcolor": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["ref", "Is.UnderConstruction"]]
+                    ],
+                    "#00000000",
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["ref", "PedestrianWay"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        ["ref", "PedestrianWay"],
+                        [
+                            "all",
+                            ["ref", "Walkway"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory4"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory3"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory2"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory1"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory0"],
+                            ["ref", "Is.UnderConstruction"]
+                        ]
+                    ],
+                    ["ref", "transparent"],
+                    null
+                ],
+                "width": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Pedestrian.UnpavedOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Pedestrian.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Pedestrian.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "PedestrianWay"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Pedestrian.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Pedestrian.Outline.Width"]],
+                                ["ref", "Street.Pedestrian.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Walkway.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Walkway.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Walkway.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "Walkway"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Walkway.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Walkway.Outline.Width"]],
+                                ["ref", "Street.Walkway.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category4.UnpavedOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category4.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Category4.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category4.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category4.RampOutlineWidth"]],
+                                ["ref", "Street.Category4.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory4"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category4.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category4.Outline.Width"]],
+                                ["ref", "Street.Category4.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category3.UnpavedOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category3.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Category3.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category3.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category3.RampOutlineWidth"]],
+                                ["ref", "Street.Category3.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory3"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category3.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category3.Outline.Width"]],
+                                ["ref", "Street.Category3.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category2.UnpavedOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category2.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Category2.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category2.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category2.RampOutlineWidth"]],
+                                ["ref", "Street.Category2.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory2"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category2.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category2.Outline.Width"]],
+                                ["ref", "Street.Category2.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category1.UnpavedOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category1.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Category1.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category1.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category1.RampOutlineWidth"]],
+                                ["ref", "Street.Category1.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory1"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category1.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category1.Outline.Width"]],
+                                ["ref", "Street.Category1.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category0.UnpavedOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category0.UnpavedOutlineWidth"]],
+                                ["ref", "Street.Category0.UnpavedWidth"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category0.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category0.RampOutlineWidth"]],
+                                ["ref", "Street.Category0.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory0"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category0.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                ["*", 2, ["ref", "Street.Category0.Outline.Width"]],
+                                ["ref", "Street.Category0.Width"]
+                            ]
+                        ]
+                    ],
+                    null
+                ],
+                "antialias": true,
+                "color": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Pedestrian.UnpavedOutlineColor"],
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Street.Pedestrian.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Walkway.UnpavedOutlineColor"],
+                    ["ref", "Walkway"],
+                    ["ref", "Street.Walkway.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Category4.TunnelOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category4.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category4.TollOutlineColor"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Street.Category4.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Category3.TunnelOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category3.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category3.TollOutlineColor"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Street.Category3.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Category2.TunnelOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category2.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category2.TollOutlineColor"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Street.Category2.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Category1.TunnelOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category1.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category1.TollOutlineColor"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Street.Category1.OutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category0.TunnelOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category0.UnpavedOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["get", "toll"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Category0.TollTunnelOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category0.TollOutlineColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category0.OutlineColor"],
+                    null
+                ],
+                "smooth-steps": [
+                    "case",
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["ref", "Is.Tunnel"],
+                            ["!", ["ref", "Is.UnderConstruction"]]
+                        ],
+                        ["ref", "PedestrianWay"]
+                    ],
+                    ["make-vector", 4, 0.5],
+                    ["ref", "Walkway"],
+                    ["make-vector", 4, 2],
+                    null
+                ]
+            }
+        },
+        {
+            "id": "bridge_extra_outlines",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["ref", "Is.Road"],
+                ["ref", "Is.Bridge"],
+                ["!", ["ref", "Is.AlsoPolygon"]],
+                [
+                    "any",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Walkway"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "StreetCategory0"]
+                ]
+            ],
+            "technique": "line",
+            "description": "bridge_extra_outline",
+            "category": [
+                "case",
+                ["ref", "PedestrianWay"],
+                "bridge-outline-pedestrian-extra",
+                ["ref", "Walkway"],
+                "bridge-outline-walkway-extra",
+                ["ref", "StreetCategory4"],
+                "bridge-outline-4-extra",
+                ["ref", "StreetCategory3"],
+                "bridge-outline-3-extra",
+                ["ref", "StreetCategory2"],
+                "bridge-outline-2-extra",
+                ["ref", "StreetCategory1"],
+                "bridge-outline-1-extra",
+                ["ref", "StreetCategory0"],
+                "bridge-outline-0-extra",
+                null
+            ],
+            "attr": {
+                "cap": "butt",
+                "width": [
+                    "case",
+                    ["ref", "PedestrianWay"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Pedestrian.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Pedestrian.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Pedestrian.BridgeOutlineWidth"]]
+                                ],
+                                ["ref", "Street.Pedestrian.Width"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "Walkway"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Walkway.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Walkway.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Walkway.Outline.Width"]]
+                                ],
+                                ["ref", "Street.Walkway.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category4.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category4.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category4.RampOutlineWidth"]]
+                                ],
+                                ["ref", "Street.Category4.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory4"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category4.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category4.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category4.Outline.Width"]]
+                                ],
+                                ["ref", "Street.Category4.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category3.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category3.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category3.RampOutlineWidth"]]
+                                ],
+                                ["ref", "Street.Category3.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory3"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category3.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category3.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category3.Outline.Width"]]
+                                ],
+                                ["ref", "Street.Category3.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category2.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category2.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category2.RampOutlineWidth"]]
+                                ],
+                                ["ref", "Street.Category2.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory2"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category2.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category2.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category2.Outline.Width"]]
+                                ],
+                                ["ref", "Street.Category2.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category1.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category1.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category1.RampOutlineWidth"]]
+                                ],
+                                ["ref", "Street.Category1.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory1"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category1.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category1.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category1.Outline.Width"]]
+                                ],
+                                ["ref", "Street.Category1.Width"]
+                            ]
+                        ]
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category0.RampOutlineWidth"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category0.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category0.RampOutlineWidth"]]
+                                ],
+                                ["ref", "Street.Category0.RampWidth"]
+                            ]
+                        ]
+                    ],
+                    ["ref", "StreetCategory0"],
+                    [
+                        "case",
+                        ["<=", ["ref", "Street.Category0.Outline.Width"], 0],
+                        0,
+                        [
+                            "world-ppi-scale",
+                            [
+                                "+",
+                                [
+                                    "+",
+                                    ["*", 2, ["ref", "Street.Category0.BridgeOutlineWidth"]],
+                                    ["*", 2, ["ref", "Street.Category0.Outline.Width"]]
+                                ],
+                                ["ref", "Street.Category0.Width"]
+                            ]
+                        ]
+                    ],
+                    null
+                ],
+                "antialias": true,
+                "color": [
+                    "case",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Street.Pedestrian.BridgeColor"],
+                    ["ref", "Walkway"],
+                    ["ref", "Street.Walkway.BridgeColor"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Street.Category4.BridgeColor"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Street.Category3.BridgeColor"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Street.Category2.BridgeColor"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Street.Category1.BridgeColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category0.TollBridgeColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category0.BridgeColor"],
+                    null
+                ]
+            }
+        },
+        {
+            "id": "center_lines",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["ref", "Is.Road"],
+                ["!", ["ref", "Is.AlsoPolygon"]],
+                ["ref", "StreetCategory0"],
+                ["!", ["ref", "Is.Ramp"]]
+            ],
+            "technique": "line",
+            "description": "center",
+            "category": [
+                "case",
+                ["ref", "Is.Bridge"],
+                "bridge-0-center",
+                ["ref", "Is.Tunnel"],
+                "tunnel-0-center",
+                "road-0-center"
+            ],
+            "attr": {
+                "cap": [
+                    "case",
+                    ["ref", "Is.UnderConstruction"],
+                    "butt",
+                    null
+                ],
+                "dasharray": [
+                    "case",
+                    ["ref", "Is.UnderConstruction"],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category0.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category0.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    null
+                ],
+                "fillcolor": [
+                    "case",
+                    ["ref", "Is.UnderConstruction"],
+                    ["ref", "transparent"],
+                    null
+                ],
+                "width": ["ref", "road0CenterLineWidthZoom"],
+                "antialias": true,
+                "color": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category0.CenterLine.TunnelColor"],
+                    [
+                        "all",
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category0.TollCenterlineColor"],
+                    ["all", ["get", "toll"], ["ref", "Is.Tunnel"]],
+                    ["ref", "Street.Category0.TollTunnelCenterlineColor"],
+                    ["ref", "Street.Category0.CenterLine.Color"]
+                ]
+            }
+        },
+        {
+            "id": "roads",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["ref", "Is.Road"],
+                ["!", ["ref", "Is.AlsoPolygon"]],
+                [
+                    "any",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Walkway"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "StreetCategory0"]
+                ]
+            ],
+            "technique": "line",
+            "description": "road",
+            "category": [
+                "case",
+                [
+                    "all",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-pedestrian",
+                [
+                    "all",
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-pedestrian",
+                ["ref", "PedestrianWay"],
+                "pedestrian",
+                [
+                    "all",
+                    ["ref", "Walkway"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-walkway",
+                ["ref", "Walkway"],
+                "walkway",
+                [
+                    "all",
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-4",
+                [
+                    "all",
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-4",
+                ["ref", "StreetCategory4"],
+                "road-4",
+                [
+                    "all",
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-3",
+                [
+                    "all",
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-3",
+                ["ref", "StreetCategory3"],
+                "road-3",
+                [
+                    "all",
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-2",
+                [
+                    "all",
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-2",
+                ["ref", "StreetCategory2"],
+                "road-2",
+                [
+                    "all",
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-1",
+                [
+                    "all",
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-1",
+                ["ref", "StreetCategory1"],
+                "road-1",
+                [
+                    "all",
+                    ["ref", "StreetCategory0"],
+                    ["ref", "Is.Bridge"]
+                ],
+                "bridge-0",
+                [
+                    "all",
+                    ["ref", "StreetCategory0"],
+                    ["ref", "Is.Tunnel"]
+                ],
+                "tunnel-0",
+                ["ref", "StreetCategory0"],
+                "road-0",
+                null
+            ],
+            "attr": {
+                "cap": [
+                    "case",
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["ref", "PedestrianWay"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        ["ref", "PedestrianWay"],
+                        [
+                            "all",
+                            ["ref", "Walkway"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory4"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory3"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory2"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory1"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory0"],
+                            ["ref", "Is.UnderConstruction"]
+                        ]
+                    ],
+                    "butt",
+                    null
+                ],
+                "dasharray": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    ["ref", "PedestrianWay"],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.LineLength"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Pedestrian.GapLength"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Walkway.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Walkway.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category4.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category4.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category3.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category3.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category2.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category2.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category1.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category1.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.UnderConstruction"]
+                    ],
+                    [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category0.ConstructionGap"]],
+                        ["world-discrete-ppi-scale", ["ref", "Street.Category0.ConstructionDash"]],
+                        0,
+                        0
+                    ],
+                    null
+                ],
+                "fillcolor": [
+                    "case",
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["ref", "PedestrianWay"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        ["ref", "PedestrianWay"],
+                        [
+                            "all",
+                            ["ref", "Walkway"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory4"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory3"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory2"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory1"],
+                            ["ref", "Is.UnderConstruction"]
+                        ],
+                        [
+                            "all",
+                            ["ref", "StreetCategory0"],
+                            ["ref", "Is.UnderConstruction"]
+                        ]
+                    ],
+                    ["ref", "transparent"],
+                    null
+                ],
+                "dummy": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Bridge"]
+                    ],
+                    0,
+                    null
+                ],
+                "width": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Pedestrian.UnpavedWidth"]],
+                    ["ref", "PedestrianWay"],
+                    ["world-ppi-scale", ["ref", "Street.Pedestrian.Width"]],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Walkway.UnpavedWidth"]],
+                    ["ref", "Walkway"],
+                    ["world-ppi-scale", ["ref", "Street.Walkway.Width"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category4.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category4.RampWidth"]],
+                    ["ref", "StreetCategory4"],
+                    ["world-ppi-scale", ["ref", "Street.Category4.Width"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category3.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category3.RampWidth"]],
+                    ["ref", "StreetCategory3"],
+                    ["world-ppi-scale", ["ref", "Street.Category3.Width"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category2.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category2.RampWidth"]],
+                    ["ref", "StreetCategory2"],
+                    ["world-ppi-scale", ["ref", "Street.Category2.Width"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category1.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category1.RampWidth"]],
+                    ["ref", "StreetCategory1"],
+                    ["world-ppi-scale", ["ref", "Street.Category1.Width"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category0.UnpavedWidth"]],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Ramp"]
+                    ],
+                    ["world-ppi-scale", ["ref", "Street.Category0.RampWidth"]],
+                    ["ref", "StreetCategory0"],
+                    ["world-ppi-scale", ["ref", "Street.Category0.Width"]],
+                    null
+                ],
+                "antialias": true,
+                "color": [
+                    "case",
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Pedestrian.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "PedestrianWay"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Pedestrian.TunnelColor"],
+                    ["ref", "PedestrianWay"],
+                    ["ref", "Street.Pedestrian.Color"],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Walkway.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "Walkway"],
+                        ["ref", "Is.Tunnel"]
+                    ],
+                    ["ref", "Street.Walkway.TunnelColor"],
+                    ["ref", "Walkway"],
+                    ["ref", "Street.Walkway.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category4.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category4.TollColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Tunnel"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category4.TollTunnelColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory4"],
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category4.TunnelColor"],
+                    ["ref", "StreetCategory4"],
+                    ["ref", "Street.Category4.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category3.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category3.TollColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Tunnel"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category3.TollTunnelColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory3"],
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category3.TunnelColor"],
+                    ["ref", "StreetCategory3"],
+                    ["ref", "Street.Category3.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category2.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category2.TollColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Tunnel"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category2.TollTunnelColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory2"],
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category2.TunnelColor"],
+                    ["ref", "StreetCategory2"],
+                    ["ref", "Street.Category2.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category1.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category1.TollColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Tunnel"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category1.TollTunnelColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory1"],
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category1.TunnelColor"],
+                    ["ref", "StreetCategory1"],
+                    ["ref", "Street.Category1.Color"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Unpaved"]
+                    ],
+                    ["ref", "Street.Category0.UnpavedColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["get", "toll"],
+                        ["!", ["ref", "Is.Tunnel"]]
+                    ],
+                    ["ref", "Street.Category0.TollColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Tunnel"],
+                        ["get", "toll"]
+                    ],
+                    ["ref", "Street.Category0.TollTunnelColor"],
+                    [
+                        "all",
+                        ["ref", "StreetCategory0"],
+                        ["ref", "Is.Tunnel"],
+                        ["!", ["get", "toll"]]
+                    ],
+                    ["ref", "Street.Category0.TunnelColor"],
+                    ["ref", "StreetCategory0"],
+                    ["ref", "Street.Category0.Color"],
+                    null
+                ],
+                "smooth-steps": [
+                    "case",
+                    ["ref", "PedestrianWay"],
+                    ["make-vector", 4, 0.5],
+                    ["ref", "Walkway"],
+                    ["make-vector", 4, 2],
+                    null
+                ]
+            }
+        },
+        {
+            "id": "ferry_lines",
+            "styleSet": "tilezen_lines",
+            "when": ["ref", "Ferry"],
+            "technique": "line",
+            "category": "ferry",
+            "attr": {
+                "dasharray": ["ref", "ferryDashArray"],
+                "fillcolor": ["ref", "Ferry.PolylineStyles.SecondaryColor"],
+                "width": ["world-ppi-scale", ["ref", "Ferry.PolylineStyles.Width"]],
+                "antialias": true,
+                "color": ["ref", "Ferry.PolylineStyles.Color"],
+                "smooth-steps": ["make-vector", 4, 0.5]
+            },
+            "description": "Ferry"
+        }
+    ]
+}

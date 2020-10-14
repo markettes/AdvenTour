@@ -1,0 +1,40 @@
+{
+    "definitions": {
+        "AreaInfo.FontStyle.Leading": {
+            "value": 1
+        },
+        "ParkingArea.Color": {
+            "value": ["ref", "PedestrianArea.Color"]
+        },
+        "WaterPark.Color": {
+            "value": "#00000000"
+        },
+        "WaterParkInfo.FontStyle.Size": {
+            "value": 0
+        },
+        "WaterParkInfo.FontStyle.Color": {
+            "value": "#0000ff"
+        },
+        "WaterParkInfo.FontStyle.OutlineColor": {
+            "value": "#ffffff"
+        },
+        "WaterParkInfo.FontStyle.OutlineWidth": {
+            "value": 1
+        },
+        "Polygon.Ambient.Factor": {
+            "value": 1
+        },
+        "Polygon.Diffuse.Factor": {
+            "value": 1
+        },
+        "Polygon.Land.Disable.Shading": {
+            "value": false
+        },
+        "NationalParkInfo.Font": {
+            "value": ["ref", "defaultFont"]
+        },
+        "PavedArea.Color": {
+            "value": "#ced8dc00"
+        }
+    }
+}

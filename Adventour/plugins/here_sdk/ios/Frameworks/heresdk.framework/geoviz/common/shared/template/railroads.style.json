@@ -1,0 +1,200 @@
+{
+    "styles": [
+        {
+            "id": "rail_labels",
+            "styleSet": "tilezen_lines",
+            "when": ["ref", "Rail"],
+            "technique": "text",
+            "description": "railway labels",
+            "category": ["match", ["ref", "getAttrib"],
+                "rail", "rail-labels",
+                "rail-labels"],
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": ["match", ["ref", "getAttrib"],
+                    "rail", ["ppi-scale", ["ref", "Rail.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "Rail.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]]],
+                "vertical-alignment": "Top",
+                "polyline-padding-px": 2,
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "softdepth": ["ref", "softDepthThreshold"],
+                "outline-color": ["match", ["ref", "getAttrib"],
+                    "rail", ["ref", "Rail.FontStyle.OutlineColor"],
+                    ["ref", "Rail.FontStyle.OutlineColor"]],
+                "far-threshold": 0.85,
+                "color": ["match", ["ref", "getAttrib"],
+                    "rail", ["ref", "Rail.FontStyle.Color"],
+                    ["ref", "Rail.FontStyle.Color"]],
+                "size": ["match", ["ref", "getAttrib"],
+                    "rail", ["ppi-scale", ["ref", "Rail.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "Rail.FontStyle.Size"], ["ref", "ScalePpi.labels"]]],
+                "font": ["ref", "defaultFont"],
+                "shape": "line",
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"]
+            }
+        },
+        {
+            "id": "rail_outlines",
+            "styleSet": "tilezen_lines",
+            "when": ["ref", "Rail"],
+            "technique": "line",
+            "description": "railway_outline",
+            "category": ["match", ["ref", "getAttrib"],
+                "rail", "rail-outline",
+                "rail-outline"],
+            "attr": {
+                "width": ["match", ["ref", "getAttrib"],
+                    "rail", ["world-ppi-scale", ["ref", "Rail.PolylineStyles.OutlineWidth"]],
+                    0],
+                "antialias": true,
+                "color": ["match", ["ref", "getAttrib"],
+                    "rail", ["ref", "Rail.PolylineStyles.OutlineColor"],
+                    ["ref", "Rail.PolylineStyles.OutlineColor"]],
+                "smooth-steps": ["make-vector", 4, 0.5]
+            }
+        },
+        {
+            "id": "rail_lines",
+            "styleSet": "tilezen_lines",
+            "when": ["ref", "Rail"],
+            "technique": "line",
+            "description": "railway",
+            "category": ["match", ["ref", "getAttrib"],
+                "rail", "rail",
+                "rail"],
+            "attr": {
+                "cap": "butt",
+                "dasharray": ["match", ["ref", "getAttrib"],
+                    "rail", [
+                        "make-vector",
+                        ["world-discrete-ppi-scale", ["ref", "Rail.PolylineStyles.DashArray1"]],
+                        ["world-discrete-ppi-scale", ["ref", "Rail.PolylineStyles.DashArray2"]],
+                        0,
+                        0
+                    ],
+                    null],
+                "fillcolor": ["match", ["ref", "getAttrib"],
+                    "rail", ["ref", "Rail.PolylineStyles.SecondaryColor"],
+                    ["ref", "Rail.PolylineStyles.SecondaryColor"]],
+                "width": ["match", ["ref", "getAttrib"],
+                    "rail", ["world-ppi-scale", ["ref", "Rail.PolylineStyles.Width"]],
+                    ["world-ppi-scale", ["ref", "Rail.PolylineStyles.Width"]]],
+                "antialias": true,
+                "color": ["match", ["ref", "getAttrib"],
+                    "rail", ["ref", "Rail.PolylineStyles.Color"],
+                    ["ref", "Rail.PolylineStyles.Color"]],
+                "smooth-steps": ["make-vector", 4, 0.5]
+            }
+        },
+        {
+            "id": "aerial_way_labels",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "any",
+                    ["ref", "CableCar"],
+                    ["ref", "Gondola"]
+            ],
+            "technique": "text",
+            "description": "aerial_way_labels",
+            "category": [
+                "case",
+                ["ref", "CableCar"],
+                "cable-car-labels",
+                ["ref", "Gondola"],
+                "gondola-labels",
+                null
+            ],
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": [
+                    "case",
+                    ["ref", "CableCar"],
+                    ["ref", "CableCar.FontStyle.OutlineWidth"],
+                    ["ref", "Gondola"],
+                    ["ref", "Gondola.FontStyle.OutlineWidth"],
+                    null
+                ],
+                "vertical-alignment": "Top",
+                "polyline-padding-px": 2,
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "softdepth": ["ref", "softDepthThreshold"],
+                "outline-color": [
+                    "case",
+                    ["ref", "CableCar"],
+                    ["ref", "CableCar.FontStyle.OutlineColor"],
+                    ["ref", "Gondola"],
+                    ["ref", "Gondola.FontStyle.OutlineColor"],
+                    null
+                ],
+                "far-threshold": 0.85,
+                "color": [
+                    "case",
+                    ["ref", "CableCar"],
+                    ["ref", "CableCar.FontStyle.Color"],
+                    ["ref", "Gondola"],
+                    ["ref", "Gondola.FontStyle.Color"],
+                    null
+                ],
+                "size": [
+                    "case",
+                    ["ref", "CableCar"],
+                    ["ref", "CableCar.FontStyle.Size"],
+                    ["ref", "Gondola"],
+                    ["ref", "Gondola.FontStyle.Size"],
+                    null
+                ],
+                "font": ["ref", "defaultFont"],
+                "shape": "line",
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"]
+            }
+        },
+        {
+            "id": "aerial_way_lines",
+            "styleSet": "tilezen_lines",
+            "when": [
+                "any",
+                    ["ref", "CableCar"],
+                    ["ref", "Gondola"]
+            ],
+            "technique": "line",
+            "description": "aerial_way",
+            "category": [
+                "case",
+                ["ref", "CableCar"],
+                "cable_car",
+                ["ref", "Gondola"],
+                "gondola",
+                null
+            ],
+            "attr": {
+                "cap": "butt",
+                "width": [
+                    "case",
+                    ["ref", "CableCar"],
+                    ["ref", "CableCar.Width"],
+                    ["ref", "Gondola"],
+                    ["ref", "Gondola.Width"],
+                    null
+                ],
+                "antialias": true,
+                "color": [
+                    "case",
+                    ["ref", "CableCar"],
+                    ["ref", "CableCar.Color"],
+                    ["ref", "Gondola"],
+                    ["ref", "Gondola.Color"],
+                    null
+                ],
+                "smooth-steps": ["make-vector", 4, 2]
+            }
+        }
+    ]
+}
