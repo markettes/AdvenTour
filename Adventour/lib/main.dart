@@ -14,7 +14,31 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'HERE SDK for Flutter - Hello Map!',
       debugShowCheckedModeBanner: false,
-      home: HereMap(onMapCreated: _onMapCreated),
+      theme: ThemeData(
+        primaryColor: Colors.deepPurple[500],
+        accentColor: Colors.deepPurple[100],
+        backgroundColor: Colors.deepPurple[50],
+        textTheme: TextTheme(
+          headline1: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 30,
+            color: Colors.white,
+          ),
+          headline2: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 30,
+            color: Colors.deepPurple[500],
+          ),
+          bodyText1: TextStyle(
+            fontWeight: FontWeight.w400,
+          ),
+          bodyText2: TextStyle(
+            fontWeight: FontWeight.w400,
+            color: Colors.black54,
+          ),
+        ),
+      ),
+      home: MainPage(),
     );
   }
 
