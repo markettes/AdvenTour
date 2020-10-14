@@ -38,7 +38,14 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: MainPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (_) => MainPage(),
+        '/map': (_) => HereMap(
+              onMapCreated: _onMapCreated,
+            )
+      },
+      //home: MainPage(),
     );
   }
 
