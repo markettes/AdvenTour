@@ -1,3 +1,4 @@
+import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -27,7 +28,8 @@ class MainPage extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyText2,
             ),
             PrimaryButton(
-              
+              text: 'LOG IN',
+              onPressed: () {},
             )
           ],
         )),

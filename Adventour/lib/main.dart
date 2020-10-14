@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.deepPurple[500],
-        accentColor: Colors.deepPurple[300],
+        accentColor: Colors.deepPurple[100],
+        backgroundColor: Colors.deepPurple[50],
         textTheme: TextTheme(
           headline1: TextStyle(
             fontWeight: FontWeight.w500,
