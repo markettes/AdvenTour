@@ -1,0 +1,22 @@
+{
+    "definitions": {
+        "zoomWidthPpiScaled": {
+            "value": ["ppi-scale", ["ref", "zoomWidth"], ["ref", "ScalePpi.ppi.scale"]]
+        },
+        "zoomWidthDiscretePpiScaled": {
+            "value": ["ppi-scale", ["ref", "zoomWidthDiscrete"], ["ref", "ScalePpi.ppi.scale"]]
+        },
+        "RouteStyle.1.Route.TraveledColor": {
+            "value": ["ref", "RouteStyle.1.Route.Color"]
+        },
+        "RouteStyle.1.Route.TraveledOutlineColor": {
+            "value": ["ref", "RouteStyle.1.Route.OutlineColor"]
+        },
+        "RouteStyle.1.Route.UpcomingColor": {
+            "value": ["ref", "RouteStyle.1.Route.Color"]
+        },
+        "RouteStyle.1.Route.UpcomingOutlineColor": {
+            "value": ["ref", "RouteStyle.1.Route.OutlineColor"]
+        }
+    }
+}

@@ -1,0 +1,4 @@
+framework module heresdk {
+  header "heresdk-Swift.h"
+  requires objc
+}

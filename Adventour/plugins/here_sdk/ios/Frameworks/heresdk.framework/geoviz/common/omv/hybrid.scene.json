@@ -1,0 +1,7 @@
+{
+  "objects": {"$ref": "./list/hybrid.objects.json#"},
+  "bucketPriorities": {"$ref": "./list/MapOmvLayerPriorities.json#"},
+  "labelDrawPriorities": "../shared/list/label.priorities.json",
+  "labelReservePrioritiesAndOverlapRules": "../shared/list/label.reserve-priority-overlap.json",
+  "visibilityRanges": "./list/MapOmvVisibilityRanges.json"
+}

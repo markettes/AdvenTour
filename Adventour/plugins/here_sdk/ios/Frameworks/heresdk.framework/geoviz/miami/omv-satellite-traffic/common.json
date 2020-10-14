@@ -1,0 +1,9 @@
+{
+    "extends": [
+        "../omv-satellite/common.json",
+        "../../common/omv-traffic/template/traffic_flow.style.json",
+        "../../common/omv-traffic/template/traffic_incident.style.json",
+        "../../common/omv-traffic/template/traffic.definitions.json",
+        "../masterlist/icon_table_here.json"
+    ]
+}

@@ -1,0 +1,2361 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.1.3 (swiftlang-1100.0.282.1 clang-1100.0.33.15)
+// swift-module-flags: -target arm64-apple-ios12.4 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name heresdk
+import Foundation
+import GLKit
+import Network
+import Swift
+import SystemConfiguration
+import UIKit
+@_exported import heresdk
+import os.log
+import os
+public struct GeoBox : Swift.Hashable {
+  public let southWestCorner: heresdk.GeoCoordinates
+  public let northEastCorner: heresdk.GeoCoordinates
+  public init(southWestCorner: heresdk.GeoCoordinates, northEastCorner: heresdk.GeoCoordinates)
+  public static func containing(geoCoordinates: [heresdk.GeoCoordinates]) -> heresdk.GeoBox?
+  public func intersects(geoBox: heresdk.GeoBox) -> Swift.Bool
+  public func contains(geoBox: heresdk.GeoBox) -> Swift.Bool
+  public func contains(geoCoordinates: heresdk.GeoCoordinates) -> Swift.Bool
+  public func expandedBy(southMeters: Swift.Double, westMeters: Swift.Double, northMeters: Swift.Double, eastMeters: Swift.Double) throws -> heresdk.GeoBox
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.GeoBox, b: heresdk.GeoBox) -> Swift.Bool
+}
+public struct GeoCircle : Swift.Hashable {
+  public let center: heresdk.GeoCoordinates
+  public let radiusInMeters: Swift.Double
+  @available(*, deprecated, message: "Will be removed in v4.5.0, use the variant that accepts a Double instead.")
+  public init(center: heresdk.GeoCoordinates, radiusInMeters: Swift.Float)
+  public init(center: heresdk.GeoCoordinates, radiusInMeters: Swift.Double)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.GeoCircle, b: heresdk.GeoCircle) -> Swift.Bool
+}
+public struct GeoCoordinates : Swift.Hashable {
+  public let latitude: Swift.Double
+  public let longitude: Swift.Double
+  public let altitude: Swift.Double?
+  public init(latitude: Swift.Double, longitude: Swift.Double, altitude: Swift.Double)
+  public init(latitude: Swift.Double, longitude: Swift.Double)
+  public func distance(to point: heresdk.GeoCoordinates) -> Swift.Double
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+public typealias InstantiationError = heresdk.InstantiationErrorCode
+extension InstantiationErrorCode : Swift.Error {
+}
+public enum InstantiationErrorCode : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case illegalArguments
+  case failed
+  case sharedSdkEngineNotInstantiated
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.InstantiationErrorCode]
+  public static var allCases: [heresdk.InstantiationErrorCode] {
+    get
+  }
+}
+public struct Anchor2D : Swift.Hashable {
+  public var horizontal: Swift.Double
+  public var vertical: Swift.Double
+  public init()
+  public init(horizontal: Swift.Double, vertical: Swift.Double)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Anchor2D, b: heresdk.Anchor2D) -> Swift.Bool
+}
+public class Angle {
+  public var degrees: Swift.Double {
+    get
+  }
+  public var radians: Swift.Double {
+    get
+  }
+  @objc deinit
+  public static func fromDegrees(angle: Swift.Double) -> heresdk.Angle
+  public static func fromRadians(angle: Swift.Double) -> heresdk.Angle
+}
+public struct AngleRange : Swift.Hashable {
+  public let start: Swift.Double
+  public let extent: Swift.Double
+  public init(start: Swift.Double, extent: Swift.Double)
+  public init()
+  public static func fromMinMaxDegreesClockwise(min: Swift.Double, max: Swift.Double) -> heresdk.AngleRange
+  public static func fromDirectionDegreesClockwise(center: Swift.Double, extent: Swift.Double) -> heresdk.AngleRange
+  public func inRange(angleClockwiseInDegreesFromNorth: Swift.Double) -> Swift.Bool
+  public func closestInRange(angleClockwiseInDegreesFromNorth: Swift.Double) -> Swift.Double
+  public func max() -> Swift.Double
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.AngleRange, b: heresdk.AngleRange) -> Swift.Bool
+}
+public class Authentication {
+  @objc deinit
+  public static func authenticate(sdkNativeEngine: heresdk.SDKNativeEngine, callback: @escaping heresdk.AuthenticationCompletionHandler)
+  public static func authenticate(sdkNativeEngine: heresdk.SDKNativeEngine) throws -> heresdk.AuthenticationData
+}
+public typealias AuthenticationCompletionHandler = (heresdk.AuthenticationError?, heresdk.AuthenticationData?) -> Swift.Void
+public struct AuthenticationData : Swift.Hashable {
+  public let token: Swift.String
+  public let expiryTimeInSeconds: Swift.UInt64
+  public init(token: Swift.String, expiryTimeInSeconds: Swift.UInt64)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.AuthenticationData, b: heresdk.AuthenticationData) -> Swift.Bool
+}
+public enum AuthenticationError : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case invalidParameter
+  case authenticationFailed
+  case noConnection
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.AuthenticationError]
+  public static var allCases: [heresdk.AuthenticationError] {
+    get
+  }
+}
+public typealias AuthenticationException = heresdk.AuthenticationError
+extension AuthenticationError : Swift.Error {
+}
+public enum CountryCode : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case abw
+  case afg
+  case ago
+  case aia
+  case ala
+  case alb
+  case and
+  case are
+  case arg
+  case arm
+  case asm
+  case ata
+  case atf
+  case atg
+  case aus
+  case aut
+  case aze
+  case bdi
+  case bel
+  case ben
+  case bes
+  case bfa
+  case bgd
+  case bgr
+  case bhr
+  case bhs
+  case bih
+  case blm
+  case blr
+  case blz
+  case bmu
+  case bol
+  case bra
+  case brb
+  case brn
+  case btn
+  case bvt
+  case bwa
+  case caf
+  case can
+  case cck
+  case che
+  case chl
+  case chn
+  case civ
+  case cmr
+  case cod
+  case cog
+  case cok
+  case col
+  case com
+  case cpv
+  case cri
+  case cub
+  case cuw
+  case cxr
+  case cym
+  case cyp
+  case cze
+  case deu
+  case dji
+  case dma
+  case dnk
+  case dom
+  case dza
+  case ecu
+  case egy
+  case eri
+  case esh
+  case esp
+  case est
+  case eth
+  case fin
+  case fji
+  case flk
+  case fra
+  case fro
+  case fsm
+  case gab
+  case gbr
+  case geo
+  case ggy
+  case gha
+  case gib
+  case gin
+  case glp
+  case gmb
+  case gnb
+  case gnq
+  case grc
+  case grd
+  case grl
+  case gtm
+  case guf
+  case gum
+  case guy
+  case hkg
+  case hmd
+  case hnd
+  case hrv
+  case hti
+  case hun
+  case idn
+  case imn
+  case ind
+  case iot
+  case irl
+  case irn
+  case irq
+  case isl
+  case isr
+  case ita
+  case jam
+  case jey
+  case jor
+  case jpn
+  case kaz
+  case ken
+  case kgz
+  case khm
+  case kir
+  case kna
+  case kor
+  case kwt
+  case lao
+  case lbn
+  case lbr
+  case lby
+  case lca
+  case lie
+  case lka
+  case lso
+  case ltu
+  case lux
+  case lva
+  case mac
+  case maf
+  case mar
+  case mco
+  case mda
+  case mdg
+  case mdv
+  case mex
+  case mhl
+  case mkd
+  case mli
+  case mlt
+  case mmr
+  case mne
+  case mng
+  case mnp
+  case moz
+  case mrt
+  case msr
+  case mtq
+  case mus
+  case mwi
+  case mys
+  case myt
+  case nam
+  case ncl
+  case ner
+  case nfk
+  case nga
+  case nic
+  case niu
+  case nld
+  case nor
+  case npl
+  case nru
+  case nzl
+  case omn
+  case pak
+  case pan
+  case pcn
+  case per
+  case phl
+  case plw
+  case png
+  case pol
+  case pri
+  case prk
+  case prt
+  case pry
+  case pse
+  case pyf
+  case qat
+  case reu
+  case rou
+  case rus
+  case rwa
+  case sau
+  case sdn
+  case sen
+  case sgp
+  case sgs
+  case shn
+  case sjm
+  case slb
+  case sle
+  case slv
+  case smr
+  case som
+  case spm
+  case srb
+  case ssd
+  case stp
+  case sur
+  case svk
+  case svn
+  case swe
+  case swz
+  case sxm
+  case syc
+  case syr
+  case tca
+  case tcd
+  case tgo
+  case tha
+  case tjk
+  case tkl
+  case tkm
+  case tls
+  case ton
+  case tto
+  case tun
+  case tur
+  case tuv
+  case twn
+  case tza
+  case uga
+  case ukr
+  case umi
+  case ury
+  case usa
+  case uzb
+  case vat
+  case vct
+  case ven
+  case vgb
+  case vir
+  case vnm
+  case vut
+  case wlf
+  case wsm
+  case yem
+  case zaf
+  case zmb
+  case zwe
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.CountryCode]
+  public static var allCases: [heresdk.CountryCode] {
+    get
+  }
+}
+public protocol CustomMetadataValue : AnyObject {
+  func getTag() -> Swift.String
+}
+public struct GeoCorridor : Swift.Hashable {
+  public let polyline: [heresdk.GeoCoordinates]
+  public let radiusInMeters: Swift.Int32
+  @available(*, deprecated, message: "Will be removed in v4.7.0. The constructor with radius as integer should be used instead.")
+  public init(polyline: [heresdk.GeoCoordinates], radiusInMeters: Swift.Double)
+  public init(polyline: [heresdk.GeoCoordinates], radiusInMeters: Swift.Int32)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.GeoCorridor, b: heresdk.GeoCorridor) -> Swift.Bool
+}
+public struct GeoPolygon : Swift.Hashable {
+  public let vertices: [heresdk.GeoCoordinates]
+  public init(vertices: [heresdk.GeoCoordinates]) throws
+  public init(geoCircle: heresdk.GeoCircle)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.GeoPolygon, b: heresdk.GeoPolygon) -> Swift.Bool
+}
+public struct GeoPolyline : Swift.Hashable {
+  public let vertices: [heresdk.GeoCoordinates]
+  public init(vertices: [heresdk.GeoCoordinates]) throws
+  public func getNearestIndexTo(point: heresdk.GeoCoordinates) -> Swift.UInt32
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.GeoPolyline, b: heresdk.GeoPolyline) -> Swift.Bool
+}
+public enum LanguageCode : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case enUs
+  case afZa
+  case sqAl
+  case amEt
+  case arSa
+  case hyAm
+  case asIn
+  case azLatnAz
+  case bnBd
+  case bnIn
+  case euEs
+  case beBy
+  case bsLatnBa
+  case bgBg
+  case caEs
+  case kuArab
+  case zhCn
+  case zhHk
+  case zhTw
+  case hrHr
+  case csCz
+  case daDk
+  case prsArabAf
+  case nlNl
+  case enGb
+  case etEe
+  case faIr
+  case filPh
+  case fiFi
+  case frFr
+  case frCa
+  case glEs
+  case kaGe
+  case deDe
+  case elGr
+  case guIn
+  case haLatnNg
+  case heIl
+  case hiIn
+  case huHu
+  case isIs
+  case igLatnNg
+  case idId
+  case gaIe
+  case xh
+  case zuZa
+  case itIt
+  case jaJp
+  case knIn
+  case kkKz
+  case kmKh
+  case qucLatnGt
+  case rwRw
+  case sw
+  case kokIn
+  case koKr
+  case kyCyrlKg
+  case lvLv
+  case ltLt
+  case lbLu
+  case mkMk
+  case msMy
+  case mlIn
+  case mtMt
+  case miLatnNz
+  case mrIn
+  case mnCyrlMn
+  case neNp
+  case nbNo
+  case nnNo
+  case orIn
+  case plPl
+  case ptBr
+  case ptPt
+  case paGuru
+  case paArab
+  case quLatnPe
+  case roRo
+  case ruRu
+  case gdLatnGb
+  case srCyrlBa
+  case srCyrlRs
+  case srLatnRs
+  case nsoZa
+  case tn
+  case sdArab
+  case siLk
+  case skSk
+  case slSi
+  case esMx
+  case esEs
+  case svSe
+  case tgCyrlTj
+  case ta
+  case ttCyrlRu
+  case teIn
+  case thTh
+  case tiEt
+  case trTr
+  case tkLatnTm
+  case ukUa
+  case ur
+  case ugArab
+  case uzCyrlUz
+  case uzLatnUz
+  case catEs
+  case viVn
+  case cyGb
+  case woLatn
+  case yoLatn
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.LanguageCode]
+  public static var allCases: [heresdk.LanguageCode] {
+    get
+  }
+}
+public struct Location : Swift.Hashable {
+  public var coordinates: heresdk.GeoCoordinates
+  public var bearingInDegrees: Swift.Double?
+  public var speedInMetersPerSecond: Swift.Double?
+  public var timestamp: Foundation.Date
+  public var horizontalAccuracyInMeters: Swift.Double?
+  public var verticalAccuracyInMeters: Swift.Double?
+  public init(coordinates: heresdk.GeoCoordinates, bearingInDegrees: Swift.Double? = nil, speedInMetersPerSecond: Swift.Double? = nil, timestamp: Foundation.Date, horizontalAccuracyInMeters: Swift.Double? = nil, verticalAccuracyInMeters: Swift.Double? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Location, b: heresdk.Location) -> Swift.Bool
+}
+public protocol LocationDelegate : AnyObject {
+  func onLocationUpdated(_ location: heresdk.Location)
+  @available(*, deprecated, message: "Will be removed in 4.7.0. The time-out functionality is now part of the SDK implementation.")
+  func onLocationTimeout()
+}
+@available(*, deprecated, message: "Will be removed in v4.7.0. This interface is no longer needed.")
+public protocol LocationProvider : AnyObject {
+  var delegate: heresdk.LocationDelegate? { get set }
+  func start()
+  func stop()
+}
+public class Metadata {
+  public init()
+  @objc deinit
+  public func getCustomValue(key: Swift.String) -> heresdk.CustomMetadataValue?
+  public func getDouble(key: Swift.String) -> Swift.Double?
+  public func getInteger(key: Swift.String) -> Swift.Int32?
+  public func getString(key: Swift.String) -> Swift.String?
+  public func getType(key: Swift.String) -> heresdk.MetadataType?
+  public func removeValue(key: Swift.String)
+  public func setCustomValue(key: Swift.String, value: heresdk.CustomMetadataValue)
+  public func setDouble(key: Swift.String, value: Swift.Double)
+  public func setInteger(key: Swift.String, value: Swift.Int32)
+  public func setString(key: Swift.String, value: Swift.String)
+}
+public enum MetadataType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case custom
+  case double
+  case geoCoordinates
+  case integer
+  case string
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.MetadataType]
+  public static var allCases: [heresdk.MetadataType] {
+    get
+  }
+}
+public struct Point2D : Swift.Hashable {
+  public var x: Swift.Double
+  public var y: Swift.Double
+  public init(x: Swift.Double = 0.0, y: Swift.Double = 0.0)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Point2D, b: heresdk.Point2D) -> Swift.Bool
+}
+public struct Rectangle2D : Swift.Hashable {
+  public var origin: heresdk.Point2D
+  public var size: heresdk.Size2D
+  public init(origin: heresdk.Point2D, size: heresdk.Size2D)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Rectangle2D, b: heresdk.Rectangle2D) -> Swift.Bool
+}
+public struct Size2D : Swift.Hashable {
+  public var width: Swift.Double
+  public var height: Swift.Double
+  public init(width: Swift.Double = 0.0, height: Swift.Double = 0.0)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Size2D, b: heresdk.Size2D) -> Swift.Bool
+}
+public enum TextFormat : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case html
+  case plain
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.TextFormat]
+  public static var allCases: [heresdk.TextFormat] {
+    get
+  }
+}
+public enum UnitSystem : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case metric
+  case imperial
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.UnitSystem]
+  public static var allCases: [heresdk.UnitSystem] {
+    get
+  }
+}
+public enum AuthenticationPreferences : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case useServerTime
+  case useSystemTime
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.AuthenticationPreferences]
+  public static var allCases: [heresdk.AuthenticationPreferences] {
+    get
+  }
+}
+public protocol LogAppender : AnyObject {
+  func log(level: heresdk.LogLevel, message: Swift.String)
+}
+public enum LogLevel : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case logLevelTrace
+  case logLevelDebug
+  case logLevelInfo
+  case logLevelWarning
+  case logLevelError
+  case logLevelFatal
+  case logLevelOff
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.LogLevel]
+  public static var allCases: [heresdk.LogLevel] {
+    get
+  }
+}
+public class SDKBuildInformation {
+  @objc deinit
+  public static func sdkVersion() -> heresdk.SDKVersion
+}
+public class SDKNativeEngine {
+  public init(options: heresdk.SDKOptions)
+  public var options: heresdk.SDKOptions {
+    get
+  }
+  public static var sharedInstance: heresdk.SDKNativeEngine? {
+    get
+    set(newValue)
+  }
+  @objc deinit
+  public func setAccessKey(accessKeyId: Swift.String, accessKeySecret: Swift.String)
+  public func setLogAppender(appender: heresdk.LogAppender)
+}
+public struct SDKOptions : Swift.Hashable {
+  public var accessKeyId: Swift.String
+  public var accessKeySecret: Swift.String
+  public var cachePath: Swift.String
+  public var authenticationPreferences: heresdk.AuthenticationPreferences
+  public init(accessKeyId: Swift.String, accessKeySecret: Swift.String, cachePath: Swift.String, authenticationPreferences: heresdk.AuthenticationPreferences = AuthenticationPreferences.useServerTime)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.SDKOptions, b: heresdk.SDKOptions) -> Swift.Bool
+}
+public struct SDKVersion : Swift.Hashable {
+  public var productVariant: Swift.String
+  public var versionName: Swift.String
+  public var versionGeneration: Swift.Int32
+  public var versionMajor: Swift.Int32
+  public var versionMinor: Swift.Int32
+  public var versionPatch: Swift.Int32
+  public var versionBuild: Swift.Int32
+  public var versionTag: Swift.String
+  public init(productVariant: Swift.String, versionName: Swift.String, versionGeneration: Swift.Int32, versionMajor: Swift.Int32, versionMinor: Swift.Int32, versionPatch: Swift.Int32, versionBuild: Swift.Int32, versionTag: Swift.String)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.SDKVersion, b: heresdk.SDKVersion) -> Swift.Bool
+}
+public protocol PlatformThreading : AnyObject {
+  func runOnMainThread(runnable: heresdk.Runnable) -> heresdk.TaskHandle
+  func postToMainThread(runnable: heresdk.Runnable, delayMs: Swift.UInt64) -> heresdk.TaskHandle
+  func postToMainThread(runnable: heresdk.Runnable) -> heresdk.TaskHandle
+}
+public protocol Runnable : AnyObject {
+  func run()
+}
+public protocol TaskHandle : AnyObject {
+  var isFinished: Swift.Bool { get }
+  var isCancelled: Swift.Bool { get }
+  func cancel() -> Swift.Bool
+}
+public class Threading {
+  @objc deinit
+  public static func setPlatformThreading(platformThreading: heresdk.PlatformThreading)
+  public static func getPlatformThreading() -> heresdk.PlatformThreading
+}
+public protocol DoubleTapDelegate : AnyObject {
+  func onDoubleTap(origin: heresdk.Point2D)
+}
+public enum GestureState : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case begin
+  case update
+  case end
+  case cancel
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.GestureState]
+  public static var allCases: [heresdk.GestureState] {
+    get
+  }
+}
+public enum GestureType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case twoFingerTap
+  case doubleTap
+  case pan
+  case twoFingerPan
+  case pinchRotate
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.GestureType]
+  public static var allCases: [heresdk.GestureType] {
+    get
+  }
+}
+public class Gestures {
+  public var tapDelegate: heresdk.TapDelegate? {
+    get
+    set(newValue)
+  }
+  public var doubleTapDelegate: heresdk.DoubleTapDelegate? {
+    get
+    set(newValue)
+  }
+  public var pinchRotateDelegate: heresdk.PinchRotateDelegate? {
+    get
+    set(newValue)
+  }
+  public var longPressDelegate: heresdk.LongPressDelegate? {
+    get
+    set(newValue)
+  }
+  public var panDelegate: heresdk.PanDelegate? {
+    get
+    set(newValue)
+  }
+  public var twoFingerTapDelegate: heresdk.TwoFingerTapDelegate? {
+    get
+    set(newValue)
+  }
+  public var twoFingerPanDelegate: heresdk.TwoFingerPanDelegate? {
+    get
+    set(newValue)
+  }
+  @objc deinit
+  public func enableDefaultAction(forGesture gestureType: heresdk.GestureType)
+  public func disableDefaultAction(forGesture gestureType: heresdk.GestureType)
+}
+public class InternalGestureDetector {
+  @objc deinit
+}
+public protocol LongPressDelegate : AnyObject {
+  func onLongPress(state: heresdk.GestureState, origin: heresdk.Point2D)
+}
+public protocol PanDelegate : AnyObject {
+  func onPan(state: heresdk.GestureState, origin: heresdk.Point2D, translation: heresdk.Point2D, velocity: Swift.Double)
+}
+public protocol PinchRotateDelegate : AnyObject {
+  func onPinchRotate(state: heresdk.GestureState, pinchOrigin: heresdk.Point2D, rotationOrigin: heresdk.Point2D, twoFingerDistance: Swift.Double, rotation: heresdk.Angle)
+}
+public protocol TapDelegate : AnyObject {
+  func onTap(origin: heresdk.Point2D)
+}
+public protocol TwoFingerPanDelegate : AnyObject {
+  func onTwoFingerPan(state: heresdk.GestureState, origin: heresdk.Point2D, translation: heresdk.Point2D, velocity: Swift.Double)
+}
+public protocol TwoFingerTapDelegate : AnyObject {
+  func onTwoFingerTap(origin: heresdk.Point2D)
+}
+public enum ImageFormat : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case png
+  case svg
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.ImageFormat]
+  public static var allCases: [heresdk.ImageFormat] {
+    get
+  }
+}
+public enum LineCap : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case round
+  case square
+  case butt
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.LineCap]
+  public static var allCases: [heresdk.LineCap] {
+    get
+  }
+}
+public class MapCamera {
+  public var state: heresdk.MapCamera.State {
+    get
+  }
+  public var boundingBox: heresdk.GeoBox? {
+    get
+  }
+  public var limits: heresdk.MapCameraLimits {
+    get
+  }
+  @objc deinit
+  public struct OrientationUpdate : Swift.Hashable {
+    public var bearing: Swift.Double?
+    public var tilt: Swift.Double?
+    public init(bearing: Swift.Double? = nil, tilt: Swift.Double? = nil)
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: heresdk.MapCamera.OrientationUpdate, b: heresdk.MapCamera.OrientationUpdate) -> Swift.Bool
+  }
+  public struct Orientation : Swift.Hashable {
+    public var bearing: Swift.Double
+    public var tilt: Swift.Double
+    public init(bearing: Swift.Double = 0, tilt: Swift.Double = 0)
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+    public static func == (a: heresdk.MapCamera.Orientation, b: heresdk.MapCamera.Orientation) -> Swift.Bool
+  }
+  public struct State {
+    public var targetCoordinates: heresdk.GeoCoordinates
+    public var targetOrientation: heresdk.MapCamera.Orientation
+    public var distanceToTargetInMeters: Swift.Double
+    public var zoomLevel: Swift.Double
+  }
+  public func addObserver(_ observer: heresdk.MapCameraObserver)
+  public func removeObserver(_ observer: heresdk.MapCameraObserver)
+  public func zoomBy(_ factor: Swift.Double, around origin: heresdk.Point2D)
+  public func zoomTo(zoomLevel: Swift.Double)
+  public func lookAt(point target: heresdk.GeoCoordinates)
+  public func lookAt(point target: heresdk.GeoCoordinates, distanceInMeters: Swift.Double)
+  public func lookAt(point target: heresdk.GeoCoordinates, orientation: heresdk.MapCamera.OrientationUpdate, distanceInMeters: Swift.Double)
+  public func lookAt(area target: heresdk.GeoBox, orientation: heresdk.MapCamera.OrientationUpdate)
+  public func setDistanceToTarget(distanceInMeters: Swift.Double)
+  public func setTargetOrientation(orientation: heresdk.MapCamera.OrientationUpdate)
+}
+public class MapCameraLimits {
+  public typealias MapCameraLimitsError = heresdk.MapCameraLimits.ErrorCode
+  public static var minTilt: Swift.Double
+  public static var maxTilt: Swift.Double
+  public static var minZoomLevel: Swift.Double
+  public static var maxZoomLevel: Swift.Double
+  @objc deinit
+  public enum ErrorCode : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+    case valueAboveAbsoluteMaximum
+    case valueBelowAbsoluteMinimum
+    case minimumAboveMaximum
+    case maximumBelowMinimum
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+    public typealias AllCases = [heresdk.MapCameraLimits.ErrorCode]
+    public static var allCases: [heresdk.MapCameraLimits.ErrorCode] {
+      get
+    }
+  }
+  public func setMaxTilt(degreesFromNadir: Swift.Double) throws
+  public func setMinTilt(degreesFromNadir: Swift.Double) throws
+  public func setMaxZoomLevel(_ zoomLevel: Swift.Double) throws
+  public func setMinZoomLevel(_ zoomLevel: Swift.Double) throws
+}
+extension MapCameraLimits.ErrorCode : Swift.Error {
+}
+public protocol MapCameraObserver : AnyObject {
+  func onCameraUpdated(_ cameraState: heresdk.MapCamera.State)
+}
+public enum MapError : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case operationInProgress
+  case duplicateLayer
+  case invalidDataSource
+  case invalidScene
+  case invalidContent
+  case invalidState
+  case unknownLayer
+  case unknown
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.MapError]
+  public static var allCases: [heresdk.MapError] {
+    get
+  }
+}
+public class MapImage {
+  public init(pixelData: Foundation.Data, imageFormat: heresdk.ImageFormat)
+  public init(imageData: Foundation.Data, imageFormat: heresdk.ImageFormat, width: Swift.UInt32, height: Swift.UInt32)
+  public init(filePath: Swift.String, width: Swift.UInt32, height: Swift.UInt32) throws
+  @objc deinit
+}
+public class MapMarker {
+  public init(at: heresdk.GeoCoordinates, image: heresdk.MapImage)
+  public init(at: heresdk.GeoCoordinates, image: heresdk.MapImage, anchor: heresdk.Anchor2D)
+  public var coordinates: heresdk.GeoCoordinates {
+    get
+    set(newValue)
+  }
+  public var metadata: heresdk.Metadata? {
+    get
+    set(newValue)
+  }
+  public var drawOrder: Swift.Int32 {
+    get
+    set(newValue)
+  }
+  public var image: heresdk.MapImage {
+    get
+    set(newValue)
+  }
+  @objc deinit
+}
+extension MapMarker : Swift.Hashable {
+  public static func == (lhs: heresdk.MapMarker, rhs: heresdk.MapMarker) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public class MapMarker3D {
+  public init(at: heresdk.GeoCoordinates, model: heresdk.MapMarker3DModel)
+  public init(at: heresdk.GeoCoordinates, model: heresdk.MapMarker3DModel, scale: Swift.Double)
+  public var coordinates: heresdk.GeoCoordinates {
+    get
+    set(newValue)
+  }
+  public var metadata: heresdk.Metadata? {
+    get
+    set(newValue)
+  }
+  public var bearing: Swift.Double {
+    get
+    set(newValue)
+  }
+  public var roll: Swift.Double {
+    get
+    set(newValue)
+  }
+  public var pitch: Swift.Double {
+    get
+    set(newValue)
+  }
+  public var scale: Swift.Double {
+    get
+    set(newValue)
+  }
+  @objc deinit
+}
+extension MapMarker3D : Swift.Hashable {
+  public static func == (lhs: heresdk.MapMarker3D, rhs: heresdk.MapMarker3D) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public class MapMarker3DModel {
+  public init(geometryFilePath: Swift.String, textureFilePath: Swift.String, color: UIKit.UIColor)
+  public init(geometryFilePath: Swift.String, textureFilePath: Swift.String)
+  public init(geometryFilePath: Swift.String)
+  @objc deinit
+}
+public class MapPolygon {
+  public init(geometry: heresdk.GeoPolygon, color: UIKit.UIColor)
+  public var metadata: heresdk.Metadata? {
+    get
+    set(newValue)
+  }
+  @objc deinit
+  public func updateGeometry(_ geometry: heresdk.GeoPolygon)
+}
+extension MapPolygon : Swift.Hashable {
+  public static func == (lhs: heresdk.MapPolygon, rhs: heresdk.MapPolygon) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public class MapPolyline {
+  public init(geometry: heresdk.GeoPolyline, widthInPixels: Swift.Double, color: UIKit.UIColor)
+  public init(geometry: heresdk.GeoPolyline, widthInPixels: Swift.Double, color: UIKit.UIColor, outlineWidthInPixels: Swift.Double, outlineColor: UIKit.UIColor)
+  public var metadata: heresdk.Metadata? {
+    get
+    set(newValue)
+  }
+  public var lineCap: heresdk.LineCap {
+    get
+    set(newValue)
+  }
+  public var lineColor: UIKit.UIColor {
+    get
+    set(newValue)
+  }
+  public var lineWidth: Swift.Double {
+    get
+    set(newValue)
+  }
+  public var outlineColor: UIKit.UIColor {
+    get
+    set(newValue)
+  }
+  public var outlineWidth: Swift.Double {
+    get
+    set(newValue)
+  }
+  public var drawOrder: Swift.Int32 {
+    get
+    set(newValue)
+  }
+  @objc deinit
+  public func updateGeometry(_ geometry: heresdk.GeoPolyline)
+}
+extension MapPolyline : Swift.Hashable {
+  public static func == (lhs: heresdk.MapPolyline, rhs: heresdk.MapPolyline) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol MapRepresentable : AnyObject {
+  func attach(mapView: heresdk.MapViewBase)
+  func detach(mapView: heresdk.MapViewBase)
+}
+public class MapScene {
+  public typealias LoadSceneCompletionHandler = (heresdk.MapError?) -> Swift.Void
+  @objc deinit
+  public enum LayerState : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+    case visible
+    case hidden
+    public typealias RawValue = Swift.UInt32
+    public init?(rawValue: Swift.UInt32)
+    public var rawValue: Swift.UInt32 {
+      get
+    }
+    public typealias AllCases = [heresdk.MapScene.LayerState]
+    public static var allCases: [heresdk.MapScene.LayerState] {
+      get
+    }
+  }
+  public struct Layers {
+    public static var extrudedBuildings: Swift.String
+    public static var buildingFootprints: Swift.String
+    public static var trafficFlow: Swift.String
+    public static var trafficIncidents: Swift.String
+  }
+  public func loadScene(mapScheme: heresdk.MapScheme, completion callback: heresdk.MapScene.LoadSceneCompletionHandler?)
+  public func loadScene(fromFile configurationFile: Swift.String, completion callback: heresdk.MapScene.LoadSceneCompletionHandler?)
+  public func addMapPolyline(_ mapPolyline: heresdk.MapPolyline)
+  public func removeMapPolyline(_ mapPolyline: heresdk.MapPolyline)
+  public func addMapMarker(_ marker: heresdk.MapMarker)
+  public func removeMapMarker(_ marker: heresdk.MapMarker)
+  public func addMapMarker3d(_ marker: heresdk.MapMarker3D)
+  public func removeMapMarker3d(_ marker: heresdk.MapMarker3D)
+  public func addMapPolygon(_ mapPolygon: heresdk.MapPolygon)
+  public func removeMapPolygon(_ mapPolygon: heresdk.MapPolygon)
+  public func setLayerState(layerName: Swift.String, newState: heresdk.MapScene.LayerState)
+}
+public enum MapScheme : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case normalDay
+  case normalNight
+  case greyDay
+  case greyNight
+  case satellite
+  case hybridDay
+  case hybridNight
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.MapScheme]
+  public static var allCases: [heresdk.MapScheme] {
+    get
+  }
+}
+public protocol MapViewBase : AnyObject {
+  typealias PickMapItemsHandler = (heresdk.PickMapItemsResult?) -> Swift.Void
+  var camera: heresdk.MapCamera { get }
+  var gestures: heresdk.Gestures { get }
+  var mapScene: heresdk.MapScene { get }
+  var pixelScale: Swift.Double { get }
+  func viewToGeoCoordinates(viewCoordinates: heresdk.Point2D) -> heresdk.GeoCoordinates?
+  func geoToViewCoordinates(geoCoordinates: heresdk.GeoCoordinates) -> heresdk.Point2D?
+  func setWatermarkPosition(placement: heresdk.WatermarkPlacement, bottomCenterMargin: Swift.UInt32)
+  func addMapRepresentable(_ mapRepresentable: heresdk.MapRepresentable)
+  func removeMapRepresentable(_ mapRepresentable: heresdk.MapRepresentable)
+  func pickMapItems(at centerPoint: heresdk.Point2D, radius: Swift.Double, completion callback: @escaping (heresdk.PickMapItemsResult?) -> Swift.Void)
+}
+public class PickMapItemsResult {
+  public var markers: [heresdk.MapMarker] {
+    get
+  }
+  public var polylines: [heresdk.MapPolyline] {
+    get
+  }
+  @objc deinit
+}
+public enum WatermarkPlacement : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case bottomRight
+  case bottomLeft
+  case bottomCenter
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.WatermarkPlacement]
+  public static var allCases: [heresdk.WatermarkPlacement] {
+    get
+  }
+}
+public class RoutingEngine : heresdk.RoutingProtocol {
+  public init() throws
+  public init(_ sdkEngine: heresdk.SDKNativeEngine) throws
+  @objc deinit
+  public func calculateRoute(with waypoints: [heresdk.Waypoint], carOptions: heresdk.CarOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  public func calculateRoute(with waypoints: [heresdk.Waypoint], pedestrianOptions: heresdk.PedestrianOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  public func calculateRoute(with waypoints: [heresdk.Waypoint], truckOptions: heresdk.TruckOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  public func calculateRoute(with waypoints: [heresdk.Waypoint], evCarOptions: heresdk.EVCarOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  public func calculateRoute(with waypoints: [heresdk.Waypoint], evTruckOptions: heresdk.EVTruckOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+}
+public struct Arrival : Swift.Hashable {
+  public var type: heresdk.RoutePlaceType
+  public var waypointIndex: Swift.Int32?
+  public var originalCoordinates: heresdk.GeoCoordinates?
+  public var mapMatchedCoordinates: heresdk.GeoCoordinates
+  public var chargeInKilowattHours: Swift.Double?
+  public var chargingStation: heresdk.ChargingStation?
+  public init(type: heresdk.RoutePlaceType, waypointIndex: Swift.Int32? = nil, originalCoordinates: heresdk.GeoCoordinates? = nil, mapMatchedCoordinates: heresdk.GeoCoordinates, chargeInKilowattHours: Swift.Double? = nil, chargingStation: heresdk.ChargingStation? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Arrival, b: heresdk.Arrival) -> Swift.Bool
+}
+public struct AvoidanceOptions : Swift.Hashable {
+  public var roadFeatures: [heresdk.RoadFeatures]
+  public var countries: [heresdk.CountryCode]
+  public var avoidAreas: [heresdk.GeoBox]
+  public init(roadFeatures: [heresdk.RoadFeatures] = [], countries: [heresdk.CountryCode] = [], avoidAreas: [heresdk.GeoBox] = [])
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.AvoidanceOptions, b: heresdk.AvoidanceOptions) -> Swift.Bool
+}
+public struct BatterySpecifications : Swift.Hashable {
+  public var totalCapacityInKilowattHours: Swift.Double
+  public var initialChargeInKilowattHours: Swift.Double
+  public var targetChargeInKilowattHours: Swift.Double
+  public var chargingCurve: [Swift.Double : Swift.Double]
+  public var connectorTypes: [heresdk.ChargingConnectorType]
+  public init(totalCapacityInKilowattHours: Swift.Double = 0.0, initialChargeInKilowattHours: Swift.Double = 0.0, targetChargeInKilowattHours: Swift.Double = 0.0, chargingCurve: [Swift.Double : Swift.Double] = [:], connectorTypes: [heresdk.ChargingConnectorType] = [])
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.BatterySpecifications, b: heresdk.BatterySpecifications) -> Swift.Bool
+}
+public typealias CalculateRouteCompletionHandler = (heresdk.RoutingError?, [heresdk.Route]?) -> Swift.Void
+public struct CarOptions : Swift.Hashable {
+  public var routeOptions: heresdk.RouteOptions
+  public var textOptions: heresdk.RouteTextOptions
+  public var avoidanceOptions: heresdk.AvoidanceOptions
+  public init(routeOptions: heresdk.RouteOptions = RouteOptions(), textOptions: heresdk.RouteTextOptions = RouteTextOptions(), avoidanceOptions: heresdk.AvoidanceOptions = AvoidanceOptions())
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.CarOptions, b: heresdk.CarOptions) -> Swift.Bool
+}
+public struct ChargingConnectorAttributes : Swift.Hashable {
+  public var powerInKilowatts: Swift.Double
+  public var currentInAmperes: Swift.Double?
+  public var voltageInVolts: Swift.Double?
+  public var supplyType: heresdk.ChargingSupplyType?
+  public var connectorType: heresdk.ChargingConnectorType?
+  public init(powerInKilowatts: Swift.Double, currentInAmperes: Swift.Double? = nil, voltageInVolts: Swift.Double? = nil, supplyType: heresdk.ChargingSupplyType? = nil, connectorType: heresdk.ChargingConnectorType? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.ChargingConnectorAttributes, b: heresdk.ChargingConnectorAttributes) -> Swift.Bool
+}
+public enum ChargingConnectorType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case iec62196Type1Combo
+  case iec62196Type2Combo
+  case chademo
+  case tesla
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.ChargingConnectorType]
+  public static var allCases: [heresdk.ChargingConnectorType] {
+    get
+  }
+}
+public struct ChargingStation : Swift.Hashable {
+  public var id: Swift.String?
+  public var name: Swift.String?
+  public var connectorAttributes: heresdk.ChargingConnectorAttributes?
+  public init(id: Swift.String? = nil, name: Swift.String? = nil, connectorAttributes: heresdk.ChargingConnectorAttributes? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.ChargingStation, b: heresdk.ChargingStation) -> Swift.Bool
+}
+public enum ChargingSupplyType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case acSingle
+  case acThree
+  case dc
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.ChargingSupplyType]
+  public static var allCases: [heresdk.ChargingSupplyType] {
+    get
+  }
+}
+public struct Departure : Swift.Hashable {
+  public var type: heresdk.RoutePlaceType
+  public var waypointIndex: Swift.Int32?
+  public var originalCoordinates: heresdk.GeoCoordinates?
+  public var mapMatchedCoordinates: heresdk.GeoCoordinates
+  public var chargeInKilowattHours: Swift.Double?
+  public var chargingStation: heresdk.ChargingStation?
+  public init(type: heresdk.RoutePlaceType, waypointIndex: Swift.Int32? = nil, originalCoordinates: heresdk.GeoCoordinates? = nil, mapMatchedCoordinates: heresdk.GeoCoordinates, chargeInKilowattHours: Swift.Double? = nil, chargingStation: heresdk.ChargingStation? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Departure, b: heresdk.Departure) -> Swift.Bool
+}
+public struct EVCarOptions : Swift.Hashable {
+  public var routeOptions: heresdk.RouteOptions
+  public var textOptions: heresdk.RouteTextOptions
+  public var avoidanceOptions: heresdk.AvoidanceOptions
+  public var ensureReachability: Swift.Bool
+  public var consumptionModel: heresdk.EVConsumptionModel
+  public var batterySpecifications: heresdk.BatterySpecifications
+  public init(routeOptions: heresdk.RouteOptions = RouteOptions(), textOptions: heresdk.RouteTextOptions = RouteTextOptions(), avoidanceOptions: heresdk.AvoidanceOptions = AvoidanceOptions(), ensureReachability: Swift.Bool = false, consumptionModel: heresdk.EVConsumptionModel = EVConsumptionModel(), batterySpecifications: heresdk.BatterySpecifications = BatterySpecifications())
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.EVCarOptions, b: heresdk.EVCarOptions) -> Swift.Bool
+}
+public struct EVConsumptionModel : Swift.Hashable {
+  public var ascentConsumptionInWattHoursPerMeter: Swift.Double
+  public var descentRecoveryInWattHoursPerMeter: Swift.Double
+  public var freeFlowSpeedTable: [Swift.Int32 : Swift.Double]
+  public var trafficSpeedTable: [Swift.Int32 : Swift.Double]
+  public var auxiliaryConsumptionInWattHoursPerSecond: Swift.Double
+  public init(ascentConsumptionInWattHoursPerMeter: Swift.Double = 0.0, descentRecoveryInWattHoursPerMeter: Swift.Double = 0.0, freeFlowSpeedTable: [Swift.Int32 : Swift.Double] = [:], trafficSpeedTable: [Swift.Int32 : Swift.Double] = [:], auxiliaryConsumptionInWattHoursPerSecond: Swift.Double = 0.0)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.EVConsumptionModel, b: heresdk.EVConsumptionModel) -> Swift.Bool
+}
+public struct EVDetails : Swift.Hashable {
+  public var consumptionInKilowattHour: Swift.Double
+  public init(consumptionInKilowattHour: Swift.Double)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.EVDetails, b: heresdk.EVDetails) -> Swift.Bool
+}
+public struct EVTruckOptions : Swift.Hashable {
+  public var routeOptions: heresdk.RouteOptions
+  public var textOptions: heresdk.RouteTextOptions
+  public var avoidanceOptions: heresdk.AvoidanceOptions
+  public var specifications: heresdk.TruckSpecifications
+  public var tunnelCategory: heresdk.TunnelCategory?
+  public var hazardousGoods: [heresdk.HazardousGood]
+  public var consumptionModel: heresdk.EVConsumptionModel
+  public init(routeOptions: heresdk.RouteOptions = RouteOptions(), textOptions: heresdk.RouteTextOptions = RouteTextOptions(), avoidanceOptions: heresdk.AvoidanceOptions = AvoidanceOptions(), specifications: heresdk.TruckSpecifications = TruckSpecifications(), tunnelCategory: heresdk.TunnelCategory? = nil, hazardousGoods: [heresdk.HazardousGood] = [], consumptionModel: heresdk.EVConsumptionModel = EVConsumptionModel())
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.EVTruckOptions, b: heresdk.EVTruckOptions) -> Swift.Bool
+}
+public enum HazardousGood : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case explosive
+  case gas
+  case flammable
+  case combustible
+  case organic
+  case poison
+  case radioactive
+  case corrosive
+  case poisonousInhalation
+  case harmfulToWater
+  case other
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.HazardousGood]
+  public static var allCases: [heresdk.HazardousGood] {
+    get
+  }
+}
+public class Maneuver {
+  public var action: heresdk.ManeuverAction {
+    get
+  }
+  public var coordinates: heresdk.GeoCoordinates {
+    get
+  }
+  public var polyline: [heresdk.GeoCoordinates] {
+    get
+  }
+  public var text: Swift.String {
+    get
+  }
+  public var roadName: Swift.String? {
+    get
+  }
+  public var roadNameLanguageCode: Swift.String? {
+    get
+  }
+  public var roadNumber: Swift.String? {
+    get
+  }
+  public var roadType: heresdk.RoadType? {
+    get
+  }
+  public var nextRoadName: Swift.String? {
+    get
+  }
+  public var nextRoadNameLanguageCode: Swift.String? {
+    get
+  }
+  public var nextRoadNumber: Swift.String? {
+    get
+  }
+  public var nextRoadType: heresdk.RoadType? {
+    get
+  }
+  public var countryCode: Swift.String? {
+    get
+  }
+  @objc deinit
+}
+public enum ManeuverAction : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case depart
+  case arrive
+  case leftUTurn
+  case sharpLeftTurn
+  case leftTurn
+  case slightLeftTurn
+  case continueOn
+  case slightRightTurn
+  case rightTurn
+  case sharpRightTurn
+  case rightUTurn
+  case leftExit
+  case rightExit
+  case leftRamp
+  case rightRamp
+  case leftFork
+  case middleFork
+  case rightFork
+  case ferry
+  case leftRoundaboutEnter
+  case rightRoundaboutEnter
+  case leftRoundaboutPass
+  case rightRoundaboutPass
+  case leftRoundaboutExit1
+  case leftRoundaboutExit2
+  case leftRoundaboutExit3
+  case leftRoundaboutExit4
+  case leftRoundaboutExit5
+  case leftRoundaboutExit6
+  case leftRoundaboutExit7
+  case leftRoundaboutExit8
+  case leftRoundaboutExit9
+  case leftRoundaboutExit10
+  case leftRoundaboutExit11
+  case leftRoundaboutExit12
+  case rightRoundaboutExit1
+  case rightRoundaboutExit2
+  case rightRoundaboutExit3
+  case rightRoundaboutExit4
+  case rightRoundaboutExit5
+  case rightRoundaboutExit6
+  case rightRoundaboutExit7
+  case rightRoundaboutExit8
+  case rightRoundaboutExit9
+  case rightRoundaboutExit10
+  case rightRoundaboutExit11
+  case rightRoundaboutExit12
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.ManeuverAction]
+  public static var allCases: [heresdk.ManeuverAction] {
+    get
+  }
+}
+public enum OptimizationMode : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case fastest
+  case shortest
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.OptimizationMode]
+  public static var allCases: [heresdk.OptimizationMode] {
+    get
+  }
+}
+public struct PedestrianOptions : Swift.Hashable {
+  public var routeOptions: heresdk.RouteOptions
+  public var textOptions: heresdk.RouteTextOptions
+  public init(routeOptions: heresdk.RouteOptions = RouteOptions(), textOptions: heresdk.RouteTextOptions = RouteTextOptions())
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.PedestrianOptions, b: heresdk.PedestrianOptions) -> Swift.Bool
+}
+public struct PostAction : Swift.Hashable {
+  public var action: heresdk.PostActionType
+  public var durationInSeconds: Swift.Int32
+  public init(action: heresdk.PostActionType, durationInSeconds: Swift.Int32)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.PostAction, b: heresdk.PostAction) -> Swift.Bool
+}
+public enum PostActionType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case chargingSetup
+  case charging
+  case wait
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.PostActionType]
+  public static var allCases: [heresdk.PostActionType] {
+    get
+  }
+}
+public enum RoadFeatures : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case seasonalClosure
+  case tollRoad
+  case controlledAccessHighway
+  case ferry
+  case carShuttleTrain
+  case tunnel
+  case dirtRoad
+  case difficultTurns
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.RoadFeatures]
+  public static var allCases: [heresdk.RoadFeatures] {
+    get
+  }
+}
+public enum RoadType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case highway
+  case rural
+  case urban
+  case unknown
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.RoadType]
+  public static var allCases: [heresdk.RoadType] {
+    get
+  }
+}
+public class Route {
+  public var sections: [heresdk.Section] {
+    get
+  }
+  public var polyline: [heresdk.GeoCoordinates] {
+    get
+  }
+  public var boundingBox: heresdk.GeoBox {
+    get
+  }
+  public var lengthInMeters: Swift.Int32 {
+    get
+  }
+  public var durationInSeconds: Swift.Int32 {
+    get
+  }
+  public var trafficDelayInSeconds: Swift.Int32 {
+    get
+  }
+  public var language: heresdk.LanguageCode {
+    get
+  }
+  public var optimizationMode: heresdk.OptimizationMode {
+    get
+  }
+  public var transportMode: heresdk.TransportMode {
+    get
+  }
+  @objc deinit
+}
+public struct RouteOptions : Swift.Hashable {
+  public var optimizationMode: heresdk.OptimizationMode
+  public var alternatives: Swift.Int32
+  public var departureTime: Foundation.Date?
+  public init(optimizationMode: heresdk.OptimizationMode = OptimizationMode.fastest, alternatives: Swift.Int32 = 0, departureTime: Foundation.Date? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.RouteOptions, b: heresdk.RouteOptions) -> Swift.Bool
+}
+public enum RoutePlaceType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case place
+  case chargingStation
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.RoutePlaceType]
+  public static var allCases: [heresdk.RoutePlaceType] {
+    get
+  }
+}
+public struct RouteTextOptions : Swift.Hashable {
+  public var language: heresdk.LanguageCode
+  public var instructionFormat: heresdk.TextFormat
+  public var unitSystem: heresdk.UnitSystem
+  public init(language: heresdk.LanguageCode = LanguageCode.enUs, instructionFormat: heresdk.TextFormat = TextFormat.html, unitSystem: heresdk.UnitSystem = UnitSystem.metric)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.RouteTextOptions, b: heresdk.RouteTextOptions) -> Swift.Bool
+}
+public enum RoutingError : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case internalError
+  case invalidParameter
+  case serverUnreachable
+  case httpError
+  case authenticationFailed
+  case forbidden
+  case exceededUsageLimit
+  case parsingError
+  case noRouteFound
+  case timedOut
+  case offline
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.RoutingError]
+  public static var allCases: [heresdk.RoutingError] {
+    get
+  }
+}
+public protocol RoutingProtocol : AnyObject {
+  func calculateRoute(with waypoints: [heresdk.Waypoint], carOptions: heresdk.CarOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  func calculateRoute(with waypoints: [heresdk.Waypoint], pedestrianOptions: heresdk.PedestrianOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  func calculateRoute(with waypoints: [heresdk.Waypoint], truckOptions: heresdk.TruckOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  func calculateRoute(with waypoints: [heresdk.Waypoint], evCarOptions: heresdk.EVCarOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+  func calculateRoute(with waypoints: [heresdk.Waypoint], evTruckOptions: heresdk.EVTruckOptions, completion: @escaping heresdk.CalculateRouteCompletionHandler)
+}
+public class Section {
+  public var polyline: [heresdk.GeoCoordinates] {
+    get
+  }
+  public var maneuvers: [heresdk.Maneuver] {
+    get
+  }
+  public var trafficSpeeds: [heresdk.TrafficSpeed] {
+    get
+  }
+  public var boundingBox: heresdk.GeoBox {
+    get
+  }
+  public var lengthInMeters: Swift.Int32 {
+    get
+  }
+  public var durationInSeconds: Swift.Int32 {
+    get
+  }
+  public var trafficDelayInSeconds: Swift.Int32 {
+    get
+  }
+  public var transportMode: heresdk.TransportMode {
+    get
+  }
+  public var departure: heresdk.Departure {
+    get
+  }
+  public var arrival: heresdk.Arrival {
+    get
+  }
+  public var postActions: [heresdk.PostAction] {
+    get
+  }
+  public var evDetails: heresdk.EVDetails? {
+    get
+  }
+  @objc deinit
+}
+public struct TrafficSpeed : Swift.Hashable {
+  public var offset: Swift.Int32
+  public var baseSpeedInMetersPerSecond: Swift.Double?
+  public var trafficSpeedInMetersPerSecond: Swift.Double?
+  public var jamFactor: Swift.Double?
+  public init(offset: Swift.Int32, baseSpeedInMetersPerSecond: Swift.Double? = nil, trafficSpeedInMetersPerSecond: Swift.Double? = nil, jamFactor: Swift.Double? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.TrafficSpeed, b: heresdk.TrafficSpeed) -> Swift.Bool
+}
+public enum TransportMode : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case car
+  case truck
+  case pedestrian
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.TransportMode]
+  public static var allCases: [heresdk.TransportMode] {
+    get
+  }
+}
+public struct TruckOptions : Swift.Hashable {
+  public var routeOptions: heresdk.RouteOptions
+  public var textOptions: heresdk.RouteTextOptions
+  public var avoidanceOptions: heresdk.AvoidanceOptions
+  public var specifications: heresdk.TruckSpecifications
+  public var tunnelCategory: heresdk.TunnelCategory?
+  public var hazardousGoods: [heresdk.HazardousGood]
+  public init(routeOptions: heresdk.RouteOptions = RouteOptions(), textOptions: heresdk.RouteTextOptions = RouteTextOptions(), avoidanceOptions: heresdk.AvoidanceOptions = AvoidanceOptions(), specifications: heresdk.TruckSpecifications = TruckSpecifications(), tunnelCategory: heresdk.TunnelCategory? = nil, hazardousGoods: [heresdk.HazardousGood] = [])
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.TruckOptions, b: heresdk.TruckOptions) -> Swift.Bool
+}
+public struct TruckSpecifications : Swift.Hashable {
+  public var grossWeightInKilograms: Swift.Int32?
+  public var weightPerAxleInKilograms: Swift.Int32?
+  public var heightInCentimeters: Swift.Int32?
+  public var widthInCentimeters: Swift.Int32?
+  public var lengthInCentimeters: Swift.Int32?
+  public var axleCount: Swift.Int32?
+  public init(grossWeightInKilograms: Swift.Int32? = nil, weightPerAxleInKilograms: Swift.Int32? = nil, heightInCentimeters: Swift.Int32? = nil, widthInCentimeters: Swift.Int32? = nil, lengthInCentimeters: Swift.Int32? = nil, axleCount: Swift.Int32? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.TruckSpecifications, b: heresdk.TruckSpecifications) -> Swift.Bool
+}
+public enum TunnelCategory : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case b
+  case c
+  case d
+  case e
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.TunnelCategory]
+  public static var allCases: [heresdk.TunnelCategory] {
+    get
+  }
+}
+public struct Waypoint : Swift.Hashable {
+  public var coordinates: heresdk.GeoCoordinates
+  public var type: heresdk.WaypointType
+  public var transitRadiusInMeters: Swift.Int32
+  public var durationInSeconds: Swift.Int32
+  public var headingInDegrees: Swift.Double?
+  public init(coordinates: heresdk.GeoCoordinates, type: heresdk.WaypointType = WaypointType.stopover, transitRadiusInMeters: Swift.Int32 = 0, durationInSeconds: Swift.Int32 = 0, headingInDegrees: Swift.Double? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Waypoint, b: heresdk.Waypoint) -> Swift.Bool
+}
+public enum WaypointType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case stopover
+  case passThrough
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.WaypointType]
+  public static var allCases: [heresdk.WaypointType] {
+    get
+  }
+}
+public enum HighlightType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case title
+  case addressLabel
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.HighlightType]
+  public static var allCases: [heresdk.HighlightType] {
+    get
+  }
+}
+public class IndexRange {
+  public var start: Swift.Int32 {
+    get
+  }
+  public var end: Swift.Int32 {
+    get
+  }
+  @objc deinit
+}
+public class SearchEngine {
+  public init() throws
+  public init(_ sdkEngine: heresdk.SDKNativeEngine) throws
+  @objc deinit
+  public func search(textQuery query: heresdk.TextQuery, options: heresdk.SearchOptions, completion: @escaping heresdk.SearchCompletionHandler) -> heresdk.TaskHandle
+  public func search(addressQuery query: heresdk.AddressQuery, options: heresdk.SearchOptions, completion: @escaping heresdk.SearchCompletionHandler) -> heresdk.TaskHandle
+  @available(*, deprecated, message: "Will be removed in v4.6.0, use search that accepts PlaceIdQuery, LanguageCode and PlaceIdSearchCallback instead.")
+  public func search(placeIdQuery query: heresdk.PlaceIdQuery, completion: @escaping heresdk.PlaceIdSearchCompletionHandler) -> heresdk.TaskHandle
+  public func search(placeIdQuery query: heresdk.PlaceIdQuery, languageCode: heresdk.LanguageCode?, completion: @escaping heresdk.PlaceIdSearchCompletionHandler) -> heresdk.TaskHandle
+  public func search(coordinates: heresdk.GeoCoordinates, options: heresdk.SearchOptions, completion: @escaping heresdk.SearchCompletionHandler) -> heresdk.TaskHandle
+  public func search(categoryQuery query: heresdk.CategoryQuery, options: heresdk.SearchOptions, completion: @escaping heresdk.SearchCompletionHandler) -> heresdk.TaskHandle
+  public func suggest(textQuery query: heresdk.TextQuery, options: heresdk.SearchOptions, completion: @escaping heresdk.SuggestCompletionHandler) -> heresdk.TaskHandle
+  public func setCustomOption(name: Swift.String, value: Swift.String) -> heresdk.SearchError?
+}
+public typealias SuggestCompletionHandler = (heresdk.SearchError?, [heresdk.Suggestion]?) -> Swift.Void
+public class Suggestion {
+  public var title: Swift.String {
+    get
+  }
+  public var type: heresdk.SuggestionType {
+    get
+  }
+  public var place: heresdk.Place? {
+    get
+  }
+  public var href: Swift.String? {
+    get
+  }
+  @objc deinit
+  public func getHighlights() -> [heresdk.HighlightType : [heresdk.IndexRange]]
+}
+public enum SuggestionType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case category
+  case chain
+  case place
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.SuggestionType]
+  public static var allCases: [heresdk.SuggestionType] {
+    get
+  }
+}
+public typealias AdditionalAddressData = [Swift.String : Swift.String]
+public struct Address : Swift.Hashable {
+  public let city: Swift.String
+  public let countryCode: Swift.String
+  public let country: Swift.String
+  public let district: Swift.String
+  public let subdistrict: Swift.String
+  public let houseNumOrName: Swift.String
+  public let postalCode: Swift.String
+  public let stateName: Swift.String
+  public let countyName: Swift.String
+  public let streetName: Swift.String
+  public let block: Swift.String
+  public let subBlock: Swift.String
+  public let addressText: Swift.String
+  public let additionalData: heresdk.AdditionalAddressData
+  public init(city: Swift.String, countryCode: Swift.String, country: Swift.String, district: Swift.String, subdistrict: Swift.String, houseNumOrName: Swift.String, postalCode: Swift.String, stateName: Swift.String, countyName: Swift.String, streetName: Swift.String, block: Swift.String, subBlock: Swift.String, addressText: Swift.String, additionalData: heresdk.AdditionalAddressData)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Address, b: heresdk.Address) -> Swift.Bool
+}
+public struct AddressQuery : Swift.Hashable {
+  public let query: Swift.String
+  public let areaCenter: heresdk.GeoCoordinates?
+  public let countries: [heresdk.CountryCode]
+  public init(_ query: Swift.String, near areaCenter: heresdk.GeoCoordinates)
+  public init(_ query: Swift.String, near areaCenter: heresdk.GeoCoordinates, inCountries countries: [heresdk.CountryCode])
+  public init(_ query: Swift.String)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.AddressQuery, b: heresdk.AddressQuery) -> Swift.Bool
+}
+public struct CategoryQuery : Swift.Hashable {
+  public let categories: [heresdk.PlaceCategory]
+  public let filter: Swift.String?
+  public let areaCenter: heresdk.GeoCoordinates
+  public let corridorArea: heresdk.GeoCorridor?
+  public init(_ categories: [heresdk.PlaceCategory], filter: Swift.String, areaCenter: heresdk.GeoCoordinates)
+  public init(_ category: heresdk.PlaceCategory, filter: Swift.String, areaCenter: heresdk.GeoCoordinates)
+  public init(_ categories: [heresdk.PlaceCategory], areaCenter: heresdk.GeoCoordinates)
+  public init(_ category: heresdk.PlaceCategory, areaCenter: heresdk.GeoCoordinates)
+  public init(_ categories: [heresdk.PlaceCategory], in corridorArea: heresdk.GeoCorridor)
+  public init(_ category: heresdk.PlaceCategory, in corridorArea: heresdk.GeoCorridor)
+  public init(_ categories: [heresdk.PlaceCategory], filter: Swift.String, in corridorArea: heresdk.GeoCorridor)
+  public init(_ category: heresdk.PlaceCategory, filter: Swift.String, in corridorArea: heresdk.GeoCorridor)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.CategoryQuery, b: heresdk.CategoryQuery) -> Swift.Bool
+}
+public struct Contact : Swift.Hashable {
+  public let landlinePhoneNumbers: [Swift.String]
+  public let mobilePhoneNumbers: [Swift.String]
+  public let emailAddresses: [Swift.String]
+  public let websiteAddresses: [Swift.String]
+  public init(landlinePhoneNumbers: [Swift.String], mobilePhoneNumbers: [Swift.String], emailAddresses: [Swift.String], websiteAddresses: [Swift.String])
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Contact, b: heresdk.Contact) -> Swift.Bool
+}
+public struct Details : Swift.Hashable {
+  public let contacts: [heresdk.Contact]
+  public let openingHours: [heresdk.OpeningHours]
+  public let categories: [heresdk.PlaceCategory]
+  public let images: [heresdk.WebImage]
+  public let editorials: [heresdk.WebEditorial]
+  public let ratings: [heresdk.WebRating]
+  public init(contacts: [heresdk.Contact], openingHours: [heresdk.OpeningHours], categories: [heresdk.PlaceCategory], images: [heresdk.WebImage], editorials: [heresdk.WebEditorial], ratings: [heresdk.WebRating])
+  public func getPrimaryCategories() -> [heresdk.PlaceCategory]
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.Details, b: heresdk.Details) -> Swift.Bool
+}
+public struct OpeningHours : Swift.Hashable {
+  public let text: [Swift.String]
+  public let isOpen: Swift.Bool
+  public let scheduleDetailsList: [heresdk.ScheduleDetails]
+  public init(text: [Swift.String], isOpen: Swift.Bool, scheduleDetailsList: [heresdk.ScheduleDetails])
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.OpeningHours, b: heresdk.OpeningHours) -> Swift.Bool
+}
+public class Place {
+  public var title: Swift.String {
+    get
+  }
+  public var id: Swift.String {
+    get
+  }
+  public var type: heresdk.PlaceType {
+    get
+  }
+  public var address: heresdk.Address {
+    get
+  }
+  public var details: heresdk.Details {
+    get
+  }
+  public var geoCoordinates: heresdk.GeoCoordinates? {
+    get
+  }
+  public var accessPoints: [heresdk.GeoCoordinates] {
+    get
+  }
+  @available(*, deprecated, message: "Will be removed in v4.7.0. `Place.geoCoordinates` should be used instead.")
+  public var coordinates: heresdk.GeoCoordinates {
+    get
+  }
+  public var boundingBox: heresdk.GeoBox? {
+    get
+  }
+  public var distanceInMeters: Swift.Int32? {
+    get
+  }
+  @objc deinit
+}
+public class PlaceCategory {
+  public init(id: Swift.String)
+  public static var eatAndDrink: Swift.String
+  public static var eatAndDrinkRestaurant: Swift.String
+  public static var eatAndDrinkCoffeeTea: Swift.String
+  public static var goingOutEntertainment: Swift.String
+  public static var goingOutNightlife: Swift.String
+  public static var goingOutCinema: Swift.String
+  public static var goingOutTheatreMusicCulture: Swift.String
+  public static var goingOutGamblingLotteryBetting: Swift.String
+  public static var sightsAndMuseums: Swift.String
+  public static var sightsLandmarkAttaction: Swift.String
+  public static var sightsMuseum: Swift.String
+  public static var sightsReligiousPlace: Swift.String
+  public static var naturalAndGeographical: Swift.String
+  public static var naturalAndGeographicalBodyOfWater: Swift.String
+  public static var naturalAndGeographicalMountainOrHill: Swift.String
+  public static var naturalAndGeographicalUnderseaFeature: Swift.String
+  public static var naturalAndGeographicalForestHealthOtherVegetation: Swift.String
+  public static var naturalAndGeographicalOther: Swift.String
+  public static var transport: Swift.String
+  public static var transportAirport: Swift.String
+  public static var transportPublic: Swift.String
+  public static var transportCargo: Swift.String
+  public static var transportRestArea: Swift.String
+  public static var accomodation: Swift.String
+  public static var accomodationHotelMotel: Swift.String
+  public static var accomodationLodging: Swift.String
+  public static var leisureAndOutdoor: Swift.String
+  public static var leisureOutdoorRecreation: Swift.String
+  public static var leisureOther: Swift.String
+  public static var shopping: Swift.String
+  public static var shoppingConvenienceStore: Swift.String
+  public static var shoppingMallComplex: Swift.String
+  public static var shoppingDepartmentStore: Swift.String
+  public static var shoppingFoodAndDrink: Swift.String
+  public static var shoppingDrugstorePharmacy: Swift.String
+  public static var shoppingElectronics: Swift.String
+  public static var shoppingHardwareHouseGarden: Swift.String
+  public static var shoppingBookstore: Swift.String
+  public static var shoppingClothingAndAccesories: Swift.String
+  public static var shoppingConsumerGoods: Swift.String
+  public static var shoppingHairAndBeauty: Swift.String
+  public static var businessAndServices: Swift.String
+  public static var businessAndServicesBanking: Swift.String
+  public static var businessAndServicesAtm: Swift.String
+  public static var businessAndServicesMoneyCash: Swift.String
+  public static var businessAndServicesCommunicationMedia: Swift.String
+  public static var businessAndCommercialServices: Swift.String
+  public static var businessAndServicesIndustry: Swift.String
+  public static var businessAndServicesPoliceFireEmergency: Swift.String
+  public static var businessAndConsumerServices: Swift.String
+  public static var businessAndServicesPostOffice: Swift.String
+  public static var businessAndServicesTouristInformation: Swift.String
+  public static var businessAndServicesFuelingStation: Swift.String
+  public static var businessAndServicesCarDealerSales: Swift.String
+  public static var businessAndServicesCarRepairServices: Swift.String
+  public static var businessAndServicesCarRental: Swift.String
+  public static var businessAndServicesTruckSemiDealer: Swift.String
+  public static var facilities: Swift.String
+  public static var facilitiesHospitalHealthcare: Swift.String
+  public static var facilitiesGovernmentCommunitty: Swift.String
+  public static var facilitiesEducation: Swift.String
+  public static var facilitiesLibrary: Swift.String
+  public static var facilitiesEventSpaces: Swift.String
+  public static var facilitiesParking: Swift.String
+  public static var facilitiesVenueSports: Swift.String
+  public static var facilitiesOther: Swift.String
+  public static var areasAndBuildings: Swift.String
+  public static var areasAndBuildingsOutdoorComplex: Swift.String
+  public static var areasAndBuildingsResidentalOffice: Swift.String
+  public var id: Swift.String {
+    get
+  }
+  @objc deinit
+}
+extension PlaceCategory : Swift.Hashable {
+  public static func == (lhs: heresdk.PlaceCategory, rhs: heresdk.PlaceCategory) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public struct PlaceIdQuery : Swift.Hashable {
+  public let id: Swift.String
+  public init(_ id: Swift.String)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.PlaceIdQuery, b: heresdk.PlaceIdQuery) -> Swift.Bool
+}
+public typealias PlaceIdSearchCompletionHandler = (heresdk.SearchError?, heresdk.Place?) -> Swift.Void
+public enum PlaceType : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case unit
+  case houseNumber
+  case houseNumberInterpolated
+  case addressBlock
+  case street
+  case locality
+  case administrativeArea
+  case poi
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.PlaceType]
+  public static var allCases: [heresdk.PlaceType] {
+    get
+  }
+}
+public struct ScheduleDetails : Swift.Hashable {
+  public let start: Swift.String
+  public let duration: Swift.String
+  public let recurrence: Swift.String
+  public init(start: Swift.String, duration: Swift.String, recurrence: Swift.String)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.ScheduleDetails, b: heresdk.ScheduleDetails) -> Swift.Bool
+}
+public typealias SearchCompletionHandler = (heresdk.SearchError?, [heresdk.Place]?) -> Swift.Void
+public enum SearchError : Swift.UInt32, Swift.CaseIterable, Swift.Codable {
+  case authenticationFailed
+  case maxItemsOutOfRange
+  case polylineTooLong
+  case parsingError
+  case noResultsFound
+  case httpError
+  case serverUnreachable
+  case invalidParameter
+  case forbidden
+  case exceededUsageLimit
+  case operationFailed
+  case operationCancelled
+  case optionNotAvailable
+  case timedOut
+  case offline
+  case queryTooLong
+  case filterTooLong
+  public typealias RawValue = Swift.UInt32
+  public init?(rawValue: Swift.UInt32)
+  public var rawValue: Swift.UInt32 {
+    get
+  }
+  public typealias AllCases = [heresdk.SearchError]
+  public static var allCases: [heresdk.SearchError] {
+    get
+  }
+}
+public struct SearchOptions : Swift.Hashable {
+  public var languageCode: heresdk.LanguageCode?
+  public var maxItems: Swift.Int32?
+  public init(languageCode: heresdk.LanguageCode? = nil, maxItems: Swift.Int32? = nil)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.SearchOptions, b: heresdk.SearchOptions) -> Swift.Bool
+}
+public struct TextQuery : Swift.Hashable {
+  public let query: Swift.String
+  public let areaCenter: heresdk.GeoCoordinates?
+  public let countries: [heresdk.CountryCode]
+  public let boxArea: heresdk.GeoBox?
+  public let circleArea: heresdk.GeoCircle?
+  public let corridorArea: heresdk.GeoCorridor?
+  public init(_ query: Swift.String, near areaCenter: heresdk.GeoCoordinates)
+  public init(_ query: Swift.String, near areaCenter: heresdk.GeoCoordinates, inCountries countries: [heresdk.CountryCode])
+  public init(_ query: Swift.String, in boxArea: heresdk.GeoBox)
+  public init(_ query: Swift.String, in circleArea: heresdk.GeoCircle)
+  public init(_ query: Swift.String, in corridorArea: heresdk.GeoCorridor, near areaCenter: heresdk.GeoCoordinates)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.TextQuery, b: heresdk.TextQuery) -> Swift.Bool
+}
+public struct WebEditorial : Swift.Hashable {
+  public var description: Swift.String
+  public var language: Swift.String
+  public var source: heresdk.WebSource
+  public init(description: Swift.String, language: Swift.String, source: heresdk.WebSource)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.WebEditorial, b: heresdk.WebEditorial) -> Swift.Bool
+}
+public struct WebImage : Swift.Hashable {
+  public var date: Foundation.Date
+  public var source: heresdk.WebSource
+  public init(date: Foundation.Date, source: heresdk.WebSource)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.WebImage, b: heresdk.WebImage) -> Swift.Bool
+}
+public struct WebRating : Swift.Hashable {
+  public var count: Swift.Int32
+  public var average: Swift.Double
+  public var source: heresdk.WebSource
+  public init(count: Swift.Int32, average: Swift.Double, source: heresdk.WebSource)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.WebRating, b: heresdk.WebRating) -> Swift.Bool
+}
+public struct WebSource : Swift.Hashable {
+  public var href: Swift.String
+  public var supplierId: Swift.String
+  public init(href: Swift.String, supplierId: Swift.String)
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+  public static func == (a: heresdk.WebSource, b: heresdk.WebSource) -> Swift.Bool
+}
+@objc @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor` instead.")
+final public class Color : UIKit.UIColor {
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.init(red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)` instead (Note: the range of color component should be changed [0...255] -> [0...1]).")
+  public convenience init(red: Swift.UInt8, green: Swift.UInt8, blue: Swift.UInt8)
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.init(red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)` instead (Note: the range of color component should be changed [0...255] -> [0...1]).")
+  public convenience init(red: Swift.Int, green: Swift.Int, blue: Swift.Int)
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.init(red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)` instead (Note: the range of color component should be changed [0...255] -> [0...1]).")
+  public convenience init(red: Swift.UInt8, green: Swift.UInt8, blue: Swift.UInt8, alpha: Swift.UInt8)
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.init(red:CGFloat,green:CGFloat,blue:CGFloat,alpha:CGFloat)` instead (Note: the range of color component should be changed [0...255] -> [0...1]).")
+  public convenience init(red: Swift.Int, green: Swift.Int, blue: Swift.Int, alpha: Swift.Int)
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor` instead.")
+  public convenience init(_ color: UIKit.UIColor)
+  @objc override dynamic public init(white: CoreGraphics.CGFloat, alpha: CoreGraphics.CGFloat)
+  @objc override dynamic public init(hue: CoreGraphics.CGFloat, saturation: CoreGraphics.CGFloat, brightness: CoreGraphics.CGFloat, alpha: CoreGraphics.CGFloat)
+  @objc override dynamic public init(red: CoreGraphics.CGFloat, green: CoreGraphics.CGFloat, blue: CoreGraphics.CGFloat, alpha: CoreGraphics.CGFloat)
+  @available(iOS 10.0, *)
+  @available(*, deprecated)
+  @objc override dynamic public init(displayP3Red: CoreGraphics.CGFloat, green: CoreGraphics.CGFloat, blue: CoreGraphics.CGFloat, alpha: CoreGraphics.CGFloat)
+  @objc override dynamic public init(cgColor: CoreGraphics.CGColor)
+  @objc override dynamic public init(patternImage image: UIKit.UIImage)
+  @available(iOS 5.0, *)
+  @available(*, deprecated)
+  @objc override dynamic public init(ciColor: CoreImage.CIColor)
+  @objc override dynamic public init()
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @available(iOS 13.0, *)
+  @available(*, deprecated)
+  @objc override dynamic public init(dynamicProvider: @escaping (UIKit.UITraitCollection) -> UIKit.UIColor)
+  @objc deinit
+}
+extension UIColor {
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.getRed` instead (Note: the range of color component is [0...1] instead of [0...255]).")
+  public var red: Swift.UInt8 {
+    get
+  }
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.getRed` instead (Note: the range of color component is [0...1] instead of [0...255]).")
+  public var green: Swift.UInt8 {
+    get
+  }
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.getRed` instead (Note: the range of color component is [0...1] instead of [0...255]).")
+  public var blue: Swift.UInt8 {
+    get
+  }
+  @available(*, deprecated, message: "Will be removed in v4.7.0. Use `UIColor.getRed` instead (Note: the range of color component is [0...1] instead of [0...255]).")
+  public var alpha: Swift.UInt8 {
+    get
+  }
+}
+extension GeoBox {
+  @available(*, deprecated, message: "Use intersects(geoBox:)")
+  public func intersects(geoBoundingRect: heresdk.GeoBox) -> Swift.Bool
+  @available(*, deprecated, message: "Use contains(geoBox:)")
+  public func contains(geoBoundingRect: heresdk.GeoBox) -> Swift.Bool
+}
+extension GeoCoordinates {
+  public static func == (lhs: heresdk.GeoCoordinates, rhs: heresdk.GeoCoordinates) -> Swift.Bool
+}
+public func makeIOSPlatformThreading() -> heresdk.PlatformThreading
+public class SDKInitializer {
+  public enum SDKInitError : Swift.Error {
+    case missingPlistFile
+    case missingCredentialsSection
+    case missingAccessKeyId
+    case missingAccessKeySecret
+    case invalidAuthenticationPreferences
+    public static func == (a: heresdk.SDKInitializer.SDKInitError, b: heresdk.SDKInitializer.SDKInitError) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public static func initializeInternal()
+  public static func initialize(options: heresdk.SDKOptions) throws
+  public static func initializePlatformUtils()
+  public static func initializeIfNecessary() throws
+  @objc deinit
+}
+@objc @IBDesignable open class MapView : UIKit.UIView, heresdk.MapViewBase {
+  public typealias TakeScreenshotCallback = (UIKit.UIImage?) -> Swift.Void
+  public class ViewPin {
+    public var view: UIKit.UIView {
+      get
+      }
+    public var geoCoordinates: heresdk.GeoCoordinates {
+      get
+      set(newValue)
+    }
+    public func unpin()
+    @objc deinit
+  }
+  public var camera: heresdk.MapCamera {
+    get
+  }
+  public var gestures: heresdk.Gestures {
+    get
+  }
+  public var mapScene: heresdk.MapScene {
+    get
+  }
+  public static var primaryLanguage: heresdk.LanguageCode? {
+    get
+    set(newValue)
+  }
+  @objc dynamic public convenience init()
+  @objc override dynamic public convenience init(frame: CoreGraphics.CGRect)
+  public init(frame: CoreGraphics.CGRect, withSdkEngine sdkEngine: heresdk.SDKNativeEngine)
+  @objc required dynamic public init?(coder aDecoder: Foundation.NSCoder)
+  @objc deinit
+  @objc override dynamic open class var layerClass: Swift.AnyClass {
+    @objc get
+  }
+  public func geoToViewCoordinates(geoCoordinates: heresdk.GeoCoordinates) -> heresdk.Point2D?
+  public func viewToGeoCoordinates(viewCoordinates: heresdk.Point2D) -> heresdk.GeoCoordinates?
+  public func pickMapItems(at centerPoint: heresdk.Point2D, radius: Swift.Double, completion callback: @escaping (heresdk.PickMapItemsResult?) -> Swift.Void)
+  public func takeScreenshot(callback: @escaping heresdk.MapView.TakeScreenshotCallback)
+  public func addMapRepresentable(_ mapRepresentable: heresdk.MapRepresentable)
+  public func removeMapRepresentable(_ mapRepresentable: heresdk.MapRepresentable)
+  public func setWatermarkPosition(placement: heresdk.WatermarkPlacement, bottomCenterMargin: Swift.UInt32)
+  public var pixelScale: Swift.Double {
+    get
+  }
+  public func setFrame(frame: CoreGraphics.CGRect)
+  public func pinView(_ view: UIKit.UIView, to coordinates: heresdk.GeoCoordinates) -> heresdk.MapView.ViewPin?
+  public func unpinView(_ view: UIKit.UIView)
+  public var viewPins: [heresdk.MapView.ViewPin] {
+    get
+  }
+  public func handleLowMemory()
+  @objc override dynamic open func touchesBegan(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+  @objc override dynamic open func touchesMoved(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+  @objc override dynamic open func touchesEnded(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+  @objc override dynamic open func touchesCancelled(_ touches: Swift.Set<UIKit.UITouch>, with event: UIKit.UIEvent?)
+  @objc override dynamic open func layoutSubviews()
+}

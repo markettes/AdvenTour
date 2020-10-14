@@ -1,0 +1,12 @@
+{
+    "styles": [
+        {
+            "styleSet": "rasterterrain",
+            "technique": "rasterterrain",
+            "attr": {
+                "gamma": ["ref", "Satellite.ColorGamma"],
+                "brightness": ["ref", "Satellite.ColorBrightness"]
+            }
+        }
+    ]
+}

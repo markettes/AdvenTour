@@ -33,6 +33,7 @@
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
               android:resource="@drawable/launch_background"
               />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -43,5 +44,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <meta-data android:name="com.here.sdk.access_key_id" android:value="F4_pDCeALhbr0BJ6QMhrzA"/>
+            <meta-data android:name="com.here.sdk.access_key_secret" android:value="kjqkF48vPjLwrlwgD0puCCSismLljnUH4JTgJ2NNjbbaS4xguA5yulIV9382biWDULN48uvy1OnD99PUSc1oCw"/>
+     
+
+
     </application>
-</manifest>
+    </manifest>

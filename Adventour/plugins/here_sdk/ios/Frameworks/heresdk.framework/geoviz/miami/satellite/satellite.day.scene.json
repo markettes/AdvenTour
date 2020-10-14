@@ -1,0 +1,17 @@
+{
+    "inherit": "../../common/satellite/scene.json",
+    "extends": [
+        "../../common/satellite/template/polecaps.style.json",
+        "../../common/satellite/template/satellite.style.json",
+        "../../common/shared/template/environment.style.json",
+        "../../common/shared/template/geogrid.style.json",
+        "../../common/satellite/template/polecaps.definitions.json",
+        "../../common/satellite/template/satellite.definitions.json",
+        "../../common/shared/template/environment.definitions.json",
+        "../../common/shared/template/scaling-factors.definitions.json",
+        "../../common/shared/template/shared.definitions.json",
+        "../schemes/normal.day.definitions.json",
+        "../schemes/normal.day.definitions.json",
+        "../schemes/satellite.day.definitions.json"
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "definitions": {
+        "Northpole.Color": {
+            "value": "#10304a"
+        },
+        "Southpole.Color": {
+            "value": "#ffffff"
+        }
+    }
+}

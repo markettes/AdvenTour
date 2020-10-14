@@ -1,0 +1,30 @@
+{
+    "datasources": {
+        "omv" : {
+            "provider": {
+                "name": "tilezen_traffic_incident",
+                "server": "https://traffic.vector.hereapi.com/v2/traffictiles/incident/mc/{z}/{x}/{y}/omv",
+
+                "cache": {
+                    "path": "cache/tilezen_traffic_incident"
+                },
+                "tiling": "QuadTreeMercator",
+                "levels": {
+                    "min_storage_level": 2,
+                    "max_storage_level": 15
+                }
+            },
+            "layers": [
+                {
+                    "name": "tilezen_traffic_incident.point",
+                    "geometry": "point"
+                },
+                {
+                    "name": "tilezen_traffic_incident.line",
+                    "geometry": "line",
+                    "render_as": "shiftable"
+                }
+            ]
+        }
+    }
+}

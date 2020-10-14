@@ -1,0 +1,90 @@
+{
+    "styles": [
+        {
+            "id": "pois",
+            "styleSet": "tilezen_points",
+            "when": [
+                "all",
+                ["==", ["get", "$layer"], "pois"]
+            ],
+            "technique": "icontext",
+            "description": "POIs with PDS category",
+            "category": "poi-labels",
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"],
+                "placements": "N",
+                "icon-brightness": ["ref", "IconText.Icon.POI.Brightness"],
+                "font-outline-style": "OutlineAndFill",
+                "perspective-scale-min": ["ref", "poiPerspectiveScaleMin"],
+                "text-dy": [
+                    "/",
+                    ["ppi-scale", ["ref", "PointOfInterest.General.IconSize"], ["ref", "ScalePpi.labels"]],
+                    1.35
+                ],
+                "icon-shadow-color": ["ref", "IconShadow.Color"],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "break-line": true,
+                "dy": [
+                    "/",
+                    [
+                        "-",
+                        ["ppi-scale", ["ref", "PointOfInterest.General.IconSize"], ["ref", "ScalePpi.labels"]]
+                    ],
+                    2
+                ],
+                "icon-height": ["ref", "PoiIconSize"],
+                "perspective-scale-max": ["ref", "poiPerspectiveScaleMax"],
+                "text-outline-color": ["match", ["ref", "poiLookupGroup"],
+                    "Public Transport", ["ref", "Transit.Stop.FontStyle.OutlineColor"],
+                    ["ref", "PointOfInterest.FontStyle.OutlineColor"]],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "text-dx": 0,
+                "leading-space": ["ref", "PointOfInterest.FontStyle.Leading"],
+                "icon-shadow-enabled": ["ref", "IconShadow.Enabled.POI"],
+                "text-color": ["match", ["ref", "poiLookupGroup"],
+                    "Public Transport", ["ref", "Transit.Stop.FontStyle.Color"],
+                    ["ref", "PointOfInterest.FontStyle.Color"]],
+                "icon-shadow-blur-radius": ["ref", "IconShadow.BlurRadius"],
+                "text-brightness": ["ref", "IconText.Text.POI.Brightness"],
+                "far-threshold": 0.85,
+                "icon-shadow-size-increment": ["ref", "IconShadow.POI.SizeIncrement"],
+                "font-outline-size":
+                [
+                    "ppi-scale",
+                    ["match", ["ref", "poiLookupGroup"],
+                        "Public Transport", ["ref", "Transit.Stop.FontStyle.OutlineWidth"],
+                        ["ref", "PointOfInterest.FontStyle.OutlineWidth"]],
+                    ["ref", "ScalePpi.labels"]
+                ],
+                "icon-shadow-shear-factor-y": ["ref", "IconShadow.ShearFactor.Y"],
+                "font": ["ref", "defaultFont"],
+                "icon-shadow-dy": ["-", ["ref", "IconShadow.POI.Distance.Y"]],
+                "dx": 0,
+                "icon-shadow-dx": ["ref", "IconShadow.POI.Distance.X"],
+                "image": [
+                    "concat",
+                    "file:///poi/",
+                    ["ref", "PoiIconPathPrefix"],
+                    ["ref", "poiLookupIconName"],
+                    ".svg"
+                ],
+                "z-order": ["-", 10000, ["ref", "poiLookupPriority"]],
+                "iconMinZoomLevel": ["ref", "poiLookupIconMinLevel"],
+                "iconMaxZoomLevel": ["number", ["ref", "poiLookupIconMaxLevel"], 0],
+                "textMinZoomLevel": ["ref", "poiLookupTextMinLevel"],
+                "textMaxZoomLevel": ["number", ["ref", "poiLookupTextMaxLevel"], 0],
+                "font-size": [
+                    "ppi-scale",
+                    ["match", ["ref", "poiLookupGroup"],
+                        "Public Transport", ["ref", "Transit.Stop.FontStyle.Size"],
+                        ["ref", "PointOfInterest.FontStyle.Size"]],
+                    ["ref", "ScalePpi.labels"]
+                ],
+                "icon-shadow-shear-factor-x": ["ref", "IconShadow.ShearFactor.X"]
+            }
+        }
+    ]
+}

@@ -1,0 +1,326 @@
+{
+    "styles": [
+        {
+            "id": "water_lines",
+            "styleSet": "tilezen_lines",
+            "when": ["==", ["get", "$layer"], "water"],
+            "technique": "line",
+            "description": "Water",
+            "category": "water-line",
+            "attr": {
+                "shadow-receiver": true,
+                "width": ["world-ppi-scale", ["ref", "River.Width"]],
+                "antialias": true,
+                "color": [
+                    "case",
+                    ["get", "intermittent"],
+                    ["ref", "IntermittentRiver.Color"],
+                    ["==", ["get", "kind"], "river"],
+                    ["ref", "River.Color"],
+                    ["==", ["get", "kind"], "canal"],
+                    ["ref", "CanalWaterChannel.Color"],
+                    ["ref", "River.Color"]
+                ],
+                "smooth-steps": ["make-vector", 3, 1]
+            }
+        },
+        {
+            "id": "water_line_labels",
+            "styleSet": "tilezen_lines",
+            "when": ["ref", "Is.WaterLineLabel"],
+            "technique": "text",
+            "description": "Water Line Labels",
+            "category": "water-labels",
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"],
+                "attribute-name": [
+                    "case",
+                    [
+                        "any",
+                        ["get", "intermittent"],
+                        ["==", ["get", "kind"], "river"],
+                        ["==", ["get", "kind"], "canal"]
+                    ],
+                    ["ref", "Water.CountryCode"],
+                    null
+                ],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": [
+                    "case",
+                    ["get", "intermittent"],
+                    ["ppi-scale", ["ref", "IntermittentRiver.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["==", ["get", "kind"], "river"],
+                    ["ppi-scale", ["ref", "River.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["==", ["get", "kind"], "canal"],
+                    ["ppi-scale", ["ref", "CanalWaterChannel.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", 0, ["ref", "ScalePpi.labels"]]
+                ],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "slant-amount": [
+                    "case",
+                    ["get", "intermittent"],
+                    [
+                        "case",
+                        ["ref", "IntermittentRiver.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    ["==", ["get", "kind"], "river"],
+                    [
+                        "case",
+                        ["ref", "River.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    ["==", ["get", "kind"], "canal"],
+                    [
+                        "case",
+                        ["ref", "CanalWaterChannel.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    null
+                ],
+                "tracking-space": [
+                    "case",
+                    ["get", "intermittent"],
+                    ["ref", "IntermittentRiver.FontStyle.Tracking"],
+                    ["==", ["get", "kind"], "river"],
+                    ["ref", "River.FontStyle.Tracking"],
+                    ["==", ["get", "kind"], "canal"],
+                    ["ref", "CanalWaterChannel.FontStyle.Tracking"],
+                    null
+                ],
+                "outline-color": [
+                    "case",
+                    ["get", "intermittent"],
+                    ["ref", "IntermittentRiver.FontStyle.OutlineColor"],
+                    ["==", ["get", "kind"], "river"],
+                    ["ref", "River.FontStyle.OutlineColor"],
+                    ["==", ["get", "kind"], "canal"],
+                    ["ref", "CanalWaterChannel.FontStyle.OutlineColor"],
+                    null
+                ],
+                "far-threshold": 0.85,
+                "color": [
+                    "case",
+                    ["get", "intermittent"],
+                    ["ref", "IntermittentRiver.FontStyle.Color"],
+                    ["==", ["get", "kind"], "river"],
+                    ["ref", "River.FontStyle.Color"],
+                    ["==", ["get", "kind"], "canal"],
+                    ["ref", "CanalWaterChannel.FontStyle.Color"],
+                    "#0000ff"
+                ],
+                "size": [
+                    "case",
+                    ["get", "intermittent"],
+                    ["ppi-scale", ["ref", "IntermittentRiver.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["==", ["get", "kind"], "river"],
+                    ["ppi-scale", ["ref", "River.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["==", ["get", "kind"], "canal"],
+                    ["ppi-scale", ["ref", "CanalWaterChannel.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "FallbackLabel.FontStyle.Size"], ["ref", "ScalePpi.labels"]]
+                ],
+                "font": [
+                    "case",
+                    [
+                        "any",
+                        ["get", "intermittent"],
+                        ["==", ["get", "kind"], "river"],
+                        ["==", ["get", "kind"], "canal"]
+                    ],
+                    ["ref", "Water.Font"],
+                    ["ref", "defaultFont"]
+                ],
+                "shape": "line"
+            }
+        },
+        {
+            "id": "water_point_labels",
+            "styleSet": "tilezen_points",
+            "when": ["ref", "Is.WaterPointLabel"],
+            "technique": "text",
+            "description": "Water Point Labels",
+            "category": ["match", ["get", "kind"],
+                "ocean", "ocean-labels",
+                "water-labels"],
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"],
+                "attribute-name": ["match", ["get", "kind"],
+                    [
+                        "canal",
+                        "river",
+                        "bay",
+                        "lake",
+                        "ocean",
+                        "sea",
+                        "fjord",
+                        "strait"
+                    ], ["ref", "Water.CountryCode"],
+                    null],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": ["match", ["get", "kind"],
+                    "ocean", ["step", ["ref", "Ocean.FontStyle.OutlineWidth"],
+                        "FillOnly",
+                        1, "OutlineAndFill"],
+                    "OutlineAndFill"],
+                "break-line": true,
+                "outline-size": ["match", ["get", "kind"],
+                    "canal", ["ppi-scale", ["ref", "CanalWaterChannel.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "river", ["ppi-scale", ["ref", "River.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "bay", ["ppi-scale", ["ref", "BayHarbour.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "lake", ["ppi-scale", ["ref", "Lake.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "ocean", ["ppi-scale", ["ref", "Ocean.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "sea", ["ppi-scale", ["ref", "Sea.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "fjord", ["ppi-scale", ["ref", "Fjord.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "strait", ["ppi-scale", ["ref", "Strait.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "Sea.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]]],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "leading-space": ["match", ["get", "kind"],
+                    "canal", ["ref", "CanalWaterChannel.FontStyle.Leading"],
+                    "river", ["ref", "River.FontStyle.Leading"],
+                    "bay", ["ref", "BayHarbour.FontStyle.Leading"],
+                    "lake", ["ref", "Lake.FontStyle.Leading"],
+                    "ocean", ["ref", "Ocean.FontStyle.Leading"],
+                    "sea", ["ref", "Sea.FontStyle.Leading"],
+                    "fjord", ["ref", "Fjord.FontStyle.Leading"],
+                    "strait", ["ref", "Strait.FontStyle.Leading"],
+                    ["ref", "Sea.FontStyle.Leading"]],
+                "slant-amount": ["match", ["get", "kind"],
+                    "canal", [
+                        "case",
+                        ["ref", "CanalWaterChannel.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "river", [
+                        "case",
+                        ["ref", "River.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "bay", [
+                        "case",
+                        ["ref", "BayHarbour.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "lake", [
+                        "case",
+                        ["ref", "Lake.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "ocean", [
+                        "case",
+                        ["ref", "Ocean.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "sea", [
+                        "case",
+                        ["ref", "Sea.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "fjord", [
+                        "case",
+                        ["ref", "Fjord.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    "strait", [
+                        "case",
+                        ["ref", "Strait.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ],
+                    [
+                        "case",
+                        ["ref", "Sea.FontStyle.Oblique"],
+                        ["ref", "TextSlant10Degrees"],
+                        ["ref", "TextSlant0Degrees"]
+                    ]],
+                "tracking-space": ["match", ["get", "kind"],
+                    "canal", ["ref", "CanalWaterChannel.FontStyle.Tracking"],
+                    "river", ["ref", "River.FontStyle.Tracking"],
+                    "bay", ["ref", "BayHarbour.FontStyle.Tracking"],
+                    "lake", ["ref", "Lake.FontStyle.Tracking"],
+                    "ocean", ["ref", "Ocean.FontStyle.Tracking"],
+                    "sea", ["ref", "Sea.FontStyle.Tracking"],
+                    "fjord", ["ref", "Fjord.FontStyle.Tracking"],
+                    "strait", ["ref", "Strait.FontStyle.Tracking"],
+                    ["ref", "Sea.FontStyle.Tracking"]],
+                "outline-color": ["match", ["get", "kind"],
+                    "canal", ["ref", "CanalWaterChannel.FontStyle.OutlineColor"],
+                    "river", ["ref", "River.FontStyle.OutlineColor"],
+                    "bay", ["ref", "BayHarbour.FontStyle.OutlineColor"],
+                    "lake", ["ref", "Lake.FontStyle.OutlineColor"],
+                    "ocean", ["ref", "Ocean.FontStyle.OutlineColor"],
+                    "sea", ["ref", "Sea.FontStyle.OutlineColor"],
+                    "fjord", ["ref", "Fjord.FontStyle.OutlineColor"],
+                    "strait", ["ref", "Strait.FontStyle.OutlineColor"],
+                    "Sea.FontStyle.OutlineColor"],
+                "far-threshold": 0.85,
+                "color": ["match", ["get", "kind"],
+                    "canal", ["ref", "CanalWaterChannel.FontStyle.Color"],
+                    "river", ["ref", "River.FontStyle.Color"],
+                    "bay", ["ref", "BayHarbour.FontStyle.Color"],
+                    "lake", ["ref", "Lake.FontStyle.Color"],
+                    "ocean", ["ref", "Ocean.FontStyle.Color"],
+                    "sea", ["ref", "Sea.FontStyle.Color"],
+                    "fjord", ["ref", "Fjord.FontStyle.Color"],
+                    "strait", ["ref", "Strait.FontStyle.Color"],
+                    ["ref", "Sea.FontStyle.Color"]],
+                "size": ["match", ["get", "kind"],
+                    "canal", ["ppi-scale", ["ref", "CanalWaterChannel.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "river", ["ppi-scale", ["ref", "River.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "bay", ["ppi-scale", ["ref", "BayHarbour.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "lake", ["ppi-scale", ["ref", "Lake.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "ocean", ["ppi-scale", ["ref", "Ocean.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "sea", ["ppi-scale", ["ref", "Sea.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "fjord", ["ppi-scale", ["ref", "Fjord.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "strait", ["ppi-scale", ["ref", "Strait.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "Sea.FontStyle.Size"], ["ref", "ScalePpi.labels"]]],
+                "font": ["match", ["get", "kind"],
+                    [
+                        "canal",
+                        "river",
+                        "bay",
+                        "lake",
+                        "ocean",
+                        "sea",
+                        "fjord",
+                        "strait"
+                    ], ["ref", "Water.Font"],
+                    ["ref", "defaultFont"]],
+                "shape": "point"
+            }
+        },
+        {
+            "id": "water_polygons",
+            "styleSet": "tilezen_polygons",
+            "when": ["==", ["get", "$layer"], "water"],
+            "technique": "polygon",
+            "description": "Water",
+            "category": "water",
+            "attr": {
+                "disable-shading": ["ref", "Polygon.Water.Disable.Shading"],
+                "opacity": ["ref", "globalPolygonOpacity"],
+                "ambient": ["ref", "Water.Polygon.Ambient.Factor"],
+                "softdepth": ["ref", "softDepthThreshold"],
+                "color": ["ref", "Water.Color.0m"],
+                "diffuse": ["ref", "Water.Polygon.Diffuse.Factor"],
+                "flatshading": true
+            }
+        }
+    ]
+}

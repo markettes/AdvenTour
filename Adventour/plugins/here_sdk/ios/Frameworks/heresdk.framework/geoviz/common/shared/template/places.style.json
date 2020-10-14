@@ -1,0 +1,567 @@
+{
+    "styles": [
+        {
+            "id": "admin_labels",
+            "styleSet": "tilezen_points",
+            "when": ["==", ["get", "$layer"], "places"],
+            "technique": "icontext",
+            "description": "Places",
+            "category": [
+                "case",
+                ["ref", "Is.CityDistrict.Class3"],
+                "city-center-microhood",
+                ["ref", "Is.CityDistrict.Class2"],
+                "city-center-neighbourhood",
+                ["ref", "Is.CityDistrict.Class1"],
+                "city-center-hamlet",
+                ["all", ["ref", "Is.CityCenter.Class1"], ["get", "region_capital"]],
+                "city-center-state-capital-class1",
+                ["all", ["ref", "Is.CityCenter.Class1"], ["get", "country_capital"]],
+                "city-center-country-capital-class1",
+                ["ref", "Is.CityCenter.Class1"],
+                "city-center-class1",
+                ["all", ["ref", "Is.CityCenter.Class2"], ["get", "region_capital"]],
+                "city-center-state-capital-class2",
+                ["all", ["ref", "Is.CityCenter.Class2"], ["get", "country_capital"]],
+                "city-center-country-capital-class2",
+                ["ref", "Is.CityCenter.Class2"],
+                "city-center-class2",
+                ["all", ["ref", "Is.CityCenter.Class3"], ["get", "region_capital"]],
+                "city-center-state-capital-class3",
+                ["all", ["ref", "Is.CityCenter.Class3"], ["get", "country_capital"]],
+                "city-center-country-capital-class3",
+                ["ref", "Is.CityCenter.Class3"],
+                "city-center-class3",
+                ["all", ["ref", "Is.CityCenter.Class4"], ["get", "region_capital"]],
+                "city-center-state-capital-class4",
+                ["all", ["ref", "Is.CityCenter.Class4"], ["get", "country_capital"]],
+                "city-center-country-capital-class4",
+                ["ref", "Is.CityCenter.Class4"],
+                "city-center-class4",
+                ["all", ["ref", "Is.CityCenter.Class5"], ["get", "region_capital"]],
+                "city-center-state-capital-class5",
+                ["all", ["ref", "Is.CityCenter.Class5"], ["get", "country_capital"]],
+                "city-center-country-capital-class5",
+                ["ref", "Is.CityCenter.Class5"],
+                "city-center-class5",
+                ["ref", "Is.Admin.State"],
+                "state-labels",
+                ["ref", "Is.Admin.Country"],
+                "country-labels",
+                "places-labels"
+            ],
+            "attr": {
+                "margin": ["match", ["get", "kind"],
+                    "microhood", ["ref", "NumbersMargin"],
+                    ["ref", "defaultMargin"]],
+                "persisting-margin-reducing": ["match", ["get", "kind"],
+                    "microhood", ["ref", "NumbersMarginReducing"],
+                    ["ref", "defaultPersistingMarginReducing"]],
+                "attribute-name": [
+                    "case",
+                    ["ref", "Is.Admin.State"],
+                    ["ref", "StateLabel.CountryCode"],
+                    ["ref", "Is.Admin.Country"],
+                    ["ref", "MajorCountryLabel.CountryCode"],
+                    null
+                ],
+                "placements": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["step", ["ref", "CityCenter.Class1.BulletSize"],
+                        "C",
+                        1, ["ref", "CityCenter.Text.Placements"]],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["step", ["ref", "CityCenter.Class2.BulletSize"],
+                        "C",
+                        1, ["ref", "CityCenter.Text.Placements"]],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["step", ["ref", "CityCenter.Class3.BulletSize"],
+                        "C",
+                        1, ["ref", "CityCenter.Text.Placements"]],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["step", ["ref", "CityCenter.Class4.BulletSize"],
+                        "C",
+                        1, ["ref", "CityCenter.Text.Placements"]],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["step", ["ref", "CityCenter.Class5.BulletSize"],
+                        "C",
+                        1, ["ref", "CityCenter.Text.Placements"]],
+                    null
+                ],
+                "icon-brightness": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "Icon.CityCenter.Brightness"],
+                    null
+                ],
+                "font-outline-style": "OutlineAndFill",
+                "text-dy": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class1.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class2"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class2.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class3"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class3.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class4"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class4.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class5"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class5.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    null
+                ],
+                "icon-shadow-color": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.Color"],
+                    null
+                ],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "break-line": true,
+                "dy": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class1.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class2"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class2.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class3"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class3.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class4"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class4.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class5"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class5.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    null
+                ],
+                "icon-height": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class1.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class1.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class2.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class2.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class3.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class3.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class4.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class4.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class5.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class5.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    null
+                ],
+                "text-outline-color": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    ["ref", "Microhood.FontStyle.OutlineColor"],
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ref", "NeighborhoodInfo.FontStyle.0.OutlineColor"],
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ref", "CityCenter.Hamlet.FontStyle.OutlineColor"],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ref", "CityCenter.Class1.FontStyle.OutlineColor"],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["ref", "CityCenter.Class2.FontStyle.OutlineColor"],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["ref", "CityCenter.Class3.FontStyle.OutlineColor"],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["ref", "CityCenter.Class4.FontStyle.OutlineColor"],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["ref", "CityCenter.Class5.FontStyle.OutlineColor"],
+                    ["ref", "Is.Admin.State"],
+                    ["ref", "StateLabel.FontStyle.OutlineColor"],
+                    ["ref", "Is.Admin.Country"],
+                    ["ref", "MajorCountryLabel.FontStyle.OutlineColor"],
+                    "#000000"
+                ],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "text-dx": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class1.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class2"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class2.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class3"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class3.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class4"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class4.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class5"],
+                    [
+                        "/",
+                        ["ppi-scale", ["ref", "CityCenter.Class5.BulletSize"], ["ref", "ScalePpi.labels"]],
+                        2
+                    ],
+                    null
+                ],
+                "leading-space": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    ["ref", "Microhood.FontStyle.Leading"],
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ref", "NeighborhoodInfo.FontStyle.Leading"],
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ref", "CityCenter.Hamlet.FontStyle.Leading"],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ref", "CityCenter.Class1.FontStyle.Leading"],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["ref", "CityCenter.Class2.FontStyle.Leading"],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["ref", "CityCenter.Class3.FontStyle.Leading"],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["ref", "CityCenter.Class4.FontStyle.Leading"],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["ref", "CityCenter.Class5.FontStyle.Leading"],
+                    ["ref", "Is.Admin.State"],
+                    ["ref", "StateLabel.FontStyle.Leading"],
+                    ["ref", "Is.Admin.Country"],
+                    ["ref", "MajorCountryLabel.FontStyle.Leading"],
+                    null
+                ],
+                "text-case-conversion": [
+                    "case",
+                    ["any", ["ref", "Is.CityDistrict.Class3"], ["ref", "Is.CityDistrict.Class2"]],
+                    "makeUpperCase",
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ref", "CityCenter.Hamlet.FontStyle.CaseConversion"],
+                    ["any", ["ref", "Is.Admin.State"], ["ref", "Is.Admin.Country"]],
+                    "makeUpperCase",
+                    null
+                ],
+                "icon-shadow-enabled": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.Enabled.CityCenterBullet"],
+                    null
+                ],
+                "text-color": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    ["ref", "Microhood.FontStyle.Color"],
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ref", "NeighborhoodInfo.FontStyle.0.Color"],
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ref", "CityCenter.Hamlet.FontStyle.Color"],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ref", "CityCenter.Class1.FontStyle.Color"],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["ref", "CityCenter.Class2.FontStyle.Color"],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["ref", "CityCenter.Class3.FontStyle.Color"],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["ref", "CityCenter.Class4.FontStyle.Color"],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["ref", "CityCenter.Class5.FontStyle.Color"],
+                    ["ref", "Is.Admin.State"],
+                    ["ref", "StateLabel.FontStyle.Color"],
+                    ["ref", "Is.Admin.Country"],
+                    ["ref", "MajorCountryLabel.FontStyle.Color"],
+                    "#ff0000"
+                ],
+                "icon-width": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class1.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class1.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class2.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class2.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class3.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class3.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class4.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class4.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["step", ["ppi-scale", ["ref", "CityCenter.Class5.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                        0,
+                        1, ["ppi-scale", ["ref", "CityCenter.Class5.BulletSize"], ["ref", "ScalePpi.labels"]]],
+                    null
+                ],
+                "icon-shadow-blur-radius": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.BlurRadius"],
+                    null
+                ],
+                "tracking-space": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    ["ref", "Microhood.FontStyle.Tracking"],
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ref", "NeighborhoodInfo.FontStyle.Tracking"],
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ref", "CityCenter.Hamlet.FontStyle.Tracking"],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ref", "CityCenter.Class1.FontStyle.Tracking"],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["ref", "CityCenter.Class2.FontStyle.Tracking"],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["ref", "CityCenter.Class3.FontStyle.Tracking"],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["ref", "CityCenter.Class4.FontStyle.Tracking"],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["ref", "CityCenter.Class5.FontStyle.Tracking"],
+                    ["ref", "Is.Admin.State"],
+                    ["ref", "StateLabel.FontStyle.Tracking"],
+                    ["ref", "Is.Admin.Country"],
+                    ["ref", "MajorCountryLabel.FontStyle.Tracking"],
+                    null
+                ],
+                "far-threshold": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    0.83,
+                    ["ref", "Is.CityDistrict.Class2"],
+                    0.84,
+                    ["ref", "Is.CityDistrict.Class1"],
+                    0.85,
+                    ["ref", "Is.CityCenter.Class1"],
+                    0.95,
+                    ["ref", "Is.CityCenter.Class2"],
+                    0.94,
+                    ["ref", "Is.CityCenter.Class3"],
+                    0.93,
+                    ["ref", "Is.CityCenter.Class4"],
+                    0.91,
+                    ["ref", "Is.CityCenter.Class5"],
+                    0.87,
+                    0.9
+                ],
+                "icon-shadow-size-increment": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.SizeIncrement"],
+                    null
+                ],
+                "font-outline-size": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    ["ppi-scale", ["ref", "Microhood.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ppi-scale", ["ref", "NeighborhoodInfo.FontStyle.0.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ppi-scale", ["ref", "CityCenter.Hamlet.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ppi-scale", ["ref", "CityCenter.Class1.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["ppi-scale", ["ref", "CityCenter.Class2.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["ppi-scale", ["ref", "CityCenter.Class3.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["ppi-scale", ["ref", "CityCenter.Class4.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["ppi-scale", ["ref", "CityCenter.Class5.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.Admin.State"],
+                    ["ppi-scale", ["ref", "StateLabel.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.Admin.Country"],
+                    ["ppi-scale", ["ref", "MajorCountryLabel.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", 0, ["ref", "ScalePpi.labels"]]
+                ],
+                "icon-shadow-shear-factor-y": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.ShearFactor.Y"],
+                    null
+                ],
+                "font": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ref", "CityCenter.Hamlet.Font"],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ref", "CityCenter.Class1.Font"],
+                    ["ref", "Is.Admin.State"],
+                    ["ref", "StateLabel.Font"],
+                    ["ref", "Is.Admin.Country"],
+                    ["ref", "MajorCountryLabel.Font"],
+                    ["ref", "defaultFont"]
+                ],
+                "shape": "point",
+                "icon-shadow-dy": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["-", ["ref", "IconShadow.Distance.Y"]],
+                    null
+                ],
+                "dx": [
+                    "case",
+                    ["ref", "Is.CityCenter.Class1"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class1.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class2"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class2.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class3"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class3.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class4"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class4.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    ["ref", "Is.CityCenter.Class5"],
+                    [
+                        "/",
+                        [
+                            "-",
+                            ["ppi-scale", ["ref", "CityCenter.Class5.BulletSize"], ["ref", "ScalePpi.labels"]]
+                        ],
+                        2
+                    ],
+                    null
+                ],
+                "icon-shadow-dx": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.Distance.X"],
+                    null
+                ],
+                "image": [
+                    "concat",
+                    "file:///city_center/",
+                    ["ref", "CityCenter.IconPathPrefix"],
+                    [
+                        "get",
+                        "iconName",
+                        ["get", ["ref", "CityCenter.IconKind"], ["ref", "cityCenterMapping"]]
+                    ],
+                    ".svg"
+                ],
+                "font-size": [
+                    "case",
+                    ["ref", "Is.CityDistrict.Class3"],
+                    ["ppi-scale", ["ref", "Microhood.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityDistrict.Class2"],
+                    ["ppi-scale", ["ref", "NeighborhoodInfo.FontStyle.0.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityDistrict.Class1"],
+                    ["ppi-scale", ["ref", "CityCenter.Hamlet.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class1"],
+                    ["ppi-scale", ["ref", "CityCenter.Class1.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class2"],
+                    ["ppi-scale", ["ref", "CityCenter.Class2.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class3"],
+                    ["ppi-scale", ["ref", "CityCenter.Class3.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class4"],
+                    ["ppi-scale", ["ref", "CityCenter.Class4.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.CityCenter.Class5"],
+                    ["ppi-scale", ["ref", "CityCenter.Class5.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.Admin.State"],
+                    ["ppi-scale", ["ref", "StateLabel.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ref", "Is.Admin.Country"],
+                    ["ppi-scale", ["ref", "MajorCountryLabel.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "FallbackLabel.FontStyle.Size"], ["ref", "ScalePpi.labels"]]
+                ],
+                "icon-shadow-shear-factor-x": [
+                    "case",
+                    ["ref", "Is.CityCenter"],
+                    ["ref", "IconShadow.ShearFactor.X"],
+                    null
+                ]
+            }
+        }
+    ]
+}

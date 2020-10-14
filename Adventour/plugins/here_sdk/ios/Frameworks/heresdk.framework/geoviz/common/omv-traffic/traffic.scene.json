@@ -1,0 +1,4 @@
+{
+    "objects": { "$ref": "list/traffic.objects.json#" },
+    "bucketPriorities": { "$ref": "list/traffic.layer.priority.json#" }
+}

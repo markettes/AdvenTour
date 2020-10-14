@@ -1,0 +1,25 @@
+{
+    "definitions": {
+        "TrafficStyle.NoRoute.BlockingOutlineColor": {
+            "value": ["ref", "TrafficStyle.NoRoute.OutlineColor"]
+        },
+        "TrafficStyle.NoRoute.VeryHighOutlineColor": {
+            "value": ["ref", "TrafficStyle.NoRoute.OutlineColor"]
+        },
+        "TrafficStyle.NoRoute.HighOutlineColor": {
+            "value": ["ref", "TrafficStyle.NoRoute.OutlineColor"]
+        },
+        "TrafficStyle.NoRoute.NormalOutlineColor": {
+            "value": ["ref", "TrafficStyle.NoRoute.OutlineColor"]
+        },
+        "Icon.Traffic.Brightness": {
+            "value": 1
+        },
+        "IconShadow.Enabled.Traffic": {
+            "value": false
+        },
+        "TrafficOffsetDirection": {
+            "value": ["match", ["get", "drives_on_left"], 1, -1, 1]
+        }
+    }
+}

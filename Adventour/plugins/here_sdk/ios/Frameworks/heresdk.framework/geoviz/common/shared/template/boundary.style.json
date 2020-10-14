@@ -1,0 +1,150 @@
+{
+    "styles": [
+        {
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["==", ["get", "$layer"], "boundaries"],
+                [
+                    "any",
+                    ["ref", "State.Boundary.Disputed"],
+                    ["ref", "State.Boundary"],
+                    ["ref", "Country.Boundary.Disputed"],
+                    ["ref", "Country.Boundary"]
+                ]
+            ],
+            "technique": "line",
+            "description": "boundary",
+            "id": "boundary_line",
+            "category": [
+                "case",
+                ["any", ["ref", "State.Boundary.Disputed"], ["ref", "State.Boundary"]],
+                "state-border",
+                "country-border"
+            ],
+            "attr": {
+                "dasharray": [
+                    "case",
+                    ["ref", "State.Boundary.Disputed"],
+                    [
+                        "make-vector",
+                        ["world-ppi-scale", ["ref", "StateBoundaryDisputed.GapLength"]],
+                        ["world-ppi-scale", ["ref", "StateBoundaryDisputed.LineLength"]],
+                        0,
+                        0
+                    ],
+                    ["ref", "Country.Boundary.Disputed"],
+                    [
+                        "make-vector",
+                        ["world-ppi-scale", ["ref", "CountryBoundaryDisputed.GapLength"]],
+                        ["world-ppi-scale", ["ref", "CountryBoundaryDisputed.LineLength"]],
+                        0,
+                        0
+                    ],
+                    null
+                ],
+                "fillcolor": [
+                    "case",
+                    [
+                        "any",
+                        [
+                            "all",
+                            ["==", ["get", "kind"], "disputed"],
+                            ["==", ["get", "kind_detail"], 4]
+                        ],
+                        [
+                            "all",
+                            ["==", ["get", "kind"], "disputed"],
+                            ["==", ["get", "kind_detail"], 2]
+                        ]
+                    ],
+                    "#00000000",
+                    null
+                ],
+                "width": [
+                    "case",
+                    ["ref", "State.Boundary.Disputed"],
+                    [
+                        "*",
+                        ["world-ppi-scale", ["ref", "StateBoundaryDisputed.Width"]],
+                        ["ref", "aaScaleAdjustment"]
+                    ],
+                    ["ref", "State.Boundary"],
+                    [
+                        "*",
+                        ["world-ppi-scale", ["ref", "StateBoundary.Width"]],
+                        ["ref", "aaScaleAdjustment"]
+                    ],
+                    ["ref", "Country.Boundary.Disputed"],
+                    [
+                        "*",
+                        ["world-ppi-scale", ["ref", "CountryBoundaryDisputed.Width"]],
+                        ["ref", "aaScaleAdjustment"]
+                    ],
+                    [
+                        "*",
+                        ["world-ppi-scale", ["ref", "CountryBoundary.Width"]],
+                        ["ref", "aaScaleAdjustment"]
+                    ]
+                ],
+                "antialias": true,
+                "color": [
+                    "case",
+                    ["ref", "State.Boundary.Disputed"],
+                    ["ref", "StateBoundaryDisputed.Color"],
+                    ["ref", "State.Boundary"],
+                    ["ref", "StateBoundary.Color"],
+                    ["ref", "Country.Boundary.Disputed"],
+                    ["ref", "CountryBoundaryDisputed.Color"],
+                    ["ref", "CountryBoundary.Color"]
+                ]
+            }
+        },
+        {
+            "styleSet": "tilezen_lines",
+            "when": [
+                "all",
+                ["==", ["get", "$layer"], "boundaries"],
+                [
+                    "any",
+                    ["ref", "State.Boundary.Disputed"],
+                    ["ref", "State.Boundary"],
+                    ["ref", "Country.Boundary.Disputed"],
+                    ["ref", "Country.Boundary"]
+                ]
+            ],
+            "technique": "line",
+            "description": "boundary_outline",
+            "id": "boundary_outline",
+            "category": [
+                "case",
+                ["any", ["ref", "State.Boundary.Disputed"], ["ref", "State.Boundary"]],
+                "state-border-outline",
+                "country-border-outline"
+            ],
+            "attr": {
+                "width": [
+                    "case",
+                    ["ref", "State.Boundary.Disputed"],
+                    ["world-ppi-scale", ["ref", "StateBoundaryDisputed.BackgroundWidth"]],
+                    ["ref", "State.Boundary"],
+                    ["world-ppi-scale", ["ref", "StateBoundary.BackgroundWidth"]],
+                    ["ref", "Country.Boundary.Disputed"],
+                    ["world-ppi-scale", ["ref", "CountryBoundaryDisputed.BackgroundWidth"]],
+                    ["world-ppi-scale", ["ref", "CountryBoundary.BackgroundWidth"]]
+                ],
+                "antialias": true,
+                "color": [
+                    "case",
+                    ["ref", "State.Boundary.Disputed"],
+                    ["ref", "StateBoundaryDisputed.BackgroundColor"],
+                    ["ref", "State.Boundary"],
+                    ["ref", "StateBoundary.BackgroundColor"],
+                    ["ref", "Country.Boundary.Disputed"],
+                    ["ref", "CountryBoundaryDisputed.BackgroundColor"],
+                    ["ref", "CountryBoundary.BackgroundColor"]
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,45 @@
+{
+  "name": "icon_masterlist",
+  "tmc": [
+    {
+      "kind": "accident",
+      "iconName": "tmc_blocking_accident"
+    },
+    {
+      "kind": "congestion",
+      "iconName": "tmc_blocking_congestion"
+    },
+    {
+      "kind": "construction",
+      "iconName": "tmc_blocking_roadworks"
+    },
+    {
+      "kind": "disabled_vehicle",
+      "iconName": "tmc_blocking_accident"
+    },
+    {
+      "kind": "mass_transit",
+      "iconName": "tmc_blocking_other"
+    },
+    {
+      "kind": "planned_event",
+      "iconName": "tmc_blocking_closure"
+    },
+    {
+      "kind": "road_closure",
+      "iconName": "tmc_blocking_closure"
+    },
+    {
+      "kind": "road_hazard",
+      "iconName": "tmc_blocking_other"
+    },
+    {
+      "kind": "weather",
+      "iconName": "tmc_blocking_other"
+    },
+    {
+      "kind": "other",
+      "iconName": "tmc_blocking_other"
+    }
+  ]
+}

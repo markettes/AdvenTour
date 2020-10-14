@@ -1,0 +1,47 @@
+{
+    "definitions": {
+        "zoomWidth": {
+            "value": [
+                "/",
+                ["pow", 2, 15.8],
+                ["pow", 2, ["zoom"]]
+            ]
+        },
+        "zoomWidthDiscrete": {
+            "value": [
+                "/",
+                ["pow", 2, 15.8],
+                [
+                    "pow",
+                    2,
+                    ["floor", ["zoom"]]
+                ]
+            ]
+        },
+        "defaultFont": {
+            "value": "fonts/FiraGO_Map.ttf"
+        },
+        "defaultMargin": {
+            "value": 3
+        },
+        "defaultPersistingMarginReducing": {
+            "value": 2
+        },
+        "globalPolygonOpacity": {
+            "value": 1
+        },
+        "softDepthThreshold": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                2, 300000,
+                7, 60000,
+                10, 7500,
+                12, 2000,
+                14, 850,
+                16, 200,
+                18, 100]
+        },
+        "fadeInDurationSeconds": {
+            "value": 0.5
+        }
+    }
+}

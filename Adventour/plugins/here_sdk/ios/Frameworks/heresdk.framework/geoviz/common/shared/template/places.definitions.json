@@ -1,0 +1,118 @@
+{
+    "definitions": {
+        "CityCenter.Text.Placements": {
+            "value": "NE,SE,SW,NW"
+        },
+        "Icon.CityCenter.Brightness": {
+            "value": 1
+        },
+        "IconShadow.Enabled.CityCenterBullet": {
+            "value": false
+        },
+        "IconShadow.SizeIncrement": {
+            "value": 0
+        },
+        "IconShadow.BlurRadius": {
+            "value": 3
+        },
+        "IconShadow.Color": {
+            "value": "#78787887"
+        },
+        "IconShadow.Distance.X": {
+            "value": 1
+        },
+        "IconShadow.Distance.Y": {
+            "value": 1
+        },
+        "IconShadow.ShearFactor": {
+            "value": 0.4
+        },
+        "IconShadow.ShearFactor.X": {
+            "value": ["ref", "IconShadow.ShearFactor"]
+        },
+        "IconShadow.ShearFactor.Y": {
+            "value": 1
+        },
+        "MajorCountryLabel.Font": {
+            "value": ["ref", "defaultFont"]
+        },
+        "StateLabel.Font": {
+            "value": ["ref", "defaultFont"]
+        },
+        "CityCenter.Hamlet.Font": {
+            "value": ["ref", "defaultFont"]
+        },
+        "CityCenter.Class1.Font": {
+            "value": ["ref", "defaultFont"]
+        },
+        "MajorCountryLabel.FontStyle.Tracking": {
+            "value": 0
+        },
+        "MajorCountryLabel.CountryCode": {
+            "value": "name"
+        },
+        "StateLabel.FontStyle.Tracking": {
+            "value": 0
+        },
+        "StateLabel.CountryCode": {
+            "value": "name"
+        },
+        "CityCenter.Class1.FontStyle.Tracking": {
+            "value": 0
+        },
+        "CityCenter.Class2.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "CityCenter.Class3.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "CityCenter.Class4.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "CityCenter.Class5.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "CityCenter.Hamlet.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "NeighborhoodInfo.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "Microhood.FontStyle.Tracking": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Tracking"]
+        },
+        "CityCenter.Class1.FontStyle.Leading": {
+            "value": 1
+        },
+        "CityCenter.Class2.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "CityCenter.Class3.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "CityCenter.Class4.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "CityCenter.Class5.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "CityCenter.Hamlet.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "NeighborhoodInfo.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "Microhood.FontStyle.Leading": {
+            "value": ["ref", "CityCenter.Class1.FontStyle.Leading"]
+        },
+        "CityCenter.Hamlet.FontStyle.CaseConversion": {
+            "value": "keepOriginal"
+        },
+        "NumbersMargin": {
+            "value": 10
+        },
+        "NumbersMarginReducing": {
+            "value": 4
+        }
+    }
+}

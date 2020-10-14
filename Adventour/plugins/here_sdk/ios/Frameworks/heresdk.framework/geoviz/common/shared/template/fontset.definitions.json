@@ -1,0 +1,16 @@
+{
+    "definitions": {
+        "FiraBold": {
+            "value": "fonts/FiraGO_MapLowResBold.ttf; fonts/DroidSansFallback.ttf; fonts/LohitKanMalTamTel.ttf; fonts/LohitIndic.ttf; fonts/NotoSansArmenian-Regular-unhinted.ttf; fonts/NotoSansGeorgian-Regular-unhinted.ttf; fonts/NotoSansKhmer-Regular-unhinted.ttf; fonts/NotoSansMyanmar-Regular-unhinted.ttf"
+        },
+        "Miami": {
+            "value": "fonts/FiraGO_Map.ttf; fonts/DroidSansFallback.ttf; fonts/LohitKanMalTamTel.ttf; fonts/LohitIndic.ttf; fonts/NotoSansArmenian-Regular-unhinted.ttf; fonts/NotoSansGeorgian-Regular-unhinted.ttf; fonts/NotoSansKhmer-Regular-unhinted.ttf; fonts/NotoSansMyanmar-Regular-unhinted.ttf"
+        },
+        "SignTextNarrowBold": {
+            "value": "fonts/SignTextNarrow_Bold.ttf"
+        },
+        "defaultFont": {
+            "value": ["ref", "Miami"]
+        }
+    }
+}

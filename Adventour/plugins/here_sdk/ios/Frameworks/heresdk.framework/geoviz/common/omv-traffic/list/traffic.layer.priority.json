@@ -1,0 +1,10 @@
+[
+    { "group": "traffic_flow", "category": "traffic-outline" },
+    { "group": "traffic_flow", "category": "traffic" },
+    { "group": "traffic_flow", "category": "traffic-normal" },
+    { "group": "traffic_flow", "category": "traffic-high" },
+    { "group": "traffic_flow", "category": "traffic-very-high" },
+    { "group": "traffic_flow", "category": "traffic-blocking" },
+    { "group": "traffic_incidents", "category": "traffic_incidents_line_outline" },
+    { "group": "traffic_incidents", "category": "traffic_incidents_line" }
+]

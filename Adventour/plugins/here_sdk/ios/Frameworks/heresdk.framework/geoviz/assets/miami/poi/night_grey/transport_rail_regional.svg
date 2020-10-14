@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Generator: Adobe Illustrator 24.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="transport_x5F_rail_x5F_regional-layer"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 30 30"
+	 style="enable-background:new 0 0 30 30;" xml:space="preserve">
+<g id="transport_x5F_rail_x5F_regional_1_">
+	<g>
+		<g>
+			<path style="fill:#1B2433;" d="M2,29.5c-0.827,0-1.5-0.673-1.5-1.5V2c0-0.827,0.673-1.5,1.5-1.5h26c0.827,0,1.5,0.673,1.5,1.5v26
+				c0,0.827-0.673,1.5-1.5,1.5H2z"/>
+			<g>
+				<path style="fill:#3B424C;" d="M28,1c0.551,0,1,0.449,1,1v26c0,0.551-0.449,1-1,1H2c-0.551,0-1-0.449-1-1V2c0-0.551,0.449-1,1-1
+					H28 M28,0H2C0.895,0,0,0.895,0,2v26c0,1.105,0.895,2,2,2h26c1.105,0,2-0.895,2-2V2C30,0.895,29.105,0,28,0L28,0z"/>
+			</g>
+		</g>
+	</g>
+	<rect id="_x3C_Path_x3E__6_" x="3" y="3" style="fill:none;" width="24" height="24"/>
+	<path style="fill:#CDCDCD;" d="M23,6.5C23,5.67,22.33,5,21.5,5h-13C7.67,5,7,5.67,7,6.5V20h4l-5,5h3l4.5-5h3l4.5,5h3l-5-5h4V6.5z
+		 M9,7h5v7H9V7z M10.5,18.5L10.5,18.5C9.672,18.5,9,17.828,9,17v0c0-0.828,0.672-1.5,1.5-1.5h0c0.828,0,1.5,0.672,1.5,1.5v0
+		C12,17.828,11.328,18.5,10.5,18.5z M21,17L21,17c0,0.828-0.672,1.5-1.5,1.5h0c-0.828,0-1.5-0.672-1.5-1.5v0
+		c0-0.828,0.672-1.5,1.5-1.5h0C20.328,15.5,21,16.172,21,17z M21,14h-5V7h5V14z"/>
+</g>
+</svg>

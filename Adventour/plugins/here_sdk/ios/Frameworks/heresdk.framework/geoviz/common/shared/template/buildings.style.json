@@ -1,0 +1,156 @@
+{
+    "styles": [
+        {
+            "id": "building_text",
+            "styleSet": "tilezen_building_addresses",
+            "when": [
+                "all",
+                ["==", ["get", "$layer"], "buildings"],
+                [
+                    "any",
+                    ["==", ["get", "kind"], "building"],
+                    ["==", ["get", "kind"], "address"]
+                ]
+            ],
+            "technique": "text",
+            "category": ["match", ["get", "kind"],
+                "building", "buildings-info-labels",
+                "address", "buildings-address-labels",
+                "buildings-info-labels"],
+            "attr": {
+                "minZoomLevel": ["match", ["get", "kind"],
+                    "building", 17,
+                    "address", 18,
+                    18],
+                "margin": ["match", ["get", "kind"],
+                    "building", ["ref", "defaultMargin"],
+                    "address", ["ref", "NumbersMargin"],
+                    ["ref", "defaultMargin"]],
+                "persisting-margin-reducing": ["match", ["get", "kind"],
+                    "building", ["ref", "defaultPersistingMarginReducing"],
+                    "address", ["ref", "NumbersMarginReducing"],
+                    ["ref", "defaultPersistingMarginReducing"]],
+                "attribute-name": ["match", ["get", "kind"],
+                    "address", "addr_housenumber",
+                    null],
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": ["match", ["get", "kind"],
+                    "building", ["ppi-scale", ["ref", "BuildingInfo.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    "address", ["ppi-scale", ["ref", "BuildingAddress.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "BuildingInfo.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]]],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "outline-color": ["match", ["get", "kind"],
+                    "building", ["ref", "BuildingInfo.FontStyle.OutlineColor"],
+                    "address", ["ref", "BuildingAddress.FontStyle.OutlineColor"],
+                    ["ref", "BuildingInfo.FontStyle.OutlineColor"]],
+                "far-threshold": 0.7,
+                "color": ["match", ["get", "kind"],
+                    "building", ["ref", "BuildingInfo.FontStyle.Color"],
+                    "address", ["ref", "BuildingAddress.FontStyle.Color"],
+                    ["ref", "BuildingInfo.FontStyle.Color"]],
+                "size": ["match", ["get", "kind"],
+                    "building", ["ppi-scale", ["ref", "BuildingInfo.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    "address", ["ppi-scale", ["ref", "BuildingAddress.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "BuildingInfo.FontStyle.Size"], ["ref", "ScalePpi.labels"]]],
+                "font": ["ref", "defaultFont"],
+                "break-line": true,
+                "shape": "point"
+            },
+            "description": "Building Labels"
+        },
+        {
+            "id": "building_footprints",
+            "styleSet": "tilezen_building_footprints",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "polygon",
+            "category": "footprints",
+            "attr": {
+                "minZoomLevel": 16,
+                "opacity": ["ref", "globalPolygonOpacity"],
+                "ambient": ["ref", "Polygon.Ambient.Factor"],
+                "color": ["ref", "Building.Color"],
+                "diffuse": ["ref", "Polygon.Diffuse.Factor"]
+            },
+            "description": "Building Footprints"
+        },
+        {
+            "id": "building_footprints_outlines",
+            "styleSet": "tilezen_building_footprints_outlines",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "line",
+            "category": "footprints_outlines",
+            "attr": {
+                "minZoomLevel": 16,
+                "opacity": ["ref", "globalPolygonOpacity"],
+                "width": ["world-ppi-scale", ["ref", "BuildingOutline.Width"]],
+                "antialias": true,
+                "color": ["ref", "BuildingOutline.Color"]
+            },
+            "description": "Building Footprint Outlines"
+        },
+        {
+            "id": "extruded_building_depth",
+            "styleSet": "tilezen_volumes",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "extruded_building",
+            "description": "depth",
+            "category": "depth",
+            "attr": {
+                "minZoomLevel": 16,
+                "scale": ["ref", "ExtrudedBuilding.Scale"],
+                "far-fade-distance": ["ref", "FadeDistanceFar"],
+                "start-fade-distance": ["ref", "FadeDistanceStart"],
+                "wall-color": ["ref", "ExtrudedBuilding.Wall.Color"],
+                "roof-color": ["ref", "ExtrudedBuilding.Roof.Color"]
+            }
+        },
+        {
+            "id": "extruded_building_offscreen_depth",
+            "styleSet": "tilezen_volumes",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "extruded_building",
+            "description": "offscreen-depth",
+            "category": "offscreen-depth",
+            "attr": {
+                "minZoomLevel": 16,
+                "scale": ["ref", "ExtrudedBuilding.Scale"],
+                "far-fade-distance": ["ref", "FadeDistanceFar"],
+                "start-fade-distance": ["ref", "FadeDistanceStart"],
+                "wall-color": ["ref", "ExtrudedBuilding.Wall.Color"],
+                "roof-color": ["ref", "ExtrudedBuilding.Roof.Color"]
+            }
+        },
+        {
+            "id": "extruded_building",
+            "styleSet": "tilezen_volumes",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "extruded_building",
+            "category": "extruded_building",
+            "attr": {
+                "minZoomLevel": 16,
+                "fakeAO-height": ["ref", "ExtrudedBuilding.FakeAO.Height"],
+                "shadow-caster": true,
+                "fakeAO-color": ["ref", "ExtrudedBuilding.FakeAO.Color"],
+                "wall-diffuse": ["ref", "ExtrudedBuilding.Diffuse.Factor"],
+                "wall-ambient": ["ref", "ExtrudedBuilding.Ambient.Factor"],
+                "roof-diffuse": ["ref", "ExtrudedBuilding.Diffuse.Factor"],
+                "roof-ambient": ["ref", "ExtrudedBuilding.Ambient.Factor"],
+                "roof-specular": ["ref", "ExtrudedBuilding.Specular.Factor"],
+                "wall-specular": ["ref", "ExtrudedBuilding.Specular.Factor"],
+                "scale": ["ref", "ExtrudedBuilding.Scale"],
+                "roof-shininess": ["ref", "ExtrudedBuilding.Roof.Shininess"],
+                "wall-shininess": ["ref", "ExtrudedBuilding.Wall.Shininess"],
+                "far-fade-distance": ["ref", "FadeDistanceFar"],
+                "start-fade-distance": ["ref", "FadeDistanceStart"],
+                "gradient-color-ambient": ["ref", "ExtrudedBuilding.Gradient.Color"],
+                "gradient-color-diffuse": ["ref", "ExtrudedBuilding.Gradient.Color"],
+                "wall-color": ["ref", "ExtrudedBuilding.Wall.Color"],
+                "roof-color": ["ref", "ExtrudedBuilding.Roof.Color"]
+            },
+            "description": "Extruded Buildings"
+        }
+    ]
+}

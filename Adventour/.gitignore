@@ -1,3 +1,5 @@
+/android/app/google-services.json
+
 # Miscellaneous
 *.class
 *.log
@@ -30,6 +32,9 @@
 .pub-cache/
 .pub/
 /build/
+
+#HERE Sdk related
+/plugins/here_sdk/ios/Frameworks/heresdk.framework/heresdk
 
 # Web related
 lib/generated_plugin_registrant.dart

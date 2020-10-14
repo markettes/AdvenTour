@@ -1,0 +1,54 @@
+{
+    "styles": [
+        {
+            "styleSet": "tilezen_points",
+            "id": "earth_labels",
+            "when": [
+                "all",
+                ["==", ["get", "$layer"], "earth"],
+                [
+                    "any",
+                    ["==", ["get", "kind"], "island"],
+                    ["==", ["get", "kind"], "continent"]
+                ]
+            ],
+            "technique": "text",
+            "category": ["match", ["get", "kind"],
+                "island", "island-labels",
+                "continent-labels"],
+            "attr": {
+                "margin": ["ref", "defaultMargin"],
+                "persisting-margin-reducing": ["ref", "defaultPersistingMarginReducing"],
+                "far-threshold-range": 0.015,
+                "case-conversion": ["match", ["get", "kind"],
+                    "continent", "makeUpperCase",
+                    null],
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "break-line": ["match", ["get", "kind"],
+                    "island", true,
+                    null],
+                "outline-size": ["match", ["get", "kind"],
+                    "island", ["ppi-scale", ["ref", "IslandInfo.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "ContinentLabel.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]]],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "leading-space": ["match", ["get", "kind"],
+                    "island", ["ref", "IslandInfo.FontStyle.Leading"],
+                    ["ref", "ContinentLabel.FontStyle.Leading"]],
+                "outline-color": ["match", ["get", "kind"],
+                    "island", ["ref", "IslandInfo.FontStyle.OutlineColor"],
+                    ["ref", "ContinentLabel.FontStyle.OutlineColor"]],
+                "far-threshold": 0.85,
+                "color": ["match", ["get", "kind"],
+                    "island", ["ref", "IslandInfo.FontStyle.Color"],
+                    ["ref", "ContinentLabel.FontStyle.Color"]],
+                "size": ["match", ["get", "kind"],
+                    "island", ["ppi-scale", ["ref", "IslandInfo.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                    ["ppi-scale", ["ref", "ContinentLabel.FontStyle.Size"], ["ref", "ScalePpi.labels"]]],
+                "font": ["ref", "defaultFont"],
+                "shape": "point"
+            }
+        }
+    ]
+}

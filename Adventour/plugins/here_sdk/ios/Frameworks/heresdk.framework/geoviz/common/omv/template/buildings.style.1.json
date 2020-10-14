@@ -1,0 +1,89 @@
+{
+    "styles": [
+        {
+            "styleSet": "tilezen_building_addresses",
+            "when": ["==", ["get", "kind"], "address"],
+            "technique": "text",
+            "category": "buildings-labels",
+            "attr": {
+                "margin": ["match", ["get", "kind"],
+                    "building", ["ref", "defaultMargin"],
+                    "address", ["ref", "NumbersMargin"],
+                    ["ref", "defaultMargin"]],
+                "persisting-margin-reducing": ["match", ["get", "kind"],
+                    "building", ["ref", "defaultPersistingMarginReducing"],
+                    "address", ["ref", "NumbersMarginReducing"],
+                    ["ref", "defaultPersistingMarginReducing"]],
+                "attribute-name": "addr_housenumber",
+                "far-threshold-range": 0.015,
+                "fade-time": 0.3,
+                "outline-style": "OutlineAndFill",
+                "outline-size": ["ppi-scale", ["ref", "BuildingAddress.FontStyle.OutlineWidth"], ["ref", "ScalePpi.labels"]],
+                "replaceable": true,
+                "new-label-spread-frames": 10,
+                "outline-color": ["ref", "BuildingAddress.FontStyle.OutlineColor"],
+                "far-threshold": 0.7,
+                "color": ["ref", "BuildingAddress.FontStyle.Color"],
+                "size": ["ppi-scale", ["ref", "BuildingAddress.FontStyle.Size"], ["ref", "ScalePpi.labels"]],
+                "font": ["ref", "defaultFont"],
+                "shape": "point"
+            }
+        },
+        {
+            "styleSet": "tilezen_building_footprints",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "polygon",
+            "attr": {
+                "opacity": ["ref", "globalPolygonOpacity"],
+                "ambient": ["ref", "Polygon.Ambient.Factor"],
+                "color": ["ref", "Building.Color"],
+                "diffuse": ["ref", "Polygon.Diffuse.Factor"]
+            }
+        },
+        {
+            "styleSet": "tilezen_building_footprints_outlines",
+            "when": ["==", ["get", "$layer"], "buildings"],
+            "technique": "line",
+            "attr": {
+                "opacity": ["ref", "globalPolygonOpacity"],
+                "width": ["world-ppi-scale", ["ref", "BuildingOutline.Width"]],
+                "antialias": true,
+                "color": ["ref", "BuildingOutline.Color"]
+            }
+        },
+        {
+            "styleSet": "tilezen_volumes",
+            "technique": "extruded_building",
+            "description": "depth",
+            "category": "depth",
+            "attr": {
+                "wall-diffuse": ["ref", "ExtrudedBuilding.Diffuse.Factor"],
+                "scale": ["ref", "ExtrudedBuilding.Scale"],
+                "wall-ambient": ["ref", "ExtrudedBuilding.Ambient.Factor"],
+                "far-fade-distance": ["ref", "FadeDistanceFar"],
+                "start-fade-distance": ["ref", "FadeDistanceStart"],
+                "roof-diffuse": ["ref", "ExtrudedBuilding.Diffuse.Factor"],
+                "wall-color": ["ref", "ExtrudedBuilding.Wall.Color"],
+                "roof-color": ["ref", "ExtrudedBuilding.Roof.Color"],
+                "roof-ambient": ["ref", "ExtrudedBuilding.Ambient.Factor"]
+            }
+        },
+        {
+            "styleSet": "tilezen_volumes",
+            "technique": "extruded_building",
+            "description": "offscreen-depth",
+            "category": "offscreen-depth",
+            "attr": {
+                "wall-diffuse": ["ref", "ExtrudedBuilding.Diffuse.Factor"],
+                "scale": ["ref", "ExtrudedBuilding.Scale"],
+                "wall-ambient": ["ref", "ExtrudedBuilding.Ambient.Factor"],
+                "far-fade-distance": ["ref", "FadeDistanceFar"],
+                "start-fade-distance": ["ref", "FadeDistanceStart"],
+                "roof-diffuse": ["ref", "ExtrudedBuilding.Diffuse.Factor"],
+                "wall-color": ["ref", "ExtrudedBuilding.Wall.Color"],
+                "roof-color": ["ref", "ExtrudedBuilding.Roof.Color"],
+                "roof-ambient": ["ref", "ExtrudedBuilding.Ambient.Factor"]
+            }
+        }
+    ]
+}

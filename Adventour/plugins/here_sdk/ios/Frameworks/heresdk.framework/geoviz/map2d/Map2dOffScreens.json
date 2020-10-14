@@ -1,0 +1,71 @@
+{
+    "offscreenFactories":
+    [
+    {
+        "factoryName": "offscreen-terrain-deferred-factory",
+        "colorTarget": ["new", "new"],
+        "colorTargetFormat": ["rgba8", "la16f"],
+        "depthTarget": "offscreen",
+        "sampleCount": 1
+    },
+    {
+        "factoryName": "offscreen-terrain-factory",
+        "colorTarget": "none",
+        "depthTarget": "offscreen",
+        "sampleCount": 1
+    },
+    {
+        "factoryName": "offscreen-terrain-2nd-rt-factory",
+        "colorTarget": ["keep-previous", "new"],
+        "colorTargetFormat": ["rgba8", "l32f"],
+        "depthTarget": "keep-previous",
+        "indexOfColorTargetAsDepth": 1,
+        "sampleCount": 1,
+        "clearSettings":
+        {
+            "buffers": ["frame"],
+            "color": [255, 0, 0, 0]
+        }
+    },
+    {
+        "factoryName": "shadow-depth-mask-factory",
+        "colorTarget": "none",
+        "depthTarget": "offscreen",
+        "sampleCount": 1,
+        "clearSettings":
+        {
+            "buffers": ["z", "stencil"]
+        }
+    },
+    {
+        "factoryName": "offscreen-lanes-factory",
+        "colorTarget": "new",
+        "depthTarget": "offscreen",
+        "sampleCount": 1
+    },
+    {
+        "factoryName": "offscreen-main-factory",
+        "colorTarget": "new",
+        "depthTarget": "buffer",
+        "sampleCount": 1
+    },
+    {
+        "factoryName": "offscreen-transparent-lines-factory",
+        "colorTarget": ["new", "new"],
+        "colorTargetFormat": ["rgba8", "l8"],
+        "depthTarget": "none",
+        "sampleCount": 1,
+        "maxUsages": 3
+    },
+    {
+        "factoryName": "offscreen-unified-roads-factory",
+        "colorTarget": "keep-previous",
+        "depthTarget": "buffer",
+        "sampleCount": 1,
+        "clearSettings":
+        {
+            "buffers": ["z", "stencil"]
+        }
+    }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "definitions": {
+        "Satellite.ColorGamma": {
+            "value": 1
+        },
+        "Satellite.ColorBrightness": {
+            "value": 1
+        }
+    }
+}

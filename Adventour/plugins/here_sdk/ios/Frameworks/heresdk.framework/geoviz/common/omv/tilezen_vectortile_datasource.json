@@ -1,0 +1,87 @@
+{
+    "datasources" : {
+        "omv" : {
+            "provider" : {
+                "name" : "tilezen",
+                "server": "https://vector.hereapi.com/v2/vectortiles/base/mc/{z}/{x}/{y}/omv",
+                "cache":
+                {
+                    "path": "cache/tilezen",
+                    "diskSize": 268435456,
+                    "indexSize": 131072,
+                    "dataSize": 1048576
+                },
+                "tiling" : "QuadTreeMercator",
+                "levels" : {
+                    "min_storage_level" : 2,
+                    "max_storage_level" : 15
+                }
+            },
+            "layers" : [
+                {
+                    "name" : "tilezen.point",
+                    "geometry" : "point",
+                    "blacklist_data_layers": [
+                        {
+                            "data_layer": "buildings"
+                        }
+                    ]
+                },
+                {
+                    "name" : "tilezen.building_address",
+                    "geometry" : "pointareacenter",
+                    "whitelist_data_layers": [
+                        {
+                            "data_layer": "buildings"
+                        }
+                    ]
+                },
+                {
+                    "name" : "tilezen.line",
+                    "geometry" : "line",
+                    "blacklist_data_layers": [
+                        {
+                            "data_layer": "road_labels"
+                        }
+                    ]
+                },
+                {
+                    "name" : "tilezen.area",
+                    "geometry" : "area",
+                    "blacklist_data_layers": [
+                        {
+                            "data_layer": "buildings"
+                        }
+                    ]
+                },
+                {
+                    "name" : "tilezen.building_footprint",
+                    "geometry" : "area",
+                    "whitelist_data_layers": [
+                        {
+                            "data_layer": "buildings"
+                        }
+                    ]
+                },
+                {
+                    "name" : "tilezen.building_footprint_outline",
+                    "geometry" : "areaoutline",
+                    "whitelist_data_layers": [
+                        {
+                            "data_layer": "buildings"
+                        }
+                    ]
+                },
+                {
+                    "name" : "tilezen.volume",
+                    "geometry" : "areavolume",
+                    "whitelist_data_layers": [
+                        {
+                            "data_layer": "buildings"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

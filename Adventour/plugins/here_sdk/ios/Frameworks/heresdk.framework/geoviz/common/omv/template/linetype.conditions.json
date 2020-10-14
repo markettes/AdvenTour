@@ -1,0 +1,130 @@
+{
+    "definitions": {
+    "Is.Road": {
+            "value": ["==", ["get", "$layer"], "roads"]
+        },
+    "Is.Ramp": {
+            "value": ["get", "is_link"]
+        },
+    "Ferry": {
+            "value": ["all",
+                ["==", ["get", "$layer"], "roads"],
+                ["==", ["get", "kind"], "ferry"]]
+        },
+    "Rail": {
+            "value": ["all",
+                ["==", ["get", "$layer"], "roads"],
+                ["==", ["get", "kind"], "rail"]]
+        },
+    "Rail.Rail": {
+            "value": ["==", ["get", "kind_detail"], "rail"]
+        },
+    "Rail.Private": {
+            "value": ["==", ["get", "kind_detail"], "private_rail"]
+        },
+    "Rail.State": {
+            "value": ["==", ["get", "kind_detail"], "state_rail"]
+        },
+    "Rail.Speed": {
+            "value": ["==", ["get", "kind_detail"], "speed_rail"]
+        },
+    "getAttrib": {
+            "value": ["get", "kind_detail"]
+        },
+    "PedestrianWay": {
+            "value": ["all",
+                ["==", ["get", "kind"], "path"],
+                ["==", ["get", "kind_detail"], "pedestrian"]]
+        },
+    "Walkway": {
+            "value": ["all",
+                ["==", ["get", "kind"], "path"],
+                ["==", ["get", "kind_detail"], "footway"]]
+        },
+    "CableCar": {
+            "value": ["all",
+                ["==", ["get", "$layer"], "roads"],
+                ["==", ["get", "kind"], "aerialway"],
+                ["==", ["get", "kind_detail"], "cable_car"]]
+        },
+    "Gondola": {
+            "value": ["all",
+                ["==", ["get", "$layer"], "roads"],
+                ["==", ["get", "kind"], "aerialway"],
+                ["==", ["get", "kind_detail"], "gondola"]]
+        },
+    "StreetCategory0": {
+            "value" : ["all",
+                ["==", ["get", "kind"], "highway"],
+                ["!=", ["get", "kind_detail"], "trunk"]]
+        },
+    "StreetCategory1": {
+            "value" :[
+                        "any",
+                        [
+                            "all",
+                            ["==", ["get", "kind"], "highway"],
+                            ["==", ["get", "kind_detail"], "trunk"]
+                        ],
+                        [
+                            "all",
+                            ["==", ["get", "kind"], "major_road"],
+                            ["==", ["get", "kind_detail"], "primary"]
+                        ]
+                     ]
+        },
+    "StreetCategory2": {
+            "value" : ["all",
+                ["==", ["get", "kind"], "major_road"],
+                ["==", ["get", "kind_detail"], "secondary"]]
+        },
+    "StreetCategory3": {
+            "value" : ["all",
+                ["==", ["get", "kind"], "major_road"],
+                ["==", ["get", "kind_detail"], "tertiary"]]
+        },
+    "StreetCategory4": {
+            "value" : ["any",
+                    [
+                        "all",
+                        ["==", ["get", "kind"], "minor_road"],
+                        ["==", ["get", "kind_detail"], "unclassified"]
+                    ],
+                    [
+                        "all",
+                        ["==", ["get", "kind"], "minor_road"],
+                        ["==", ["get", "kind_detail"], "service"]
+                    ],
+                    [
+                        "all",
+                        ["==", ["get", "kind"], "minor_road"],
+                        ["==", ["get", "kind_detail"], "residential"]
+                    ]]
+        },
+    "Is.Unpaved": {
+            "value" :["==", ["get", "surface"], "unpaved"]
+        },
+    "Is.Tunnel": {
+            "value" :["get", "is_tunnel"]
+        },
+    "Is.UnderConstruction": {
+            "value" :["get", "under_construction"]
+        },
+    "Is.Bridge": {
+            "value" :["get", "is_bridge"]
+        },
+    "Is.AlsoPolygon": {
+            "value" :["get", "is_present_in_landuse"]
+        },
+    /*
+     * Point and line labels in OMV are differentiated by their data layer (not their 'a_layer'
+     * property), and are otherwise identical.
+     */
+    "Is.WaterLineLabel": {
+            "value" :["==", ["get", "$layer"], "water"]
+        },
+    "Is.WaterPointLabel": {
+            "value" :["==", ["get", "$layer"], "water"]
+        }
+    }
+}

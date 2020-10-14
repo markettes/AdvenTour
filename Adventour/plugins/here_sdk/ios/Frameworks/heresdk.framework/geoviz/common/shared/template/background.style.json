@@ -1,0 +1,16 @@
+{
+    "styles": [
+        {
+            "styleSet": "background",
+            "technique": "polygon",
+            "attr": {
+                "disable-shading": ["ref", "Polygon.Land.Disable.Shading"],
+                "opacity": ["ref", "globalPolygonOpacity"],
+                "enforce-ztest": true,
+                "ambient": ["ref", "Polygon.Ambient.Factor"],
+                "color": ["ref", "Land.Color"],
+                "diffuse": ["ref", "Polygon.Diffuse.Factor"]
+            }
+        }
+    ]
+}

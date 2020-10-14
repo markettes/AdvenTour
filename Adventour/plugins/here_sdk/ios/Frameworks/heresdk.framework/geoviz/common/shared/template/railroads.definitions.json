@@ -1,0 +1,95 @@
+{
+    "definitions": {
+        "Rail.PolylineStyles.SecondaryColor": {
+            "value": "#ffffff"
+        },
+        "Rail.PolylineStyles.OutlineWidth": {
+            "value": 3
+        },
+        "Rail.PolylineStyles.OutlineColor": {
+            "value": "#87878c"
+        },
+        "Rail.PolylineStyles.DashArray1": {
+            "value": 12
+        },
+        "Rail.PolylineStyles.DashArray2": {
+            "value": 10
+        },
+        "Rail.FontStyle.Size.Zero": {
+            "value": 0
+        },
+        "railLineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Rail.PolylineStyles.Width"]]
+        },
+        "railOutlineWidthZoom": {
+            "value": ["world-ppi-scale", ["ref", "Rail.PolylineStyles.OutlineWidth"]]
+        },
+        "railDashArray": {
+            "value": [
+                "make-vector",
+                ["world-discrete-ppi-scale", ["ref", "Rail.PolylineStyles.DashArray1"]],
+                ["world-discrete-ppi-scale", ["ref", "Rail.PolylineStyles.DashArray2"]],
+                0,
+                0
+            ]
+        },
+        "Rail.FontStyle.Color": {
+            "value": "#646464"
+        },
+        "Rail.FontStyle.OutlineColor": {
+            "value": "#ffffff78"
+        },
+        "Rail.FontStyle.OutlineWidth": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                0, 1.25,
+                12, 1.25,
+                13, 1.375,
+                15, 1.375,
+                16, 1.5,
+                20, 1.5]
+        },
+        "Rail.FontStyle.Size": {
+            "value": 0
+        },
+        "CableCar.Width": {
+            "value": 0.5
+        },
+        "CableCar.Color": {
+            "value": "#969696"
+        },
+        "CableCar.FontStyle.Color": {
+            "value": "#737373"
+        },
+        "CableCar.FontStyle.OutlineColor": {
+            "value": "#ffffff96"
+        },
+        "CableCar.FontStyle.Size": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                13, 0,
+                13, 8]
+        },
+        "CableCar.FontStyle.OutlineWidth": {
+            "value": ["interpolate", ["linear"], ["zoom"],
+                13, 0,
+                13, 0.5]
+        },
+        "Gondola.Color": {
+            "value": ["ref", "CableCar.Color"]
+        },
+        "Gondola.Width": {
+            "value": ["ref", "CableCar.Width"]
+        },
+        "Gondola.FontStyle.Color": {
+            "value": ["ref", "CableCar.FontStyle.Color"]
+        },
+        "Gondola.FontStyle.OutlineColor": {
+            "value": ["ref", "CableCar.FontStyle.OutlineColor"]
+        },
+        "Gondola.FontStyle.Size": {
+            "value": ["ref", "CableCar.FontStyle.Size"]
+        },
+        "Gondola.FontStyle.OutlineWidth": {
+            "value": ["ref", "CableCar.FontStyle.OutlineWidth"]
+        }
+    }
+}
