@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HERE SDK for Flutter - Hello Map!',
+      debugShowCheckedModeBanner: false,
       home: HereMap(onMapCreated: _onMapCreated),
     );
   }
