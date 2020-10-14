@@ -1,4 +1,5 @@
 import 'package:Adventour/widgets/primary_button.dart';
+import 'package:Adventour/widgets/site_icon.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -12,6 +13,7 @@ class MainPage extends StatelessWidget {
         ),
       ),
       body: Container(
+        color: Theme.of(context).backgroundColor,
         child: Center(
             child: Column(
           children: [
@@ -30,6 +32,19 @@ class MainPage extends StatelessWidget {
             PrimaryButton(
               text: 'LOG IN',
               onPressed: () {},
+            ),
+            PrimaryButton(
+                text: 'LOG OUT', onPressed: () {}, style: ButtonType.Void),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SiteIcon(
+                  type: SiteIconType.Food,
+                ),
+                SiteIcon(
+                  type: SiteIconType.Museum,
+                ),
+              ],
             )
           ],
         )),

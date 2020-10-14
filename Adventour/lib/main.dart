@@ -15,18 +15,18 @@ class MyApp extends StatelessWidget {
       title: 'HERE SDK for Flutter - Hello Map!',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: Colors.deepPurple[500],
+        primaryColor: Colors.deepPurple[600],
         accentColor: Colors.deepPurple[100],
         backgroundColor: Colors.deepPurple[50],
         textTheme: TextTheme(
           headline1: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 30,
+            fontSize: 25,
             color: Colors.white,
           ),
           headline2: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 30,
+            fontSize: 25,
             color: Colors.deepPurple[500],
           ),
           bodyText1: TextStyle(
