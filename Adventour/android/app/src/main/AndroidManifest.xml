@@ -47,8 +47,8 @@
 
         <meta-data android:name="com.here.sdk.access_key_id" android:value="F4_pDCeALhbr0BJ6QMhrzA"/>
             <meta-data android:name="com.here.sdk.access_key_secret" android:value="kjqkF48vPjLwrlwgD0puCCSismLljnUH4JTgJ2NNjbbaS4xguA5yulIV9382biWDULN48uvy1OnD99PUSc1oCw"/>
-     
-
 
     </application>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     </manifest>
