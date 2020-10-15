@@ -10,11 +10,13 @@ class PrimaryButton extends StatelessWidget {
     this.style = ButtonType.Normal,
     this.padding =
         const EdgeInsets.only(left: 45, right: 45, top: 8, bottom: 8),
+    this.icon,
   });
   String text;
   Function onPressed;
   ButtonType style;
   EdgeInsetsGeometry padding;
+  IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,13 @@ class PrimaryButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: SizedBox(
-                child: AdventourIcon(),
+                child: icon == null
+                    ? AdventourIcon()
+                    : Icon(
+                        icon,
+                        color: Theme.of(context).primaryColor,
+                        size: 30,
+                      ),
                 height: 35,
                 width: 35,
               ),

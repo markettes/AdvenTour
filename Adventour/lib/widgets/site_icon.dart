@@ -5,16 +5,18 @@ enum SiteIconType { Food, Museum }
 class SiteIcon extends StatelessWidget {
   SiteIcon({
     @required this.type,
+    @required this.onPressed,
   });
+
   SiteIconType type;
+  Function onPressed;
+
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
-      onPressed: () {},
+      onPressed: onPressed,
       elevation: 2.0,
       fillColor: Theme.of(context).primaryColor,
-      hoverColor: Theme.of(context).accentColor,
-      splashColor: Theme.of(context).accentColor,
       constraints: BoxConstraints(minWidth: 0),
       child: Icon(
         icon(type),

@@ -1,5 +1,7 @@
+import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/site_icon.dart';
+import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatelessWidget {
@@ -12,42 +14,60 @@ class MainPage extends StatelessWidget {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
-      body: Container(
-        color: Theme.of(context).backgroundColor,
-        child: Center(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
             child: Column(
-          children: [
-            Text(
-              'Hola mundo',
-              style: Theme.of(context).textTheme.headline2,
-            ),
-            Text(
-              'Hola mundo',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Text(
-              'Hola mundo',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            PrimaryButton(
-              text: 'LOG IN',
-              onPressed: () {},
-            ),
-            PrimaryButton(
-                text: 'LOG OUT', onPressed: () {}, style: ButtonType.Void),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SiteIcon(
-                  type: SiteIconType.Food,
+                Text(
+                  'Hola mundo',
+                  style: Theme.of(context).textTheme.headline2,
                 ),
-                SiteIcon(
-                  type: SiteIconType.Museum,
+                Text(
+                  'Hola mundo',
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
+                Text(
+                  'Hola mundo',
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
+                PrimaryButton(
+                  text: 'HIGHLIGHTS',
+                  onPressed: () {},
+                  icon: Icons.star,
+                ),
+                PrimaryButton(
+                  text: 'CUSTOM',
+                  onPressed: () {},
+                  style: ButtonType.Void,
+                  icon: Icons.edit,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SiteIcon(
+                      type: SiteIconType.Food,
+                      onPressed: () {},
+                    ),
+                    SiteIcon(
+                      type: SiteIconType.Museum,
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                InputText(
+                  icon: Icons.location_on,
+                  labelText: 'Location',
+                ),
+                SquareIconButton(
+                  icon: Icons.map,
+                  onPressed: () {},
+                )
               ],
-            )
-          ],
-        )),
+            ),
+          )
+        ],
       ),
     );
   }
