@@ -62,7 +62,9 @@ class MainPage extends StatelessWidget {
                 ),
                 SquareIconButton(
                   icon: Icons.map,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/map');
+                  },
                 )
               ],
             ),
