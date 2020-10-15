@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
     splashColor: Colors.deepPurple[100],
     cursorColor: Colors.deepPurple[600],
     buttonColor: Colors.white,
+    dividerColor: Colors.black,
     textTheme: TextTheme(
         headline1: TextStyle(
           fontWeight: FontWeight.w500,

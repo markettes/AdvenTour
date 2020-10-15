@@ -23,13 +23,16 @@ class _LoginMainPageState extends State<LoginMainPage> {
                 height: 200,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 50),
-              child: PrimaryButton(
-                text: 'Log in',
-                onPressed: () {},
-                style: ButtonType.Normal,
-              ),
+            SizedBox(
+              height: 50,
+            ),
+            PrimaryButton(
+              text: 'Log in',
+              onPressed: () {},
+              style: ButtonType.Normal,
+            ),
+            SizedBox(
+              height: 50,
             ),
             Container(
               alignment: Alignment.center,
@@ -37,6 +40,23 @@ class _LoginMainPageState extends State<LoginMainPage> {
                 "Don't you have account?",
                 style: Theme.of(context).textTheme.bodyText1,
               ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            PrimaryButton(
+              text: 'Sign up',
+              onPressed: () {},
+              style: ButtonType.Normal,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Divider(
+              color: Theme.of(context).dividerColor,
+              indent: 25,
+              endIndent: 25,
+              thickness: 1,
             )
           ],
         ),
