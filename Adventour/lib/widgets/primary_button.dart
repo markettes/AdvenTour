@@ -25,12 +25,13 @@ class PrimaryButton extends StatelessWidget {
       child: RaisedButton(
         onPressed: onPressed,
         color: style == ButtonType.Normal
-            ? Theme.of(context).accentColor
+            ? Theme.of(context).buttonColor
             : Theme.of(context).backgroundColor,
         elevation: 5,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Theme.of(context).primaryColor)),
+          borderRadius: BorderRadius.circular(10),
+          /*side: BorderSide(color: Theme.of(context).primaryColor)*/
+        ),
         child: Row(
           children: [
             Padding(
@@ -51,9 +52,12 @@ class PrimaryButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    text,
-                    style: Theme.of(context).textTheme.headline2,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20),
+                    child: Text(
+                      text,
+                      style: Theme.of(context).textTheme.button,
+                    ),
                   ),
                 ],
               ),
