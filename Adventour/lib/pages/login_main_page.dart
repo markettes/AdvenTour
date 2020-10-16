@@ -1,3 +1,5 @@
+import 'package:Adventour/widgets/facebook_signin_button.dart';
+import 'package:Adventour/widgets/google_signin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 
@@ -50,13 +52,27 @@ class _LoginMainPageState extends State<LoginMainPage> {
               style: ButtonType.Normal,
             ),
             SizedBox(
-              height: 20,
+              height: 30,
             ),
             Divider(
               color: Theme.of(context).dividerColor,
               indent: 25,
               endIndent: 25,
               thickness: 1,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            FacebookSigninButton(
+              onPressed: () {},
+              text: 'Continue with Facebook',
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            GoogleSigninButton(
+              onPressed: () {},
+              text: 'Continue with Google',
             )
           ],
         ),
