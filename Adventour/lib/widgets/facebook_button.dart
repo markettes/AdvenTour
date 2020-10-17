@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class GoogleSigninButton extends StatelessWidget {
-  GoogleSigninButton({
+class FacebookButton extends StatelessWidget {
+  FacebookButton({
     this.padding =
         const EdgeInsets.only(left: 45, right: 45, top: 8, bottom: 8),
   });
@@ -12,8 +12,8 @@ class GoogleSigninButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: RaisedButton(
-        onPressed: () {},
-        color: Colors.white,
+        onPressed: () {}, //TODO
+        color: Color(0xFF1877F2),
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
@@ -25,18 +25,18 @@ class GoogleSigninButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: SizedBox(
-                child: Image.asset('assets/google_icon_button.png'),
+                child: Image.asset('assets/facebook_icon_button.png'),
                 height: 35,
                 width: 35,
               ),
             ),
             Expanded(
               child: Text(
-                'Continue with google',
+                'Continue with Facebook',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .headline1
                     .copyWith(fontSize: 14),
               ),
             ),

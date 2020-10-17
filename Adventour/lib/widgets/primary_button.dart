@@ -1,4 +1,3 @@
-import 'package:Adventour/widgets/adventour_icon.dart';
 import 'package:flutter/material.dart';
 
 enum ButtonType { Normal, Void }
@@ -29,16 +28,15 @@ class PrimaryButton extends StatelessWidget {
             : Theme.of(context).backgroundColor,
         elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          /*side: BorderSide(color: Theme.of(context).primaryColor)*/
-        ),
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Theme.of(context).primaryColor, width: 2)),
         child: Row(
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: SizedBox(
                 child: icon == null
-                    ? AdventourIcon()
+                    ? Image.asset('assets/logo_adventour.png')
                     : Icon(
                         icon,
                         color: Theme.of(context).primaryColor,
@@ -49,17 +47,13 @@ class PrimaryButton extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text(
-                      text,
-                      style: Theme.of(context).textTheme.button,
-                    ),
-                  ),
-                ],
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline2
+                    .copyWith(fontSize: 20),
               ),
             ),
           ],

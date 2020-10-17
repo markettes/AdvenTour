@@ -1,5 +1,6 @@
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
+import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatefulWidget {
@@ -15,19 +16,17 @@ class _SignupPage extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      appBar: AppBar(
+        title: Text('Put your credentials'),
+      ),
       body: Padding(
         padding: EdgeInsets.all(10),
-        child: Column(
+        child: ScrollColumnExpandable(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
-              child: Image.asset(
-                'assets/logo_adventour+titulo.png',
-                height: 200,
-              ),
+            Image.asset(
+              'assets/logo_adventour+titulo.png',
+              height: 180,
             ),
             InputText(
               obscured: false,

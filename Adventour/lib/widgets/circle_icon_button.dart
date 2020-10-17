@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-enum SiteIconType { Food, Museum }
+enum CircleIconButtonType { Food, Museum }
 
-class SiteIcon extends StatelessWidget {
-  SiteIcon({
+class CircleIconButton extends StatelessWidget {
+  CircleIconButton({
     @required this.type,
     @required this.onPressed,
   });
 
-  SiteIconType type;
+  CircleIconButtonType type;
   Function onPressed;
 
   @override
@@ -29,11 +29,11 @@ class SiteIcon extends StatelessWidget {
   }
 }
 
-IconData icon(SiteIconType type) {
+IconData icon(CircleIconButtonType type) {
   switch (type) {
-    case SiteIconType.Food:
+    case CircleIconButtonType.Food:
       return Icons.restaurant;
-    case SiteIconType.Museum:
+    case CircleIconButtonType.Museum:
       return Icons.museum;
     default:
       return Icons.error;
