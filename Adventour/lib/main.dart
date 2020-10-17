@@ -6,7 +6,41 @@ import 'package:geolocator/geolocator.dart';
 
 void main() {
   SdkContext.init(IsolateOrigin.main);
-  runApp(MyApp());
+  runApp(CurrentLocation());
+}
+
+class CurrentLocation extends StatelessWidget {
+  void _getCurrentLocation() async {
+    final position =
+        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(position);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Prueba',
+      home: Scaffold(
+        appBar: AppBar(title: Text("Location Services")),
+        body: Align(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(""),
+              FlatButton(
+                  onPressed: () {
+                    _getCurrentLocation();
+                  },
+                  color: Colors.green,
+                  child: Text(
+                    "Find Location",
+                  ))
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

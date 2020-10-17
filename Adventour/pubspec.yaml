@@ -30,7 +30,7 @@ dependencies:
   firebase_analytics: ^6.0.2
   firebase_auth: ^0.18.1+2
   firebase_core: ^0.5.0+1
-  geolocator: ^5.3.1
+  geolocator: ^6.0.0+4
   # The following adds the HERE SDK for Flutter plugin folder to your application.
   here_sdk:
     path: plugins/here_sdk
