@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 
 class InputText extends StatelessWidget {
   InputText(
-      {this.icon = Icons.edit, this.labelText, this.controller, this.obscured});
+      {this.icon = Icons.edit,
+      this.labelText,
+      this.controller,
+      this.obscured,
+      this.keyboardType});
 
   IconData icon;
   String labelText;
   TextEditingController controller;
   bool obscured;
+  TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +24,7 @@ class InputText extends StatelessWidget {
         bottom: 8,
       ),
       child: TextField(
+        keyboardType: keyboardType,
         obscureText: obscured,
         controller: controller,
         decoration: InputDecoration(

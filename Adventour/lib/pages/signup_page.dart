@@ -42,6 +42,7 @@ class _SignupPage extends State<SignupPage> {
               controller: passwordController,
             ),
             InputText(
+              keyboardType: TextInputType.emailAddress,
               obscured: false,
               icon: Icons.email,
               labelText: 'Email',
