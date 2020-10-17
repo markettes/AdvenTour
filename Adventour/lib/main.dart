@@ -1,6 +1,7 @@
 import 'package:Adventour/pages/login_main_page.dart';
 import 'package:Adventour/pages/login_page.dart';
 import 'package:Adventour/pages/main_page.dart';
+import 'package:Adventour/pages/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
@@ -19,12 +20,13 @@ class MyApp extends StatelessWidget {
       theme: themeData,
       initialRoute: '/loginMainPage',
       routes: {
-        '/': (_) => MainPage(),
+        '/mainPage': (_) => MainPage(),
         '/map': (_) => HereMap(
               onMapCreated: _onMapCreated,
             ),
         '/loginMainPage': (_) => LoginMainPage(),
-        '/loginPage': (_) => LoginPage()
+        '/loginPage': (_) => LoginPage(),
+        '/signupPage': (_) => SignupPage()
       },
       //home: MainPage(),
     );

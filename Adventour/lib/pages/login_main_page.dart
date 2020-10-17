@@ -37,7 +37,9 @@ class LoginMainPage extends StatelessWidget {
             ),
             PrimaryButton(
               text: 'Sign up',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/signupPage');
+              },
               style: ButtonType.Normal,
             ),
             Divider(
