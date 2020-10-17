@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 class InputText extends StatelessWidget {
-  InputText(
-      {this.icon = Icons.edit,
-      this.labelText,
-      this.controller,
-      this.obscured,
-      this.keyboardType});
+  InputText({
+    this.icon = Icons.edit,
+    this.labelText,
+    this.controller,
+    this.obscured,
+    this.keyboardType,
+  });
 
   IconData icon;
   String labelText;
@@ -24,6 +25,7 @@ class InputText extends StatelessWidget {
         bottom: 8,
       ),
       child: TextField(
+        onChanged: (value) {},
         keyboardType: keyboardType,
         obscureText: obscured,
         controller: controller,
