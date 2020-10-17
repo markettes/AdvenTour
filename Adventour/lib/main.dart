@@ -1,10 +1,15 @@
+import 'package:Adventour/MapMarkerManager.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 
 void main() {
   SdkContext.init(IsolateOrigin.main);
-  print("diego y rau");
+  
+  /*MapMarkerManager hola = new MapMarkerManager(new GeoCoordinates(39.46, -0.37), 'hola');
+
+  hola.addMarker(); */
+
   runApp(MyApp());
 }
 
