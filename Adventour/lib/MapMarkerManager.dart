@@ -1,14 +1,25 @@
 
 import 'package:here_sdk/core.dart';
-import 'package:here_sdk/mapview.dart';
 
 class MapMarkerManager {
   
-  MapMarkerManager (HereMapController hereMapController) {
+  GeoCoordinates geoCoordinates;
+  String placeType;
+
+
+  MapMarkerManager (GeoCoordinates geoCoordinates, String placeType) {
+    this.geoCoordinates = geoCoordinates;
+    this.placeType = placeType;
+  }
+
+  void addMarker(){
+
+
 
   }
 
-  void markPlace (GeoCoordinates coords, String sitePoi) {
+
+  void markerPlace(GeoCoordinates coords, String sitePoi) {
     //utilizar "sitePoi.png" para buscar y así no hacer un 
     //switch y que sea mas facil añadir sitios nuevos
   }

@@ -1,10 +1,6 @@
-import 'package:Adventour/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-import 'package:here_sdk/gestures.dart';
-
-import 'MapMarkerTap.dart';
 
 void main() {
   SdkContext.init(IsolateOrigin.main);
