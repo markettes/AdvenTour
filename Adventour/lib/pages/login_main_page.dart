@@ -15,7 +15,8 @@ class _LoginMainPageState extends State<LoginMainPage> {
       backgroundColor: Theme.of(context).backgroundColor,
       body: Padding(
         padding: EdgeInsets.all(10),
-        child: ListView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               alignment: Alignment.center,
