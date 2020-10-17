@@ -3,12 +3,7 @@ import 'package:Adventour/widgets/google_signin_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 
-class LoginMainPage extends StatefulWidget {
-  @override
-  _LoginMainPageState createState() => _LoginMainPageState();
-}
-
-class _LoginMainPageState extends State<LoginMainPage> {
+class LoginMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +11,7 @@ class _LoginMainPageState extends State<LoginMainPage> {
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
               alignment: Alignment.center,
@@ -26,16 +21,12 @@ class _LoginMainPageState extends State<LoginMainPage> {
                 height: 200,
               ),
             ),
-            SizedBox(
-              height: 50,
-            ),
             PrimaryButton(
               text: 'Log in',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed('/loginPage');
+              },
               style: ButtonType.Normal,
-            ),
-            SizedBox(
-              height: 50,
             ),
             Container(
               alignment: Alignment.center,
@@ -44,16 +35,10 @@ class _LoginMainPageState extends State<LoginMainPage> {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
             PrimaryButton(
               text: 'Sign up',
               onPressed: () {},
               style: ButtonType.Normal,
-            ),
-            SizedBox(
-              height: 30,
             ),
             Divider(
               color: Theme.of(context).dividerColor,
@@ -61,15 +46,9 @@ class _LoginMainPageState extends State<LoginMainPage> {
               endIndent: 25,
               thickness: 1,
             ),
-            SizedBox(
-              height: 30,
-            ),
             FacebookSigninButton(
               onPressed: () {},
               text: 'Continue with Facebook',
-            ),
-            SizedBox(
-              height: 20,
             ),
             GoogleSigninButton(
               onPressed: () {},

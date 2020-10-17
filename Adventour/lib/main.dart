@@ -1,4 +1,5 @@
 import 'package:Adventour/pages/login_main_page.dart';
+import 'package:Adventour/pages/login_page.dart';
 import 'package:Adventour/pages/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
               onMapCreated: _onMapCreated,
             ),
         '/loginMainPage': (_) => LoginMainPage(),
+        '/loginPage': (_) => LoginPage()
       },
       //home: MainPage(),
     );
@@ -52,31 +54,32 @@ class MyApp extends StatelessWidget {
     buttonColor: Colors.white,
     dividerColor: Colors.black,
     textTheme: TextTheme(
-        headline1: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 25,
-          color: Colors.white,
-        ),
-        headline2: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 25,
-          color: Colors.deepPurple[500],
-        ),
-        bodyText1: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: 17,
-          fontFamily: 'Roboto',
-        ),
-        bodyText2: TextStyle(
-          fontWeight: FontWeight.w400,
-          color: Colors.black54,
-        ),
-        button: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: 17,
-        )),
+      headline1: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 25,
+        color: Colors.white,
+      ),
+      headline2: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 25,
+        color: Colors.deepPurple[500],
+      ),
+      bodyText1: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        fontSize: 17,
+        fontFamily: 'Roboto',
+      ),
+      bodyText2: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: Colors.black54,
+      ),
+      button: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        fontSize: 17,
+      ),
+    ),
     iconTheme: IconThemeData(color: Colors.deepPurple[600]),
   );
 }

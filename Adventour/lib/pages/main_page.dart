@@ -57,6 +57,7 @@ class MainPage extends StatelessWidget {
                   ],
                 ),
                 InputText(
+                  obscured: false,
                   icon: Icons.location_on,
                   labelText: 'Location',
                 ),
