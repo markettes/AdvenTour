@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:flutter/material.dart';
 
 class FacebookButton extends StatelessWidget {
@@ -12,7 +13,13 @@ class FacebookButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: RaisedButton(
-        onPressed: () {}, //TODO
+        onPressed: () async {
+          try {
+            await auth.signInWithFacebook();
+          } catch (e) {
+            print(e.toString());
+          }
+        },
         color: Color(0xFF1877F2),
         elevation: 5,
         shape: RoundedRectangleBorder(

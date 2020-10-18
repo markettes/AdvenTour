@@ -19,7 +19,6 @@ class GoogleButton extends StatelessWidget {
           } catch (e) {
             print(e.toString());
           }
-          
         },
         color: Colors.white,
         elevation: 5,
