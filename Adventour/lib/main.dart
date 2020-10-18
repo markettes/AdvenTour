@@ -1,8 +1,8 @@
 import 'package:Adventour/pages/init_page.dart';
-import 'package:Adventour/pages/login_page.dart';
+import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/main_page.dart';
 import 'package:Adventour/pages/root_page.dart';
-import 'package:Adventour/pages/signup_page.dart';
+import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
@@ -25,8 +25,8 @@ class MyApp extends StatelessWidget {
               onMapCreated: _onMapCreated,
             ),
         '/initPage': (_) => InitPage(),
-        '/loginPage': (_) => LoginPage(),
-        '/signupPage': (_) => SignupPage(),
+        '/logInPage': (_) => LogInPage(),
+        '/signUpPage': (_) => SignUpPage(),
         '/': (_) => RootPage(),
         'mainPage': (_) => MainPage()
       },

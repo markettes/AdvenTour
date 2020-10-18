@@ -1,4 +1,5 @@
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/controllers/db.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/main_page.dart';
@@ -14,6 +15,7 @@ class RootPage extends StatelessWidget {
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData) return CircularProgressIndicator();
           auth = Auth();
+          db = DB();
           return StreamBuilder(
             stream: auth.authStatusChanges,
             builder: (context, snapshot) {

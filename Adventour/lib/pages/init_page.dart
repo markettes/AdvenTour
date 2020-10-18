@@ -1,5 +1,5 @@
 import 'package:Adventour/widgets/facebook_button.dart';
-import 'package:Adventour/widgets/google_signin_button.dart';
+import 'package:Adventour/widgets/google_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 
@@ -23,7 +23,7 @@ class InitPage extends StatelessWidget {
                   PrimaryButton(
                     text: 'LOG IN',
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/loginPage');
+                      Navigator.of(context).pushNamed('/logInPage');
                     },
                     style: ButtonType.Normal,
                   ),
@@ -37,7 +37,7 @@ class InitPage extends StatelessWidget {
                   PrimaryButton(
                     text: 'SIGN UP',
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/signupPage');
+                      Navigator.of(context).pushNamed('/signUpPage');
                     },
                     style: ButtonType.Void,
                   ),
@@ -55,7 +55,7 @@ class InitPage extends StatelessWidget {
                     thickness: 1,
                   ),
                   FacebookButton(),
-                  GoogleSigninButton()
+                  GoogleButton()
                 ],
               ),
             ),

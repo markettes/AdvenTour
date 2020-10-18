@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:Adventour/controllers/db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:Adventour/models/User.dart' as myuser;
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -19,11 +21,11 @@ class Auth {
     return user.uid;
   }
 
-  Future<String> registerUser(User user, String password) async {
+  Future<String> registerUser(myuser.User user, String password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: user.email, password: password);
     User firebaseUser = result.user;
-    // db.newUser(user);
+    db.addUser(user);
     signIn(user.email, password);
     return firebaseUser.uid;
   }
@@ -60,12 +62,12 @@ class Auth {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future changePassword(User user, String newPassword) async {
-    user.updatePassword(newPassword);
+  Future changePassword(String newPassword) async {
+    _firebaseAuth.currentUser.updatePassword(newPassword);
   }
 
-  Future changeEmail(User user, String newEmail) async {
-    user.updateEmail(newEmail);
+  Future changeEmail(String newEmail) async {
+    _firebaseAuth.currentUser.updateEmail(newEmail);
   }
 }
 

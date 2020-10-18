@@ -1,7 +1,8 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:flutter/material.dart';
 
-class GoogleSigninButton extends StatelessWidget {
-  GoogleSigninButton({
+class GoogleButton extends StatelessWidget {
+  GoogleButton({
     this.padding =
         const EdgeInsets.only(left: 45, right: 45, top: 8, bottom: 8),
   });
@@ -12,7 +13,14 @@ class GoogleSigninButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: RaisedButton(
-        onPressed: () {},
+        onPressed: () async {
+          try {
+            await auth.signInWithGoogle();
+          } catch (e) {
+            print(e.toString());
+          }
+          
+        },
         color: Colors.white,
         elevation: 5,
         shape: RoundedRectangleBorder(
