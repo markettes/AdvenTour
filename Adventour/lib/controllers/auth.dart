@@ -3,12 +3,10 @@ import 'package:Adventour/controllers/db.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:Adventour/models/User.dart' as myuser;
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final FacebookLogin _facebookLogin = FacebookLogin();
 
   Stream<User> get authStatusChanges => _firebaseAuth.authStateChanges();
 
@@ -57,22 +55,6 @@ class Auth {
     final UserCredential result =
         await _firebaseAuth.signInWithCredential(credential);
     User user = result.user;
-    return user;
-  }
-
-  Future<User> signInWithFacebook() async {
-    final FacebookLoginResult facebookLoginResult =
-        await _facebookLogin.logIn(['email']);
-    final FacebookAccessToken facebookAccessToken =
-        await facebookLoginResult.accessToken;
-
-    final AuthCredential credential =
-        FacebookAuthProvider.credential(facebookAccessToken.userId);
-
-    final UserCredential result =
-        await _firebaseAuth.signInWithCredential(credential);
-    User user = result.user;
-
     return user;
   }
 

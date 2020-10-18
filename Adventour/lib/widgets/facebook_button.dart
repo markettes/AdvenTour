@@ -13,13 +13,7 @@ class FacebookButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: RaisedButton(
-        onPressed: () async {
-          try {
-            await auth.signInWithFacebook();
-          } catch (e) {
-            print(e.toString());
-          }
-        },
+        onPressed: () {},
         color: Color(0xFF1877F2),
         elevation: 5,
         shape: RoundedRectangleBorder(
