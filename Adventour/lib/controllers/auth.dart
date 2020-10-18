@@ -64,7 +64,7 @@ class Auth {
     final FacebookLoginResult facebookLoginResult =
         await _facebookLogin.logIn(['email']);
     final FacebookAccessToken facebookAccessToken =
-        await _facebookLogin.currentAccessToken;
+        await facebookLoginResult.accessToken;
 
     final AuthCredential credential =
         FacebookAuthProvider.credential(facebookAccessToken.userId);
