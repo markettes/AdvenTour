@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
 
-class MapMarkerManager {
+class Marker {
   
   GeoCoordinates geoCoordinates;
   String placeType;
@@ -14,13 +14,14 @@ class MapMarkerManager {
   MapImage poiMapImage;
 
 
-  MapMarkerManager (GeoCoordinates geoCoordinates, String placeType) {
+  Marker(GeoCoordinates geoCoordinates, String placeType, HereMapController hereMapController) {
+    this.hereMapController = hereMapController;
     this.geoCoordinates = geoCoordinates;
     this.placeType = placeType;
   }
 
-  void addMarker() {
-    addPOIMapMarker(this.geoCoordinates, 1);
+  void addMarkerToMap() {
+    addPOIMapMarker(this.geoCoordinates, 1, this.placeType);
   }
 
   void clearMarkers(){
@@ -31,10 +32,10 @@ class MapMarkerManager {
   }
 
   Future<void> addPOIMapMarker(
-      GeoCoordinates geoCoordinates, int drawOrder) async {
+      GeoCoordinates geoCoordinates, int drawOrder, String type) async {
     // Reuse existing MapImage for new map markers.
     if (poiMapImage == null) {
-      Uint8List imagePixelData = await loadFileAsUint8List('poi.png');
+      Uint8List imagePixelData = await loadFileAsUint8List(type + '.png');
       poiMapImage =
           MapImage.withPixelDataAndImageFormat(imagePixelData, ImageFormat.png);
     }
