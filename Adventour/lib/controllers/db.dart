@@ -7,6 +7,7 @@ class DB {
 //----------------------------USERS-----------------------------------
 
   Future addUser(User user) {
+    print(user.userName);
     _firestore.collection('Users').add(user.toFirestore());
   }
 

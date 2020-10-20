@@ -2,7 +2,7 @@ class User {
   String _userName;
   String _email;
 
-  User(username, email) {
+  User(userName, email) {
     _userName = userName;
     _email = email;
   }

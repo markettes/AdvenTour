@@ -89,6 +89,7 @@ class _SignInFormState extends State<SignInForm> {
             text: 'SIGN IN',
             onPressed: () async {
               if (_formKey.currentState.validate()) {
+                print(_userNameController.text);
                 User user =
                     User(_userNameController.text, _emailController.text);
                 try {

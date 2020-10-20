@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/widgets/input_text.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:Adventour/models/User.dart' as myuser;
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn _googleAuth = GoogleSignIn();
-  final FacebookAuth _facebookAuth = FacebookAuth.instance;
 
   Stream<User> get authStatusChanges => _firebaseAuth.authStateChanges();
 
@@ -48,7 +49,6 @@ class Auth {
   Future<User> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await _googleAuth.signIn();
     if (googleSignInAccount != null) {
-      print(googleSignInAccount.email);
       final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
@@ -59,20 +59,27 @@ class Auth {
 
       final UserCredential result =
           await _firebaseAuth.signInWithCredential(credential);
+      // if (result.additionalUserInfo.isNewUser) {
+      //   showDialog(
+      //     context: context,
+      //     builder: (context) {
+      //       return Dialog(
+      //         child: InputText(
+      //           icon: Icons.person,
+      //           labelText: 'Username',
+      //           errorText: _userNameError,
+      //           controller: _userNameController,
+      //           validator: (value) {
+      //             if (value.isEmpty) return 'Username can\'t be empty';
+      //             return null;
+      //           },
+      //         ),
+      //       );
+      //     },
+      //   );
+      // }
       User user = result.user;
       return user;
-    }
-  }
-
-  Future<User> signInWithFacebook() async {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
-    if (loginResult != null) {
-      final FacebookAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken.token);
-
-      final UserCredential result = await FirebaseAuth.instance
-          .signInWithCredential(facebookAuthCredential);
-      return result.user;
     }
   }
 

@@ -1,4 +1,3 @@
-import 'package:Adventour/widgets/facebook_button.dart';
 import 'package:Adventour/widgets/google_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
@@ -54,7 +53,6 @@ class InitPage extends StatelessWidget {
                     endIndent: 25,
                     thickness: 1,
                   ),
-                  FacebookButton(),
                   GoogleButton()
                 ],
               ),
