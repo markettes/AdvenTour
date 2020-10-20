@@ -92,32 +92,10 @@ class _LogInFormState extends State<LogInForm> {
     );
   }
 
-  void _showError(error) {
+  void _showError(e) {
     setState(() {
-      _emailError = null;
-      _passwordError = null;
-      switch (error.code) {
-        case 'ERROR_INVALID_EMAIL':
-          _emailError = 'Email incorrecto';
-          break;
-        case 'ERROR_WRONG_PASSWORD':
-          _passwordError = 'Contraseña incorrecta';
-          break;
-        case 'ERROR_USER_NOT_FOUND':
-          _emailError = 'Email no registrado, porfavor registrate';
-          break;
-        case 'ERROR_USER_DISABLED':
-          _emailError = 'Usuario deshabilitado, consulte con ...';
-          break;
-        case 'ERROR_TOO_MANY_REQUESTS':
-          _emailError = 'Demasiados intentos, intentelo más tarde';
-          break;
-        case 'ERROR_OPERATION_NOT_ALLOWED':
-          _emailError = 'Email no permitido';
-          break;
-        default:
-          print('problemas de conexión');
-      }
+      _emailError = logInEmailError(e);
+      _passwordError = logInPasswordError(e);
     });
   }
 }

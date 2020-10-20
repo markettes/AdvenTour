@@ -5,7 +5,7 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
-class SignUpPage extends StatelessWidget {
+class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,18 +14,18 @@ class SignUpPage extends StatelessWidget {
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
-        child: SignUpForm(),
+        child: SignInForm(),
       ),
     );
   }
 }
 
-class SignUpForm extends StatefulWidget {
+class SignInForm extends StatefulWidget {
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  _SignInFormState createState() => _SignInFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -86,7 +86,7 @@ class _SignUpFormState extends State<SignUpForm> {
             },
           ),
           PrimaryButton(
-            text: 'SIGN UP',
+            text: 'SIGN IN',
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                 User user =
@@ -95,6 +95,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   await auth.registerUser(user, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {
+                  print(e.code);
                   _showError(e);
                 }
               }
@@ -105,23 +106,11 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  void _showError(error) {
+  void _showError(e){
     setState(() {
-      _userNameError = null;
-      _emailError = null;
-      _passwordError = null;
-
-      switch (error.code) {
-        case 'ERROR_WEAK_PASSWORD':
-          _passwordError = 'Contraseña débil, almenos 6 carácteres';
-          break;
-        case 'ERROR_INVALID_EMAIL':
-          _emailError = 'Email incorrecto';
-          break;
-        case 'ERROR_EMAIL_ALREADY_IN_USE':
-          _emailError = 'Email ya en uso';
-          break;
-      }
+      _emailError = signInEmailError(e);
+      _passwordError = signInPasswordError(e);
     });
+    
   }
 }

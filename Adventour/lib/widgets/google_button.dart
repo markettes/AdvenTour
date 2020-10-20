@@ -17,14 +17,13 @@ class GoogleButton extends StatelessWidget {
           try {
             await auth.signInWithGoogle();
           } catch (e) {
-            print(e.toString());
+            print(e);
           }
         },
         color: Colors.white,
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          /*side: BorderSide(color: Theme.of(context).primaryColor)*/
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

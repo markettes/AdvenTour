@@ -13,12 +13,17 @@ class FacebookButton extends StatelessWidget {
     return Padding(
       padding: padding,
       child: RaisedButton(
-        onPressed: () {},
+        onPressed: () async {
+          try {
+            await auth.signInWithFacebook();
+          } catch (e) {
+            print(e);
+          }
+        },
         color: Color(0xFF1877F2),
         elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          /*side: BorderSide(color: Theme.of(context).primaryColor)*/
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
