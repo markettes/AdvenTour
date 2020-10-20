@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
           GeoCoordinates(39.2434, -0.42), distanceToEarthInMeters);
     });
 
-    Marker prueba = new Marker(new GeoCoordinates(39.5021, -0.440599), "poi", hereMapController);
-    prueba.addMarkerToMap();
+    Marker prueba = new Marker(new GeoCoordinates(39.5021, -0.440599), "poi");
+    prueba.addMarkerToMap(hereMapController);
   }
 
 }

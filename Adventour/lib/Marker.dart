@@ -14,13 +14,13 @@ class Marker {
   MapImage poiMapImage;
 
 
-  Marker(GeoCoordinates geoCoordinates, String placeType, HereMapController hereMapController) {
-    this.hereMapController = hereMapController;
+  Marker(GeoCoordinates geoCoordinates, String placeType) {
     this.geoCoordinates = geoCoordinates;
     this.placeType = placeType;
   }
 
-  void addMarkerToMap() {
+  void addMarkerToMap(HereMapController hereMapController) {
+    this.hereMapController = hereMapController;
     addPOIMapMarker(this.geoCoordinates, 1, this.placeType);
   }
 
