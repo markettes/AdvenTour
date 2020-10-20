@@ -26,13 +26,20 @@ class RootPage extends StatelessWidget {
               var user = snapshot.data;
               db.signIn(user.email).then((user) async {
                 if (user.userName == '')
-                  db.changeUserName(user, await _showUserNameDialog(context));
+                  db.changeUserName(user,
+                      _getUsernameFromGoogleAccount()); // await _showUserNameDialog(context)
               });
 
               return MainPage();
             },
           );
         });
+  }
+
+  String _getUsernameFromGoogleAccount() {
+    int index = auth.currentUserEmail.toString().indexOf('@');
+    String username = auth.currentUserEmail.toString().substring(0, index);
+    return username;
   }
 
   Future<String> _showUserNameDialog(BuildContext context) {
