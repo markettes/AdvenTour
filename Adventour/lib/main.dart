@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 
 void main() {
   SdkContext.init(IsolateOrigin.main);
-  runApp(CurrentLocation());
+  runApp(MyApp());
 }
 
 class CurrentLocation extends StatelessWidget {
@@ -44,11 +44,19 @@ class CurrentLocation extends StatelessWidget {
 }
 
 class MyApp extends StatelessWidget {
+  Icon icon = Icon(
+    Icons.person_pin_circle,
+    size: 50,
+  );
+  WidgetPin widgetPinned;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HERE SDK for Flutter - Hello Map!',
-      home: HereMap(onMapCreated: _onMapCreated),
+      home: HereMap(
+        onMapCreated: _onMapCreated,
+      ),
     );
   }
 
@@ -60,9 +68,33 @@ class MyApp extends StatelessWidget {
         return;
       }
 
-      const double distanceToEarthInMeters = 8000;
-      hereMapController.camera.lookAtPointWithDistance(
-          GeoCoordinates(39.2434, -0.42), distanceToEarthInMeters);
+      widgetPinned =
+          hereMapController.pinWidget(icon, GeoCoordinates(39.2434, -0.42));
+
+      getPositionStream(desiredAccuracy: LocationAccuracy.high).listen((event) {
+        hereMapController.pinWidget(
+            Icon(
+              Icons.airplanemode_active,
+              size: 50,
+            ),
+            (GeoCoordinates(
+              event.latitude,
+              event.longitude,
+            )));
+        widgetPinned.setCoordinates(GeoCoordinates(
+          event.latitude,
+          event.longitude,
+        ));
+
+        const double distanceToEarthInMeters = 100;
+        hereMapController.camera.lookAtPointWithDistance(
+          GeoCoordinates(
+            event.latitude,
+            event.longitude,
+          ),
+          distanceToEarthInMeters,
+        );
+      });
     });
   }
 }
