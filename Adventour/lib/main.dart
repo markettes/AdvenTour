@@ -68,30 +68,24 @@ class MyApp extends StatelessWidget {
         return;
       }
 
-      widgetPinned =
-          hereMapController.pinWidget(icon, GeoCoordinates(39.2434, -0.42));
+      getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) {
+        widgetPinned = hereMapController.pinWidget(
+            icon,
+            GeoCoordinates(
+              value.latitude,
+              value.longitude,
+            ));
+      });
 
       getPositionStream(desiredAccuracy: LocationAccuracy.high).listen((event) {
-        hereMapController.pinWidget(
-            Icon(
-              Icons.airplanemode_active,
-              size: 50,
-            ),
-            (GeoCoordinates(
-              event.latitude,
-              event.longitude,
-            )));
         widgetPinned.setCoordinates(GeoCoordinates(
           event.latitude,
           event.longitude,
         ));
 
-        const double distanceToEarthInMeters = 100;
+        const double distanceToEarthInMeters = 8000;
         hereMapController.camera.lookAtPointWithDistance(
-          GeoCoordinates(
-            event.latitude,
-            event.longitude,
-          ),
+          GeoCoordinates(39.2434, -0.42),
           distanceToEarthInMeters,
         );
       });
