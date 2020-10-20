@@ -30,7 +30,6 @@ class _SignInFormState extends State<SignInForm> {
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  String _userNameError;
   String _emailError;
   String _passwordError;
 
@@ -56,7 +55,6 @@ class _SignInFormState extends State<SignInForm> {
           InputText(
             icon: Icons.person,
             labelText: 'Username',
-            errorText: _userNameError,
             controller: _userNameController,
             validator: (value) {
               if (value.isEmpty) return 'Username can\'t be empty';

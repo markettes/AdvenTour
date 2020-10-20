@@ -15,7 +15,7 @@ class GoogleButton extends StatelessWidget {
       child: RaisedButton(
         onPressed: () async {
           try {
-            await auth.signInWithGoogle();
+            await auth.signInWithGoogle(context);
           } catch (e) {
             print(e);
           }

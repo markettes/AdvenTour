@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/widgets/input_text.dart';
+import 'package:Adventour/widgets/primary_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +25,13 @@ class Auth {
     return user.uid;
   }
 
-  Future<String> registerUser(myuser.User user, String password) async {
+  Future<UserCredential> registerUser(myuser.User user, String password) async {
     UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: user.email, password: password);
 
-    User firebaseUser = result.user;
     db.addUser(user);
     signIn(user.email, password);
-    return firebaseUser.uid;
+    return result;
   }
 
   Future<void> signOut() async {
@@ -46,7 +46,7 @@ class Auth {
     return (await user.reauthenticateWithCredential(credential)).user;
   }
 
-  Future<User> signInWithGoogle() async {
+  Future<UserCredential> signInWithGoogle(BuildContext context) async {
     final GoogleSignInAccount googleSignInAccount = await _googleAuth.signIn();
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
@@ -59,27 +59,13 @@ class Auth {
 
       final UserCredential result =
           await _firebaseAuth.signInWithCredential(credential);
-      // if (result.additionalUserInfo.isNewUser) {
-      //   showDialog(
-      //     context: context,
-      //     builder: (context) {
-      //       return Dialog(
-      //         child: InputText(
-      //           icon: Icons.person,
-      //           labelText: 'Username',
-      //           errorText: _userNameError,
-      //           controller: _userNameController,
-      //           validator: (value) {
-      //             if (value.isEmpty) return 'Username can\'t be empty';
-      //             return null;
-      //           },
-      //         ),
-      //       );
-      //     },
-      //   );
-      // }
-      User user = result.user;
-      return user;
+
+          if(result.additionalUserInfo.isNewUser){
+            myuser.User user = myuser.User('',result.user.email);
+            db.addUser(user);
+          }
+
+      return result;
     }
   }
 
