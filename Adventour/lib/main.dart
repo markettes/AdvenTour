@@ -1,4 +1,4 @@
-import 'package:Adventour/Marker.dart';
+import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
           GeoCoordinates(39.2434, -0.42), distanceToEarthInMeters);
     });
 
-    Marker prueba = new Marker(new GeoCoordinates(39.5021, -0.440599), "poi");
-    prueba.addMarkerToMap(hereMapController);
+    EngineMarker prueba = new EngineMarker(hereMapController);
+    
   }
 
 }
