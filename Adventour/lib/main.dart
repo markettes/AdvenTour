@@ -1,4 +1,5 @@
 import 'package:Adventour/pages/main_page.dart';
+import 'package:Adventour/widgets/center_position_button.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
@@ -11,24 +12,13 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
-  HereMapController mapController;
+  HereMapController _hereMapController;
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'HERE SDK for Flutter - Hello Map!',
       home: Scaffold(
       body: HereMap(onMapCreated: _onMapCreated),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () 
-        {
-         mapController.camera.lookAtPointWithDistance(GeoCoordinates(39.2434, -0.42), 8000);
-        },
-        child: Icon(
-          Icons.my_location,
-          size: 35,
-          color: Colors.black,
-          ),
-        backgroundColor: Colors.deepPurple,
-      ),
+      floatingActionButton: CenterPositionButton(hereMapController: _hereMapController),
     ),
     );
   }
@@ -40,10 +30,11 @@ class MyApp extends StatelessWidget {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
       }
-      mapController = hereMapController;
+      _hereMapController = hereMapController;
       const double distanceToEarthInMeters = 8000;
       hereMapController.camera.lookAtPointWithDistance(
           GeoCoordinates(39.2434, -0.42), distanceToEarthInMeters);
     });
   }
-} 
+}
+
