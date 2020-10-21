@@ -5,7 +5,7 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatelessWidget {
+class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,10 +30,12 @@ class _SignInFormState extends State<SignInForm> {
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _repeatPasswordController = TextEditingController();
   String _emailError;
   String _passwordError;
+  String _repeatPasswordError;
 
-    @override
+  @override
   void dispose() {
     _userNameController.dispose();
     _passwordController.dispose();
@@ -83,8 +85,21 @@ class _SignInFormState extends State<SignInForm> {
               return null;
             },
           ),
+          InputText(
+            obscured: true,
+            icon: Icons.lock,
+            labelText: 'Repeat password',
+            errorText: _repeatPasswordError,
+            controller: _repeatPasswordController,
+            validator: (value) {
+              if (value.isEmpty) return 'Repeat password';
+              if (_repeatPasswordController.text != _passwordController.text)
+                return 'Password does not match';
+              return null;
+            },
+          ),
           PrimaryButton(
-            text: 'SIGN IN',
+            text: 'SIGN UP',
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                 print(_userNameController.text);
@@ -105,11 +120,10 @@ class _SignInFormState extends State<SignInForm> {
     );
   }
 
-  void _showError(e){
+  void _showError(e) {
     setState(() {
       _emailError = signInEmailError(e);
       _passwordError = signInPasswordError(e);
     });
-    
   }
 }

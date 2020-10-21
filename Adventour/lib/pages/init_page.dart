@@ -34,9 +34,9 @@ class InitPage extends StatelessWidget {
                     ),
                   ),
                   PrimaryButton(
-                    text: 'SIGN IN',
+                    text: 'SIGN UP',
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/signInPage');
+                      Navigator.of(context).pushNamed('/signUpPage');
                     },
                     style: ButtonType.Void,
                   ),
