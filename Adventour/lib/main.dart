@@ -9,37 +9,11 @@ void main() {
   runApp(MyApp());
 }
 
-class CurrentLocation extends StatelessWidget {
+class CurrentLocation {
   void _getCurrentLocation() async {
     final position =
         await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(position);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Prueba',
-      home: Scaffold(
-        appBar: AppBar(title: Text("Location Services")),
-        body: Align(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(""),
-              FlatButton(
-                  onPressed: () {
-                    _getCurrentLocation();
-                  },
-                  color: Colors.green,
-                  child: Text(
-                    "Find Location",
-                  ))
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
 
@@ -68,26 +42,34 @@ class MyApp extends StatelessWidget {
         return;
       }
 
-      getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((value) {
+      getLastKnownPosition().then((value) {
         widgetPinned = hereMapController.pinWidget(
-            icon,
-            GeoCoordinates(
-              value.latitude,
-              value.longitude,
-            ));
+          icon,
+          GeoCoordinates(
+            value.latitude,
+            value.longitude,
+          ),
+        );
       });
 
       getPositionStream(desiredAccuracy: LocationAccuracy.high).listen((event) {
-        widgetPinned.setCoordinates(GeoCoordinates(
-          event.latitude,
-          event.longitude,
-        ));
+        if (event == null) {
+          print("Todo mal");
+        } else {
+          widgetPinned.setCoordinates(GeoCoordinates(
+            event.latitude,
+            event.longitude,
+          ));
 
-        const double distanceToEarthInMeters = 8000;
-        hereMapController.camera.lookAtPointWithDistance(
-          GeoCoordinates(39.2434, -0.42),
-          distanceToEarthInMeters,
-        );
+          const double distanceToEarthInMeters = 50;
+          hereMapController.camera.lookAtPointWithDistance(
+            GeoCoordinates(
+              event.latitude,
+              event.longitude,
+            ),
+            distanceToEarthInMeters,
+          );
+        }
       });
     });
   }
