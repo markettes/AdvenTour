@@ -29,10 +29,6 @@ class MyApp extends StatelessWidget {
       hereMapController.camera.lookAtPointWithDistance(
           GeoCoordinates(39.2434, -0.42), distanceToEarthInMeters);
     });
-
-    EngineMarker prueba = new EngineMarker(hereMapController);
-    prueba.addPOIMapMarker(GeoCoordinates(36.43,-0.32), 1, "poi");
-    
   }
 
 }
