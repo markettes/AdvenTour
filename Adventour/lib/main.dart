@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
       floatingActionButton: CenterPositionButton(hereMapController: _hereMapController),
     ),
     );
-  }
+  } 
+
 
   void _onMapCreated(HereMapController hereMapController) {
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
