@@ -27,7 +27,7 @@ class RootPage extends StatelessWidget {
               db.signIn(user.email).then((user) async {
                 if (user.userName == '')
                   db.changeUserName(user,
-                      _getUsernameFromGoogleAccount()); // await _showUserNameDialog(context)
+                      await _showUserNameDialog(context));
               });
 
               return MainPage();
