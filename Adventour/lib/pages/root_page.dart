@@ -36,12 +36,6 @@ class RootPage extends StatelessWidget {
         });
   }
 
-  String _getUsernameFromGoogleAccount() {
-    int index = auth.currentUserEmail.toString().indexOf('@');
-    String username = auth.currentUserEmail.toString().substring(0, index);
-    return username;
-  }
-
   Future<String> _showUserNameDialog(BuildContext context) {
     TextEditingController _userNameController = TextEditingController();
     final _formKey = GlobalKey<FormState>();
