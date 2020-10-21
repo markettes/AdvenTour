@@ -5,11 +5,6 @@ import 'package:here_sdk/mapview.dart';
 
 void main() {
   SdkContext.init(IsolateOrigin.main);
-  
-  /*MapMarkerManager hola = new MapMarkerManager(new GeoCoordinates(39.46, -0.37), 'hola');
-
-  hola.addMarker(); */
-
   runApp(MyApp());
 }
 
@@ -36,6 +31,7 @@ class MyApp extends StatelessWidget {
     });
 
     EngineMarker prueba = new EngineMarker(hereMapController);
+    prueba.addPOIMapMarker(GeoCoordinates(36.43,-0.32), 1, "poi");
     
   }
 

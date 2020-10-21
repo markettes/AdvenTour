@@ -23,7 +23,7 @@ class EngineMarker {
 
   Future<void> addPOIMapMarker(
       GeoCoordinates geoCoordinates, int drawOrder, String type) async {
-    // Reuse existing MapImage for new map markers.
+        
     if (_poiMapImage == null) {
       Uint8List imagePixelData = await loadFileAsUint8List(type + '.png');
       _poiMapImage =
