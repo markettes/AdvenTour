@@ -9,10 +9,10 @@ import 'package:here_sdk/mapview.dart';
 
 void main() {
   SdkContext.init(IsolateOrigin.main);
-  runApp(MyApp());
+  runApp(Adventour());
 }
 
-class MyApp extends StatelessWidget {
+class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
