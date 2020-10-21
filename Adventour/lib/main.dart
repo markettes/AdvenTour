@@ -42,15 +42,13 @@ class MyApp extends StatelessWidget {
         return;
       }
 
-      getLastKnownPosition().then((value) {
-        widgetPinned = hereMapController.pinWidget(
-          icon,
-          GeoCoordinates(
-            value.latitude,
-            value.longitude,
-          ),
-        );
-      });
+      widgetPinned = hereMapController.pinWidget(
+        icon,
+        GeoCoordinates(
+          39.432073,
+          -0.425456,
+        ),
+      );
 
       getPositionStream(desiredAccuracy: LocationAccuracy.high).listen((event) {
         if (event == null) {
