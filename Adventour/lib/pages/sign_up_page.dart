@@ -30,11 +30,8 @@ class _SignInFormState extends State<SignInForm> {
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _repeatPasswordController = TextEditingController();
   String _emailError;
   String _passwordError;
-  String _repeatPasswordError;
-
   @override
   void dispose() {
     _userNameController.dispose();
@@ -82,19 +79,6 @@ class _SignInFormState extends State<SignInForm> {
             controller: _passwordController,
             validator: (value) {
               if (value.isEmpty) return 'Password can\'t be empty';
-              return null;
-            },
-          ),
-          InputText(
-            obscured: true,
-            icon: Icons.lock,
-            labelText: 'Repeat password',
-            errorText: _repeatPasswordError,
-            controller: _repeatPasswordController,
-            validator: (value) {
-              if (value.isEmpty) return 'Repeat password';
-              if (_repeatPasswordController.text != _passwordController.text)
-                return 'Password does not match';
               return null;
             },
           ),
