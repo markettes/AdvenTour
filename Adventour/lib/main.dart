@@ -3,11 +3,11 @@ import 'package:Adventour/widgets/center_position_button.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
-
-
+import 'package:Adventour/pages/information_places.dart';
 void main() {
   SdkContext.init(IsolateOrigin.main);
-  runApp(MyApp());
+  //runApp(MyApp());
+  runApp(InformationPlaces());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,12 +17,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'HERE SDK for Flutter - Hello Map!',
       home: Scaffold(
-      body: HereMap(onMapCreated: _onMapCreated),
-      floatingActionButton: CenterPositionButton(hereMapController: _hereMapController),
-    ),
+        body: HereMap(onMapCreated: _onMapCreated),
+        floatingActionButton:
+        CenterPositionButton(hereMapController: _hereMapController),
+      ),
     );
-  } 
-
+  }
 
   void _onMapCreated(HereMapController hereMapController) {
     hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
@@ -38,4 +38,3 @@ class MyApp extends StatelessWidget {
     });
   }
 }
-
