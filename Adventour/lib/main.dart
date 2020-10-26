@@ -17,14 +17,11 @@ class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'HERE SDK for Flutter - Hello Map!',
+      title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
       theme: themeData,
       initialRoute: '/',
       routes: {
-        '/map': (_) => HereMap(
-              onMapCreated: _onMapCreated,
-            ),
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
@@ -32,20 +29,6 @@ class Adventour extends StatelessWidget {
         'mainPage': (_) => MainPage()
       },
     );
-  }
-
-  void _onMapCreated(HereMapController hereMapController) {
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay,
-        (MapError error) {
-      if (error != null) {
-        print('Map scene not loaded. MapError: ${error.toString()}');
-        return;
-      }
-
-      const double distanceToEarthInMeters = 8000;
-      hereMapController.camera.lookAtPointWithDistance(
-          GeoCoordinates(39.2434, -0.42), distanceToEarthInMeters);
-    });
   }
 
   var themeData = ThemeData(
