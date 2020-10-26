@@ -1,4 +1,0 @@
-{
-    "northpole" : { "alwaysShowRootLevel" : true, "ignoreMaximumLevelTileCount" : true },
-    "southpole" : { "alwaysShowRootLevel" : true, "ignoreMaximumLevelTileCount" : true }
-}
