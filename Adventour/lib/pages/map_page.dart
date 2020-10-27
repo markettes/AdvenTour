@@ -43,6 +43,15 @@ class _MapPageState extends State<MapPage> {
               myLocationEnabled: true,
             );
           }),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: _currentLocation,
+        isExtended: false,
+        label: Icon(
+          Icons.location_on,
+          color: Theme.of(context).buttonColor,
+        ),
+      ),
     );
   }
 
