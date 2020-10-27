@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:here_sdk/core.dart';
-import 'package:here_sdk/mapview.dart';
 
-class CenterPositionButton extends StatelessWidget {
+/*class CenterPositionButton extends StatelessWidget {
   const CenterPositionButton({
     @required this.hereMapController,
   });
@@ -24,4 +22,4 @@ class CenterPositionButton extends StatelessWidget {
       backgroundColor: Colors.deepPurple,
     );
   }
-}
+}*/

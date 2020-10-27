@@ -1,11 +1,8 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
-import 'package:here_sdk/core.dart';
-import 'package:here_sdk/mapview.dart';
 
-class EngineMarker {
+/*class EngineMarker {
   List<MapMarker> _mapMarkerList = [];
   HereMapController _hereMapController;
   MapImage _poiMapImage;
@@ -14,7 +11,7 @@ class EngineMarker {
     this._hereMapController = hereMapController;
   }
 
-  void clearMarkers(){
+  void clearMarkers() {
     for (var mapMarker in _mapMarkerList) {
       _hereMapController.mapScene.removeMapMarker(mapMarker);
     }
@@ -23,7 +20,6 @@ class EngineMarker {
 
   Future<void> addPOIMapMarker(
       GeoCoordinates geoCoordinates, int drawOrder, String type) async {
-        
     if (_poiMapImage == null) {
       Uint8List imagePixelData = await loadFileAsUint8List(type + '.png');
       _poiMapImage =
@@ -45,9 +41,7 @@ class EngineMarker {
   }
 
   Future<Uint8List> loadFileAsUint8List(String fileName) async {
-
     ByteData fileData = await rootBundle.load('assets/' + fileName);
     return Uint8List.view(fileData.buffer);
   }
-
-}
+}*/

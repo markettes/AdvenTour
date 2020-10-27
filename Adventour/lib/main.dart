@@ -1,15 +1,14 @@
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/main_page.dart';
+import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
-import 'package:here_sdk/core.dart';
-import 'package:here_sdk/mapview.dart';
 
 void main() {
-  SdkContext.init(IsolateOrigin.main);
+  //SdkContext.init(IsolateOrigin.main);
   runApp(Adventour());
 }
 
@@ -26,7 +25,8 @@ class Adventour extends StatelessWidget {
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
         '/': (_) => RootPage(),
-        'mainPage': (_) => MainPage()
+        '/mainPage': (_) => MainPage(),
+        '/mapPage': (_) => MapPage()
       },
     );
   }
