@@ -31,6 +31,8 @@ dependencies:
   google_sign_in: ^4.5.5
   google_maps_flutter: ^0.5.27+3
   geolocator: ^6.1.0
+  flutter_google_places: ^0.2.6
+  http: ^0.12.2
 
 dev_dependencies:
   flutter_test:
