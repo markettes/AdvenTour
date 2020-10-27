@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InformationPlaces extends StatelessWidget {
+class InformationPlacesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
