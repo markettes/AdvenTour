@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart' as Location;
 
 class MapPage extends StatefulWidget {
   @override
@@ -45,6 +46,25 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+  void _currentLocation() async {
+    final GoogleMapController controller = _mapController;
+    Location.LocationData currentLocation;
+    var location = new Location.Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
+
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(currentLocation.latitude, currentLocation.longitude),
+        zoom: 18.0,
+      ),
+    ));
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
@@ -57,7 +77,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   Future _searchRestaurants(GoogleMapController controller) async {
-    List<Place> places = await _seachEngine.searchByLocation(39.5305989,-0.3489142);
+    List<Place> places =
+        await _seachEngine.searchByLocation(39.5305989, -0.3489142);
     for (var place in places) {
       print(place.toString());
     }
@@ -70,9 +91,7 @@ class _MapPageState extends State<MapPage> {
     // creating a new MARKER
     final Marker marker = Marker(
       markerId: markerId,
-      position: LatLng(
-        39.531600, -0.349953
-      ),
+      position: LatLng(39.531600, -0.349953),
       infoWindow: InfoWindow(title: markerId.toString(), snippet: '*'),
       onTap: () {
         // _onMarkerTapped(markerId);
@@ -83,5 +102,5 @@ class _MapPageState extends State<MapPage> {
       // adding a new marker to map
       _markers[markerId] = marker;
     });
-}
+  }
 }
