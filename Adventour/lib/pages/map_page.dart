@@ -19,7 +19,7 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: FutureBuilder(
         future: Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high),
+            desiredAccuracy: LocationAccuracy.bestForNavigation),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData) return CircularProgressIndicator();
@@ -38,29 +38,33 @@ class _MapPageState extends State<MapPage> {
           );
         },
       ),
-      floatingActionButton:
-            FloatingActionButton.extended(
-              onPressed: _currentLocation,
-              label: Icon(Icons.location_on),
-            ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: _currentLocation,
+        isExtended: false,
+        label: Icon(
+          Icons.location_on,
+          color: Theme.of(context).buttonColor,
+        ),
+      ),
     );
   }
 
   void _currentLocation() async {
-   final GoogleMapController controller = mapController;
-   Location.LocationData currentLocation;
-   var location = new Location.Location();
-   try {
-     currentLocation = await location.getLocation();
-     } on Exception {
-       currentLocation = null;
-       }
+    final GoogleMapController controller = mapController;
+    Location.LocationData currentLocation;
+    var location = new Location.Location();
+    try {
+      currentLocation = await location.getLocation();
+    } on Exception {
+      currentLocation = null;
+    }
 
     controller.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
         bearing: 0,
         target: LatLng(currentLocation.latitude, currentLocation.longitude),
-        zoom: 17.0,
+        zoom: 18.0,
       ),
     ));
   }
