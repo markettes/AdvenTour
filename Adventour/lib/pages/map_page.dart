@@ -30,6 +30,8 @@ class _MapPageState extends State<MapPage> {
             zoom: 11.0,
           ),
           myLocationEnabled: true,
+          myLocationButtonEnabled: true,
+          compassEnabled: true,
         ),
       ),
     );
