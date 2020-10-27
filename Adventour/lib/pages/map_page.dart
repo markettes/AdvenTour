@@ -20,8 +20,8 @@ class _MapPageState extends State<MapPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
+          title: Text('AdvenTour'),
+          backgroundColor: Theme.of(context).primaryColor,
         ),
         body: GoogleMap(
           onMapCreated: _onMapCreated,
