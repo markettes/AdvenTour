@@ -1,8 +1,8 @@
-import 'package:Adventour/pages/information_places_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/main_page.dart';
 import 'package:Adventour/pages/map_page.dart';
+import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:Adventour/engine_marker.dart';
@@ -28,7 +28,7 @@ class Adventour extends StatelessWidget {
         '/': (_) => RootPage(),
         '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
-        '/informationPlacesPage': (_) => InformationPlacesPage()
+        '/placePage':(_)=> PlacePage()
       },
     );
   }
