@@ -41,6 +41,7 @@ class _MapPageState extends State<MapPage> {
                 print(position);
               },
               myLocationEnabled: true,
+              myLocationButtonEnabled: false,
             );
           }),
       floatingActionButton: FloatingActionButton.extended(
