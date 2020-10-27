@@ -1,10 +1,9 @@
 import 'package:Adventour/controllers/search_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
-const googleApiKey = "AIzaSyCqBFCpPtKqMKybjTnmbLwnEgX1PxXjwyU";
 
 class MapPage extends StatefulWidget {
   @override
@@ -49,12 +48,19 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
-    _seachEngine.search();
+    _searchRestaurants(controller);
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
     String style = await rootBundle.loadString("assets/map_style.json");
     controller.setMapStyle(style);
+  }
+
+  Future _searchRestaurants(GoogleMapController controller) async {
+    List<Place> places = await _seachEngine.searchByLocation(39.5305989,-0.3489142);
+    for (var place in places) {
+      print(place.toString());
+    }
   }
 
   void _add() {
