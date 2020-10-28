@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
@@ -15,38 +17,48 @@ class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   SearchEngine _seachEngine = SearchEngine();
+  Timer _timer;
+  bool _centerPositionOn = false;
 
   @override
   Widget build(BuildContext context) {
     _add();
     return Scaffold(
-      body: FutureBuilder(
-          future: Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            if (!snapshot.hasData) return CircularProgressIndicator();
-            Position position = snapshot.data;
-            LatLng currentPosition =
-                LatLng(position.latitude, position.longitude);
-            return GoogleMap(
-              onMapCreated: _onMapCreated,
-              zoomControlsEnabled: false,
-              markers: Set<Marker>.of(_markers.values),
-              initialCameraPosition: CameraPosition(
-                target: currentPosition,
-                zoom: 11.0,
-              ),
-              onTap: (position) {
-                print(position);
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-            );
-          }),
+      body: Listener(
+        onPointerDown: (e) {
+          if( _centerPositionOn){
+          _timer.cancel();
+          _centerPositionOn = false;
+          }
+        },
+        child: FutureBuilder(
+            future: Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              if (!snapshot.hasData) return CircularProgressIndicator();
+              Position position = snapshot.data;
+              LatLng currentPosition =
+                  LatLng(position.latitude, position.longitude);
+              return GoogleMap(
+                onMapCreated: _onMapCreated,
+                zoomControlsEnabled: false,
+                markers: Set<Marker>.of(_markers.values),
+                initialCameraPosition: CameraPosition(
+                  target: currentPosition,
+                  zoom: 11.0,
+                ),
+                onTap: (position) {
+                  print(position);
+                },
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+              );
+            }),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: _currentLocation,
+        onPressed: _currentLocationR,
         isExtended: false,
         label: Icon(
           Icons.location_on,
@@ -73,6 +85,15 @@ class _MapPageState extends State<MapPage> {
         zoom: 18.0,
       ),
     ));
+  }
+
+  void _currentLocationR() {
+    if (!_centerPositionOn) {
+      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _currentLocation();
+        _centerPositionOn = true;
+      });
+    } 
   }
 
   void _onMapCreated(GoogleMapController controller) {
