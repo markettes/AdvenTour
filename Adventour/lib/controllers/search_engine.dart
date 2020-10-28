@@ -6,13 +6,18 @@ import 'package:http/http.dart';
 class SearchEngine {
   final placesApiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
 
-  Future<List<Place>> searchByLocation(double latitude, double longitude) async {
+  Future<List<Place>> searchByLocation(
+      String type, double latitude, double longitude, int radius) async {
     var url =
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
             latitude.toString() +
             ',' +
             longitude.toString() +
-            '&radius=1500&type=restaurant&key=' +
+            '&radius=' +
+            radius.toString() +
+            '&type=' +
+            type +
+            '&key=' +
             placesApiKey;
     Response response = await get(url);
     var decoded = json.decode(response.body);
@@ -20,5 +25,9 @@ class SearchEngine {
     List<Place> places =
         results.map((place) => Place.fromGoogleMaps(place)).toList();
     return places;
+  }
+
+  Future<List<Place>> searchByText(String text) async {
+    
   }
 }
