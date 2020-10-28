@@ -59,11 +59,12 @@ class _MapPageState extends State<MapPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () async {
-          
           if (await Geolocator.isLocationServiceEnabled()) {
-            try{
-            _currentLocationR();
-            } on PlatformException catch(err) {return err;}
+            try {
+              _currentLocationR();
+            } on PlatformException catch (err) {
+              return err;
+            }
           }
         },
         isExtended: false,
