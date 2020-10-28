@@ -12,37 +12,15 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-<<<<<<< HEAD
-  GoogleMapController mapController;
-  Timer timer;
-=======
   GoogleMapController _mapController;
+  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  SearchEngine _seachEngine = SearchEngine();
+
   @override
   Widget build(BuildContext context) {
     _add();
+    return Scaffold(
       body: FutureBuilder(
-<<<<<<< HEAD
-        future: Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.bestForNavigation),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          if (!snapshot.hasData) return CircularProgressIndicator();
-          Position position = snapshot.data;
-          LatLng currentPosition =
-              LatLng(position.latitude, position.longitude);
-          return GoogleMap(
-            onMapCreated: _onMapCreated,
-            zoomControlsEnabled: false,
-            initialCameraPosition: CameraPosition(
-              target: currentPosition,
-              zoom: 11.0,
-            ),
-            myLocationButtonEnabled: false,
-            myLocationEnabled: true,
-          );
-        },
-      ),
-=======
           future: Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high),
           builder: (context, snapshot) {
@@ -66,7 +44,6 @@ class _MapPageState extends State<MapPage> {
               myLocationButtonEnabled: false,
             );
           }),
->>>>>>> 2b772d5b47ad49e49712012b27bae9d8dfb9bcfa
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: _currentLocation,
@@ -80,11 +57,7 @@ class _MapPageState extends State<MapPage> {
   }
 
   void _currentLocation() async {
-<<<<<<< HEAD
-    final GoogleMapController controller = mapController;
-=======
     final GoogleMapController controller = _mapController;
->>>>>>> 2b772d5b47ad49e49712012b27bae9d8dfb9bcfa
     Location.LocationData currentLocation;
     var location = new Location.Location();
     try {
