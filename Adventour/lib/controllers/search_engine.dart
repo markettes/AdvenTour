@@ -28,6 +28,16 @@ class SearchEngine {
   }
 
   Future<List<Place>> searchByText(String text) async {
-    
+    var url =
+        'https://maps.googleapis.com/maps/api/place/textsearch/json?query=' +
+            text +
+            '&key=' +
+            placesApiKey;
+    Response response = await get(url);
+    var decoded = json.decode(response.body);
+    List results = decoded["results"];
+    List<Place> places =
+        results.map((place) => Place.fromGoogleMaps(place)).toList();
+    return places;
   }
 }

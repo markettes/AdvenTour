@@ -4,9 +4,12 @@ import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/models/Place.dart';
+
+const kGoogleApiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
 
 class MapPage extends StatefulWidget {
   @override
@@ -39,7 +42,7 @@ class _MapPageState extends State<MapPage> {
           children: [
             FutureBuilder(
                 future: Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high),
+                    desiredAccuracy: LocationAccuracy.bestForNavigation),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
                   if (!snapshot.hasData) return CircularProgressIndicator();
@@ -65,6 +68,7 @@ class _MapPageState extends State<MapPage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Container(
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(40),
@@ -79,15 +83,25 @@ class _MapPageState extends State<MapPage> {
                   ),
                   width: size.width * 0.9,
                   height: 50,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      prefixIcon: IconButton(
-                        icon: Icon(Icons.menu),
-                        onPressed: ()=>_scaffoldKey.currentState.openDrawer(),
-                      )
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 18.0,
                     ),
-                    onSubmitted: null,
+                    child: TextField(
+                      cursorHeight: 23,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        border: InputBorder.none,
+                        prefixIcon: IconButton(
+                          icon: Icon(Icons.menu),
+                          onPressed: () =>
+                              _scaffoldKey.currentState.openDrawer(),
+                        ),
+                      ),
+                      onSubmitted: (value) {
+                        _search(_mapController, value);
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -145,7 +159,7 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
-    _searchRestaurants(controller);
+    //_searchRestaurants(controller);
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
@@ -153,12 +167,12 @@ class _MapPageState extends State<MapPage> {
     controller.setMapStyle(style);
   }
 
-  Future _searchRestaurants(GoogleMapController controller) async {
-    List<Place> places =
-        await _seachEngine.searchByLocation(PARK, 39.5305989, -0.3489142, 2000);
+  Future _search(GoogleMapController controller, String query) async {
+    List<Place> places = await _seachEngine.searchByText(query);
     for (var place in places) {
       print(place.toString());
     }
+    return places;
   }
 
   void _add() {

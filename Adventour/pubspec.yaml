@@ -33,7 +33,6 @@ dependencies:
   google_maps_flutter: ^0.5.27+3
   google_sign_in: ^4.5.5
   http: ^0.12.2
-  location: ^3.0.0
 
 
 dev_dependencies:
