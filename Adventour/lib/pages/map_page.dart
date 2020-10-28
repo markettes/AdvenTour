@@ -26,9 +26,9 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       body: Listener(
         onPointerDown: (e) {
-          if( _centerPositionOn){
-          _timer.cancel();
-          _centerPositionOn = false;
+          if (_centerPositionOn) {
+            _timer.cancel();
+            _centerPositionOn = false;
           }
         },
         child: FutureBuilder(
@@ -58,7 +58,14 @@ class _MapPageState extends State<MapPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed: _currentLocationR,
+        onPressed: () async {
+          
+          if (await Geolocator.isLocationServiceEnabled()) {
+            try{
+            _currentLocationR();
+            } on PlatformException catch(err) {return err;}
+          }
+        },
         isExtended: false,
         label: Icon(
           Icons.location_on,
@@ -93,7 +100,7 @@ class _MapPageState extends State<MapPage> {
         _currentLocation();
         _centerPositionOn = true;
       });
-    } 
+    }
   }
 
   void _onMapCreated(GoogleMapController controller) {
