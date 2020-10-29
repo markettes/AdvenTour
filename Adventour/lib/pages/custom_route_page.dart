@@ -18,7 +18,23 @@ class CustomRoutePage extends StatelessWidget {
                     Image.asset(
                       'assets/logo_adventour.png',
                       height: 180,
-                    )
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CircleIconButton(type: null, onPressed: null)
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [],
+                      ),
+                    ),
                   ],
                 ),
               )

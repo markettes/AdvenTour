@@ -22,7 +22,7 @@ class RoutePage extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Image.asset('assets/logo_adventour.png'),
                         TextFormField(
