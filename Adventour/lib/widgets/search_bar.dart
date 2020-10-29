@@ -3,6 +3,7 @@ library flutter_google_places.src;
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'dart:async';
@@ -23,70 +24,49 @@ class SearchBar extends StatelessWidget {
   GlobalKey<ScaffoldState> scaffoldKey;
   GoogleMapController mapController;
 
+  Location _location;
   SearchEngine _searchEngine = SearchEngine();
 
   @override
   Widget build(BuildContext context) {
     return PlacesAutocompleteWidget(
       apiKey: _searchEngine.placesApiKey,
-      mode: Mode.overlay,
       logo: null,
       scaffoldKey: scaffoldKey,
-      onSubmitted: (value) => _search(mapController, value),
-      location: Location(39.51621421434102, -0.4144810885190964),
+      location: _location,
       radius: 100,
+      onSubmitted: (value) async {
+        List<Place> places = await _searchEngine.searchByText(value);
+        if (places.length == 1) {
+          Place place = places.first;
+          print(place.latitude);
+          mapController.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(
+              bearing: 0,
+              target: LatLng(place.latitude, place.longitude),
+              zoom: 18.0,
+            ),
+          ));
+        }
+      },
+      onTapTextField: () async {
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.bestForNavigation);
+        _location = Location(position.latitude, position.longitude);
+      },
+      onTapPrediction: (prediction) async {
+        Place place = (await _searchEngine.searchByText(prediction.description)).first;
+        print(place.toString());
+        mapController.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(
+              bearing: 0,
+              target: LatLng(place.latitude, place.longitude),
+              zoom: 18.0,
+            ),
+          ));
+      },
       //overlayBorderRadius: BorderRadius.circular(30),
     );
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 8),
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(40),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 6,
-                offset: Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          width: size.width * 0.9,
-          height: 50,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              right: 18.0,
-            ),
-            child: TextField(
-              textAlignVertical: TextAlignVertical.center,
-              cursorHeight: 19,
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                border: InputBorder.none,
-                prefixIcon: IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () => scaffoldKey.currentState.openDrawer(),
-                ),
-              ),
-              onSubmitted: (value) {
-                _search(mapController, value);
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future _search(GoogleMapController controller, String query) async {
-    List<Place> places = await _searchEngine.searchByText(query);
-    for (var place in places) {
-      print(place.toString());
-    }
-    return places;
   }
 }
 
@@ -104,7 +84,6 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   final List<Component> components;
   final bool strictbounds;
   final String region;
-  final Mode mode;
   final Widget logo;
   final ValueChanged<PlacesAutocompleteResponse> onError;
   final int debounce;
@@ -123,11 +102,17 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   final BaseClient httpClient;
 
   GlobalKey<ScaffoldState> scaffoldKey;
+
   Function(String) onSubmitted;
+
+  Function onTapTextField;
+
+  FocusNode focusNode = FocusNode();
+
+  Function(Prediction) onTapPrediction;
 
   PlacesAutocompleteWidget(
       {@required this.apiKey,
-      this.mode = Mode.fullscreen,
       this.hint = "Search",
       this.overlayBorderRadius,
       this.offset,
@@ -146,15 +131,14 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       this.httpClient,
       @required this.scaffoldKey,
       @required this.onSubmitted,
+      this.onTapTextField,
       this.startText,
+      this.onTapPrediction,
       this.debounce = 300})
       : super(key: key);
 
   @override
   State<PlacesAutocompleteWidget> createState() {
-    if (mode == Mode.fullscreen) {
-      return _PlacesAutocompleteScaffoldState();
-    }
     return _PlacesAutocompleteOverlayState();
   }
 
@@ -162,19 +146,13 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       context.ancestorStateOfType(const TypeMatcher<PlacesAutocompleteState>());
 }
 
-class _PlacesAutocompleteScaffoldState extends PlacesAutocompleteState {
-  @override
-  Widget build(BuildContext context) {
-    final appBar = AppBar(title: AppBarPlacesAutoCompleteTextField());
-    final body = PlacesAutocompleteResult(
-      onTap: Navigator.of(context).pop,
-      logo: widget.logo,
-    );
-    return Scaffold(appBar: appBar, body: body);
-  }
-}
-
 class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
+  @override
+  void dispose() {
+    widget.focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -200,6 +178,7 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
                 color: Theme.of(context).primaryColor,
                 icon: Icon(Icons.menu),
                 onPressed: () {
+                  widget.focusNode.unfocus();
                   widget.scaffoldKey.currentState.openDrawer();
                 },
               ),
@@ -221,7 +200,6 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
     final bodyBottomRightBorderRadius = widget.overlayBorderRadius != null
         ? widget.overlayBorderRadius.bottomRight
         : Radius.circular(2);
-
     if (_searching) {
       body = Stack(
         children: <Widget>[_Loader()],
@@ -250,9 +228,10 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
             children: _response.predictions
                 .map(
                   (p) => PredictionTile(
-                    prediction: p,
-                    onTap: Navigator.of(context).pop,
-                  ),
+                      prediction: p, onTap: (prediction){
+                        widget.onTapPrediction(prediction);
+                        _queryTextController.clear();
+                      }),
                 )
                 .toList(),
           ),
@@ -278,25 +257,25 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
       : Icon(Icons.arrow_back);
 
   Widget _textField(BuildContext context) => TextField(
-        controller: _queryTextController,
-        autofocus: true,
-        style: TextStyle(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.black87
-                : null,
-            fontSize: 16.0),
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          hintStyle: TextStyle(
-            color: Theme.of(context).brightness == Brightness.light
-                ? Colors.black45
-                : null,
-            fontSize: 16.0,
-          ),
-          border: InputBorder.none,
+      controller: _queryTextController,
+      focusNode: widget.focusNode,
+      style: TextStyle(
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.black87
+              : null,
+          fontSize: 16.0),
+      decoration: InputDecoration(
+        hintText: widget.hint,
+        hintStyle: TextStyle(
+          color: Theme.of(context).brightness == Brightness.light
+              ? Colors.black45
+              : null,
+          fontSize: 16.0,
         ),
-        onSubmitted: widget.onSubmitted,
-      );
+        border: InputBorder.none,
+      ),
+      onSubmitted: widget.onSubmitted,
+      onTap: widget.onTapTextField);
 }
 
 class _Loader extends StatelessWidget {
@@ -400,27 +379,6 @@ class _AppBarPlacesAutoCompleteTextFieldState
   }
 }
 
-class PoweredByGoogleImage extends StatelessWidget {
-  final _poweredByGoogleWhite =
-      "packages/flutter_google_places/assets/google_white.png";
-  final _poweredByGoogleBlack =
-      "packages/flutter_google_places/assets/google_black.png";
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Image.asset(
-            Theme.of(context).brightness == Brightness.light
-                ? _poweredByGoogleWhite
-                : _poweredByGoogleBlack,
-            scale: 2.5,
-          ))
-    ]);
-  }
-}
-
 class PredictionsListView extends StatelessWidget {
   final List<Prediction> predictions;
   final ValueChanged<Prediction> onTap;
@@ -446,14 +404,9 @@ class PredictionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.location_on),
-      title: Text(prediction.description),
-      onTap: () {
-        if (onTap != null) {
-          onTap(prediction);
-        }
-      },
-    );
+        leading: Icon(Icons.location_on),
+        title: Text(prediction.description),
+        onTap: () => onTap(prediction));
   }
 }
 
@@ -582,7 +535,6 @@ class PlacesAutocomplete {
       String startText = ""}) {
     final builder = (BuildContext ctx) => PlacesAutocompleteWidget(
           apiKey: apiKey,
-          mode: mode,
           overlayBorderRadius: overlayBorderRadius,
           language: language,
           sessionToken: sessionToken,

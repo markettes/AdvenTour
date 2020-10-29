@@ -48,6 +48,10 @@ class Place {
 
   get name => _name;
 
+  get latitude => _latitude;
+
+  get longitude => _longitude;
+
   @override
   String toString() {
     return """
