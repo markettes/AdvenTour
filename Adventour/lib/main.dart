@@ -1,11 +1,12 @@
+import 'package:Adventour/pages/custom_route_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/main_page.dart';
 import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
+import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
-import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class Adventour extends StatelessWidget {
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      initialRoute: '/mapPage',
+      initialRoute: '/customRoutePage',
       routes: {
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
@@ -28,7 +29,9 @@ class Adventour extends StatelessWidget {
         '/': (_) => RootPage(),
         '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
-        '/placePage':(_)=> PlacePage()
+        '/placePage':(_)=> PlacePage(),
+        '/routePage': (_) => RoutePage(),
+        '/customRoutePage': (_) => CustomRoutePage()
       },
     );
   }
