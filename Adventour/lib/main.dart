@@ -20,7 +20,8 @@ class Adventour extends StatelessWidget {
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      initialRoute: '/mapPage',
+      //initialRoute: '/mapPage',
+      initialRoute: '/placePage',
       routes: {
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
@@ -28,7 +29,7 @@ class Adventour extends StatelessWidget {
         '/': (_) => RootPage(),
         '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
-        '/placePage':(_)=> PlacePage()
+        '/placePage':(_)=> PlacePage(),
       },
     );
   }
