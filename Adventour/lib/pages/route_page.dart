@@ -19,6 +19,7 @@ class RoutePage extends StatelessWidget {
                     'assets/logo_adventour.png',
                     height: 180,
                   ),
+                  /*
                   Expanded(
                     flex: 3,
                     child: Row(
@@ -31,7 +32,7 @@ class RoutePage extends StatelessWidget {
                         )
                       ],
                     ),
-                  ),
+                  ),*/
                   PrimaryButton(
                     text: 'HIGHLIGHTS',
                     onPressed: () {
