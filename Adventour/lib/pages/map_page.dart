@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -19,7 +20,6 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  SearchEngine _seachEngine = SearchEngine();
   Timer _timer;
   bool _centerPositionOn = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -28,6 +28,7 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawer: Drawer(),
       body: Listener(
@@ -64,48 +65,10 @@ class _MapPageState extends State<MapPage> {
                     myLocationButtonEnabled: false,
                   );
                 }),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 3,
-                        blurRadius: 6,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  width: size.width * 0.9,
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 18.0,
-                    ),
-                    child: TextField(
-                      cursorHeight: 23,
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        border: InputBorder.none,
-                        prefixIcon: IconButton(
-                          icon: Icon(Icons.menu),
-                          onPressed: () =>
-                              _scaffoldKey.currentState.openDrawer(),
-                        ),
-                      ),
-                      onSubmitted: (value) {
-                        _search(_mapController, value);
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            SearchBar(
+                size: size,
+                scaffoldKey: _scaffoldKey,
+                mapController: _mapController),
           ],
         ),
       ),
@@ -165,14 +128,6 @@ class _MapPageState extends State<MapPage> {
   Future _changeMapStyle(GoogleMapController controller) async {
     String style = await rootBundle.loadString("assets/map_style.json");
     controller.setMapStyle(style);
-  }
-
-  Future _search(GoogleMapController controller, String query) async {
-    List<Place> places = await _seachEngine.searchByText(query);
-    for (var place in places) {
-      print(place.toString());
-    }
-    return places;
   }
 
   void _add() {
