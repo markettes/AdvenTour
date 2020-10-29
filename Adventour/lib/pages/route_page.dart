@@ -19,15 +19,18 @@ class RoutePage extends StatelessWidget {
                     'assets/logo_adventour.png',
                     height: 180,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/logo_adventour.png'),
-                      TextFormField(
-                        decoration:
-                            InputDecoration(labelText: 'Texto de ejemplo'),
-                      )
-                    ],
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/logo_adventour.png'),
+                        TextFormField(
+                          decoration:
+                              InputDecoration(labelText: 'Texto de ejemplo'),
+                        )
+                      ],
+                    ),
                   ),
                   PrimaryButton(
                     text: 'HIGHLIGHTS',
