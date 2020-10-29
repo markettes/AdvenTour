@@ -68,7 +68,8 @@ class _MapPageState extends State<MapPage> {
             SearchBar(
                 size: size,
                 scaffoldKey: _scaffoldKey,
-                mapController: _mapController),
+                mapController: _mapController,
+                addMarker:_addMarker,)
           ],
         ),
       ),
@@ -130,19 +131,9 @@ class _MapPageState extends State<MapPage> {
     controller.setMapStyle(style);
   }
 
-  void _add() {
+  void _addMarker(Marker marker) {
     // var markerIdVal = MyWayToGenerateId();
-    final MarkerId markerId = MarkerId('1');
-
-    // creating a new MARKER
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(39.531600, -0.349953),
-      infoWindow: InfoWindow(title: markerId.toString(), snippet: '*'),
-      onTap: () {
-        // _onMarkerTapped(markerId);
-      },
-    );
+    final MarkerId markerId = marker.markerId;
 
     setState(() {
       // adding a new marker to map

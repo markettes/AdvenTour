@@ -27,10 +27,16 @@ class SearchEngine {
     return places;
   }
 
-  Future<List<Place>> searchByText(String text) async {
+  Future<List<Place>> searchByText(String text,double latitude, double longitude, int radius) async {
     var url =
         'https://maps.googleapis.com/maps/api/place/textsearch/json?query=' +
             text +
+            '&location=' +
+            latitude.toString() +
+            ',' +
+            longitude.toString() +
+            '&radius=' +
+            radius.toString() +
             '&key=' +
             placesApiKey;
     Response response = await get(url);

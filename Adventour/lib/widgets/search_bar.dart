@@ -18,11 +18,13 @@ class SearchBar extends StatelessWidget {
     @required this.size,
     @required this.scaffoldKey,
     @required this.mapController,
+    @required this.addMarker,
   });
 
   final Size size;
   GlobalKey<ScaffoldState> scaffoldKey;
   GoogleMapController mapController;
+  Function(Marker) addMarker;
 
   Location _location;
   SearchEngine _searchEngine = SearchEngine();
@@ -36,17 +38,20 @@ class SearchBar extends StatelessWidget {
       location: _location,
       radius: 100,
       onSubmitted: (value) async {
-        List<Place> places = await _searchEngine.searchByText(value);
+        List<Place> places = await _searchEngine.searchByText(value,_location.lat,_location.lng,1000);
+        print(places);
         if (places.length == 1) {
           Place place = places.first;
-          print(place.latitude);
+          goToPlace(place);
+        }
+        if(places.length > 1){
           mapController.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(
-              bearing: 0,
-              target: LatLng(place.latitude, place.longitude),
-              zoom: 18.0,
-            ),
-          ));
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(_location.lat, _location.lng),
+        zoom: 8,
+      ),
+    ));
         }
       },
       onTapTextField: () async {
@@ -55,18 +60,33 @@ class SearchBar extends StatelessWidget {
         _location = Location(position.latitude, position.longitude);
       },
       onTapPrediction: (prediction) async {
-        Place place = (await _searchEngine.searchByText(prediction.description)).first;
-        print(place.toString());
-        mapController.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(
-              bearing: 0,
-              target: LatLng(place.latitude, place.longitude),
-              zoom: 18.0,
-            ),
-          ));
+        Place place =
+            (await _searchEngine.searchByText(prediction.description,_location.lat,_location.lng,1000)).first;
+        goToPlace(place);
       },
       //overlayBorderRadius: BorderRadius.circular(30),
     );
+  }
+
+  void goToPlace(Place place) {
+    mapController.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(place.latitude, place.longitude),
+        zoom: 18.0,
+      ),
+    ));
+    // creating a new MARKER
+    final MarkerId markerId = MarkerId('searchBar');
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(place.latitude, place.longitude),
+      infoWindow: InfoWindow(title: markerId.toString(), snippet: '*'),
+      onTap: () {
+        // _onMarkerTapped(markerId);
+      },
+    );
+    addMarker(marker);
   }
 }
 
@@ -228,7 +248,8 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
             children: _response.predictions
                 .map(
                   (p) => PredictionTile(
-                      prediction: p, onTap: (prediction){
+                      prediction: p,
+                      onTap: (prediction) {
                         widget.onTapPrediction(prediction);
                         _queryTextController.clear();
                       }),
@@ -259,6 +280,7 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
   Widget _textField(BuildContext context) => TextField(
       controller: _queryTextController,
       focusNode: widget.focusNode,
+      textAlignVertical: TextAlignVertical.center,
       style: TextStyle(
           color: Theme.of(context).brightness == Brightness.light
               ? Colors.black87
@@ -273,6 +295,9 @@ class _PlacesAutocompleteOverlayState extends PlacesAutocompleteState {
           fontSize: 16.0,
         ),
         border: InputBorder.none,
+        suffixIcon: IconButton(
+            icon: Icon(Icons.clear),
+            onPressed: () => _queryTextController.clear()),
       ),
       onSubmitted: widget.onSubmitted,
       onTap: widget.onTapTextField);
