@@ -1,16 +1,10 @@
 import 'dart:async';
 
-import 'package:Adventour/controllers/search_engine.dart';
-import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:Adventour/models/Place.dart';
-
-const kGoogleApiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
 
 class MapPage extends StatefulWidget {
   @override
@@ -20,12 +14,9 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  Timer _timer;
-  bool _centerPositionOn = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -48,17 +39,12 @@ class _MapPageState extends State<MapPage> {
             setState(() {
               _fixedPosition = true;
             });
-
-            // try {
-            //   _currentLocationR();
-            // } on PlatformException catch (err) {
-            //   return err;
-            // }
           }
         },
         child: Icon(
           Icons.gps_fixed,
-          color: _fixedPosition ? Colors.blue[200] : Theme.of(context).buttonColor,
+          color:
+              _fixedPosition ? Colors.blue[200] : Theme.of(context).buttonColor,
         ),
       ),
       body: Stack(
@@ -71,7 +57,7 @@ class _MapPageState extends State<MapPage> {
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 Position position = snapshot.data;
                 return Listener(
-                                  child: GoogleMap(
+                  child: GoogleMap(
                     onMapCreated: _onMapCreated,
                     zoomControlsEnabled: false,
                     markers: Set<Marker>.of(_markers.values),
@@ -83,7 +69,7 @@ class _MapPageState extends State<MapPage> {
                     myLocationButtonEnabled: false,
                   ),
                   onPointerMove: (event) {
-                    if(_fixedPosition)
+                    if (_fixedPosition)
                       setState(() {
                         _fixedPosition = false;
                       });
@@ -97,7 +83,7 @@ class _MapPageState extends State<MapPage> {
                 if (snapshot.hasError) print(snapshot.error);
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 _position = snapshot.data;
-                if (_fixedPosition){
+                if (_fixedPosition) {
                   _mapController.animateCamera(CameraUpdate.newCameraPosition(
                     CameraPosition(
                       target: LatLng(_position.latitude, _position.longitude),
@@ -105,13 +91,18 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ));
                 }
-                  
+
                 return SearchBar(
                   size: size,
                   scaffoldKey: _scaffoldKey,
                   mapController: _mapController,
                   addMarker: _addMarker,
                   position: _position,
+                  onTapTextField: () {
+                    setState(() {
+                      _fixedPosition = false;
+                    });
+                  },
                 );
               })
         ],
@@ -119,37 +110,9 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _centerScreen() async {
-    Position position;
-    try {
-      position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-    } on Exception {
-      position = null;
-    }
-
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(position.latitude, position.longitude),
-        zoom: 18.0,
-      ),
-    ));
-  }
-
-  void _currentLocationR() {
-    if (!_centerPositionOn) {
-      _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-        _centerScreen();
-        _centerPositionOn = true;
-      });
-    }
-  }
-
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
-    //_searchRestaurants(controller);
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
@@ -162,7 +125,6 @@ class _MapPageState extends State<MapPage> {
     final MarkerId markerId = marker.markerId;
 
     setState(() {
-      // adding a new marker to map
       _markers[markerId] = marker;
     });
   }

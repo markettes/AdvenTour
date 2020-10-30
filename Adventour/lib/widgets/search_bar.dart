@@ -20,6 +20,7 @@ class SearchBar extends StatelessWidget {
     @required this.mapController,
     @required this.addMarker,
     @required this.position,
+    @required this.onTapTextField,
   });
 
   final Size size;
@@ -27,40 +28,55 @@ class SearchBar extends StatelessWidget {
   GoogleMapController mapController;
   Function(Marker) addMarker;
   Position position;
+  Function onTapTextField;
 
   SearchEngine _searchEngine = SearchEngine();
 
   @override
   Widget build(BuildContext context) {
-    return PlacesAutocompleteWidget(
-      apiKey: _searchEngine.placesApiKey,
-      logo: null,
-      scaffoldKey: scaffoldKey,
-      location: Location(position.latitude,position.longitude),
-      radius: 100,
-      onSubmitted: (value) async {
-        List<Place> places = await _searchEngine.searchByText(
-            value, position.latitude,position.longitude, 1000);
-        if (places.length == 1) {
-          Place place = places.first;
-          goToPlace(place);
-        }
-        if (places.length > 1) {
-          mapController.animateCamera(CameraUpdate.newCameraPosition(
-            CameraPosition(
-              bearing: 0,
-              target: LatLng(position.latitude,position.longitude),
-              zoom: 8,
-            ),
-          ));
-        }
-      },
-      onTapPrediction: (prediction) async {
-        Place place = (await _searchEngine.searchByText(
-                prediction.description, position.latitude,position.longitude, 1000))
-            .first;
-        goToPlace(place);
-      },
+    return Stack(
+      children: [
+        Listener(
+          child: Container(color: Colors.red),
+          onPointerDown: (event) {
+            
+          },
+        ),
+        PlacesAutocompleteWidget(
+          apiKey: _searchEngine.placesApiKey,
+          logo: null,
+          scaffoldKey: scaffoldKey,
+          location: Location(position.latitude, position.longitude),
+          radius: 100,
+          onSubmitted: (value) async {
+            List<Place> places = await _searchEngine.searchByText(
+                value, position.latitude, position.longitude, 1000);
+            if (places.length == 1) {
+              Place place = places.first;
+              goToPlace(place);
+            }
+            if (places.length > 1) {
+              mapController.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  bearing: 0,
+                  target: LatLng(position.latitude, position.longitude),
+                  zoom: 8,
+                ),
+              ));
+            }
+          },
+          onTapTextField: onTapTextField,
+          onTapPrediction: (prediction) async {
+            Place place = (await _searchEngine.searchByText(
+                    prediction.description,
+                    position.latitude,
+                    position.longitude,
+                    1000))
+                .first;
+            goToPlace(place);
+          },
+        ),
+      ],
     );
   }
 
@@ -444,7 +460,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
   @override
   void initState() {
     super.initState();
-    _queryTextController = TextEditingController(text: widget.startText);
+    
 
     _places = GoogleMapsPlaces(
         apiKey: widget.apiKey,
