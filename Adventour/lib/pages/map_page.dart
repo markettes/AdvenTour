@@ -79,25 +79,34 @@ class _MapPageState extends State<MapPage> {
                   },
                 );
               }),
-          StreamBuilder(
-              stream: Geolocator.getPositionStream(
-                  desiredAccuracy: LocationAccuracy.medium),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) print(snapshot.error);
-                if (!snapshot.hasData) return CircularProgressIndicator();
-                _position = snapshot.data;
-                if (_fixedPosition) {
-                  _mapController.animateCamera(CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                      target: LatLng(_position.latitude, _position.longitude),
-                      zoom: 18.0,
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  MaterialButton(
+                    child: Icon(
+                      Icons.menu,
+                      color: Theme.of(context).buttonColor,
                     ),
-                  ));
-                }
-
-                return SafeArea(
-                  child: SquareIconButton(
-                    icon: Icons.search,
+                    // fillColor: Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColor,
+                    height: 53,
+                    elevation: 15,
+                    shape: CircleBorder(),
+                    onPressed: () {
+                      _scaffoldKey.currentState.openDrawer();
+                    },
+                  ),
+                  MaterialButton(
+                    child: Icon(
+                      Icons.search,
+                      color: Theme.of(context).buttonColor,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    height: 53,
+                    shape: CircleBorder(),
                     onPressed: () async {
                       setState(() {
                         _fixedPosition = false;
@@ -111,23 +120,28 @@ class _MapPageState extends State<MapPage> {
                           addMarker: _addMarker);
                     },
                   ),
-                );
-
-                // return IconButton(
-                //     icon: Icon(Icons.search),
-                //     onPressed: () async {
-                //       setState(() {
-                //         _fixedPosition = false;
-                //       });
-                //       Prediction prediction = await PlacesAutocomplete.show(
-                //           context: context,
-                //           apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
-                //           location:
-                //               Location(_position.latitude, _position.longitude),
-                //           mapController: _mapController,
-                //           addMarker: _addMarker);
-                //     });
-              })
+                ],
+              ),
+            ),
+          ),
+          StreamBuilder(
+            stream: Geolocator.getPositionStream(
+                desiredAccuracy: LocationAccuracy.medium),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              if (!snapshot.hasData) return CircularProgressIndicator();
+              _position = snapshot.data;
+              if (_fixedPosition) {
+                _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    target: LatLng(_position.latitude, _position.longitude),
+                    zoom: 18.0,
+                  ),
+                ));
+              }
+              return Container();
+            },
+          ),
         ],
       ),
     );
