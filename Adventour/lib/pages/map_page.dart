@@ -17,6 +17,15 @@ class _MapPageState extends State<MapPage> {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   SearchEngine _seachEngine = SearchEngine();
 
+  List<CategoryCheckbox> buttons = [
+    CategoryCheckbox("Restaurant", Icons.restaurant),
+    CategoryCheckbox("Park", Icons.park),
+    CategoryCheckbox("Museum", Icons.museum),
+    CategoryCheckbox("Beach Access", Icons.beach_access),
+    CategoryCheckbox("Restaurant", Icons.restaurant),
+    CategoryCheckbox("Restaurant", Icons.restaurant),
+  ];
+
   @override
   Widget build(BuildContext context) {
     _add();
@@ -52,18 +61,16 @@ class _MapPageState extends State<MapPage> {
           Container(
             height: 40,
             alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(top: 50, left: 20, right: 20),
+            margin: EdgeInsets.only(
+              top: 50,
+            ),
             //padding: EdgeInsets.fromLTRB(10, 5, 5, 5),
-            child: ListView(
+            child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              children: [
-                CategoryCheckbox("Restaurant", Icons.restaurant),
-                CategoryCheckbox("park", Icons.park),
-                CategoryCheckbox("Restaurant", Icons.museum),
-                CategoryCheckbox("Restaurant", Icons.beach_access),
-                CategoryCheckbox("Restaurant", Icons.restaurant),
-                CategoryCheckbox("Restaurant", Icons.restaurant),
-              ],
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return buttons[index];
+              },
               physics: BouncingScrollPhysics(),
             ),
           ),

@@ -5,30 +5,35 @@ class CategoryCheckbox extends StatefulWidget {
 
   final String category;
   final IconData icon;
+  bool _active = false;
 
   @override
   _CategoryCheckboxState createState() => _CategoryCheckboxState();
 }
 
 class _CategoryCheckboxState extends State<CategoryCheckbox> {
-  bool _active = true;
+  double _opacity = 0.5;
   void _onTap() {
     setState(() {
-      _active = !_active;
+      widget._active = !widget._active;
+      _opacity = widget._active ? 1.0 : 0.5;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      color: Theme.of(context).primaryColor,
-      shape: CircleBorder(),
-      onPressed: _onTap,
-      child: Center(
-          child: Icon(
-        widget.icon,
-        color: Colors.white,
-      )),
+    return Opacity(
+      opacity: _opacity,
+      child: FlatButton(
+        color: Theme.of(context).primaryColor,
+        shape: CircleBorder(),
+        onPressed: _onTap,
+        child: Center(
+            child: Icon(
+          widget.icon,
+          color: Colors.white,
+        )),
+      ),
     );
   }
 }
