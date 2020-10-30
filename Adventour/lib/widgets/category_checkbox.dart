@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CategoryCheckbox extends StatefulWidget {
-  CategoryCheckbox(this.category);
+  CategoryCheckbox(this.category, this.icon);
 
   final String category;
+  final IconData icon;
 
   @override
   _CategoryCheckboxState createState() => _CategoryCheckboxState();
@@ -11,7 +12,6 @@ class CategoryCheckbox extends StatefulWidget {
 
 class _CategoryCheckboxState extends State<CategoryCheckbox> {
   bool _active = true;
-
   void _onTap() {
     setState(() {
       _active = !_active;
@@ -23,13 +23,11 @@ class _CategoryCheckboxState extends State<CategoryCheckbox> {
     return FlatButton(
       color: Theme.of(context).primaryColor,
       shape: CircleBorder(),
-      padding: EdgeInsets.all(10),
       onPressed: _onTap,
       child: Center(
-          child: Column(
-        children: [
-          Icon(Icons.ac_unit),
-        ],
+          child: Icon(
+        widget.icon,
+        color: Colors.white,
       )),
     );
   }
