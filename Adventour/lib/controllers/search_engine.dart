@@ -47,3 +47,5 @@ class SearchEngine {
     return places;
   }
 }
+
+SearchEngine searchEngine = SearchEngine();

@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:Adventour/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:Adventour/pages/search_page.dart';
+import 'package:google_maps_webservice/src/core.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -92,18 +93,20 @@ class _MapPageState extends State<MapPage> {
                   ));
                 }
 
-                return SearchBar(
-                  size: size,
-                  scaffoldKey: _scaffoldKey,
-                  mapController: _mapController,
-                  addMarker: _addMarker,
-                  position: _position,
-                  onTapTextField: () {
-                    setState(() {
-                      _fixedPosition = false;
+                return IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      setState(() {
+                        _fixedPosition = false;
+                      });
+                      PlacesAutocomplete.show(
+                          context: context,
+                          apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+                          location:
+                              Location(_position.latitude, _position.longitude),
+                          mapController: _mapController,
+                          addMarker: _addMarker);
                     });
-                  },
-                );
               })
         ],
       ),
