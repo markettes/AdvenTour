@@ -71,30 +71,29 @@ class _MapPageState extends State<MapPage> {
                 if (snapshot.hasError) print(snapshot.error);
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 Position position = snapshot.data;
-                return GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  zoomControlsEnabled: false,
-                  markers: Set<Marker>.of(_markers.values),
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(position.latitude, position.longitude),
-                    zoom: 11.0,
+                return Listener(
+                                  child: GoogleMap(
+                    onMapCreated: _onMapCreated,
+                    zoomControlsEnabled: false,
+                    markers: Set<Marker>.of(_markers.values),
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(position.latitude, position.longitude),
+                      zoom: 11.0,
+                    ),
+                    onCameraIdle: () {
+                      if(_fixedPosition)
+                      _centeredPosition = true;
+                    },
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
                   ),
-                  onTap: (position) {
-
-                  },
-                  onCameraIdle: () {
-                    if(_fixedPosition)
-                    _centeredPosition = true;
-                  },
-                  onCameraMove: (position) {
+                  onPointerMove: (event) {
                     if(_centeredPosition)
-                    setState(() {
-                      _centeredPosition = false;
-                      _fixedPosition = false;
-                    });
+                      setState(() {
+                        _centeredPosition = false;
+                        _fixedPosition = false;
+                      });
                   },
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
                 );
               }),
           StreamBuilder(
@@ -104,13 +103,15 @@ class _MapPageState extends State<MapPage> {
                 if (snapshot.hasError) print(snapshot.error);
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 _position = snapshot.data;
-                if (_fixedPosition)
+                if (_fixedPosition){
                   _mapController.animateCamera(CameraUpdate.newCameraPosition(
                     CameraPosition(
                       target: LatLng(_position.latitude, _position.longitude),
                       zoom: 18.0,
                     ),
                   ));
+                }
+                  
                 return SearchBar(
                   size: size,
                   scaffoldKey: _scaffoldKey,
