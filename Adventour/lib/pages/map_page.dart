@@ -1,12 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import "package:google_maps_webservice/places.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart' as Geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart' as Location;
+import 'package:http/http.dart';
+import 'package:location/location.dart' as Locationn;
 
 class MapPage extends StatefulWidget {
   @override
@@ -22,7 +26,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    _add();
+    //_add();
     return Scaffold(
       body: Listener(
         onPointerDown: (e) {
@@ -48,9 +52,7 @@ class _MapPageState extends State<MapPage> {
                   target: currentPosition,
                   zoom: 11.0,
                 ),
-                onTap: (position) {
-                  print(position);
-                },
+                onTap: _handleTap,
                 myLocationEnabled: true,
                 myLocationButtonEnabled: false,
               );
@@ -78,8 +80,8 @@ class _MapPageState extends State<MapPage> {
 
   void _currentLocation() async {
     final GoogleMapController controller = _mapController;
-    Location.LocationData currentLocation;
-    var location = new Location.Location();
+    Locationn.LocationData currentLocation;
+    var location = new Locationn.Location();
     try {
       currentLocation = await location.getLocation();
     } on Exception {
@@ -140,6 +142,88 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       // adding a new marker to map
       _markers[markerId] = marker;
+    });
+  }
+
+  void _handleTap(LatLng point) {
+    setState(() {
+      _nearPlaces(point);
+    });
+  }
+
+  /*
+                 * Cuando haces click en un lugar con sitios cercanos se centra en el lugar pero si no hay ningun lugar próximo se va exactamente
+                 * a donde has pulsado, si ha encontrado un sitio cercano estará en la variable local "placeDef" del metodo
+                 */
+  Future<void> _nearPlaces(LatLng point) async {
+    //List<Geo.Placemark> placemark = await Geo.placemarkFromCoordinates(point.latitude,point.longitude);
+    //List<Geo.Location> locations = await Geo.locationFromAddress("Gronausestraat 710, Enschede");
+
+    String apiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
+    var url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
+            point.latitude.toString() +
+            ',' +
+            point.longitude.toString() +
+            '&radius=50&key=' +
+            apiKey;
+
+    Response responsePlaces = await get(url);
+    var decoded = json.decode(responsePlaces.body);
+    List results = decoded["results"];
+    List<Place> places =
+        results.map((place) => Place.fromGoogleMaps(place)).toList();
+
+    //GoogleMapsPlaces places = new GoogleMapsPlaces(apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho");
+    //PlacesSearchResponse response = await places.searchNearbyWithRadius(new Location(point.latitude,point.longitude), 500);
+    //PlacesDetailsResponse responsee = await places.getDetailsByPlaceId("PLACE_ID");
+
+    num menor = 10;
+    Place placeDef;
+    for (var place in places) {
+      var _distanceInMeters = Geolocator.distanceBetween(
+          point.latitude, point.longitude, place.latitude, place.longitude);
+      if (_distanceInMeters < menor) {
+        menor = _distanceInMeters;
+        placeDef = place;
+      }
+    }
+
+    GoogleMapsPlaces placesGM = new GoogleMapsPlaces(apiKey: apiKey);
+    if (placeDef != null) {
+      //debugging nombre place
+      PlacesDetailsResponse response =
+          await placesGM.getDetailsByPlaceId(placeDef.id);
+      print("***********************");
+      PlaceDetails r = response.result;
+      print(r.name);
+      print(r.rating);
+      print(r.formattedAddress);
+      print(r.formattedPhoneNumber);
+
+      List<Review> revs = r.reviews;
+      if (revs != null) {
+        for (var review in revs) {
+          print(review.authorName + ": " + review.text);
+        }
+      }
+    }
+
+    LatLng newPoint;
+    if (placeDef == null) {
+      newPoint = point;
+    } else {
+      newPoint = new LatLng(placeDef.latitude, placeDef.longitude);
+    }
+
+    setState(() {
+      Marker newMarker = Marker(
+        markerId: MarkerId(newPoint.toString()),
+        position: newPoint,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      );
+      _markers.clear();
+      _markers[MarkerId(newPoint.toString())] = newMarker;
     });
   }
 }

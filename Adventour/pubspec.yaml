@@ -30,6 +30,7 @@ dependencies:
   firebase_core: ^0.5.0+1
   flutter_google_places: ^0.2.6
   geolocator: ^6.1.0
+  geocoding: ^1.0.2
   google_maps_flutter: ^0.5.27+3
   google_sign_in: ^4.5.5
   http: ^0.12.2
