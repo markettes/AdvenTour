@@ -25,7 +25,6 @@ class _MapPageState extends State<MapPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
-  bool _centeredPosition = false;
   
 
   @override
@@ -80,17 +79,12 @@ class _MapPageState extends State<MapPage> {
                       target: LatLng(position.latitude, position.longitude),
                       zoom: 11.0,
                     ),
-                    onCameraIdle: () {
-                      if(_fixedPosition)
-                      _centeredPosition = true;
-                    },
                     myLocationEnabled: true,
                     myLocationButtonEnabled: false,
                   ),
                   onPointerMove: (event) {
-                    if(_centeredPosition)
+                    if(_fixedPosition)
                       setState(() {
-                        _centeredPosition = false;
                         _fixedPosition = false;
                       });
                   },
