@@ -23,6 +23,9 @@ class _MapPageState extends State<MapPage> {
   Timer _timer;
   bool _centerPositionOn = false;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Position _position;
+  bool _fixedPosition = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -31,64 +34,86 @@ class _MapPageState extends State<MapPage> {
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawer: Drawer(),
-      body: Listener(
-        onPointerDown: (e) {
-          if (_centerPositionOn) {
-            _timer.cancel();
-            _centerPositionOn = false;
-          }
-        },
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            FutureBuilder(
-                future: Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.bestForNavigation),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) print(snapshot.error);
-                  if (!snapshot.hasData) return CircularProgressIndicator();
-                  Position position = snapshot.data;
-                  LatLng currentPosition =
-                      LatLng(position.latitude, position.longitude);
-                  return GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    zoomControlsEnabled: false,
-                    markers: Set<Marker>.of(_markers.values),
-                    initialCameraPosition: CameraPosition(
-                      target: currentPosition,
-                      zoom: 11.0,
-                    ),
-                    onTap: (position) {
-                      print(position);
-                    },
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: false,
-                  );
-                }),
-            SearchBar(
-                size: size,
-                scaffoldKey: _scaffoldKey,
-                mapController: _mapController,
-                addMarker:_addMarker,)
-          ],
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () async {
-          if (await Geolocator.isLocationServiceEnabled()) {
-            try {
-              _currentLocationR();
-            } on PlatformException catch (err) {
-              return err;
-            }
+          if (_position != null) {
+            _mapController.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                bearing: 0,
+                target: LatLng(_position.latitude, _position.longitude),
+                zoom: 18.0,
+              ),
+            ));
+            setState(() {
+              _fixedPosition = true;
+              print(_fixedPosition);
+            });
+
+            // try {
+            //   _currentLocationR();
+            // } on PlatformException catch (err) {
+            //   return err;
+            // }
           }
         },
-        isExtended: false,
         child: Icon(
           Icons.gps_fixed,
-          color: Theme.of(context).buttonColor,
+          color: _fixedPosition ? Colors.black : Theme.of(context).buttonColor,
         ),
+      ),
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          FutureBuilder(
+              future: Geolocator.getLastKnownPosition(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                Position position = snapshot.data;
+                return GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  zoomControlsEnabled: false,
+                  markers: Set<Marker>.of(_markers.values),
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(position.latitude, position.longitude),
+                    zoom: 11.0,
+                  ),
+                  onTap: (position) {
+                    print(position);
+                  },
+                  onCameraMove: (position) {
+                    // setState(() {
+                    //   _fixedPosition = false;
+                    // });
+                  },
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                );
+              }),
+          StreamBuilder(
+              stream: Geolocator.getPositionStream(
+                  desiredAccuracy: LocationAccuracy.medium),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                _position = snapshot.data;
+                if (_fixedPosition)
+                  _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: LatLng(_position.latitude, _position.longitude),
+                      zoom: 18.0,
+                    ),
+                  ));
+                return SearchBar(
+                  size: size,
+                  scaffoldKey: _scaffoldKey,
+                  mapController: _mapController,
+                  addMarker: _addMarker,
+                  position: _position,
+                );
+              })
+        ],
       ),
     );
   }

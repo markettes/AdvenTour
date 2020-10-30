@@ -19,14 +19,15 @@ class SearchBar extends StatelessWidget {
     @required this.scaffoldKey,
     @required this.mapController,
     @required this.addMarker,
+    @required this.position,
   });
 
   final Size size;
   GlobalKey<ScaffoldState> scaffoldKey;
   GoogleMapController mapController;
   Function(Marker) addMarker;
+  Position position;
 
-  Location _location;
   SearchEngine _searchEngine = SearchEngine();
 
   @override
@@ -35,36 +36,31 @@ class SearchBar extends StatelessWidget {
       apiKey: _searchEngine.placesApiKey,
       logo: null,
       scaffoldKey: scaffoldKey,
-      location: _location,
+      location: Location(position.latitude,position.longitude),
       radius: 100,
       onSubmitted: (value) async {
-        List<Place> places = await _searchEngine.searchByText(value,_location.lat,_location.lng,1000);
-        print(places);
+        List<Place> places = await _searchEngine.searchByText(
+            value, position.latitude,position.longitude, 1000);
         if (places.length == 1) {
           Place place = places.first;
           goToPlace(place);
         }
-        if(places.length > 1){
+        if (places.length > 1) {
           mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(_location.lat, _location.lng),
-        zoom: 8,
-      ),
-    ));
+            CameraPosition(
+              bearing: 0,
+              target: LatLng(position.latitude,position.longitude),
+              zoom: 8,
+            ),
+          ));
         }
       },
-      onTapTextField: () async {
-        Position position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.bestForNavigation);
-        _location = Location(position.latitude, position.longitude);
-      },
       onTapPrediction: (prediction) async {
-        Place place =
-            (await _searchEngine.searchByText(prediction.description,_location.lat,_location.lng,1000)).first;
+        Place place = (await _searchEngine.searchByText(
+                prediction.description, position.latitude,position.longitude, 1000))
+            .first;
         goToPlace(place);
       },
-      //overlayBorderRadius: BorderRadius.circular(30),
     );
   }
 
@@ -76,7 +72,6 @@ class SearchBar extends StatelessWidget {
         zoom: 18.0,
       ),
     ));
-    // creating a new MARKER
     final MarkerId markerId = MarkerId('searchBar');
     final Marker marker = Marker(
       markerId: markerId,
