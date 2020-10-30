@@ -95,7 +95,8 @@ class _MapPageState extends State<MapPage> {
                   ));
                 }
 
-                return SquareIconButton(
+                return SafeArea(
+                  child: SquareIconButton(
                     icon: Icons.search,
                     onPressed: () async {
                       setState(() {
@@ -108,7 +109,9 @@ class _MapPageState extends State<MapPage> {
                               Location(_position.latitude, _position.longitude),
                           mapController: _mapController,
                           addMarker: _addMarker);
-                    });
+                    },
+                  ),
+                );
 
                 // return IconButton(
                 //     icon: Icon(Icons.search),
