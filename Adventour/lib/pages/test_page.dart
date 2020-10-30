@@ -18,7 +18,7 @@ class TestPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Center(
-              child: CategoryCheckbox("hola"),
+              child: CategoryCheckbox("hola", Icons.restaurant),
             ),
           ],
         ),

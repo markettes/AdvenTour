@@ -1,5 +1,6 @@
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/widgets/category_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,30 +21,54 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     _add();
     return Scaffold(
-      body: FutureBuilder(
-          future: Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            if (!snapshot.hasData) return CircularProgressIndicator();
-            Position position = snapshot.data;
-            LatLng currentPosition =
-                LatLng(position.latitude, position.longitude);
-            return GoogleMap(
-              onMapCreated: _onMapCreated,
-              zoomControlsEnabled: false,
-              markers: Set<Marker>.of(_markers.values),
-              initialCameraPosition: CameraPosition(
-                target: currentPosition,
-                zoom: 11.0,
-              ),
-              onTap: (position) {
-                print(position);
-              },
-              myLocationEnabled: true,
-              myLocationButtonEnabled: false,
-            );
-          }),
+      body: Stack(
+        alignment: AlignmentDirectional.topCenter,
+        children: [
+          FutureBuilder(
+              future: Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                if (!snapshot.hasData)
+                  return Center(child: CircularProgressIndicator());
+                Position position = snapshot.data;
+                LatLng currentPosition =
+                    LatLng(position.latitude, position.longitude);
+                return GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  zoomControlsEnabled: false,
+                  markers: Set<Marker>.of(_markers.values),
+                  initialCameraPosition: CameraPosition(
+                    target: currentPosition,
+                    zoom: 11.0,
+                  ),
+                  onTap: (position) {
+                    print(position);
+                  },
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                );
+              }),
+          Container(
+            height: 40,
+            alignment: Alignment.topCenter,
+            margin: EdgeInsets.only(top: 50, left: 20, right: 20),
+            //padding: EdgeInsets.fromLTRB(10, 5, 5, 5),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                CategoryCheckbox("Restaurant", Icons.restaurant),
+                CategoryCheckbox("park", Icons.park),
+                CategoryCheckbox("Restaurant", Icons.museum),
+                CategoryCheckbox("Restaurant", Icons.beach_access),
+                CategoryCheckbox("Restaurant", Icons.restaurant),
+                CategoryCheckbox("Restaurant", Icons.restaurant),
+              ],
+              physics: BouncingScrollPhysics(),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: _currentLocation,
