@@ -25,6 +25,7 @@ class _MapPageState extends State<MapPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
+  bool _centeredPosition = false;
   
 
   @override
@@ -47,7 +48,6 @@ class _MapPageState extends State<MapPage> {
             ));
             setState(() {
               _fixedPosition = true;
-              print(_fixedPosition);
             });
 
             // try {
@@ -59,7 +59,7 @@ class _MapPageState extends State<MapPage> {
         },
         child: Icon(
           Icons.gps_fixed,
-          color: _fixedPosition ? Colors.black : Theme.of(context).buttonColor,
+          color: _fixedPosition ? Colors.blue[200] : Theme.of(context).buttonColor,
         ),
       ),
       body: Stack(
@@ -80,12 +80,18 @@ class _MapPageState extends State<MapPage> {
                     zoom: 11.0,
                   ),
                   onTap: (position) {
-                    print(position);
+
+                  },
+                  onCameraIdle: () {
+                    if(_fixedPosition)
+                    _centeredPosition = true;
                   },
                   onCameraMove: (position) {
-                    // setState(() {
-                    //   _fixedPosition = false;
-                    // });
+                    if(_centeredPosition)
+                    setState(() {
+                      _centeredPosition = false;
+                      _fixedPosition = false;
+                    });
                   },
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
