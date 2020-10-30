@@ -2,29 +2,33 @@ import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
-
+import 'package:Adventour/models/Place.dart';
+import "package:google_maps_webservice/places.dart";
 
 int numeroComentarios = 0;
 
 class PlacePage extends StatelessWidget {
+  final PlaceDetails _place;
+  PlacePage(this._place);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nombre tienda'),
+        title: Text(_place.name),
+        
       ),
       body: Column(
         children: <Widget>[
-          InfoSuper(),
+          InfoSuper(place: _place),
           InfoMiddle(),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                InfoBut(icon: Icons.gps_fixed, text: "Carrer"),
-                InfoBut(icon: Icons.local_phone, text: "Carrer"),
-                InfoBut(icon: Icons.access_alarm_outlined, text: "Carrer"),
-                InfoBut(icon: Icons.calendar_today, text: "Carrer"),
+                InfoBut(icon: Icons.gps_fixed, text: "${_place.formattedAddress}"),
+                InfoBut(icon: Icons.local_phone, text: "${_place.formattedPhoneNumber}"),
+                InfoBut(icon: Icons.access_alarm_outlined, text: "${_place.name}"),
+                InfoBut(icon: Icons.calendar_today, text: openAndClose()),
                 Divider(
                   thickness: 5,
                   color: Theme.of(context).primaryColor,
@@ -32,7 +36,7 @@ class PlacePage extends StatelessWidget {
                 
               ],
             ),
-            
+
           ),
           InfoBottom(),
           CommentsBar(),
@@ -40,6 +44,33 @@ class PlacePage extends StatelessWidget {
       ),
     );
   }
+
+    String itsDefined(String text) {
+    if(text == null){return "No definido";}
+    else{return text;}
+  }
+
+    String mostrarNombre(){
+      if(_place.name.isEmpty){
+        return "No definido";
+      }
+      else{
+        return _place.name;
+        }
+    }
+
+  String openAndClose(){
+    int dia; 
+    if(DateTime.now().weekday==7){dia = 0;}
+    else{dia=DateTime.now().weekday;}
+    if(_place.openingHours==null){return "No defined";}
+    else{
+    String numHorasAbierto = "${_place.openingHours.periods[dia-1].open.time}";
+    String horasAbierto = numHorasAbierto.substring(0,2) + " : " + numHorasAbierto.substring(2,4);
+    String numHorasCerrado = "${_place.openingHours.periods[6].close.time}";
+    String horasCerrado = numHorasCerrado.substring(0,2) + " : " + numHorasCerrado.substring(2,4);
+    return horasAbierto + " - "  + horasCerrado;
+  }}
 }
 
 class InfoBut extends StatelessWidget {
@@ -52,7 +83,8 @@ class InfoBut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    if(this.text == null){
+      return Container(
       child: Row(
         children: <Widget>[
           Icon(
@@ -60,15 +92,38 @@ class InfoBut extends StatelessWidget {
             color: Theme.of(context).primaryColor,
             size: 35,
           ),
-          Text(
-            "$text",
-            style: TextStyle(
-              fontSize: 25,
+          Expanded(
+                      child: Text(
+              "${this.text}",
+              style: TextStyle(
+                fontSize: 20,
+              ),
             ),
           ),
         ],
       ),
     );
+    }
+    else{return Container(
+      child: Row(
+        children: <Widget>[
+          Icon(
+            icon,
+            color: Theme.of(context).primaryColor,
+            size: 35,
+          ),
+          Expanded(
+                      child: Text(
+              "${this.text}",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );}
+    
   }
 }
 
@@ -109,17 +164,19 @@ class InfoMiddle extends StatelessWidget {
     }
 
 class InfoSuper extends StatelessWidget {
+    final PlaceDetails place;
+    const InfoSuper({
+      @required this.place,
+    });
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/rosquilleta.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
+      /*child: Image.network(
+            "https://maps.googleapis.com/maps/api/place/photo?" + "${this.place.photos[0].photoReference}",
+            fit: BoxFit.cover,
+            ),*/
+        );
   }
 }
 class InfoBottom extends StatelessWidget {

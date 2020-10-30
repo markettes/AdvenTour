@@ -12,6 +12,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:location/location.dart' as Locationn;
 
+import 'place_page.dart';
+
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -23,7 +25,7 @@ class _MapPageState extends State<MapPage> {
   SearchEngine _seachEngine = SearchEngine();
   Timer _timer;
   bool _centerPositionOn = false;
-
+  
   @override
   Widget build(BuildContext context) {
     //_add();
@@ -158,7 +160,7 @@ class _MapPageState extends State<MapPage> {
   Future<void> _nearPlaces(LatLng point) async {
     //List<Geo.Placemark> placemark = await Geo.placemarkFromCoordinates(point.latitude,point.longitude);
     //List<Geo.Location> locations = await Geo.locationFromAddress("Gronausestraat 710, Enschede");
-
+    PlaceDetails r;
     String apiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
     var url =
         'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
@@ -195,17 +197,21 @@ class _MapPageState extends State<MapPage> {
       PlacesDetailsResponse response =
           await placesGM.getDetailsByPlaceId(placeDef.id);
       print("***********************");
-      PlaceDetails r = response.result;
+      r = response.result;
       print(r.name);
       print(r.rating);
       print(r.formattedAddress);
       print(r.formattedPhoneNumber);
+      //periods[]
+      if(r.photos !=null ) print(r.photos[0]);
+      
 
       List<Review> revs = r.reviews;
       if (revs != null) {
         for (var review in revs) {
           print(review.authorName + ": " + review.text);
         }
+        //review.rating + ", " + review.profile_photo_url
       }
     }
 
@@ -225,5 +231,7 @@ class _MapPageState extends State<MapPage> {
       _markers.clear();
       _markers[MarkerId(newPoint.toString())] = newMarker;
     });
+     //Navigator.of(context).pushNamed('/placePage');
+     Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlacePage(r)));
   }
 }
