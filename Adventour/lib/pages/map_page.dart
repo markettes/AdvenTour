@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
+import 'package:google_maps_webservice/src/places.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -93,13 +95,13 @@ class _MapPageState extends State<MapPage> {
                   ));
                 }
 
-                return IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
+                return SquareIconButton(
+                    icon: Icons.search,
+                    onPressed: () async {
                       setState(() {
                         _fixedPosition = false;
                       });
-                      PlacesAutocomplete.show(
+                      Prediction prediction = await PlacesAutocomplete.show(
                           context: context,
                           apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
                           location:
@@ -107,6 +109,21 @@ class _MapPageState extends State<MapPage> {
                           mapController: _mapController,
                           addMarker: _addMarker);
                     });
+
+                // return IconButton(
+                //     icon: Icon(Icons.search),
+                //     onPressed: () async {
+                //       setState(() {
+                //         _fixedPosition = false;
+                //       });
+                //       Prediction prediction = await PlacesAutocomplete.show(
+                //           context: context,
+                //           apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+                //           location:
+                //               Location(_position.latitude, _position.longitude),
+                //           mapController: _mapController,
+                //           addMarker: _addMarker);
+                //     });
               })
         ],
       ),

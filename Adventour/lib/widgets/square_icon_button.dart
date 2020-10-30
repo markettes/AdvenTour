@@ -17,7 +17,7 @@ class SquareIconButton extends StatelessWidget {
       constraints: BoxConstraints(minWidth: 0),
       child: Icon(
         icon,
-        size: 35,
+        size: 30,
         color: Colors.white,
       ),
       padding: EdgeInsets.all(6),
