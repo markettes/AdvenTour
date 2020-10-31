@@ -51,7 +51,7 @@ class _MapPageState extends State<MapPage> {
         ),
       ),
       body: Stack(
-        alignment: Alignment.topCenter,
+        alignment: Alignment.topRight,
         children: [
           FutureBuilder(
               future: Geolocator.getLastKnownPosition(),
@@ -80,64 +80,62 @@ class _MapPageState extends State<MapPage> {
                 );
               }),
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // MaterialButton(
-                  //   child: Icon(
-                  //     Icons.menu,
-                  //     color: Theme.of(context).buttonColor,
-                  //   ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 53,
-                  //   elevation: 15,
-                  //   shape: CircleBorder(),
-                  //   onPressed: () {
-                  //     _scaffoldKey.currentState.openDrawer();
-                  //   },
-                  // ),
-                  Padding(
-                    padding: const EdgeInsets.only(left:8.0),
-                    child: MaterialButton(
-                      child: Text(
-                        'Clean markers',
-                      ),
-                      textColor: Theme.of(context).buttonColor,
-                      color: Theme.of(context).primaryColor,
-                      disabledTextColor: Theme.of(context).disabledColor,
-                      height: 40,
-                      elevation: 15,
-                      onPressed: _markers.isEmpty || _markers.length == 1
-                          ? null
-                          : () => _clearMarkers(),
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                // MaterialButton(
+                //   child: Icon(
+                //     Icons.menu,
+                //     color: Theme.of(context).buttonColor,
+                //   ),
+                //   color: Theme.of(context).primaryColor,
+                //   height: 53,
+                //   elevation: 15,
+                //   shape: CircleBorder(),
+                //   onPressed: () {
+                //     _scaffoldKey.currentState.openDrawer();
+                //   },
+                // ),
+
+                MaterialButton(
+                  child: Icon(
+                    Icons.search,
+                    color: Theme.of(context).buttonColor,
                   ),
-                  MaterialButton(
-                    child: Icon(
-                      Icons.search,
-                      color: Theme.of(context).buttonColor,
-                    ),
-                    color: Theme.of(context).primaryColor,
-                    height: 53,
-                    shape: CircleBorder(),
-                    onPressed: () async {
-                      setState(() {
-                        _fixedPosition = false;
-                      });
-                     await PlacesAutocomplete.show(
-                          context: context,
-                          apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
-                          location:
-                              Location(_position.latitude, _position.longitude),
-                          mapController: _mapController,
-                          addMarkers: _addMarkers,
-                          cleanMarkers:_clearMarkers,);
-                    },
+                  color: Theme.of(context).primaryColor,
+                  height: 53,
+                  shape: CircleBorder(),
+                  elevation: 15,
+                  onPressed: () async {
+                    setState(() {
+                      _fixedPosition = false;
+                    });
+                    await PlacesAutocomplete.show(
+                      context: context,
+                      apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+                      location:
+                          Location(_position.latitude, _position.longitude),
+                      mapController: _mapController,
+                      addMarkers: _addMarkers,
+                      cleanMarkers: _clearMarkers,
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                MaterialButton(
+                  child: Icon(
+                    Icons.delete,
+                    color: Theme.of(context).buttonColor,
                   ),
-                ],
-              ),
+                  color: Theme.of(context).primaryColor,
+                  height: 53,
+                  shape: CircleBorder(),
+                  elevation: 15,
+                  onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
+                ),
+              ],
             ),
           ),
           StreamBuilder(
@@ -178,12 +176,10 @@ class _MapPageState extends State<MapPage> {
     for (var marker in markers) {
       final MarkerId markerId = marker.markerId;
 
-    setState(() {
-      _markers[markerId] = marker;
-    });
-
+      setState(() {
+        _markers[markerId] = marker;
+      });
     }
-    
   }
 
   void _clearMarkers() {
