@@ -71,7 +71,9 @@ class Place {
     _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
     _reviews = details.reviews;
-    _reviews.sort((a, b) => b.rating.compareTo(a.rating));
+    if (_reviews != null) {
+      _reviews.sort((a, b) => b.rating.compareTo(a.rating));
+    }
     _openingHours = details.openingHours;
   }
 
