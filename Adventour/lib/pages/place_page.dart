@@ -33,11 +33,24 @@ class PlacePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                InfoBut(icon: Icons.gps_fixed, text: "${place.adress}"),
-                InfoBut(icon: Icons.local_phone, text: "${place.telephone}"),
-                InfoBut(
-                    icon: Icons.access_alarm_outlined, text: "${place.name}"),
-                InfoBut(icon: Icons.calendar_today, text: openAndClose()),
+                place.adress != null
+                    ? InfoBut(
+                        icon: Icons.gps_fixed,
+                        text: "${place.adress}")
+                    : SizedBox(),
+                place.telephone != null
+                    ? InfoBut(
+                        icon: Icons.local_phone,
+                        text: "${place.telephone}")
+                    : SizedBox(),
+                place.openingHours != null
+                    ? InfoBut(
+                        icon: Icons.access_alarm_outlined,
+                        text: "${itsOpen(place.openingHours.openNow)}")
+                    : SizedBox(),
+                place.openingHours != null
+                    ? InfoBut(icon: Icons.calendar_today, text: openAndClose())
+                    : SizedBox(),
                 Divider(
                   thickness: 5,
                   color: Theme.of(context).primaryColor,
@@ -52,38 +65,38 @@ class PlacePage extends StatelessWidget {
     );
   }
 
-  String itsDefined(String text) {
+  bool itsDefined(String text) {
     if (text == null) {
-      return "No definido";
+      return false;
     } else {
-      return text;
+      return true;
     }
   }
 
-  String mostrarNombre() {
-    if (place.name.isEmpty) {
-      return "No definido";
+  String itsOpen(bool open) {
+    if (open) {
+      return "Open";
     } else {
-      return place.name;
+      return "Closed";
     }
   }
 
   String openAndClose() {
     int dia;
-    if (DateTime.now().weekday == 7) {
+    if (DateTime.now().weekday == 6) {
       dia = 0;
     } else {
       dia = DateTime.now().weekday;
     }
-    if (place.openingHours == null) {
-      return "No defined";
+    if (place.openingHours.periods[dia].open.time.isEmpty) {
+      return "null";
     } else {
       String numHorasAbierto =
-          "${place.openingHours.periods[dia - 1].open.time}";
+          "${place.openingHours.periods[dia].open.time}";
       String horasAbierto = numHorasAbierto.substring(0, 2) +
           " : " +
           numHorasAbierto.substring(2, 4);
-      String numHorasCerrado = "${place.openingHours.periods[6].close.time}";
+      String numHorasCerrado = "${place.openingHours.periods[dia].close.time}";
       String horasCerrado = numHorasCerrado.substring(0, 2) +
           " : " +
           numHorasCerrado.substring(2, 4);
@@ -189,6 +202,24 @@ class InfoMiddle extends StatelessWidget {
           )),
         ],
       ),
+    );
+  }
+}
+
+class InfoSuper extends StatelessWidget {
+  final PlaceDetails place;
+  const InfoSuper({
+    @required this.place,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      /*child: Image.network(
+            "https://maps.googleapis.com/maps/api/place/photo?" + "${this.place.photos[0].photoReference}",
+            fit: BoxFit.cover,
+            ),*/
+      //No consigue insertar la imagen.
     );
   }
 }

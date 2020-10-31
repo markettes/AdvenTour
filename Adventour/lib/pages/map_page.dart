@@ -11,6 +11,8 @@ import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
 
+import 'place_page.dart';
+
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -197,10 +199,6 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  /*
-                 * Cuando haces click en un lugar con sitios cercanos se centra en el lugar pero si no hay ningun lugar próximo se va exactamente
-                 * a donde has pulsado, si ha encontrado un sitio cercano estará en la variable local "placeDef" del metodo
-                 */
   Future<Place> _touchedPlace(LatLng point) async {
     List<Place> places = await searchEngine.searchByLocation(
         Location(point.latitude, point.longitude), 50);
