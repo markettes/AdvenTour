@@ -49,7 +49,7 @@ class SearchEngine {
   }
 
   String searchPhoto(String photoReference) {
-    return _googleMapsPlaces.buildPhotoUrl(photoReference: photoReference);
+    return _googleMapsPlaces.buildPhotoUrl(photoReference: photoReference,maxHeight: 1000,maxWidth: 1000);
   }
 }
 

@@ -1,11 +1,11 @@
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
+import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Place.dart';
 import "package:google_maps_webservice/places.dart";
-
-int numeroComentarios = 0;
 
 class PlacePage extends StatelessWidget {
   Place place;
@@ -16,69 +16,179 @@ class PlacePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name),
+        actions: [IconButton(icon: Icon(Icons.more_vert), onPressed: () {})],
       ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            height: 200,
-            child: place.photos == null || place.photos.isEmpty
-                ? Center(child: Text('Unknown'))
-                : Image.network(
-                    searchEngine.searchPhoto(place.photos.first.photoReference),
-                    fit: BoxFit.cover,
-                  ),
+      body: place.detailed
+          ? PlaceBodyInfo(
+              place: place,
+            )
+          : FutureBuilder(
+            future: searchEngine.searchWithDetails(place.id),
+            builder: (context, snapshot) {
+              if(snapshot.hasError)print('error');
+              if(!snapshot.hasData)return CircularProgressIndicator();
+              Place place = snapshot.data;
+              return PlaceBodyInfo(place: place);
+            },
           ),
-          InfoMiddle(place: place,),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                place.adress != null
-                    ? InfoBut(
-                        icon: Icons.gps_fixed,
-                        text: "${place.adress}")
-                    : SizedBox(),
-                place.telephone != null
-                    ? InfoBut(
-                        icon: Icons.local_phone,
-                        text: "${place.telephone}")
-                    : SizedBox(),
-                place.openingHours != null
-                    ? InfoBut(
-                        icon: Icons.access_alarm_outlined,
-                        text: "${itsOpen(place.openingHours.openNow)}")
-                    : SizedBox(),
-                place.openingHours != null
-                    ? InfoBut(icon: Icons.calendar_today, text: openAndClose())
-                    : SizedBox(),
-                Divider(
-                  thickness: 5,
-                  color: Theme.of(context).primaryColor,
-                )
-              ],
-            ),
-          ),
-          InfoBottom(),
-          CommentsBar(),
-        ],
-      ),
     );
   }
+}
 
-  bool itsDefined(String text) {
-    if (text == null) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+class PlaceBodyInfo extends StatelessWidget {
+  PlaceBodyInfo({
+    @required this.place,
+  });
 
-  String itsOpen(bool open) {
-    if (open) {
-      return "Open";
-    } else {
-      return "Closed";
-    }
+  Place place;
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    return CustomScrollView(slivers: [
+      SliverToBoxAdapter(
+          child: Column(
+        children: <Widget>[
+          Container(
+              height: 200,
+              child: place.photos == null || place.photos.isEmpty
+                  ? Center(child: Text('No available photos'))
+                  : CarouselSlider.builder(
+                      itemCount: place.photos.length,
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        pauseAutoPlayOnManualNavigate: true,
+                        autoPlayInterval: Duration(seconds: 10),
+                        enableInfiniteScroll: place.photos.length > 1,
+                        aspectRatio: size.width / 200,
+                        enlargeCenterPage: true,
+                      ),
+                      itemBuilder: (BuildContext context, int index) =>
+                          Image.network(
+                        searchEngine
+                            .searchPhoto(place.photos[index].photoReference),
+                        fit: BoxFit.cover,
+                      ),
+                    )),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(children: [
+              InfoMiddle(
+                place: place,
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Column(
+                children: [
+                  if (place.adress != null)
+                    InfoBut(
+                      icon: Icons.gps_fixed,
+                      text: place.adress,
+                    ),
+                  if (place.telephone != null) SizedBox(height: 5),
+                  if (place.telephone != null)
+                    InfoBut(icon: Icons.local_phone, text: place.telephone),
+                  if (place.openingHours != null) SizedBox(height: 5),
+                  if (place.openingHours != null)
+                    InfoBut(
+                        icon: Icons.access_alarm_outlined,
+                        text: place.openingHours.openNow ? 'Opened' : 'Closed'),
+                  if (place.openingHours != null) SizedBox(height: 5),
+                  if (place.openingHours != null)
+                    InfoBut(
+                      icon: Icons.calendar_today,
+                      text: openAndClose(),
+                    ),
+                ],
+              ),
+              Divider(
+                thickness: 2,
+                color: Theme.of(context).primaryColor,
+                indent: 50,
+                endIndent: 50,
+                height: 30,
+              ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    (place.reviews != null
+                            ? place.reviews.length.toString()
+                            : '0') +
+                        " opinions",
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  Expanded(
+                      child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.add_comment,
+                          size: 35,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ],
+                  )),
+                ],
+              ),
+              if (place.reviews != null) SizedBox(height: 5),
+              if (place.reviews != null)
+                ListView.separated(
+                  itemCount: place.reviews.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 12,
+                  ),
+                  itemBuilder: (_, int index) {
+                    Review review = place.reviews[index];
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            CircleAvatar(
+                              child: Image.network(review.profilePhotoUrl),
+                            ),
+                            Row(
+                              children: [
+                                Text(review.rating.toString()),
+                                Icon(
+                                  Icons.star,
+                                  color: Theme.of(context).primaryColor,
+                                  size: 20,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(review.text),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Text(review.relativeTimeDescription)),
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  },
+                ),
+              SizedBox(height: 5)
+            ]),
+          ),
+        ],
+      ))
+    ]);
   }
 
   String openAndClose() {
@@ -91,8 +201,7 @@ class PlacePage extends StatelessWidget {
     if (place.openingHours.periods[dia].open.time.isEmpty) {
       return "null";
     } else {
-      String numHorasAbierto =
-          "${place.openingHours.periods[dia].open.time}";
+      String numHorasAbierto = "${place.openingHours.periods[dia].open.time}";
       String horasAbierto = numHorasAbierto.substring(0, 2) +
           " : " +
           numHorasAbierto.substring(2, 4);
@@ -115,47 +224,24 @@ class InfoBut extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (this.text == null) {
-      return Container(
-        child: Row(
-          children: <Widget>[
-            Icon(
-              icon,
-              color: Theme.of(context).primaryColor,
-              size: 35,
-            ),
-            Expanded(
-              child: Text(
-                "${this.text}",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ],
+    return Row(
+      children: <Widget>[
+        Icon(
+          icon,
+          color: Theme.of(context).primaryColor,
+          size: 35,
         ),
-      );
-    } else {
-      return Container(
-        child: Row(
-          children: <Widget>[
-            Icon(
-              icon,
-              color: Theme.of(context).primaryColor,
-              size: 35,
-            ),
-            Expanded(
-              child: Text(
-                "${this.text}",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-            ),
-          ],
+        SizedBox(
+          width: 5,
         ),
-      );
-    }
+        Expanded(
+          child: Text(
+            this.text,
+            style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 16),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -164,10 +250,9 @@ class InfoMiddle extends StatelessWidget {
   InfoMiddle({this.place});
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8),
-      child: Row(
-        children: <Widget>[
+    return Row(
+      children: <Widget>[
+        if (place.icon != null)
           Container(
             width: 50,
             height: 50,
@@ -176,87 +261,37 @@ class InfoMiddle extends StatelessWidget {
               color: Theme.of(context).primaryColor,
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(12),
               child: Image.network(
-                        place.icon,
-                        color: Colors.white,
-                        fit: BoxFit.contain,
-                      ),
+                place.icon,
+                color: Colors.white,
+                fit: BoxFit.contain,
+              ),
             ),
           ),
+        if (place.rating != null)
+          SizedBox(
+            width: 8,
+          ),
+        if (place.rating != null)
           Text(
-            "4",
+            place.rating.toString(),
             style: Theme.of(context).textTheme.bodyText1,
           ),
+        if (place.rating != null)
           Icon(
             Icons.star,
             color: Theme.of(context).primaryColor,
             size: 45,
           ),
-          Expanded(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SquareIconButton(icon: Icons.map, onPressed: null),
-            ],
-          )),
-        ],
-      ),
-    );
-  }
-}
-
-class InfoSuper extends StatelessWidget {
-  final PlaceDetails place;
-  const InfoSuper({
-    @required this.place,
-  });
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      /*child: Image.network(
-            "https://maps.googleapis.com/maps/api/place/photo?" + "${this.place.photos[0].photoReference}",
-            fit: BoxFit.cover,
-            ),*/
-      //No consigue insertar la imagen.
-    );
-  }
-}
-
-class InfoBottom extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8),
-      child: Row(
-        children: <Widget>[
-          Text(
-            numeroComentarios.toString() + " opiniones",
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
-          Expanded(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              SquareIconButton(icon: Icons.add_comment, onPressed: () {}),
-            ],
-          )),
-        ],
-      ),
-    );
-  }
-}
-
-class CommentsBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 150,
-      child: ListView.builder(
-        itemCount: 1000,
-        itemBuilder: (_, int index) => Text('hola'),
-      ),
+        Expanded(
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SquareIconButton(icon: Icons.map, onPressed: null),
+          ],
+        )),
+      ],
     );
   }
 }

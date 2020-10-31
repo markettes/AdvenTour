@@ -119,14 +119,15 @@ class _MapPageState extends State<MapPage> {
                         _fixedPosition = false;
                       });
                       await PlacesAutocomplete.show(
-                        context: context,
-                        apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
-                        location:
-                            Location(_position.latitude, _position.longitude),
-                        mapController: _mapController,
-                        addMarkers: _addMarkers,
-                        cleanMarkers: _clearMarkers,
-                      );
+                          context: context,
+                          apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+                          location:
+                              Location(_position.latitude, _position.longitude),
+                          mapController: _mapController,
+                          addMarkers: _addMarkers,
+                          cleanMarkers: _clearMarkers,
+                          goToPlace: goToPlace,
+                          goToPlaces: goToPlaces);
                     },
                   ),
                   SizedBox(
@@ -182,8 +183,18 @@ class _MapPageState extends State<MapPage> {
     controller.setMapStyle(style);
   }
 
-  void _addMarkers(List<Marker> markers) {
-    // var markerIdVal = MyWayToGenerateId();
+  void _addMarkers(List<Place> places) {
+    List<Marker> markers = places
+        .map((place) => Marker(
+              markerId: MarkerId(place.name),
+              position: LatLng(place.latitude, place.longitude),
+              infoWindow: InfoWindow(
+                title: place.name ?? "Unknown",
+                onTap: () => Navigator.of(context).pushNamed('/placePage', arguments: place),
+              ),
+            ))
+        .toList();
+
     for (var marker in markers) {
       final MarkerId markerId = marker.markerId;
 
@@ -219,14 +230,31 @@ class _MapPageState extends State<MapPage> {
       place = await searchEngine.searchWithDetails(place.id);
       print(place.toString());
 
-      Marker marker = Marker(
-        markerId: MarkerId(place.id),
-        position: LatLng(place.latitude, place.longitude),
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-      );
       _clearMarkers();
-      _addMarkers([marker]);
-      Navigator.of(context).pushNamed('/placePage',arguments: place);
+      _addMarkers([place]);
+      Navigator.of(context).pushNamed('/placePage', arguments: {place:place,goToPlace:goToPlace});
     }
+  }
+
+  void goToPlace(Place place) {
+    Navigator.pop(context);
+    _mapController.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: LatLng(place.latitude, place.longitude),
+        zoom: 18.0,
+      ),
+    ));
+  }
+
+  void goToPlaces(List<Place> places, LatLng location) {
+    Navigator.pop(context);
+    _mapController.animateCamera(CameraUpdate.newCameraPosition(
+      CameraPosition(
+        bearing: 0,
+        target: location,
+        zoom: 13,
+      ),
+    ));
   }
 }

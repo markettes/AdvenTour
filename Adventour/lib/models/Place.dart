@@ -25,9 +25,8 @@ const TOURIST_ATTRACTION = "tourist_attraction";
 const UNIVERSITY = "university";
 const ZOO = "zoo";
 
-
-
 class Place {
+  bool _detailed;
   String _id;
   String _name;
   String _icon;
@@ -51,7 +50,8 @@ class Place {
   //   _longitude = location["lng"];
   // }
 
-  Place.fromNearby(PlacesSearchResult result){
+  Place.fromNearby(PlacesSearchResult result) {
+    _detailed = false;
     _id = result.placeId;
     _name = result.name;
     _icon = result.icon;
@@ -59,7 +59,8 @@ class Place {
     _longitude = result.geometry.location.lng;
   }
 
-    Place.fromDetails(PlaceDetails details){
+  Place.fromDetails(PlaceDetails details) {
+    _detailed = true;
     _id = details.placeId;
     _name = details.name;
     _icon = details.icon;
@@ -70,8 +71,11 @@ class Place {
     _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
     _reviews = details.reviews;
+    _reviews.sort((a, b) => b.rating.compareTo(a.rating));
     _openingHours = details.openingHours;
   }
+
+  get detailed => _detailed;
 
   get id => _id;
 
@@ -91,7 +95,7 @@ class Place {
 
   List<Photo> get photos => _photos;
 
-  get reviews => _reviews;
+  List<Review> get reviews => _reviews;
 
   get openingHours => _openingHours;
 

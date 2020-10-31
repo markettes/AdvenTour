@@ -41,7 +41,11 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   /// or custom configuration
   final BaseClient httpClient;
 
-  Function(List<Marker>) addMarkers;
+  Function(List<Place>) addMarkers;
+
+  Function(Place) goToPlace;
+
+  Function(List<Place>, LatLng) goToPlaces;
 
   Function clearMarkers;
 
@@ -68,6 +72,8 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       @required this.addMarkers,
       @required this.clearMarkers,
       @required this.mapController,
+      @required this.goToPlace,
+      @required this.goToPlaces,
       this.debounce = 300})
       : super(key: key);
 
@@ -87,11 +93,11 @@ class _PlacesAutocompleteScaffoldState extends PlacesAutocompleteState {
     final body = PlacesAutocompleteResult(
       onTap: (prediction) async {
         widget.clearMarkers();
-        Place place = (await searchEngine.searchByText(prediction.description,
-                widget.location, 1000))
+        Place place = (await searchEngine.searchByText(
+                prediction.description, widget.location, 1000))
             .first;
-        goToPlace(place);
-        addMarkers([place]);
+        widget.goToPlace(place);
+        widget.addMarkers([place]);
       },
     );
     return Scaffold(
@@ -180,16 +186,17 @@ class _AppBarPlacesAutoCompleteTextFieldState
           style: widget.textStyle ?? _defaultStyle(),
           decoration: widget.textDecoration ?? _defaultDecoration(state),
           onSubmitted: (value) async {
-            List<Place> places = await searchEngine.searchByText(value,
-                state.widget.location, 1000);
+            List<Place> places = await searchEngine.searchByText(
+                value, state.widget.location, 1000);
             state.widget.clearMarkers();
-            state.addMarkers(places);
+            state.widget.addMarkers(places);
             if (places.length == 1) {
               Place place = places.first;
-              state.goToPlace(place);
+              state.widget.goToPlace(place);
             }
             if (places.length > 1) {
-              state.goToPlaces(places);
+              state.widget.goToPlaces(places,
+                  LatLng(state.widget.location.lat, state.widget.location.lng));
             }
           },
         ));
@@ -292,40 +299,6 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
     _queryBehavior.stream.listen(doSearch);
   }
 
-  void goToPlace(Place place) {
-    Navigator.pop(context);
-    widget.mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(place.latitude, place.longitude),
-        zoom: 18.0,
-      ),
-    ));
-  }
-
-  void addMarkers(List<Place> places) {
-    List<Marker> markers = places
-        .map((place) => Marker(
-              markerId: MarkerId(place.name),
-              position: LatLng(place.latitude, place.longitude),
-              infoWindow: InfoWindow(title: place.name ?? "Unknown"),
-            ))
-        .toList();
-
-    widget.addMarkers(markers);
-  }
-
-  void goToPlaces(List<Place> places) {
-    Navigator.pop(context);
-    widget.mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(widget.location.lat, widget.location.lng),
-        zoom: 13,
-      ),
-    ));
-  }
-
   Future<Null> doSearch(String value) async {
     if (mounted && value.isNotEmpty) {
       setState(() {
@@ -419,29 +392,32 @@ class PlacesAutocomplete {
       Client httpClient,
       Function addMarkers,
       Function cleanMarkers,
+      Function(Place) goToPlace,
+      Function(List<Place>, LatLng location) goToPlaces,
       @required GoogleMapController mapController,
       String startText = ""}) {
     final builder = (BuildContext ctx) => PlacesAutocompleteWidget(
-          apiKey: apiKey,
-          overlayBorderRadius: overlayBorderRadius,
-          language: language,
-          sessionToken: sessionToken,
-          components: components,
-          types: types,
-          location: location,
-          radius: radius,
-          strictbounds: strictbounds,
-          region: region,
-          offset: offset,
-          hint: hint,
-          onError: onError,
-          proxyBaseUrl: proxyBaseUrl,
-          httpClient: httpClient,
-          startText: startText,
-          addMarkers: addMarkers,
-          clearMarkers: cleanMarkers,
-          mapController: mapController,
-        );
+        apiKey: apiKey,
+        overlayBorderRadius: overlayBorderRadius,
+        language: language,
+        sessionToken: sessionToken,
+        components: components,
+        types: types,
+        location: location,
+        radius: radius,
+        strictbounds: strictbounds,
+        region: region,
+        offset: offset,
+        hint: hint,
+        onError: onError,
+        proxyBaseUrl: proxyBaseUrl,
+        httpClient: httpClient,
+        startText: startText,
+        addMarkers: addMarkers,
+        clearMarkers: cleanMarkers,
+        mapController: mapController,
+        goToPlace: goToPlace,
+        goToPlaces: goToPlaces);
 
     return Navigator.push(context, MaterialPageRoute(builder: builder));
   }
