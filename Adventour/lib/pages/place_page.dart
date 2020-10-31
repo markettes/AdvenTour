@@ -1,18 +1,24 @@
 import 'package:Adventour/controllers/search_engine.dart';
-import 'package:Adventour/widgets/circle_icon_button.dart';
-import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Place.dart';
 import "package:google_maps_webservice/places.dart";
+import 'package:Adventour/pages/map_page.dart';
 
 class PlacePage extends StatelessWidget {
   Place place;
+  Function goToPlace;
 
   @override
   Widget build(BuildContext context) {
-    place = ModalRoute.of(context).settings.arguments;
+    // final List<Object> args = ModalRoute.of(context).settings.arguments;
+    // place = args.first;
+    // goToPlace = args.last.;
+    Map args = ModalRoute.of(context).settings.arguments;
+    place = args.values.first;
+    goToPlace = args.values.last;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name),
@@ -21,26 +27,29 @@ class PlacePage extends StatelessWidget {
       body: place.detailed
           ? PlaceBodyInfo(
               place: place,
+              goToPlace: goToPlace,
             )
           : FutureBuilder(
-            future: searchEngine.searchWithDetails(place.id),
-            builder: (context, snapshot) {
-              if(snapshot.hasError)print('error');
-              if(!snapshot.hasData)return CircularProgressIndicator();
-              Place place = snapshot.data;
-              return PlaceBodyInfo(place: place);
-            },
-          ),
+              future: searchEngine.searchWithDetails(place.id),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print('error');
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                Place place = snapshot.data;
+                return PlaceBodyInfo(
+                  place: place,
+                  goToPlace: goToPlace,
+                );
+              },
+            ),
     );
   }
 }
 
 class PlaceBodyInfo extends StatelessWidget {
-  PlaceBodyInfo({
-    @required this.place,
-  });
+  PlaceBodyInfo({@required this.place, @required this.goToPlace});
 
   Place place;
+  Function goToPlace;
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +84,7 @@ class PlaceBodyInfo extends StatelessWidget {
             child: Column(children: [
               InfoMiddle(
                 place: place,
+                goToPlace: goToPlace,
               ),
               SizedBox(
                 height: 5,
@@ -247,7 +257,8 @@ class InfoBut extends StatelessWidget {
 
 class InfoMiddle extends StatelessWidget {
   Place place;
-  InfoMiddle({this.place});
+  Function goToPlace;
+  InfoMiddle({this.place, this.goToPlace});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -288,7 +299,12 @@ class InfoMiddle extends StatelessWidget {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            SquareIconButton(icon: Icons.map, onPressed: null),
+            SquareIconButton(
+              icon: Icons.map,
+              onPressed: () {
+                goToPlace(place);
+              },
+            ),
           ],
         )),
       ],

@@ -2,16 +2,12 @@ import 'dart:async';
 
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
-import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
-import 'package:google_maps_webservice/src/places.dart';
-
-import 'place_page.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -190,8 +186,8 @@ class _MapPageState extends State<MapPage> {
               position: LatLng(place.latitude, place.longitude),
               infoWindow: InfoWindow(
                 title: place.name ?? "Unknown",
-                onTap: () => Navigator.of(context)
-                    .pushNamed('/placePage', arguments: place),
+                onTap: () => Navigator.of(context).pushNamed('/placePage',
+                    arguments: {place: place, goToPlace: goToPlace}),
               ),
             ))
         .toList();
@@ -233,7 +229,8 @@ class _MapPageState extends State<MapPage> {
 
       _clearMarkers();
       _addMarkers([place]);
-      Navigator.of(context).pushNamed('/placePage', arguments: place);
+      Navigator.of(context).pushNamed('/placePage',
+          arguments: {place: place, goToPlace: goToPlace});
     }
   }
 
