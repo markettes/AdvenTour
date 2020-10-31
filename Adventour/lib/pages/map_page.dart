@@ -190,7 +190,8 @@ class _MapPageState extends State<MapPage> {
               position: LatLng(place.latitude, place.longitude),
               infoWindow: InfoWindow(
                 title: place.name ?? "Unknown",
-                onTap: () => Navigator.of(context).pushNamed('/placePage', arguments: place),
+                onTap: () => Navigator.of(context)
+                    .pushNamed('/placePage', arguments: place),
               ),
             ))
         .toList();
@@ -232,7 +233,7 @@ class _MapPageState extends State<MapPage> {
 
       _clearMarkers();
       _addMarkers([place]);
-      Navigator.of(context).pushNamed('/placePage', arguments: {place:place,goToPlace:goToPlace});
+      Navigator.of(context).pushNamed('/placePage', arguments: place);
     }
   }
 

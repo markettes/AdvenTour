@@ -34,7 +34,7 @@ class Place {
   String _telephone;
   double _latitude;
   double _longitude;
-  double _rating;
+  num _rating;
   List<Photo> _photos;
   List<Review> _reviews;
   OpeningHoursDetail _openingHours;
