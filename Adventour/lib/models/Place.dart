@@ -33,10 +33,9 @@ class Place {
   String _adress;
   double _latitude;
   double _longitude;
-  num _rating;
+  double _rating;
 
   Place.fromGoogleMaps(Map json) {
-
     var location = json["geometry"]["location"];
 
     _id = json["place_id"];
@@ -45,12 +44,9 @@ class Place {
     _adress = json["vicinity"];
     _latitude = location["lat"];
     _longitude = location["lng"];
-    _rating = json["rating"];
   }
 
-  get adress => _adress;
-  get longitude => _longitude;
-  get rating => _rating;
+  get name => _name;
 
   get latitude => _latitude;
 
@@ -65,5 +61,6 @@ icon = $_icon
 adress = $_adress
 latitude = $_latitude
 longitude = $_longitude
-rating = $_rating
+    """;
   }
+}
