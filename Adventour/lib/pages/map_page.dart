@@ -260,7 +260,7 @@ class _MapPageState extends State<MapPage> {
       CameraPosition(
         bearing: 0,
         target: location,
-        zoom: 13,
+        zoom: 14.5,
       ),
     ));
   }
