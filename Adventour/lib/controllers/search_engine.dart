@@ -42,10 +42,14 @@ class SearchEngine {
       String id) async {
     PlacesDetailsResponse response = await _googleMapsPlaces.getDetailsByPlaceId(id);
 
-
+    print(response.result.photos);
     Place place = Place.fromDetails(response.result);
 
     return place;
+  }
+
+  String searchPhoto(String photoReference) {
+    return _googleMapsPlaces.buildPhotoUrl(photoReference: photoReference);
   }
 }
 

@@ -218,6 +218,7 @@ class _MapPageState extends State<MapPage> {
     }
 
     if (place != null) {
+      place = await searchEngine.searchWithDetails(place.id);
       print(place.toString());
 
       Marker marker = Marker(
@@ -227,6 +228,7 @@ class _MapPageState extends State<MapPage> {
       );
       _clearMarkers();
       _addMarkers([marker]);
+      Navigator.of(context).pushNamed('/placePage',arguments: place);
     }
   }
 }

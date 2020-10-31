@@ -36,7 +36,7 @@ class Place {
   double _latitude;
   double _longitude;
   double _rating;
-  List<String> _photos;
+  List<Photo> _photos;
   List<Review> _reviews;
   OpeningHoursDetail _openingHours;
 
@@ -67,7 +67,7 @@ class Place {
     _latitude = details.geometry.location.lat;
     _longitude = details.geometry.location.lng;
     _rating = details.rating;
-    _photos = details.photos.map((photo) => photo.photoReference).toList();
+    _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
     _reviews = details.reviews;
     _openingHours = details.openingHours;
@@ -89,7 +89,7 @@ class Place {
 
   get icon => _icon;
 
-  get photos => _photos;
+  List<Photo> get photos => _photos;
 
   get reviews => _reviews;
 
@@ -104,6 +104,11 @@ icon = $_icon
 adress = $_adress
 latitude = $_latitude
 longitude = $_longitude
+telephone = $_telephone
+rating = $_rating
+photos = ${_photos}
+reviews = ${_reviews}
+openingHours = ${_openingHours}
     """;
   }
 }
