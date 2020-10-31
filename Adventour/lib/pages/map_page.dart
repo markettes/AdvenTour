@@ -90,7 +90,6 @@ class _MapPageState extends State<MapPage> {
                       Icons.menu,
                       color: Theme.of(context).buttonColor,
                     ),
-                    // fillColor: Theme.of(context).primaryColor,
                     color: Theme.of(context).primaryColor,
                     height: 53,
                     elevation: 15,
@@ -98,6 +97,17 @@ class _MapPageState extends State<MapPage> {
                     onPressed: () {
                       _scaffoldKey.currentState.openDrawer();
                     },
+                  ),
+                  MaterialButton(
+                    child: Text(
+                      'Clean markers',
+                    ),
+                    textColor: Theme.of(context).buttonColor,
+                    color: Theme.of(context).primaryColor,
+                    disabledTextColor: Theme.of(context).disabledColor,
+                    height: 40,
+                    elevation: 15,
+                    onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
                   ),
                   MaterialButton(
                     child: Icon(
@@ -163,6 +173,12 @@ class _MapPageState extends State<MapPage> {
 
     setState(() {
       _markers[markerId] = marker;
+    });
+  }
+
+  void _clearMarkers() {
+    setState(() {
+      _markers.clear();
     });
   }
 }

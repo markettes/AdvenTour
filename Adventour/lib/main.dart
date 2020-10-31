@@ -28,7 +28,7 @@ class Adventour extends StatelessWidget {
         '/': (_) => RootPage(),
         '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
-        '/placePage':(_)=> PlacePage()
+        '/placePage': (_) => PlacePage()
       },
     );
   }
@@ -43,6 +43,7 @@ class Adventour extends StatelessWidget {
     cursorColor: Colors.deepPurple[600],
     buttonColor: Colors.white,
     dividerColor: Colors.black,
+    disabledColor: Colors.transparent,
     textTheme: TextTheme(
         headline1: TextStyle(
           fontWeight: FontWeight.w500,
