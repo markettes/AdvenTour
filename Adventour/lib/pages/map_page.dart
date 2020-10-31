@@ -107,7 +107,9 @@ class _MapPageState extends State<MapPage> {
                     disabledTextColor: Theme.of(context).disabledColor,
                     height: 40,
                     elevation: 15,
-                    onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
+                    onPressed: _markers.isEmpty || _markers.length == 1
+                        ? null
+                        : () => _clearMarkers(),
                   ),
                   MaterialButton(
                     child: Icon(
@@ -174,6 +176,7 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _markers[markerId] = marker;
     });
+    print(_markers.length);
   }
 
   void _clearMarkers() {
