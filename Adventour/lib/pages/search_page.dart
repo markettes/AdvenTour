@@ -88,7 +88,7 @@ class _PlacesAutocompleteScaffoldState extends PlacesAutocompleteState {
       onTap: (prediction) async {
         widget.clearMarkers();
         Place place = (await searchEngine.searchByText(prediction.description,
-                widget.location.lat, widget.location.lng, 1000))
+                widget.location, 1000))
             .first;
         goToPlace(place);
         addMarkers([place]);
@@ -181,7 +181,7 @@ class _AppBarPlacesAutoCompleteTextFieldState
           decoration: widget.textDecoration ?? _defaultDecoration(state),
           onSubmitted: (value) async {
             List<Place> places = await searchEngine.searchByText(value,
-                state.widget.location.lat, state.widget.location.lng, 1000);
+                state.widget.location, 1000);
             state.widget.clearMarkers();
             state.addMarkers(places);
             if (places.length == 1) {

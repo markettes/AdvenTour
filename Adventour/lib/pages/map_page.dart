@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:Adventour/controllers/search_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -64,6 +66,7 @@ class _MapPageState extends State<MapPage> {
                     onMapCreated: _onMapCreated,
                     zoomControlsEnabled: false,
                     markers: Set<Marker>.of(_markers.values),
+                    onTap: _touchedPlace,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(position.latitude, position.longitude),
                       zoom: 11.0,
@@ -81,7 +84,7 @@ class _MapPageState extends State<MapPage> {
               }),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(top:8.0),
+              padding: const EdgeInsets.only(top: 8.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -128,10 +131,12 @@ class _MapPageState extends State<MapPage> {
                     height: 5,
                   ),
                   MaterialButton(
-                    child: _markers.isEmpty ? Container() :Icon(
-                      Icons.delete,
-                      color: Theme.of(context).buttonColor,
-                    ),
+                    child: _markers.isEmpty
+                        ? Container()
+                        : Icon(
+                            Icons.delete,
+                            color: Theme.of(context).buttonColor,
+                          ),
                     color: Theme.of(context).primaryColor,
                     height: 40,
                     shape: CircleBorder(),
@@ -190,5 +195,38 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _markers.clear();
     });
+  }
+
+  /*
+                 * Cuando haces click en un lugar con sitios cercanos se centra en el lugar pero si no hay ningun lugar próximo se va exactamente
+                 * a donde has pulsado, si ha encontrado un sitio cercano estará en la variable local "placeDef" del metodo
+                 */
+  Future<Place> _touchedPlace(LatLng point) async {
+    List<Place> places = await searchEngine.searchByLocation(
+        Location(point.latitude, point.longitude), 50);
+
+    int menor = 100;
+    Place place;
+    for (var p in places) {
+      int _distanceInMeters = Geolocator.distanceBetween(
+              point.latitude, point.longitude, p.latitude, p.longitude)
+          .round();
+      if (_distanceInMeters < menor) {
+        menor = _distanceInMeters;
+        place = p;
+      }
+    }
+
+    if (place != null) {
+      print(place.toString());
+
+      Marker marker = Marker(
+        markerId: MarkerId(place.id),
+        position: LatLng(place.latitude, place.longitude),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      );
+      _clearMarkers();
+      _addMarkers([marker]);
+    }
   }
 }

@@ -1,50 +1,51 @@
-import 'dart:convert';
-
 import 'package:Adventour/models/Place.dart';
-import 'package:http/http.dart';
+import 'package:google_maps_webservice/src/core.dart';
+import 'package:google_maps_webservice/src/places.dart';
 
 class SearchEngine {
-  final placesApiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
+  GoogleMapsPlaces _googleMapsPlaces =
+      GoogleMapsPlaces(apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho");
 
-  Future<List<Place>> searchByLocation(
-      String type, double latitude, double longitude, int radius) async {
-    var url =
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' +
-            latitude.toString() +
-            ',' +
-            longitude.toString() +
-            '&radius=' +
-            radius.toString() +
-            '&type=' +
-            type +
-            '&key=' +
-            placesApiKey;
-    Response response = await get(url);
-    var decoded = json.decode(response.body);
-    List results = decoded["results"];
+  Future<List<Place>> searchByLocation(Location location, int radius) async {
+    PlacesSearchResponse response =
+        await _googleMapsPlaces.searchNearbyWithRadius(location, radius);
+
     List<Place> places =
-        results.map((place) => Place.fromGoogleMaps(place)).toList();
+        response.results.map((result) => Place.fromNearby(result)).toList();
+
     return places;
   }
 
-  Future<List<Place>> searchByText(String text,double latitude, double longitude, int radius) async {
-    var url =
-        'https://maps.googleapis.com/maps/api/place/textsearch/json?query=' +
-            text +
-            '&location=' +
-            latitude.toString() +
-            ',' +
-            longitude.toString() +
-            '&radius=' +
-            radius.toString() +
-            '&key=' +
-            placesApiKey;
-    Response response = await get(url);
-    var decoded = json.decode(response.body);
-    List results = decoded["results"];
+  Future<List<Place>> searchByLocationWithType(
+      String type, Location location, int radius) async {
+    PlacesSearchResponse response = await _googleMapsPlaces
+        .searchNearbyWithRadius(location, radius, type: type);
+
     List<Place> places =
-        results.map((place) => Place.fromGoogleMaps(place)).toList();
+        response.results.map((result) => Place.fromNearby(result)).toList();
+
     return places;
+  }
+
+  Future<List<Place>> searchByText(
+      String text, Location location, int radius) async {
+    PlacesSearchResponse response = await _googleMapsPlaces.searchByText(text,
+        location: location, radius: radius);
+
+    List<Place> places =
+        response.results.map((result) => Place.fromNearby(result)).toList();
+
+    return places;
+  }
+
+  Future<Place> searchWithDetails(
+      String id) async {
+    PlacesDetailsResponse response = await _googleMapsPlaces.getDetailsByPlaceId(id);
+
+
+    Place place = Place.fromDetails(response.result);
+
+    return place;
   }
 }
 
