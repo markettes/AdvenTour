@@ -321,7 +321,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
       CameraPosition(
         bearing: 0,
         target: LatLng(widget.location.lat, widget.location.lng),
-        zoom: 14,
+        zoom: 13,
       ),
     ));
   }
