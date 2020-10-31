@@ -213,6 +213,7 @@ class _MapPageState extends State<MapPage> {
         }
         //review.rating + ", " + review.profile_photo_url
       }
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlacePage(r)));
     }
 
     LatLng newPoint;
@@ -232,6 +233,6 @@ class _MapPageState extends State<MapPage> {
       _markers[MarkerId(newPoint.toString())] = newMarker;
     });
      //Navigator.of(context).pushNamed('/placePage');
-     Navigator.of(context).push(MaterialPageRoute(builder: (context) => PlacePage(r)));
+    
   }
 }
