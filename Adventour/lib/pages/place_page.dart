@@ -9,6 +9,8 @@ import 'package:Adventour/pages/map_page.dart';
 class PlacePage extends StatelessWidget {
   Place place;
   Function goToPlace;
+  Function clearMarkers;
+  Function addMarkers;
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +18,10 @@ class PlacePage extends StatelessWidget {
     // place = args.first;
     // goToPlace = args.last.;
     Map args = ModalRoute.of(context).settings.arguments;
-    place = args.values.first;
-    goToPlace = args.values.last;
+    place = args.values.toList()[0];
+    goToPlace = args.values.toList()[1];
+    clearMarkers = args.values.toList()[2];
+    addMarkers = args.values.toList()[3];
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +32,8 @@ class PlacePage extends StatelessWidget {
           ? PlaceBodyInfo(
               place: place,
               goToPlace: goToPlace,
-            )
+              clearMarkers: clearMarkers,
+              addMarkers: addMarkers)
           : FutureBuilder(
               future: searchEngine.searchWithDetails(place.id),
               builder: (context, snapshot) {
@@ -36,9 +41,10 @@ class PlacePage extends StatelessWidget {
                 if (!snapshot.hasData) return CircularProgressIndicator();
                 Place place = snapshot.data;
                 return PlaceBodyInfo(
-                  place: place,
-                  goToPlace: goToPlace,
-                );
+                    place: place,
+                    goToPlace: goToPlace,
+                    clearMarkers: clearMarkers,
+                    addMarkers: addMarkers);
               },
             ),
     );
@@ -46,10 +52,17 @@ class PlacePage extends StatelessWidget {
 }
 
 class PlaceBodyInfo extends StatelessWidget {
-  PlaceBodyInfo({@required this.place, @required this.goToPlace});
+  PlaceBodyInfo({
+    @required this.place,
+    @required this.goToPlace,
+    @required this.clearMarkers,
+    @required this.addMarkers,
+  });
 
   Place place;
   Function goToPlace;
+  Function clearMarkers;
+  Function addMarkers;
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +98,8 @@ class PlaceBodyInfo extends StatelessWidget {
               InfoMiddle(
                 place: place,
                 goToPlace: goToPlace,
+                clearMarkers: clearMarkers,
+                addMarkers: addMarkers,
               ),
               SizedBox(
                 height: 5,
@@ -258,7 +273,10 @@ class InfoBut extends StatelessWidget {
 class InfoMiddle extends StatelessWidget {
   Place place;
   Function goToPlace;
-  InfoMiddle({this.place, this.goToPlace});
+  Function clearMarkers;
+  Function addMarkers;
+
+  InfoMiddle({this.place, this.goToPlace, this.clearMarkers, this.addMarkers});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -303,6 +321,8 @@ class InfoMiddle extends StatelessWidget {
               icon: Icons.map,
               onPressed: () {
                 goToPlace(place);
+                clearMarkers();
+                addMarkers([place]);
               },
             ),
           ],
