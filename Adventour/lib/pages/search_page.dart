@@ -298,7 +298,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
     final Marker marker = Marker(
       markerId: markerId,
       position: LatLng(place.latitude, place.longitude),
-      infoWindow: InfoWindow(title: markerId.toString(), snippet: '*'),
+      infoWindow: InfoWindow(title: markerId.value),
       onTap: () {
         // _onMarkerTapped(markerId);
       },
@@ -316,18 +316,17 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
       ),
     ));
     for (Place place in places) {
-      final MarkerId markerId = MarkerId(place.name);//place.id
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(place.latitude, place.longitude),
-      infoWindow: InfoWindow(title: markerId.toString(), snippet: '*'),
-      onTap: () {
-        // _onMarkerTapped(markerId);
-      },
-    );
-    widget.addMarker(marker);
+      final MarkerId markerId = MarkerId(place.name); //place.id
+      final Marker marker = Marker(
+        markerId: markerId,
+        position: LatLng(place.latitude, place.longitude),
+        infoWindow: InfoWindow(title: markerId.value),
+        onTap: () {
+          // _onMarkerTapped(markerId);
+        },
+      );
+      widget.addMarker(marker);
     }
-    
   }
 
   Future<Null> doSearch(String value) async {
