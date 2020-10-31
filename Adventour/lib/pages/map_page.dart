@@ -80,62 +80,66 @@ class _MapPageState extends State<MapPage> {
                 );
               }),
           SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                // MaterialButton(
-                //   child: Icon(
-                //     Icons.menu,
-                //     color: Theme.of(context).buttonColor,
-                //   ),
-                //   color: Theme.of(context).primaryColor,
-                //   height: 53,
-                //   elevation: 15,
-                //   shape: CircleBorder(),
-                //   onPressed: () {
-                //     _scaffoldKey.currentState.openDrawer();
-                //   },
-                // ),
+            child: Padding(
+              padding: const EdgeInsets.only(top:8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // FUTURO DRAWER
+                  // MaterialButton(
+                  //   child: Icon(
+                  //     Icons.menu,
+                  //     color: Theme.of(context).buttonColor,
+                  //   ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 53,
+                  //   elevation: 15,
+                  //   shape: CircleBorder(),
+                  //   onPressed: () {
+                  //     _scaffoldKey.currentState.openDrawer();
+                  //   },
+                  // ),
 
-                MaterialButton(
-                  child: Icon(
-                    Icons.search,
-                    color: Theme.of(context).buttonColor,
+                  MaterialButton(
+                    child: Icon(
+                      Icons.search,
+                      color: Theme.of(context).buttonColor,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    height: 53,
+                    shape: CircleBorder(),
+                    elevation: 15,
+                    onPressed: () async {
+                      setState(() {
+                        _fixedPosition = false;
+                      });
+                      await PlacesAutocomplete.show(
+                        context: context,
+                        apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+                        location:
+                            Location(_position.latitude, _position.longitude),
+                        mapController: _mapController,
+                        addMarkers: _addMarkers,
+                        cleanMarkers: _clearMarkers,
+                      );
+                    },
                   ),
-                  color: Theme.of(context).primaryColor,
-                  height: 53,
-                  shape: CircleBorder(),
-                  elevation: 15,
-                  onPressed: () async {
-                    setState(() {
-                      _fixedPosition = false;
-                    });
-                    await PlacesAutocomplete.show(
-                      context: context,
-                      apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
-                      location:
-                          Location(_position.latitude, _position.longitude),
-                      mapController: _mapController,
-                      addMarkers: _addMarkers,
-                      cleanMarkers: _clearMarkers,
-                    );
-                  },
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                MaterialButton(
-                  child: Icon(
-                    Icons.delete,
-                    color: Theme.of(context).buttonColor,
+                  SizedBox(
+                    height: 5,
                   ),
-                  color: Theme.of(context).primaryColor,
-                  height: 53,
-                  shape: CircleBorder(),
-                  elevation: 15,
-                  onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
-                ),
-              ],
+                  MaterialButton(
+                    child: _markers.isEmpty ? Container() :Icon(
+                      Icons.delete,
+                      color: Theme.of(context).buttonColor,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    height: 40,
+                    shape: CircleBorder(),
+                    elevation: 15,
+                    onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
+                  ),
+                ],
+              ),
             ),
           ),
           StreamBuilder(

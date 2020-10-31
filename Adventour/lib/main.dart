@@ -7,6 +7,7 @@ import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   //SdkContext.init(IsolateOrigin.main);
@@ -16,6 +17,7 @@ void main() {
 class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
