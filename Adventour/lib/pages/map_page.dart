@@ -122,15 +122,15 @@ class _MapPageState extends State<MapPage> {
                   },
                 ),
                 SizedBox(
-                  height: 8,
+                  height: 5,
                 ),
                 MaterialButton(
-                  child: Icon(
+                  child: _markers.isEmpty ? Container() :Icon(
                     Icons.delete,
                     color: Theme.of(context).buttonColor,
                   ),
                   color: Theme.of(context).primaryColor,
-                  height: 53,
+                  height: 40,
                   shape: CircleBorder(),
                   elevation: 15,
                   onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
