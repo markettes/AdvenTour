@@ -41,7 +41,9 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   /// or custom configuration
   final BaseClient httpClient;
 
-  Function(Marker) addMarker;
+  Function(List<Marker>) addMarkers;
+
+  Function clearMarkers;
 
   GoogleMapController mapController;
 
@@ -63,7 +65,8 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       this.proxyBaseUrl,
       this.httpClient,
       this.startText,
-      @required this.addMarker,
+      @required this.addMarkers,
+      @required this.clearMarkers,
       @required this.mapController,
       this.debounce = 300})
       : super(key: key);
@@ -83,10 +86,12 @@ class _PlacesAutocompleteScaffoldState extends PlacesAutocompleteState {
     final searchBar = AppBarPlacesAutoCompleteTextField();
     final body = PlacesAutocompleteResult(
       onTap: (prediction) async {
+        widget.clearMarkers();
         Place place = (await searchEngine.searchByText(prediction.description,
                 widget.location.lat, widget.location.lng, 1000))
             .first;
         goToPlace(place);
+        addMarkers([place]);
       },
     );
     return Scaffold(
@@ -177,6 +182,8 @@ class _AppBarPlacesAutoCompleteTextFieldState
           onSubmitted: (value) async {
             List<Place> places = await searchEngine.searchByText(value,
                 state.widget.location.lat, state.widget.location.lng, 1000);
+            state.widget.clearMarkers();
+            state.addMarkers(places);
             if (places.length == 1) {
               Place place = places.first;
               state.goToPlace(place);
@@ -294,16 +301,18 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
         zoom: 18.0,
       ),
     ));
-    final MarkerId markerId = MarkerId('searchBar');
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(place.latitude, place.longitude),
-      infoWindow: InfoWindow(title: markerId.value),
-      onTap: () {
-        // _onMarkerTapped(markerId);
-      },
-    );
-    widget.addMarker(marker);
+  }
+
+  void addMarkers(List<Place> places) {
+    List<Marker> markers = places
+        .map((place) => Marker(
+              markerId: MarkerId(place.name),
+              position: LatLng(place.latitude, place.longitude),
+              infoWindow: InfoWindow(title: place.name ?? "Unknown"),
+            ))
+        .toList();
+
+    widget.addMarkers(markers);
   }
 
   void goToPlaces(List<Place> places) {
@@ -315,18 +324,6 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
         zoom: 14,
       ),
     ));
-    for (Place place in places) {
-      final MarkerId markerId = MarkerId(place.name); //place.id
-      final Marker marker = Marker(
-        markerId: markerId,
-        position: LatLng(place.latitude, place.longitude),
-        infoWindow: InfoWindow(title: markerId.value),
-        onTap: () {
-          // _onMarkerTapped(markerId);
-        },
-      );
-      widget.addMarker(marker);
-    }
   }
 
   Future<Null> doSearch(String value) async {
@@ -420,7 +417,8 @@ class PlacesAutocomplete {
       ValueChanged<PlacesAutocompleteResponse> onError,
       String proxyBaseUrl,
       Client httpClient,
-      Function addMarker,
+      Function addMarkers,
+      Function cleanMarkers,
       @required GoogleMapController mapController,
       String startText = ""}) {
     final builder = (BuildContext ctx) => PlacesAutocompleteWidget(
@@ -440,7 +438,8 @@ class PlacesAutocomplete {
           proxyBaseUrl: proxyBaseUrl,
           httpClient: httpClient,
           startText: startText,
-          addMarker: addMarker,
+          addMarkers: addMarkers,
+          clearMarkers: cleanMarkers,
           mapController: mapController,
         );
 

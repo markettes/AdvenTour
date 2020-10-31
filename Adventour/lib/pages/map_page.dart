@@ -85,31 +85,34 @@ class _MapPageState extends State<MapPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MaterialButton(
-                    child: Icon(
-                      Icons.menu,
-                      color: Theme.of(context).buttonColor,
+                  // MaterialButton(
+                  //   child: Icon(
+                  //     Icons.menu,
+                  //     color: Theme.of(context).buttonColor,
+                  //   ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 53,
+                  //   elevation: 15,
+                  //   shape: CircleBorder(),
+                  //   onPressed: () {
+                  //     _scaffoldKey.currentState.openDrawer();
+                  //   },
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(left:8.0),
+                    child: MaterialButton(
+                      child: Text(
+                        'Clean markers',
+                      ),
+                      textColor: Theme.of(context).buttonColor,
+                      color: Theme.of(context).primaryColor,
+                      disabledTextColor: Theme.of(context).disabledColor,
+                      height: 40,
+                      elevation: 15,
+                      onPressed: _markers.isEmpty || _markers.length == 1
+                          ? null
+                          : () => _clearMarkers(),
                     ),
-                    color: Theme.of(context).primaryColor,
-                    height: 53,
-                    elevation: 15,
-                    shape: CircleBorder(),
-                    onPressed: () {
-                      _scaffoldKey.currentState.openDrawer();
-                    },
-                  ),
-                  MaterialButton(
-                    child: Text(
-                      'Clean markers',
-                    ),
-                    textColor: Theme.of(context).buttonColor,
-                    color: Theme.of(context).primaryColor,
-                    disabledTextColor: Theme.of(context).disabledColor,
-                    height: 40,
-                    elevation: 15,
-                    onPressed: _markers.isEmpty || _markers.length == 1
-                        ? null
-                        : () => _clearMarkers(),
                   ),
                   MaterialButton(
                     child: Icon(
@@ -123,13 +126,14 @@ class _MapPageState extends State<MapPage> {
                       setState(() {
                         _fixedPosition = false;
                       });
-                      Prediction prediction = await PlacesAutocomplete.show(
+                     await PlacesAutocomplete.show(
                           context: context,
                           apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
                           location:
                               Location(_position.latitude, _position.longitude),
                           mapController: _mapController,
-                          addMarker: _addMarker);
+                          addMarkers: _addMarkers,
+                          cleanMarkers:_clearMarkers,);
                     },
                   ),
                 ],
@@ -169,14 +173,17 @@ class _MapPageState extends State<MapPage> {
     controller.setMapStyle(style);
   }
 
-  void _addMarker(Marker marker) {
+  void _addMarkers(List<Marker> markers) {
     // var markerIdVal = MyWayToGenerateId();
-    final MarkerId markerId = marker.markerId;
+    for (var marker in markers) {
+      final MarkerId markerId = marker.markerId;
 
     setState(() {
       _markers[markerId] = marker;
     });
-    print(_markers.length);
+
+    }
+    
   }
 
   void _clearMarkers() {
