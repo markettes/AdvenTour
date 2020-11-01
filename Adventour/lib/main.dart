@@ -10,6 +10,7 @@ import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:Adventour/pages/custom_route_page.dart';
 
 void main() {
   //SdkContext.init(IsolateOrigin.main);

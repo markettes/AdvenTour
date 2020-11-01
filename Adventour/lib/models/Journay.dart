@@ -2,8 +2,8 @@ import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/directions.dart';
 
 class Journay {
-  Place _origin;
-  Place _destination;
+  String _origin;
+  String _destination;
   List<Route> _routes;
 
   Journay(origin,destination,routes){
@@ -12,9 +12,9 @@ class Journay {
     _routes = routes;
   }
 
-  Place get origin => _origin;
+  String get origin => _origin;
 
-  Place get destination => _destination;
+  String get destination => _destination;
 
   List<Route> get routes => _routes;
 }

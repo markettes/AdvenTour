@@ -7,12 +7,13 @@ class DirectionsEngine {
     apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
   );
 
-  Future<Journay> makeJournay(Place origin, Place destination, String transport) async {
+  Future<Journay> makeJournay(String origin, String destination, String transport) async {
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
       travelMode: toTravelMode(transport),
     );
+    print(response.errorMessage);
     return Journay(origin, destination, response.routes);
   }
 }
