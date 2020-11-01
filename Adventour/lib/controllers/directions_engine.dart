@@ -13,8 +13,8 @@ class DirectionsEngine {
       destination,
       travelMode: toTravelMode(transport),
     );
-    print(response.errorMessage);
-    return Journay(origin, destination, response.routes);
+    List<Path> paths = response.routes.map((route) => toPath(route)).toList();
+    return Journay(origin, destination, paths);
   }
 }
 

@@ -214,10 +214,11 @@ class _MapPageState extends State<MapPage> {
     for (var marker in markers) {
       final MarkerId markerId = marker.markerId;
 
-      setState(() {
         _markers[markerId] = marker;
-      });
     }
+    setState(() {
+      
+    });
   }
 
   void _clearMarkers() {
