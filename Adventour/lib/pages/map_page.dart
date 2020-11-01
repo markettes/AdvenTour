@@ -117,7 +117,6 @@ class _MapPageState extends State<MapPage> {
                       });
                       await PlacesAutocomplete.show(
                         context: context,
-                        apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
                         location:
                             Location(_position.latitude, _position.longitude),
                         onTapPrediction: _onTapPrediction,
