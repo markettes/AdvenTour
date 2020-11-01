@@ -41,15 +41,9 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   /// or custom configuration
   final BaseClient httpClient;
 
-  Function(List<Place>) addMarkers;
+  Function(Prediction) onTapPrediction;
 
-  Function(Place) goToPlace;
-
-  Function(List<Place>, LatLng) goToPlaces;
-
-  Function clearMarkers;
-
-  GoogleMapController mapController;
+  Function(String) onSubmitted;
 
   PlacesAutocompleteWidget(
       {@required this.apiKey,
@@ -69,11 +63,8 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       this.proxyBaseUrl,
       this.httpClient,
       this.startText,
-      @required this.addMarkers,
-      @required this.clearMarkers,
-      @required this.mapController,
-      @required this.goToPlace,
-      @required this.goToPlaces,
+      @required this.onTapPrediction,
+      @required this.onSubmitted,
       this.debounce = 300})
       : super(key: key);
 
@@ -91,14 +82,7 @@ class _PlacesAutocompleteScaffoldState extends PlacesAutocompleteState {
   Widget build(BuildContext context) {
     final searchBar = AppBarPlacesAutoCompleteTextField();
     final body = PlacesAutocompleteResult(
-      onTap: (prediction) async {
-        widget.clearMarkers();
-        Place place = (await searchEngine.searchByText(
-                prediction.description, widget.location, 1000))
-            .first;
-        widget.goToPlace(place);
-        widget.addMarkers([place]);
-      },
+      onTap: widget.onTapPrediction,
     );
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -185,20 +169,7 @@ class _AppBarPlacesAutoCompleteTextFieldState
           autofocus: true,
           style: widget.textStyle ?? _defaultStyle(),
           decoration: widget.textDecoration ?? _defaultDecoration(state),
-          onSubmitted: (value) async {
-            List<Place> places = await searchEngine.searchByText(
-                value, state.widget.location, 1000);
-            state.widget.clearMarkers();
-            state.widget.addMarkers(places);
-            if (places.length == 1) {
-              Place place = places.first;
-              state.widget.goToPlace(place);
-            }
-            if (places.length > 1) {
-              state.widget.goToPlaces(places,
-                  LatLng(state.widget.location.lat, state.widget.location.lng));
-            }
-          },
+          onSubmitted: state.widget.onSubmitted,
         ));
   }
 
@@ -390,34 +361,29 @@ class PlacesAutocomplete {
       ValueChanged<PlacesAutocompleteResponse> onError,
       String proxyBaseUrl,
       Client httpClient,
-      Function addMarkers,
-      Function cleanMarkers,
-      Function(Place) goToPlace,
-      Function(List<Place>, LatLng location) goToPlaces,
-      @required GoogleMapController mapController,
+      @required Function(Prediction) onTapPrediction,
+      @required Function(String) onSubmitted,
       String startText = ""}) {
     final builder = (BuildContext ctx) => PlacesAutocompleteWidget(
-        apiKey: apiKey,
-        overlayBorderRadius: overlayBorderRadius,
-        language: language,
-        sessionToken: sessionToken,
-        components: components,
-        types: types,
-        location: location,
-        radius: radius,
-        strictbounds: strictbounds,
-        region: region,
-        offset: offset,
-        hint: hint,
-        onError: onError,
-        proxyBaseUrl: proxyBaseUrl,
-        httpClient: httpClient,
-        startText: startText,
-        addMarkers: addMarkers,
-        clearMarkers: cleanMarkers,
-        mapController: mapController,
-        goToPlace: goToPlace,
-        goToPlaces: goToPlaces);
+          apiKey: apiKey,
+          overlayBorderRadius: overlayBorderRadius,
+          language: language,
+          sessionToken: sessionToken,
+          components: components,
+          types: types,
+          location: location,
+          radius: radius,
+          strictbounds: strictbounds,
+          region: region,
+          offset: offset,
+          hint: hint,
+          onError: onError,
+          proxyBaseUrl: proxyBaseUrl,
+          httpClient: httpClient,
+          startText: startText,
+          onTapPrediction: onTapPrediction,
+          onSubmitted: onSubmitted,
+        );
 
     return Navigator.push(context, MaterialPageRoute(builder: builder));
   }

@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
+import 'package:google_maps_webservice/src/places.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -115,15 +116,13 @@ class _MapPageState extends State<MapPage> {
                         _fixedPosition = false;
                       });
                       await PlacesAutocomplete.show(
-                          context: context,
-                          apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
-                          location:
-                              Location(_position.latitude, _position.longitude),
-                          mapController: _mapController,
-                          addMarkers: _addMarkers,
-                          cleanMarkers: _clearMarkers,
-                          goToPlace: goToPlace,
-                          goToPlaces: goToPlaces);
+                        context: context,
+                        apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+                        location:
+                            Location(_position.latitude, _position.longitude),
+                        onTapPrediction: _onTapPrediction,
+                        onSubmitted: _onSubmitted,
+                      );
                     },
                   ),
                   SizedBox(
@@ -169,6 +168,8 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
+
+
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
@@ -189,7 +190,7 @@ class _MapPageState extends State<MapPage> {
                 onTap: () =>
                     Navigator.of(context).pushNamed('/placePage', arguments: {
                   place: place,
-                  goToPlace: goToPlace,
+                  _goToPlace: _goToPlace,
                   _clearMarkers: _clearMarkers,
                   _addMarkers: _addMarkers
                 }),
@@ -236,14 +237,14 @@ class _MapPageState extends State<MapPage> {
       _addMarkers([place]);
       Navigator.of(context).pushNamed('/placePage', arguments: {
         place: place,
-        goToPlace: goToPlace,
+        _goToPlace: _goToPlace,
         _clearMarkers: _clearMarkers,
         _addMarkers: _addMarkers
       });
     }
   }
 
-  void goToPlace(Place place) {
+  void _goToPlace(Place place) {
     Navigator.pop(context);
     _mapController.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
@@ -254,7 +255,7 @@ class _MapPageState extends State<MapPage> {
     ));
   }
 
-  void goToPlaces(List<Place> places, LatLng location) {
+  void _goToPlaces(List<Place> places, LatLng location) {
     Navigator.pop(context);
     _mapController.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
@@ -263,5 +264,33 @@ class _MapPageState extends State<MapPage> {
         zoom: 14.5,
       ),
     ));
+  }
+
+    Future _onSubmitted(String value) async {
+    List<Place> places = await searchEngine.searchByText(
+        value,
+        Location(_position.latitude, _position.longitude),
+        1000);
+    _clearMarkers();
+    _addMarkers(places);
+    if (places.length == 1) {
+      Place place = places.first;
+      _goToPlace(place);
+    }
+    if (places.length > 1) {
+      _goToPlaces(
+          places,
+          LatLng(
+              _position.latitude, _position.longitude));
+    }
+  }
+
+  Future _onTapPrediction(Prediction prediction) async {
+    _clearMarkers();
+    Place place = (await searchEngine.searchByText(prediction.description,
+            Location(_position.latitude, _position.longitude), 1000))
+        .first;
+    _goToPlace(place);
+    _addMarkers([place]);
   }
 }
