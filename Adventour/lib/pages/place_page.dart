@@ -93,7 +93,7 @@ class PlaceBodyInfo extends StatelessWidget {
                       ),
                     )),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(children: [
               InfoMiddle(
                 place: place,
@@ -104,28 +104,32 @@ class PlaceBodyInfo extends StatelessWidget {
               SizedBox(
                 height: 5,
               ),
-              Column(
-                children: [
-                  if (place.adress != null)
-                    InfoBut(
-                      icon: Icons.gps_fixed,
-                      text: place.adress,
-                    ),
-                  if (place.telephone != null) SizedBox(height: 5),
-                  if (place.telephone != null)
-                    InfoBut(icon: Icons.local_phone, text: place.telephone),
-                  if (place.openingHours != null) SizedBox(height: 5),
-                  if (place.openingHours != null)
-                    InfoBut(
-                        icon: Icons.access_alarm_outlined,
-                        text: place.openingHours.openNow ? 'Opened' : 'Closed'),
-                  if (place.openingHours != null) SizedBox(height: 5),
-                  if (place.openingHours != null)
-                    InfoBut(
-                      icon: Icons.calendar_today,
-                      text: openAndClose(),
-                    ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    if (place.adress != null)
+                      InfoBut(
+                        icon: Icons.gps_fixed,
+                        text: place.adress,
+                      ),
+                    if (place.telephone != null) SizedBox(height: 5),
+                    if (place.telephone != null)
+                      InfoBut(icon: Icons.local_phone, text: place.telephone),
+                    if (place.openingHours != null) SizedBox(height: 5),
+                    if (place.openingHours != null)
+                      InfoBut(
+                          icon: Icons.access_alarm_outlined,
+                          text:
+                              place.openingHours.openNow ? 'Opened' : 'Closed'),
+                    if (place.openingHours != null) SizedBox(height: 5),
+                    if (place.openingHours != null)
+                      InfoBut(
+                        icon: Icons.calendar_today,
+                        text: openAndClose(),
+                      ),
+                  ],
+                ),
               ),
               Divider(
                 thickness: 2,
@@ -303,18 +307,18 @@ class InfoMiddle extends StatelessWidget {
           ),
         if (place.rating != null)
           SizedBox(
-            width: 8,
-          ),
-        if (place.rating != null)
-          Text(
-            place.rating.toString(),
-            style: Theme.of(context).textTheme.bodyText1,
+            width: 15,
           ),
         if (place.rating != null)
           Icon(
             Icons.star,
             color: Theme.of(context).primaryColor,
             size: 45,
+          ),
+        if (place.rating != null)
+          Text(
+            place.rating.toString(),
+            style: Theme.of(context).textTheme.bodyText1,
           ),
         Expanded(
             child: Row(
