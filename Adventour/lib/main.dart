@@ -1,4 +1,3 @@
-import 'package:Adventour/pages/custom_route_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/main_page.dart';
@@ -8,7 +7,9 @@ import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/creating_route_page.dart';
 import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
+import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   //SdkContext.init(IsolateOrigin.main);
@@ -18,10 +19,12 @@ void main() {
 class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
       theme: themeData,
+      //initialRoute: '/mapPage',
       initialRoute: '/mapPage',
       routes: {
         '/initPage': (_) => InitPage(),
