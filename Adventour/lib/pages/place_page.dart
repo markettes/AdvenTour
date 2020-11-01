@@ -214,16 +214,13 @@ class PlaceBodyInfo extends StatelessWidget {
   }
 
   String openAndClose() {
-    print('hola');
     int dia;
     if (DateTime.now().weekday == 7) {
       dia = 0;
     } else {
       dia = DateTime.now().weekday;
     }
-    print('hola2');
     if (place.openingHours.periods[dia].open.time.isEmpty) {
-      print('hola3');
       return "null";
     } else {
       String numHorasAbierto = "${place.openingHours.periods[dia].open.time}";
