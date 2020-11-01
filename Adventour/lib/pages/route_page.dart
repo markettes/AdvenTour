@@ -4,7 +4,7 @@ import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as google;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 
 class RoutePage extends StatefulWidget {
@@ -13,11 +13,17 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  google.GoogleMapController _mapController;
+  GoogleMapController _mapController;
 
   Position _position;
 
-  Map<google.PolylineId, google.Polyline> polylines = {};
+  Map<PolylineId, Polyline> _polylines = {};
+
+  @override
+  void initState() {
+    _drawJournay();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +39,13 @@ class _RoutePageState extends State<RoutePage> {
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData) return CircularProgressIndicator();
           _position = snapshot.data;
-          _drawJournay();
-          return google.GoogleMap(
-            initialCameraPosition: google.CameraPosition(
-              target: google.LatLng(_position.latitude, _position.longitude),
+          
+          return GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(_position.latitude, _position.longitude),
               zoom: 11,
             ),
-            polylines: Set<google.Polyline>.of(polylines.values),
+            polylines: Set<Polyline>.of(_polylines.values),
             onMapCreated: _onMapCreated,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
@@ -52,23 +58,26 @@ class _RoutePageState extends State<RoutePage> {
 
   Future _drawJournay() async {
     Journay journay = await directionsEngine.makeJournay('Meliana', 'Burjassot', 'walk');
-    print(journay.routes.isEmpty);
-    _addJournays([journay]);
+    _addPaths(journay.paths);
   }
 
-  void _onMapCreated(google.GoogleMapController controller) {
+  void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
   }
 
-    Future _changeMapStyle(google.GoogleMapController controller) async {
+    Future _changeMapStyle(GoogleMapController controller) async {
     String style = await rootBundle.loadString("assets/map_style.json");
     controller.setMapStyle(style);
   }
 
-  _addJournays(List<Journay> journays){
+  _addPaths(List<Path> paths){
+    List<Polyline> polylines = paths.map((path) => path.polyline).toList();
+    for (Polyline polyline in polylines) {
+      _polylines[polyline.polylineId] = polyline;
+    }
     setState(() {
-      polylines[google.PolylineId('1')] = journays.first.routes.first.overviewPolyline as google.Polyline;
+      
     });
   }
 }
