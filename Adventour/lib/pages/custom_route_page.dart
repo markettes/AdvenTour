@@ -3,7 +3,37 @@ import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
+void main(List<String> args) {
+  runApp(CustomRoutePage());
+}
+
 List<String> transports = ['car', 'bicycle', 'public', 'walk'];
+List<String> places = [
+  'amusement_park',
+  'museum',
+  'church',
+  'library',
+  'night_club',
+  'restaurants',
+  'zoo'
+];
+// List<String> places = [
+//   'amusement_park',
+//   'art_gallery',
+//   'museum',
+//   'church',
+//   'hindu_temple',
+//   'mosque',
+//   'synagogue',
+//   'library',
+//   'university',
+//   'night_club',
+//   //restaurants
+//   'restaurant',
+//   'bar',
+//   'cafe',
+//   'zoo'
+// ];
 
 class CustomRoutePage extends StatefulWidget {
   @override
@@ -13,6 +43,7 @@ class CustomRoutePage extends StatefulWidget {
 class _CustomRoutePageState extends State<CustomRoutePage> {
   bool _shortRoute = true;
   List<String> _transports = [];
+  List<String> _places = [];
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +67,49 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
               Expanded(
                 child: Column(
                   children: [
-                    Column(
-                      children: [
-                        Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Places',
-                              style: Theme.of(context).textTheme.headline2,
-                            ))
-                      ],
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text('Places',
+                                  style:
+                                      Theme.of(context).textTheme.headline2)),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 20, right: 20),
+                            child: SizedBox(
+                              height: 70,
+                              child: ListView.separated(
+                                itemCount: places.length,
+                                scrollDirection: Axis.horizontal,
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(width: 5),
+                                itemBuilder: (context, index) {
+                                  bool activated =
+                                      _places.contains(places[index]);
+                                  bool icon = places[index] == 'zoo' ||
+                                          places[index] == 'church' ||
+                                          places[index] == 'night_club'
+                                      ? false
+                                      : true;
+                                  return CircleIconButton(
+                                      activated: activated,
+                                      type: places[index],
+                                      icon: icon,
+                                      onPressed: () {
+                                        setState(() {
+                                          if (activated)
+                                            _places.remove(places[index]);
+                                          else
+                                            _places.add(places[index]);
+                                        });
+                                      });
+                                },
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: Column(
@@ -84,7 +149,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                           )
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -204,7 +269,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                     ),
                     PrimaryButton(
                       text: 'CREATE',
-                      onPressed: () => Navigator.pushNamed(context, '/routePage',arguments: placeId),
+                      onPressed: () => Navigator.pushNamed(
+                          context, '/routePage',
+                          arguments: placeId),
                       icon: Icons.edit,
                       style: ButtonType.Normal,
                     ),
