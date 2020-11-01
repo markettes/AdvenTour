@@ -56,11 +56,11 @@ class StylePage extends StatelessWidget {
                     ),
                   ],
                 ),
-                InputText(
-                  obscured: false,
-                  icon: Icons.location_on,
-                  labelText: 'Location',
-                ),
+                // InputText(
+                //   obscured: false,
+                //   icon: Icons.location_on,
+                //   labelText: 'Location',
+                // ),
                 SquareIconButton(
                   icon: Icons.map,
                   onPressed: () {

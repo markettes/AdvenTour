@@ -5,10 +5,12 @@ class InputText extends StatefulWidget {
     this.icon = Icons.edit,
     this.labelText,
     this.errorText,
-    this.controller,
+    @required this.controller,
     this.obscured = false,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.onTap,
+    this.readOnly = false
   });
 
   IconData icon;
@@ -18,6 +20,8 @@ class InputText extends StatefulWidget {
   bool obscured;
   TextInputType keyboardType;
   Function(String value) validator;
+  Function() onTap;
+  bool readOnly;
 
   @override
   _InputTextState createState() => _InputTextState();
@@ -37,6 +41,7 @@ class _InputTextState extends State<InputText> {
         keyboardType: widget.keyboardType,
         obscureText: widget.obscured,
         controller: widget.controller,
+        readOnly: widget.readOnly,
         decoration: InputDecoration(
           icon: Icon(
             widget.icon,
@@ -44,7 +49,7 @@ class _InputTextState extends State<InputText> {
           ),
           labelText: widget.labelText,
           errorText: widget.errorText,
-          suffixIcon: widget.controller.text.length > 0
+          suffixIcon: widget.controller.text.length > 0 && !widget.readOnly
               ? IconButton(
                   icon: Icon(Icons.clear),
                   onPressed: () {
@@ -57,6 +62,7 @@ class _InputTextState extends State<InputText> {
         onChanged: (value) {
           setState(() {});
         },
+        onTap: widget.onTap,
         validator: widget.validator,
       ),
     );
