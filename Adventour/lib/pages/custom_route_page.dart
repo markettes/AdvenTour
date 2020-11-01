@@ -243,7 +243,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                           Icon(Icons.keyboard_arrow_up),
                                           Expanded(
                                             child: Text(
-                                                'Short routes: about 5 hours max',
+                                                'Long routes: about 5 hours max',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyText2
