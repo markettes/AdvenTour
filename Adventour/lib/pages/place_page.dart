@@ -14,9 +14,6 @@ class PlacePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final List<Object> args = ModalRoute.of(context).settings.arguments;
-    // place = args.first;
-    // goToPlace = args.last.;
     Map args = ModalRoute.of(context).settings.arguments;
     place = args.values.toList()[0];
     goToPlace = args.values.toList()[1];
@@ -217,22 +214,25 @@ class PlaceBodyInfo extends StatelessWidget {
   }
 
   String openAndClose() {
+    print('hola');
     int dia;
-    if (DateTime.now().weekday == 6) {
+    if (DateTime.now().weekday == 7) {
       dia = 0;
     } else {
       dia = DateTime.now().weekday;
     }
+    print('hola2');
     if (place.openingHours.periods[dia].open.time.isEmpty) {
+      print('hola3');
       return "null";
     } else {
       String numHorasAbierto = "${place.openingHours.periods[dia].open.time}";
       String horasAbierto = numHorasAbierto.substring(0, 2) +
-          " : " +
+          ":" +
           numHorasAbierto.substring(2, 4);
       String numHorasCerrado = "${place.openingHours.periods[dia].close.time}";
       String horasCerrado = numHorasCerrado.substring(0, 2) +
-          " : " +
+          ":" +
           numHorasCerrado.substring(2, 4);
       return horasAbierto + " - " + horasCerrado;
     }
