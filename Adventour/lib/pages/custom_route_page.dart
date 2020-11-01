@@ -16,6 +16,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
 
   @override
   Widget build(BuildContext context) {
+    String placeId = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text('Creating your route'),
@@ -203,7 +204,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                     ),
                     PrimaryButton(
                       text: 'CREATE',
-                      onPressed: () {},
+                      onPressed: () => Navigator.pushNamed(context, '/routePage',arguments: placeId),
                       icon: Icons.edit,
                       style: ButtonType.Normal,
                     ),

@@ -7,6 +7,12 @@ class Place {
   double _longitude;
   num _rating;
 
+  Place(String id,{latitude,longitude}){
+    _id = id;
+    _latitude = latitude;
+    _longitude = longitude;
+  }
+
   Place.fromGoogleMaps(Map json) {
 
     var location = json["geometry"]["location"];

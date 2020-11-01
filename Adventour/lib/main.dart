@@ -5,6 +5,7 @@ import 'package:Adventour/pages/main_page.dart';
 import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
+import 'package:Adventour/pages/creating_route_page.dart';
 import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +31,9 @@ class Adventour extends StatelessWidget {
         '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
         '/placePage': (_) => PlacePage(),
-        '/routePage': (_) => RoutePage(),
-        '/customRoutePage': (_) => CustomRoutePage()
+        '/creatingRoutePage': (_) => CreatingRoutePage(),
+        '/customRoutePage': (_) => CustomRoutePage(),
+        '/routePage':(_) => RoutePage()
       },
     );
   }

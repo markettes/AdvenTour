@@ -1,153 +1,52 @@
-import 'package:Adventour/controllers/auth.dart';
-import 'package:Adventour/widgets/input_text.dart';
-import 'package:Adventour/widgets/primary_button.dart';
-import 'package:Adventour/widgets/scroll_column_expandable.dart';
+import 'package:Adventour/controllers/directions_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
-import 'package:Adventour/pages/search_page.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:Adventour/controllers/search_engine.dart';
 
 class RoutePage extends StatelessWidget {
+  GoogleMapController _mapController;
+  Position _position;
   @override
   Widget build(BuildContext context) {
+    String placeId = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Creating your route'),
+        title: Text('Custom route'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: SafeArea(
-          child: ScrollColumnExpandable(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(40),
-                child: SizedBox(
-                  height: 180,
-                  child: Image.asset(
-                    'assets/logo_adventour.png',
-                  ),
-                ),
-              ),
-              Expanded(
-                child: CreatingRouteForm(),
-              ),
-            ],
-          ),
-        ),
+      body: FutureBuilder(
+        future: Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          _position = snapshot.data;
+          directionsEngine.makeJournay(Place(placeId), Place(placeId), 'car');
+          return GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(_position.latitude, _position.longitude),
+              zoom: 11,
+            ),
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+          );
+        },
       ),
     );
   }
-}
 
-class CreatingRouteForm extends StatefulWidget {
-  @override
-  _CreatingRouteFormState createState() => _CreatingRouteFormState();
-}
-
-class _CreatingRouteFormState extends State<CreatingRouteForm> {
-  TextEditingController _locationController = TextEditingController(text:'Your location');
-  TextEditingController _dateController =
-      TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
-  DateTime _selectedDate;
-  String _location;
-  String _locationId;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: InputText(
-                  controller: _locationController,
-                  labelText: 'Route zone',
-                  icon: Icons.location_on,
-                  onTap: () => PlacesAutocomplete.show(
-                    context: context,
-                    onTapPrediction: (prediction){
-                      Navigator.pop(context);
-                      
-                        _location = prediction.description;
-                        _locationId = prediction.placeId;
-                        setState(() {
-                        _locationController.text = _location;
-                      });
-                    },
-                    onSubmitted: (value){},
-                  ),
-                  readOnly: true,
-                ),
-              ),
-              Expanded(
-                child: InputText(
-                  controller: _dateController,
-                  labelText: 'Date',
-                  icon: Icons.calendar_today,
-                  onTap: () => _selectDate(context),
-                  readOnly: true,
-                ),
-              )
-            ],
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    // PrimaryButton(
-                    //   text: 'HIGHLIGHTS',
-                    //   onPressed: () {
-                    //     //Navigator.of(context).pushNamed('/xxx');
-                    //   },
-                    //   icon: Icons.star,
-                    //   style: ButtonType.Void,
-                    // ),
-                    PrimaryButton(
-                      text: 'CREATE',
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/customRoutePage',arguments: _locationId);
-                      },
-                      icon: Icons.edit,
-                      style: ButtonType.Normal,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
-    );
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+    _changeMapStyle(_mapController);
   }
 
-  _selectDate(BuildContext context) async {
-    DateTime newSelectedDate = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 365 * 2)),
-      builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(),
-          ),
-          child: child,
-        );
-      },
-    );
-
-    if (newSelectedDate != null) {
-      _selectedDate = newSelectedDate;
-      _dateController
-        ..text = DateFormat.yMMMd().format(_selectedDate)
-        ..selection = TextSelection.fromPosition(TextPosition(
-            offset: _dateController.text.length,
-            affinity: TextAffinity.upstream));
-    }
+    Future _changeMapStyle(GoogleMapController controller) async {
+    String style = await rootBundle.loadString("assets/map_style.json");
+    controller.setMapStyle(style);
   }
+
 }

@@ -19,7 +19,6 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  SearchEngine _seachEngine = SearchEngine();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class _MapPageState extends State<MapPage> {
           FloatingActionButton(
             heroTag: 'route',
             backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () => Navigator.pushNamed(context, '/routePage'),
+            onPressed: () => Navigator.pushNamed(context, '/creatingRoutePage'),
             child: Icon(
               Icons.flag,
               color: Theme.of(context).buttonColor,
@@ -96,20 +95,11 @@ class _MapPageState extends State<MapPage> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _changeMapStyle(_mapController);
-    _searchRestaurants(controller);
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
     String style = await rootBundle.loadString("assets/map_style.json");
     controller.setMapStyle(style);
-  }
-
-  Future _searchRestaurants(GoogleMapController controller) async {
-    List<Place> places =
-        await _seachEngine.searchByLocation(39.5305989, -0.3489142);
-    for (var place in places) {
-      print(place.toString());
-    }
   }
 
   void _add() {
