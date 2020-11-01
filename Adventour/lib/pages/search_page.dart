@@ -17,7 +17,6 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   final String startText;
   final String hint;
   final BorderRadius overlayBorderRadius;
-  final Location location;
   final num offset;
   final num radius;
   final String language;
@@ -51,7 +50,6 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       this.hint = "Search",
       this.overlayBorderRadius,
       this.offset,
-      this.location,
       this.radius,
       this.language,
       this.sessionToken,
@@ -280,7 +278,6 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
       final res = await _places.autocomplete(
         value,
         offset: widget.offset,
-        location: widget.location,
         radius: widget.radius,
         language: widget.language,
         sessionToken: widget.sessionToken,
@@ -350,7 +347,6 @@ class PlacesAutocomplete {
       String hint = "Search",
       BorderRadius overlayBorderRadius,
       num offset,
-      @required Location location,
       num radius,
       String language,
       String sessionToken,
@@ -370,7 +366,6 @@ class PlacesAutocomplete {
           sessionToken: sessionToken,
           components: components,
           types: types,
-          location: location,
           radius: radius,
           strictbounds: strictbounds,
           region: region,

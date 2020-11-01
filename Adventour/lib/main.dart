@@ -46,6 +46,7 @@ class Adventour extends StatelessWidget {
     cursorColor: Colors.deepPurple[600],
     buttonColor: Colors.white,
     dividerColor: Colors.black,
+    disabledColor: Colors.deepPurple[200],
     textTheme: TextTheme(
         headline1: TextStyle(
           fontWeight: FontWeight.w500,

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
-enum CircleIconButtonType { Food, Museum }
-
 class CircleIconButton extends StatelessWidget {
   CircleIconButton({
     @required this.type,
     @required this.onPressed,
+    this.activated = true
   });
 
-  CircleIconButtonType type;
+  String type;
   Function onPressed;
+  bool activated;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       onPressed: onPressed,
       elevation: 2.0,
-      fillColor: Theme.of(context).primaryColor,
+      fillColor: activated?Theme.of(context).primaryColor:Theme.of(context).disabledColor,
       constraints: BoxConstraints(minWidth: 0),
       child: Icon(
-        icon(type),
+        toIcon(type),
         size: 25,
         color: Colors.white,
       ),
@@ -27,15 +27,19 @@ class CircleIconButton extends StatelessWidget {
       shape: CircleBorder(),
     );
   }
-}
 
-IconData icon(CircleIconButtonType type) {
-  switch (type) {
-    case CircleIconButtonType.Food:
-      return Icons.restaurant;
-    case CircleIconButtonType.Museum:
-      return Icons.museum;
-    default:
-      return Icons.error;
+  IconData toIcon(String type) {
+    switch (type) {
+      case 'car':
+        return Icons.directions_car;
+      case 'walk':
+        return Icons.directions_walk;
+      case 'bicycle':
+        return Icons.directions_bike;
+      case 'public':
+        return Icons.directions_subway;
+      default:
+        throw Exception();
+    }
   }
 }

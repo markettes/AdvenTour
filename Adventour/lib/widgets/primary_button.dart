@@ -4,7 +4,7 @@ enum ButtonType { Normal, Void }
 
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({
-    this.text,
+    @required this.text,
     this.onPressed,
     this.style = ButtonType.Normal,
     this.padding =

@@ -3,6 +3,7 @@ import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:Adventour/pages/search_page.dart';
 
@@ -44,10 +45,12 @@ class CreatingRouteForm extends StatefulWidget {
 }
 
 class _CreatingRouteFormState extends State<CreatingRouteForm> {
-  TextEditingController _locationController = TextEditingController();
+  TextEditingController _locationController = TextEditingController(text:'Your location');
   TextEditingController _dateController =
       TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
   DateTime _selectedDate;
+  String _location;
+  String _locationId;
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +62,20 @@ class _CreatingRouteFormState extends State<CreatingRouteForm> {
               Expanded(
                 child: InputText(
                   controller: _locationController,
-                  labelText: 'Where do you want to go?',
+                  labelText: 'Route zone',
                   icon: Icons.location_on,
                   onTap: () => PlacesAutocomplete.show(
                     context: context,
-                    location: null,
-                    onTapPrediction: null,
-                    onSubmitted: null,
+                    onTapPrediction: (prediction){
+                      Navigator.pop(context);
+                      
+                        _location = prediction.description;
+                        _locationId = prediction.placeId;
+                        setState(() {
+                        _locationController.text = _location;
+                      });
+                    },
+                    onSubmitted: (value){},
                   ),
                   readOnly: true,
                 ),
@@ -89,18 +99,18 @@ class _CreatingRouteFormState extends State<CreatingRouteForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    // PrimaryButton(
+                    //   text: 'HIGHLIGHTS',
+                    //   onPressed: () {
+                    //     //Navigator.of(context).pushNamed('/xxx');
+                    //   },
+                    //   icon: Icons.star,
+                    //   style: ButtonType.Void,
+                    // ),
                     PrimaryButton(
-                      text: 'HIGHLIGHTS',
+                      text: 'CREATE',
                       onPressed: () {
-                        //Navigator.of(context).pushNamed('/xxx');
-                      },
-                      icon: Icons.star,
-                      style: ButtonType.Void,
-                    ),
-                    PrimaryButton(
-                      text: 'CUSTOM',
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/customRoutePage');
+                        Navigator.of(context).pushNamed('/customRoutePage',arguments: _locationId);
                       },
                       icon: Icons.edit,
                       style: ButtonType.Normal,
