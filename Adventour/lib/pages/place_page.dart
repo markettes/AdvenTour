@@ -218,7 +218,7 @@ class PlaceBodyInfo extends StatelessWidget {
 
   String openAndClose() {
     int dia;
-    if (DateTime.now().weekday == 6) {
+    if (DateTime.now().weekday == 7) {
       dia = 0;
     } else {
       dia = DateTime.now().weekday;
