@@ -11,8 +11,9 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 
+String apiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
+
 class PlacesAutocompleteWidget extends StatefulWidget {
-  final String apiKey;
   final String startText;
   final String hint;
   final BorderRadius overlayBorderRadius;
@@ -46,7 +47,7 @@ class PlacesAutocompleteWidget extends StatefulWidget {
   Function(String) onSubmitted;
 
   PlacesAutocompleteWidget(
-      {@required this.apiKey,
+      {
       this.hint = "Search",
       this.overlayBorderRadius,
       this.offset,
@@ -260,7 +261,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
     _queryTextController = TextEditingController(text: widget.startText);
 
     _places = GoogleMapsPlaces(
-        apiKey: widget.apiKey,
+        apiKey: apiKey,
         baseUrl: widget.proxyBaseUrl,
         httpClient: widget.httpClient);
     _searching = false;
@@ -346,7 +347,6 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
 class PlacesAutocomplete {
   static Future<Prediction> show(
       {@required BuildContext context,
-      @required String apiKey,
       String hint = "Search",
       BorderRadius overlayBorderRadius,
       num offset,
@@ -365,7 +365,6 @@ class PlacesAutocomplete {
       @required Function(String) onSubmitted,
       String startText = ""}) {
     final builder = (BuildContext ctx) => PlacesAutocompleteWidget(
-          apiKey: apiKey,
           overlayBorderRadius: overlayBorderRadius,
           language: language,
           sessionToken: sessionToken,
