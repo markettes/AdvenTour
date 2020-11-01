@@ -40,9 +40,9 @@ class PrimaryButton extends StatelessWidget {
                     : Icon(
                         icon,
                         color: Theme.of(context).primaryColor,
-                        size: 30,
+                        size: 40,
                       ),
-                height: 35,
+                height: 40,
                 width: 35,
               ),
             ),

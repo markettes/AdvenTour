@@ -47,14 +47,29 @@ class _MapPageState extends State<MapPage> {
               myLocationButtonEnabled: false,
             );
           }),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: _currentLocation,
-        isExtended: false,
-        label: Icon(
-          Icons.location_on,
-          color: Theme.of(context).buttonColor,
-        ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'route',
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () => Navigator.pushNamed(context, '/routePage'),
+            child: Icon(
+              Icons.flag,
+              color: Theme.of(context).buttonColor,
+            ),
+          ),
+          SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'current_location',
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: _currentLocation,
+            child: Icon(
+              Icons.location_on,
+              color: Theme.of(context).buttonColor,
+            ),
+          ),
+        ],
       ),
     );
   }
