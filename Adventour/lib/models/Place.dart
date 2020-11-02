@@ -38,8 +38,10 @@ class Place {
   List<Photo> _photos;
   List<Review> _reviews;
   OpeningHoursDetail _openingHours;
+  List<String> _weekdaytext;
+  bool _openNow;
 
-  Place(String id,{latitude,longitude}){
+  Place(String id, {latitude, longitude}) {
     _id = id;
     _latitude = latitude;
     _longitude = longitude;
@@ -79,7 +81,11 @@ class Place {
     if (_reviews != null) {
       _reviews.sort((a, b) => b.rating.compareTo(a.rating));
     }
-    _openingHours = details.openingHours;
+    if (details.openingHours != null) {
+      _openingHours = details.openingHours;
+      _weekdaytext = details.openingHours.weekdayText;
+      _openNow = details.openingHours.openNow;
+    }
   }
 
   get detailed => _detailed;
@@ -106,6 +112,10 @@ class Place {
 
   get openingHours => _openingHours;
 
+  get weekdaytext => _weekdaytext;
+
+  get openNow => _openNow;
+
   @override
   String toString() {
     return """
@@ -120,6 +130,8 @@ rating = $_rating
 photos = ${_photos}
 reviews = ${_reviews}
 openingHours = ${_openingHours}
+weekdaytext = ${_weekdaytext}
+openNow = ${_openNow}
     """;
   }
 }
