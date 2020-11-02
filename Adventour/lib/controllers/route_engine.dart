@@ -28,11 +28,10 @@ class RouteEngine {
           type, location, maxDistance));
     }
 
-    //QUITAR DUPLICADOS
-    
-
-    prePlaces
-        .removeWhere((place) => place.rating == null || place.rating < 4.3 || place.userRatingsTotal < 500);
+    prePlaces.removeWhere((place) =>
+        place.rating == null ||
+        place.rating < 4.3 ||
+        place.userRatingsTotal < 500);
 
     List<Place> places = [];
 
@@ -42,7 +41,18 @@ class RouteEngine {
       places.add(prePlaces.firstWhere((place) => place.types.contains(type)));
     }
 
-    for (var place in places) {
+    //QUITAR DUPLICADOS
+
+    List<Place> prePlacesWithoutDuplicates = [];
+
+    for (Place p in places) {
+      print(p.name);
+      if (!prePlacesWithoutDuplicates.contains(p)) {
+        prePlacesWithoutDuplicates.add(p);
+      }
+    }
+
+    for (var place in prePlacesWithoutDuplicates) {
       print(place.toString());
     }
   }
