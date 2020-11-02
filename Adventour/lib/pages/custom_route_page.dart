@@ -75,10 +75,10 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                               child: Text('Places',
                                   style:
                                       Theme.of(context).textTheme.headline2)),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: SizedBox(
-                              height: 70,
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
                               child: ListView.separated(
                                 itemCount: places.length,
                                 scrollDirection: Axis.horizontal,
@@ -119,31 +119,35 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                               child: Text('Transports',
                                   style:
                                       Theme.of(context).textTheme.headline2)),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: SizedBox(
-                              height: 70,
-                              child: ListView.separated(
-                                itemCount: transports.length,
-                                scrollDirection: Axis.horizontal,
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(width: 5),
-                                itemBuilder: (context, index) {
-                                  bool activated =
-                                      _transports.contains(transports[index]);
-                                  return CircleIconButton(
-                                      activated: activated,
-                                      type: transports[index],
-                                      onPressed: () {
-                                        setState(() {
-                                          if (activated)
-                                            _transports
-                                                .remove(transports[index]);
-                                          else
-                                            _transports.add(transports[index]);
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20, right: 20),
+                              child: SizedBox(
+                                height: 70,
+                                child: ListView.separated(
+                                  itemCount: transports.length,
+                                  scrollDirection: Axis.horizontal,
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(width: 5),
+                                  itemBuilder: (context, index) {
+                                    bool activated =
+                                        _transports.contains(transports[index]);
+                                    return CircleIconButton(
+                                        activated: activated,
+                                        type: transports[index],
+                                        onPressed: () {
+                                          setState(() {
+                                            if (activated)
+                                              _transports
+                                                  .remove(transports[index]);
+                                            else
+                                              _transports
+                                                  .add(transports[index]);
+                                          });
                                         });
-                                      });
-                                },
+                                  },
+                                ),
                               ),
                             ),
                           )
