@@ -4,31 +4,31 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 List<String> transports = ['car', 'bicycle', 'public', 'walk'];
-// List<String> places = [
-//   'amusement_park',
-//   'museum',
-//   'church',
-//   'library',
-//   'night_club',
-//   'restaurants',
-//   'zoo'
-// ];
 List<String> places = [
   'amusement_park',
-  'art_gallery',
   'museum',
   'church',
-  'hindu_temple',
-  'mosque',
-  'synagogue',
   'library',
-  'university',
   'night_club',
   'restaurants',
-  'bar',
-  'cafe',
   'zoo'
 ];
+// List<String> places = [
+//   'amusement_park',
+//   'art_gallery',
+//   'museum',
+//   'church',
+//   'hindu_temple',
+//   'mosque',
+//   'synagogue',
+//   'library',
+//   'university',
+//   'night_club',
+//   'restaurants',
+//   'bar',
+//   'cafe',
+//   'zoo'
+// ];
 
 class CustomRoutePage extends StatefulWidget {
   @override
