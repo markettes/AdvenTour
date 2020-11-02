@@ -1,29 +1,34 @@
-import 'package:google_maps_webservice/src/places.dart';
+import 'package:Adventour/controllers/place.dart';
 
-const AMUSEMENT_PARK = "amusement_park";
-const AQUARIUM = "aquarium";
-const ART_GALLERY = "art_gallery";
-const BAR = "bar";
-const BOWLING_ALLEY = "bowling_alley";
-const CAFE = "cafe";
-const CASINO = "casino";
-const CHURCH = "church";
-const CITY_HALL = "city_hall";
-const COURTHOUSE = "courthouse";
-const HINDU_TEMPLE = "hindu_temple";
-const LIBRARY = "library";
-const MOSQUE = "mosque";
-const MOVIE_THEATER = "movie_theater";
-const MUSEUM = "museum";
-const NIGHT_CLUB = "night_club";
-const PARK = "park";
-const RESTAURANT = "restaurant";
-const SHOPPING_MALL = "shopping_mall";
-const STADIUM = "stadium";
-const SYNAGOGUE = "synagogue";
-const TOURIST_ATTRACTION = "tourist_attraction";
-const UNIVERSITY = "university";
-const ZOO = "zoo";
+// NO EN RUTAS PERO IMPLEMENTAR DE OTRA FROMA
+// const ZOO = "zoo";
+// const AMUSEMENT_PARK = "amusement_park";
+// const AQUARIUM = "aquarium";
+//const CASINO = "casino";
+
+//SHORT
+const BAR = "bar"; //30
+const CAFE = "cafe"; //30
+const CHURCH = "church"; // + 30
+const CITY_HALL = "city_hall"; //20
+const COURTHOUSE = "courthouse"; //20
+const LIBRARY = "library"; // 30
+const MOSQUE = "mosque"; // + 30
+const MOVIE_THEATER = "movie_theater"; // 30
+const PARK = "park"; // + 20
+const STADIUM = "stadium"; // 20
+const SYNAGOGUE = "synagogue"; // + 30
+const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
+const UNIVERSITY = "university"; // 20
+//LARGE
+const ART_GALLERY = "art_gallery"; // 45
+const HINDU_TEMPLE = "hindu_temple"; // + 40
+const MUSEUM = "museum"; // + 45
+const NIGHT_CLUB = "night_club"; // + 60
+const RESTAURANT = "restaurant"; // 60
+const SHOPPING_MALL = "shopping_mall"; // 60
+
+
 
 class Place {
   bool _detailed;
@@ -40,9 +45,10 @@ class Place {
   OpeningHoursDetail _openingHours;
   List<String> _weekdaytext;
   bool _openNow;
+  List<String> _types;
+  num _userRatingsTotal;
 
-  Place(String id, {latitude, longitude}) {
-    _id = id;
+  Place(latitude, longitude) {
     _latitude = latitude;
     _longitude = longitude;
   }
@@ -64,6 +70,9 @@ class Place {
     _icon = result.icon;
     _latitude = result.geometry.location.lat;
     _longitude = result.geometry.location.lng;
+    _types = result.types;
+    _rating = result.rating;
+    _userRatingsTotal =result.userRatingsTotal;
   }
 
   Place.fromDetails(PlaceDetails details) {
@@ -102,7 +111,7 @@ class Place {
 
   get telephone => _telephone;
 
-  get rating => _rating;
+  num get rating => _rating;
 
   get icon => _icon;
 
@@ -116,22 +125,27 @@ class Place {
 
   get openNow => _openNow;
 
+  List<String> get types => _types;
+
+  num get userRatingsTotal => _userRatingsTotal;
+
   @override
   String toString() {
     return """
 id = $_id
 name = $_name
-icon = $_icon
-adress = $_adress
-latitude = $_latitude
-longitude = $_longitude
-telephone = $_telephone
-rating = $_rating
-photos = ${_photos}
-reviews = ${_reviews}
-openingHours = ${_openingHours}
-weekdaytext = ${_weekdaytext}
-openNow = ${_openNow}
     """;
   }
 }
+
+// icon = $_icon
+// adress = $_adress
+// latitude = $_latitude
+// longitude = $_longitude
+// telephone = $_telephone
+// rating = $_rating
+// photos = ${_photos}
+// reviews = ${_reviews}
+// openingHours = ${_openingHours}
+// weekdaytext = ${_weekdaytext}
+// openNow = ${_openNow}

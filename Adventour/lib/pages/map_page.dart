@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,13 @@ class _MapPageState extends State<MapPage> {
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
+
+  @override
+  void initState() {
+    print('*******************************************');
+    routeEngine.makeShortRoute(Location(40.781728, -73.966262), [CHURCH,TOURIST_ATTRACTION,PARK], ['walk']);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

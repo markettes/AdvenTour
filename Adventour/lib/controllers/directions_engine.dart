@@ -1,4 +1,5 @@
-import 'package:Adventour/models/Journay.dart';
+import 'package:Adventour/models/Path.dart';
+import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/directions.dart';
 
@@ -7,14 +8,16 @@ class DirectionsEngine {
     apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
   );
 
-  Future<Journay> makeJournay(String origin, String destination, String transport) async {
+  Future<r.Route> makeRoute(Place originPlace, Place destinationPlace, String transport) async {
+    String origin = originPlace.latitude.toString() +',' + originPlace.longitude.toString();
+    String destination = destinationPlace.latitude.toString() +',' + destinationPlace.longitude.toString();
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
       travelMode: toTravelMode(transport),
     );
-    List<Path> paths = response.routes.map((route) => toPath(route)).toList();
-    return Journay(origin, destination, paths);
+    List<Path> paths = response.routes.map((route) => Path.fromGoogleRoute(route)).toList();
+    return r.Route(paths);
   }
 }
 

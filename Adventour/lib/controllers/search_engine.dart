@@ -1,6 +1,6 @@
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/src/core.dart';
-import 'package:google_maps_webservice/src/places.dart';
+import "package:Adventour/controllers/place.dart";
 
 class SearchEngine {
   GoogleMapsPlaces _googleMapsPlaces =
@@ -20,12 +20,22 @@ class SearchEngine {
       String type, Location location, int radius) async {
     PlacesSearchResponse response = await _googleMapsPlaces
         .searchNearbyWithRadius(location, radius, type: type);
-
     List<Place> places =
         response.results.map((result) => Place.fromNearby(result)).toList();
 
     return places;
   }
+
+    Future<List<Place>> searchByLocationByRank(
+      String type, Location location, int radius) async {
+    PlacesSearchResponse response = await _googleMapsPlaces
+        .searchNearbyWithRankBy(location, 'prominence', type: type);
+    List<Place> places =
+        response.results.map((result) => Place.fromNearby(result)).toList();
+
+    return places;
+  }
+
 
   Future<List<Place>> searchByText(
       String text, Location location, int radius) async {
