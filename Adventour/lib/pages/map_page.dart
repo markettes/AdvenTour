@@ -26,7 +26,29 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     print('*******************************************');
-    routeEngine.makeShortRoute(Location(40.781728, -73.966262), [CHURCH,TOURIST_ATTRACTION,PARK], ['walk']);
+    routeEngine.makeShortRoute(Location(40.781728, -73.966262), [
+      CITY_HALL,
+      CHURCH,
+      TOURIST_ATTRACTION,
+      PARK,
+      BAR,
+      CAFE,
+      COURTHOUSE,
+      LIBRARY,
+      MOSQUE,
+      MOVIE_THEATER,
+      STADIUM,
+      SYNAGOGUE,
+      UNIVERSITY,
+      ART_GALLERY,
+      HINDU_TEMPLE,
+      MUSEUM,
+      NIGHT_CLUB,
+      RESTAURANT,
+      SHOPPING_MALL
+    ], [
+      'walk'
+    ]);
     super.initState();
   }
 
@@ -50,28 +72,31 @@ class _MapPageState extends State<MapPage> {
             ),
           ),
           SizedBox(height: 8),
-                    FloatingActionButton(
-                      heroTag: 'current_location',
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () async {
-          if (_position != null) {
-            _mapController.animateCamera(CameraUpdate.newCameraPosition(
-              CameraPosition(
-                bearing: 0,
-                target: LatLng(_position.latitude, _position.longitude),
-                zoom: 18.0,
-              ),
-            ));
-            setState(() {
-              _fixedPosition = true;
-            });}},child: Icon(
-          Icons.gps_fixed,
-          color:
-              _fixedPosition ? Colors.blue[200] : Theme.of(context).buttonColor,
-        ),),
+          FloatingActionButton(
+            heroTag: 'current_location',
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () async {
+              if (_position != null) {
+                _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                    bearing: 0,
+                    target: LatLng(_position.latitude, _position.longitude),
+                    zoom: 18.0,
+                  ),
+                ));
+                setState(() {
+                  _fixedPosition = true;
+                });
+              }
+            },
+            child: Icon(
+              Icons.gps_fixed,
+              color: _fixedPosition
+                  ? Colors.blue[200]
+                  : Theme.of(context).buttonColor,
+            ),
+          ),
         ],
-      
-        
       ),
       body: Stack(
         alignment: Alignment.topRight,
@@ -184,12 +209,8 @@ class _MapPageState extends State<MapPage> {
           ),
         ],
       ),
-      
-      
     );
   }
-
-
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
@@ -222,11 +243,9 @@ class _MapPageState extends State<MapPage> {
     for (var marker in markers) {
       final MarkerId markerId = marker.markerId;
 
-        _markers[markerId] = marker;
+      _markers[markerId] = marker;
     }
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   void _clearMarkers() {
@@ -288,11 +307,9 @@ class _MapPageState extends State<MapPage> {
     ));
   }
 
-    Future _onSubmitted(String value) async {
+  Future _onSubmitted(String value) async {
     List<Place> places = await searchEngine.searchByText(
-        value,
-        Location(_position.latitude, _position.longitude),
-        1000);
+        value, Location(_position.latitude, _position.longitude), 1000);
     _clearMarkers();
     _addMarkers(places);
     if (places.length == 1) {
@@ -300,10 +317,7 @@ class _MapPageState extends State<MapPage> {
       _goToPlace(place);
     }
     if (places.length > 1) {
-      _goToPlaces(
-          places,
-          LatLng(
-              _position.latitude, _position.longitude));
+      _goToPlaces(places, LatLng(_position.latitude, _position.longitude));
     }
   }
 
