@@ -26,26 +26,10 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     print('*******************************************');
-    routeEngine.makeShortRoute(Location(40.781728, -73.966262), [
+    routeEngine.makeShortRoute(Location(40.781026, -73.967028), [
       CITY_HALL,
-      CHURCH,
-      TOURIST_ATTRACTION,
       PARK,
-      BAR,
-      CAFE,
-      COURTHOUSE,
-      LIBRARY,
-      MOSQUE,
-      MOVIE_THEATER,
-      STADIUM,
-      SYNAGOGUE,
-      UNIVERSITY,
-      ART_GALLERY,
-      HINDU_TEMPLE,
-      MUSEUM,
-      NIGHT_CLUB,
-      RESTAURANT,
-      SHOPPING_MALL
+      TOURIST_ATTRACTION,
     ], [
       'walk'
     ]);

@@ -27,41 +27,44 @@ class RouteEngine {
       prePlaces.addAll(await searchEngine.searchByLocationWithType(
           type, location, maxDistance));
     }
-    ;
 
-    prePlaces.removeWhere((place) =>
+    List<Place> placesWithoutDuplicates = [];
+
+    for (Place p in prePlaces) {
+      bool contains = false;
+      for (var i = 0; i < placesWithoutDuplicates.length && !contains; i++) {
+        if (p.id == placesWithoutDuplicates[i].id) contains = true;
+      }
+      if (!contains) placesWithoutDuplicates.add(p);
+    }
+
+    // for (var place in placesWithoutDuplicates) {
+    //   print(place.toString());
+    // }
+
+    placesWithoutDuplicates.removeWhere((place) =>
         place.rating == null ||
         place.rating < 4.3 ||
         place.userRatingsTotal < 500);
 
+    placesWithoutDuplicates.sort((a, b) => b.rating.compareTo(a.rating));
+
     List<Place> places = [];
 
-    prePlaces.sort((a, b) => b.rating.compareTo(a.rating));
-
-    for (Place place in prePlaces) { 
-      for (String type in types) {
-        if (place.types.contains(type) && !places.contains(place)) {
-          places
-              .add(prePlaces.firstWhere((place) => place.types.contains(type)));
-        }
+    for (String type in types) {
+      Place routePlace = placesWithoutDuplicates.firstWhere((place) {
+        return place.types.contains(type);
+      }, orElse: () {});
+      if (routePlace != null) {
+        places.add(routePlace);
+        placesWithoutDuplicates.remove(routePlace);
       }
     }
-
-    // for (Place p in places) {
-    //   print(p.name);
-    // }
-
-    List<Place> placesWithoutDuplicates = [];
 
     for (Place p in places) {
-      if (!placesWithoutDuplicates.contains(p)) {
-        placesWithoutDuplicates.add(p);
-      }
+      print(p.name);
     }
 
-    for (var place in placesWithoutDuplicates) {
-      print(place.toString());
-    }
   }
 }
 
