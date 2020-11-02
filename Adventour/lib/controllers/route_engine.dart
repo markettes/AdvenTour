@@ -38,19 +38,18 @@ class RouteEngine {
 
     prePlaces.sort((a, b) => b.rating.compareTo(a.rating));
 
-    for (String type in types) {
-      for (Place place in prePlaces) {
+    for (Place place in prePlaces) { 
+      for (String type in types) {
         if (place.types.contains(type) && !places.contains(place)) {
           places
               .add(prePlaces.firstWhere((place) => place.types.contains(type)));
         }
       }
     }
-    for (Place p in places) {
-      print(p.name);
-    }
 
-    //QUITAR DUPLICADOS
+    // for (Place p in places) {
+    //   print(p.name);
+    // }
 
     List<Place> placesWithoutDuplicates = [];
 
