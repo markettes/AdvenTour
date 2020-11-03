@@ -13,7 +13,7 @@ class CustomRoutePage extends StatefulWidget {
 class _CustomRoutePageState extends State<CustomRoutePage> {
   bool _shortRoute = true;
   List<String> _transports = [WALK];
-  List<String> _places = [PARK, TOURIST_ATTRACTION, BAR];
+  var _places = [PARK, TOURIST_ATTRACTION, RESTAURANT];
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                       _places.contains(places[index]);
                                   return CircleIconButton(
                                       activated: activated,
-                                      type: places[index],
+                                      type: places[index][0],
                                       onPressed: () {
                                         if (activated) {
                                           if (_places.length > 3)
@@ -253,11 +253,13 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                     PrimaryButton(
                       text: 'CREATE',
                       onPressed: () => Navigator.pushNamed(
-                          context, '/routePage', arguments: {
-                        'placeId': placeId,
-                        'placeTypes': _places,
-                        'transports': _transports
-                      }),
+                          context, '/routePage',
+                          arguments: {
+                            'placeId': placeId, //aplanar
+                            'placeTypes':
+                                _places.expand((element) => element).toList(),
+                            'transports': _transports
+                          }),
                       icon: Icons.edit,
                       style: ButtonType.Normal,
                     ),
@@ -270,7 +272,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
   }
 
   void sortPlaceTypes() {
-    List<String> sorted = [];
+    List<List<String>> sorted = [];
     sorted.addAll(_places);
     for (var placeType in places) {
       if (!sorted.contains(placeType)) sorted.add(placeType);

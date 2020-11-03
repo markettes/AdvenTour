@@ -9,28 +9,46 @@ import 'package:Adventour/libraries/place.dart';
 //SHORT
 const BAR = "bar"; //30
 const CAFE = "cafe"; //30
-const CHURCH = "church"; // + 30
-const CITY_HALL = "city_hall"; //20
+const CHURCH = ["church", "mosque", "synagogue", "hindu_temple"]; // + 30
+const CITY_HALL = ["city_hall", "courthouse"]; //20
 const COURTHOUSE = "courthouse"; //20
-const LIBRARY = "library"; // 30
+const LIBRARY = ["library", "university"]; // 30
 const MOSQUE = "mosque"; // + 30
-const MOVIE_THEATER = "movie_theater"; // 30
-const PARK = "park"; // + 20
-const STADIUM = "stadium"; // 20
+const MOVIE_THEATER = ["movie_theater"]; // 30
+const PARK = ["park"]; // + 20
+const STADIUM = ["stadium"]; // 20
 const SYNAGOGUE = "synagogue"; // + 30
-const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
+const TOURIST_ATTRACTION = ["tourist_attraction"]; // + 30
 const UNIVERSITY = "university"; // 20
 //LARGE
-const ART_GALLERY = "art_gallery"; // 45
+const ART_GALLERY = ["art_gallery", "museum"]; // 45
 const HINDU_TEMPLE = "hindu_temple"; // + 40
 const MUSEUM = "museum"; // + 45
-const NIGHT_CLUB = "night_club"; // + 60
-const RESTAURANT = "restaurant"; // 60
-const SHOPPING_MALL = "shopping_mall"; // 60
+const NIGHT_CLUB = ["night_club"]; // + 60
+const RESTAURANT = ["restaurant", "cafe", "bar"]; // 60
+const SHOPPING_MALL = ["shopping_mall"]; // 60
 
-List<String> places = [CHURCH,BAR,RESTAURANT,PARK,CITY_HALL,TOURIST_ATTRACTION];
-
-
+List<List> places = [
+  RESTAURANT,
+  //BAR,
+  //CAFE,
+  CITY_HALL,
+  //COURTHOUSE,
+  CHURCH,
+  //MOSQUE,
+  //SYNAGOGUE,
+  //HINDU_TEMPLE,
+  MOVIE_THEATER,
+  PARK,
+  STADIUM,
+  TOURIST_ATTRACTION,
+  LIBRARY,
+  //UNIVERSITY,
+  ART_GALLERY,
+  //MUSEUM,
+  NIGHT_CLUB,
+  SHOPPING_MALL
+];
 
 class Place {
   bool _detailed;
@@ -50,7 +68,7 @@ class Place {
   List<String> _types;
   num _userRatingsTotal;
 
-  Place(latitude, longitude,name,id) {
+  Place(latitude, longitude, name, id) {
     _latitude = latitude;
     _longitude = longitude;
     _name = name;
@@ -76,7 +94,7 @@ class Place {
     _longitude = result.geometry.location.lng;
     _types = result.types;
     _rating = result.rating;
-    _userRatingsTotal =result.userRatingsTotal;
+    _userRatingsTotal = result.userRatingsTotal;
   }
 
   Place.fromDetails(PlaceDetails details) {
