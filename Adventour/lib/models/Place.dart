@@ -1,4 +1,4 @@
-import 'package:Adventour/controllers/place.dart';
+import 'package:Adventour/libraries/place.dart';
 
 // NO EN RUTAS PERO IMPLEMENTAR DE OTRA FROMA
 // const ZOO = "zoo";
@@ -28,7 +28,7 @@ const NIGHT_CLUB = "night_club"; // + 60
 const RESTAURANT = "restaurant"; // 60
 const SHOPPING_MALL = "shopping_mall"; // 60
 
-List<String> places = [CHURCH,BAR,RESTAURANT,PARK,CITY_HALL];
+List<String> places = [CHURCH,BAR,RESTAURANT,PARK,CITY_HALL,TOURIST_ATTRACTION];
 
 
 

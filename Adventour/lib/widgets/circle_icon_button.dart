@@ -56,32 +56,12 @@ class CircleIconButton extends StatelessWidget {
         return Icons.restaurant;
       case CITY_HALL:
         return Icons.house_outlined;
-        case BAR:
+      case BAR:
         return Icons.sports_bar;
+      case TOURIST_ATTRACTION:
+        return Icons.camera_alt;
       default:
-        throw Exception();
+        throw Exception('Icon not available');
     }
   }
-
-  // ImageIcon toImage(String type) {
-  //   switch (type) {
-  //     case 'church':
-  //       return ImageIcon(
-  //         AssetImage("assets/church.png"),
-  //         color: Colors.white,
-  //       );
-  //     case 'night_club':
-  //       return ImageIcon(
-  //         AssetImage("assets/night_club.png"),
-  //         color: Colors.white,
-  //       );
-  //     case 'zoo':
-  //       return ImageIcon(
-  //         AssetImage("assets/zoo.png"),
-  //         color: Colors.white,
-  //       );
-  //     default:
-  //       throw Exception("No existe asset para esta categoría");
-  //   }
-  // }
 }

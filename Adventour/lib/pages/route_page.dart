@@ -1,7 +1,7 @@
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
+import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
-import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Path.dart' as p;
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +17,12 @@ class RoutePage extends StatefulWidget {
 }
 
 class _RoutePageState extends State<RoutePage> {
-  GoogleMapController _mapController;
+  MapController _mapController = MapController();
 
-  Position _position;
+  directions.Location _location;
   String placeId;
-  List<String> placeTypes = [];
-  List<String> transports = [];
-
-  Map<PolylineId, Polyline> _polylines = {};
+  List<String> placeTypes;
+  List<String> transports;
 
   @override
   Widget build(BuildContext context) {
@@ -33,68 +31,47 @@ class _RoutePageState extends State<RoutePage> {
     placeTypes = arguments['placeTypes'];
     transports = arguments['transports'];
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Custom route'),
-      ),
-      body: FutureBuilder(
-        future: Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          if (!snapshot.hasData) return CircularProgressIndicator();
-          _position = snapshot.data;
-          return FutureBuilder(
-              future: _makeRoute(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) print(snapshot.error);
-                if (!snapshot.hasData) return CircularProgressIndicator();
-                p.Path path  = snapshot.data;
-                _drawRoute(path);
-                return GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(_position.latitude, _position.longitude),
-                    zoom: 11,
-                  ),
-                  polylines: Set<Polyline>.of(_polylines.values),
-                  onMapCreated: _onMapCreated,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  zoomControlsEnabled: false,
-                );
-              });
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: Text('Custom route'),
+        ),
+        body: FutureBuilder(
+            future: _makeRoute(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              if (!snapshot.hasData) return CircularProgressIndicator();
+              p.Route route = snapshot.data;
+              _mapController.drawRoute(route.trajectories.first.points);
+              for (var place in route.places) {
+                _mapController.addMarker(place, context);
+              }
+              return GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(_location.lat, _location.lng),
+                  zoom: 12.5,
+                ),
+                markers: Set<Marker>.of(_mapController.markers.values),
+                polylines: Set<Polyline>.of(_mapController.polylines.values),
+                onMapCreated: _mapController.onMapCreated,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+                zoomControlsEnabled: false,
+              );
+            }));
   }
 
-  Future<p.Path> _makeRoute() async {
-    directions.Location location = placeId == null
-        ? directions.Location(_position.latitude, _position.longitude)
-        : await geocoding.searchByPlaceId(placeId);
-        
-    p.Path route = await routeEngine.makeShortRoute(location, placeTypes, transports);
-    
+  Future<p.Route> _makeRoute() async {
+    if (placeId == null) {
+      Position position = await Geolocator.getCurrentPosition();
+      _location = directions.Location(position.latitude, position.longitude);
+    } else {
+      _location = await geocoding.searchByPlaceId(placeId);
+    }
+
+    p.Route route =
+        await routeEngine.makeShortRoute(_location, placeTypes, transports);
+
     return route;
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-    _changeMapStyle(_mapController);
-  }
 
-  Future _changeMapStyle(GoogleMapController controller) async {
-    String style = await rootBundle.loadString("assets/map_style.json");
-    controller.setMapStyle(style);
-  }
-
-  _drawRoute(p.Path path) {
-    List<LatLng> points = [];
-    points.addAll(path.trajectories.first.points);
-    Polyline polyline = Polyline(
-        polylineId: PolylineId('route'),
-        points: points,
-        color: Colors.blue,
-        width: 2);
-    _polylines[polyline.polylineId] = polyline;
-  }
 }

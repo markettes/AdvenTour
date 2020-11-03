@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
@@ -17,8 +18,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  GoogleMapController _mapController;
-  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  MapController _mapController = MapController();
+
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
@@ -48,13 +49,8 @@ class _MapPageState extends State<MapPage> {
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () async {
               if (_position != null) {
-                _mapController.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    bearing: 0,
-                    target: LatLng(_position.latitude, _position.longitude),
-                    zoom: 18.0,
-                  ),
-                ));
+                _mapController.goToCoordinates(
+                    _position.latitude, _position.longitude, 18);
                 setState(() {
                   _fixedPosition = true;
                 });
@@ -80,10 +76,9 @@ class _MapPageState extends State<MapPage> {
                 Position position = snapshot.data;
                 return Listener(
                   child: GoogleMap(
-                    onMapCreated: _onMapCreated,
+                    onMapCreated: _mapController.onMapCreated,
                     zoomControlsEnabled: false,
-                    markers: Set<Marker>.of(_markers.values),
-                    onTap: _touchedPlace,
+                    markers: Set<Marker>.of(_mapController.markers.values),
                     initialCameraPosition: CameraPosition(
                       target: LatLng(position.latitude, position.longitude),
                       zoom: 11.0,
@@ -144,7 +139,7 @@ class _MapPageState extends State<MapPage> {
                     height: 5,
                   ),
                   MaterialButton(
-                    child: _markers.isEmpty
+                    child: _mapController.markers.isEmpty
                         ? Container()
                         : Icon(
                             Icons.delete,
@@ -154,7 +149,13 @@ class _MapPageState extends State<MapPage> {
                     height: 40,
                     shape: CircleBorder(),
                     elevation: 15,
-                    onPressed: _markers.isEmpty ? null : () => _clearMarkers(),
+                    onPressed: _mapController.markers.isEmpty
+                        ? null
+                        : () {
+                          setState(() {
+                            _mapController.clearMarkers();
+                          });
+                        } ,
                   ),
                 ],
               ),
@@ -168,12 +169,8 @@ class _MapPageState extends State<MapPage> {
               if (!snapshot.hasData) return CircularProgressIndicator();
               _position = snapshot.data;
               if (_fixedPosition) {
-                _mapController.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                    target: LatLng(_position.latitude, _position.longitude),
-                    zoom: 18.0,
-                  ),
-                ));
+                _mapController.goToCoordinates(
+                    _position.latitude, _position.longitude, 18);
               }
               return Container();
             },
@@ -183,121 +180,67 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-    _changeMapStyle(_mapController);
-  }
-
-  Future _changeMapStyle(GoogleMapController controller) async {
-    String style = await rootBundle.loadString("assets/map_style.json");
-    controller.setMapStyle(style);
-  }
-
-  void _addMarkers(List<Place> places) {
-    List<Marker> markers = places
-        .map((place) => Marker(
-              markerId: MarkerId(place.name),
-              position: LatLng(place.latitude, place.longitude),
-              infoWindow: InfoWindow(
-                title: place.name ?? "Unknown",
-                onTap: () =>
-                    Navigator.of(context).pushNamed('/placePage', arguments: {
-                  place: place,
-                  _goToPlace: _goToPlace,
-                  _clearMarkers: _clearMarkers,
-                  _addMarkers: _addMarkers
-                }),
-              ),
-            ))
-        .toList();
-
-    for (var marker in markers) {
-      final MarkerId markerId = marker.markerId;
-
-      _markers[markerId] = marker;
-    }
-    setState(() {});
-  }
-
-  void _clearMarkers() {
-    setState(() {
-      _markers.clear();
-    });
-  }
-
-  Future<Place> _touchedPlace(LatLng point) async {
-    List<Place> places = await searchEngine.searchByLocation(
-        Location(point.latitude, point.longitude), 50);
-
-    int menor = 100;
-    Place place;
-    for (var p in places) {
-      int _distanceInMeters = Geolocator.distanceBetween(
-              point.latitude, point.longitude, p.latitude, p.longitude)
-          .round();
-      if (_distanceInMeters < menor) {
-        menor = _distanceInMeters;
-        place = p;
-      }
-    }
-
-    if (place != null) {
-      place = await searchEngine.searchWithDetails(place.id);
-      print(place.toString());
-
-      _clearMarkers();
-      _addMarkers([place]);
-      Navigator.of(context).pushNamed('/placePage', arguments: {
-        place: place,
-        _goToPlace: _goToPlace,
-        _clearMarkers: _clearMarkers,
-        _addMarkers: _addMarkers
-      });
-    }
-  }
-
-  void _goToPlace(Place place) {
-    Navigator.pop(context);
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(place.latitude, place.longitude),
-        zoom: 18.0,
-      ),
-    ));
-  }
-
-  void _goToPlaces(List<Place> places, LatLng location) {
-    Navigator.pop(context);
-    _mapController.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: location,
-        zoom: 14.5,
-      ),
-    ));
-  }
-
   Future _onSubmitted(String value) async {
     List<Place> places = await searchEngine.searchByText(
         value, Location(_position.latitude, _position.longitude), 1000);
-    _clearMarkers();
-    _addMarkers(places);
+    _mapController.clearMarkers();
+    for (var place in places) {
+      _mapController.addMarker(place, context);
+    }
+
+    setState(() {});
     if (places.length == 1) {
       Place place = places.first;
-      _goToPlace(place);
+      Navigator.pop(context);
+      _mapController.goToCoordinates(place.latitude, place.longitude, 15);
     }
     if (places.length > 1) {
-      _goToPlaces(places, LatLng(_position.latitude, _position.longitude));
+      Navigator.pop(context);
+      _mapController.zoomOut(_position.latitude, _position.longitude);
     }
   }
 
   Future _onTapPrediction(Prediction prediction) async {
-    _clearMarkers();
+    _mapController.clearMarkers();
     Place place = (await searchEngine.searchByText(prediction.description,
             Location(_position.latitude, _position.longitude), 1000))
         .first;
-    _goToPlace(place);
-    _addMarkers([place]);
+
+    _mapController.addMarker(place, context);
+    setState(() {});
+    Navigator.pop(context);
+    _mapController.goToCoordinates(place.latitude, place.longitude, 15);
   }
+
 }
+
+  // Future<Place> _touchedPlace(LatLng point) async {
+  //   List<Place> places = await searchEngine.searchByLocation(
+  //       Location(point.latitude, point.longitude), 50);
+
+  //   int menor = 100;
+  //   Place place;
+  //   for (var p in places) {
+  //     int _distanceInMeters = Geolocator.distanceBetween(
+  //             point.latitude, point.longitude, p.latitude, p.longitude)
+  //         .round();
+  //     if (_distanceInMeters < menor) {
+  //       menor = _distanceInMeters;
+  //       place = p;
+  //     }
+  //   }
+
+  //   if (place != null) {
+  //     place = await searchEngine.searchWithDetails(place.id);
+  //     print(place.toString());
+
+  //     _clearMarkers();
+  //     _addMarkers([place]);
+  //     Navigator.of(context).pushNamed('/placePage', arguments: {
+  //       place: place,
+  //       _goToPlace: _goToPlace,
+  //       _clearMarkers: _clearMarkers,
+  //       _addMarkers: _addMarkers
+  //     });
+  //   }
+  // }

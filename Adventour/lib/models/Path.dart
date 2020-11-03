@@ -1,30 +1,29 @@
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:Adventour/models/Route.dart' as r;
 import 'package:google_maps_webservice/directions.dart' as directions;
 
-class Path {
-  Place _origin;
-  Place _destination;
-  List<Trajectory> _trajectories;
+class Route {
+  List<Place> _places;
+  List<Path> _paths;
 
-  Path(origin, destination, trajectories) {
-    _origin = origin;
-    _destination = destination;
-    _trajectories = trajectories;
+  Route(places, paths) {
+    _places = places;
+    _paths = paths;
   }
 
-  List<Trajectory> get trajectories => _trajectories;
+  List<Path> get trajectories => _paths;
+
+  List<Place> get places => _places;
 
   
 }
 
-class Trajectory {
+class Path {
   List<LatLng> _points;
   String _transport;
 
-  Trajectory.fromGoogleRoute(directions.Route route,String transport) {
+  Path.fromGoogleRoute(directions.Route route,String transport) {
       List<LatLng> points = [];
       for (var leg in route.legs) {
         for (var step in leg.steps) {

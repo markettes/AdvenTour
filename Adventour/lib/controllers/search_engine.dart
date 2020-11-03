@@ -1,6 +1,6 @@
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/src/core.dart';
-import "package:Adventour/controllers/place.dart";
+import 'package:Adventour/libraries/place.dart';
 
 class SearchEngine {
   GoogleMapsPlaces _googleMapsPlaces =

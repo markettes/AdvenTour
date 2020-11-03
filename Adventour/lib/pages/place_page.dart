@@ -3,7 +3,7 @@ import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Place.dart';
-import "package:Adventour/controllers/place.dart";
+import 'package:Adventour/libraries/place.dart';
 import 'package:Adventour/pages/map_page.dart';
 
 class PlacePage extends StatelessWidget {
@@ -68,6 +68,7 @@ class PlaceBodyInfo extends StatelessWidget {
       SliverToBoxAdapter(
           child: Column(
         children: <Widget>[
+          SizedBox(height: 5),
           Container(
               height: 200,
               child: place.photos == null || place.photos.isEmpty

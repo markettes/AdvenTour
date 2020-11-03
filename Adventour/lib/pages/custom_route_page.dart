@@ -12,8 +12,15 @@ class CustomRoutePage extends StatefulWidget {
 
 class _CustomRoutePageState extends State<CustomRoutePage> {
   bool _shortRoute = true;
-  List<String> _transports = [];
-  List<String> _places = [];
+  List<String> _transports = [WALK];
+  List<String> _places = [PARK, TOURIST_ATTRACTION, BAR];
+
+  @override
+  void initState() {
+    sortPlaceTypes();
+    sortTransports();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +68,15 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                       activated: activated,
                                       type: places[index],
                                       onPressed: () {
-                                        setState(() {
-                                          if (activated)
+                                        if (activated) {
+                                          if (_places.length > 3)
                                             _places.remove(places[index]);
-                                          else
-                                            _places.add(places[index]);
-                                        });
+                                          sortPlaceTypes();
+                                        } else {
+                                          _places.add(places[index]);
+                                          sortPlaceTypes();
+                                        }
+                                        setState(() {});
                                       });
                                 },
                               ),
@@ -102,12 +112,17 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                         type: transports[index],
                                         onPressed: () {
                                           setState(() {
-                                            if (activated)
-                                              _transports
-                                                  .remove(transports[index]);
-                                            else
+                                            if (activated) {
+                                              if (_transports.length > 1) {
+                                                _transports
+                                                    .remove(transports[index]);
+                                                sortTransports();
+                                              }
+                                            } else {
                                               _transports
                                                   .add(transports[index]);
+                                              sortTransports();
+                                            }
                                           });
                                         });
                                   },
@@ -125,121 +140,124 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-              //       Row(
-              //         mainAxisAlignment: MainAxisAlignment.center,
-              //         children: [
-              //           Container(
-              //             width: 200,
-              //             decoration: BoxDecoration(
-              //                 color: Theme.of(context).accentColor,
-              //                 borderRadius: BorderRadius.circular(20)),
-              //             padding: EdgeInsets.all(8),
-              //             child: Row(
-              //               mainAxisAlignment: MainAxisAlignment.center,
-              //               children: [
-              //                 Icon(
-              //                   Icons.timer,
-              //                   size: 40,
-              //                 ),
-              //                 SizedBox(
-              //                   width: 10,
-              //                 ),
-              //                 Row(
-              //                   mainAxisAlignment: MainAxisAlignment.center,
-              //                   crossAxisAlignment: CrossAxisAlignment.center,
-              //                   children: [
-              //                     Icon(
-              //                       Icons.keyboard_arrow_down,
-              //                     ),
-              //                     SizedBox(
-              //                       width: 60,
-              //                       child: Switch(
-              //                         value: _shortRoute,
-              //                         activeColor:
-              //                             Theme.of(context).primaryColor,
-              //                         inactiveThumbColor:
-              //                             Theme.of(context).primaryColor,
-              //                         inactiveTrackColor: Theme.of(context)
-              //                             .primaryColor
-              //                             .withOpacity(0.5),
-              //                         onChanged: (value) {
-              //                           setState(() {
-              //                             _shortRoute = value;
-              //                           });
-              //                         },
-              //                       ),
-              //                     ),
-              //                     Icon(
-              //                       Icons.keyboard_arrow_up,
-              //                     )
-              //                   ],
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //           IconButton(
-              //             icon: Icon(Icons.info_outline),
-              //             onPressed: () => showDialog(
-              //               context: context,
-              //               builder: (context) => Dialog(
-              //                 child: Container(
-              //                     height: 150,
-              //                     child: Column(
-              //                       mainAxisAlignment: MainAxisAlignment.center,
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment:
-              //                               MainAxisAlignment.center,
-              //                           children: [
-              //                             Icon(Icons.keyboard_arrow_down),
-              //                             Expanded(
-              //                               child: Text(
-              //                                 'Short routes: about 3 hours max',
-              //                                 style: Theme.of(context)
-              //                                     .textTheme
-              //                                     .bodyText2
-              //                                     .copyWith(fontSize: 16),
-              //                               ),
-              //                             ),
-              //                           ],
-              //                         ),
-              //                         SizedBox(height: 5),
-              //                         Row(
-              //                           mainAxisAlignment:
-              //                               MainAxisAlignment.center,
-              //                           children: [
-              //                             Icon(Icons.keyboard_arrow_up),
-              //                             Expanded(
-              //                               child: Text(
-              //                                   'Long routes: about 5 hours max',
-              //                                   style: Theme.of(context)
-              //                                       .textTheme
-              //                                       .bodyText2
-              //                                       .copyWith(fontSize: 16)),
-              //                             ),
-              //                           ],
-              //                         ),
-              //                         FlatButton(
-              //                             onPressed: () =>
-              //                                 Navigator.pop(context),
-              //                             child: Text(
-              //                               'OK',
-              //                               style: Theme.of(context)
-              //                                   .textTheme
-              //                                   .headline2,
-              //                             ))
-              //                       ],
-              //                     )),
-              //               ),
-              //             ),
-              //           ),
-              //         ],
-              //       ),
+                    //       Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           Container(
+                    //             width: 200,
+                    //             decoration: BoxDecoration(
+                    //                 color: Theme.of(context).accentColor,
+                    //                 borderRadius: BorderRadius.circular(20)),
+                    //             padding: EdgeInsets.all(8),
+                    //             child: Row(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 Icon(
+                    //                   Icons.timer,
+                    //                   size: 40,
+                    //                 ),
+                    //                 SizedBox(
+                    //                   width: 10,
+                    //                 ),
+                    //                 Row(
+                    //                   mainAxisAlignment: MainAxisAlignment.center,
+                    //                   crossAxisAlignment: CrossAxisAlignment.center,
+                    //                   children: [
+                    //                     Icon(
+                    //                       Icons.keyboard_arrow_down,
+                    //                     ),
+                    //                     SizedBox(
+                    //                       width: 60,
+                    //                       child: Switch(
+                    //                         value: _shortRoute,
+                    //                         activeColor:
+                    //                             Theme.of(context).primaryColor,
+                    //                         inactiveThumbColor:
+                    //                             Theme.of(context).primaryColor,
+                    //                         inactiveTrackColor: Theme.of(context)
+                    //                             .primaryColor
+                    //                             .withOpacity(0.5),
+                    //                         onChanged: (value) {
+                    //                           setState(() {
+                    //                             _shortRoute = value;
+                    //                           });
+                    //                         },
+                    //                       ),
+                    //                     ),
+                    //                     Icon(
+                    //                       Icons.keyboard_arrow_up,
+                    //                     )
+                    //                   ],
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           IconButton(
+                    //             icon: Icon(Icons.info_outline),
+                    //             onPressed: () => showDialog(
+                    //               context: context,
+                    //               builder: (context) => Dialog(
+                    //                 child: Container(
+                    //                     height: 150,
+                    //                     child: Column(
+                    //                       mainAxisAlignment: MainAxisAlignment.center,
+                    //                       children: [
+                    //                         Row(
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.center,
+                    //                           children: [
+                    //                             Icon(Icons.keyboard_arrow_down),
+                    //                             Expanded(
+                    //                               child: Text(
+                    //                                 'Short routes: about 3 hours max',
+                    //                                 style: Theme.of(context)
+                    //                                     .textTheme
+                    //                                     .bodyText2
+                    //                                     .copyWith(fontSize: 16),
+                    //                               ),
+                    //                             ),
+                    //                           ],
+                    //                         ),
+                    //                         SizedBox(height: 5),
+                    //                         Row(
+                    //                           mainAxisAlignment:
+                    //                               MainAxisAlignment.center,
+                    //                           children: [
+                    //                             Icon(Icons.keyboard_arrow_up),
+                    //                             Expanded(
+                    //                               child: Text(
+                    //                                   'Long routes: about 5 hours max',
+                    //                                   style: Theme.of(context)
+                    //                                       .textTheme
+                    //                                       .bodyText2
+                    //                                       .copyWith(fontSize: 16)),
+                    //                             ),
+                    //                           ],
+                    //                         ),
+                    //                         FlatButton(
+                    //                             onPressed: () =>
+                    //                                 Navigator.pop(context),
+                    //                             child: Text(
+                    //                               'OK',
+                    //                               style: Theme.of(context)
+                    //                                   .textTheme
+                    //                                   .headline2,
+                    //                             ))
+                    //                       ],
+                    //                     )),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
                     PrimaryButton(
                       text: 'CREATE',
                       onPressed: () => Navigator.pushNamed(
-                          context, '/routePage',
-                          arguments: {'placeId':placeId,'placeTypes':_places,'transports':_transports}),
+                          context, '/routePage', arguments: {
+                        'placeId': placeId,
+                        'placeTypes': _places,
+                        'transports': _transports
+                      }),
                       icon: Icons.edit,
                       style: ButtonType.Normal,
                     ),
@@ -249,5 +267,23 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
             ],
           )),
     );
+  }
+
+  void sortPlaceTypes() {
+    List<String> sorted = [];
+    sorted.addAll(_places);
+    for (var placeType in places) {
+      if (!sorted.contains(placeType)) sorted.add(placeType);
+    }
+    places = sorted;
+  }
+
+  void sortTransports() {
+    List<String> sorted = [];
+    sorted.addAll(_transports);
+    for (var transport in transports) {
+      if (!sorted.contains(transport)) sorted.add(transport);
+    }
+    transports = sorted;
   }
 }
