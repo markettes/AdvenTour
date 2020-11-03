@@ -50,7 +50,7 @@ class _CreatingRouteFormState extends State<CreatingRouteForm> {
       TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
   DateTime _selectedDate;
   String _location;
-  String _locationId = 'your_location';
+  String _locationId;
 
   @override
   Widget build(BuildContext context) {

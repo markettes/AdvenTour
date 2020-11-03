@@ -1,34 +1,9 @@
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/controllers/directions_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
-
-List<String> transports = ['car', 'bicycle', 'public', 'walk'];
-List<String> places = [
-  'amusement_park',
-  'museum',
-  'church',
-  'library',
-  'night_club',
-  'restaurants',
-  'zoo'
-];
-// List<String> places = [
-//   'amusement_park',
-//   'art_gallery',
-//   'museum',
-//   'church',
-//   'hindu_temple',
-//   'mosque',
-//   'synagogue',
-//   'library',
-//   'university',
-//   'night_club',
-//   'restaurants',
-//   'bar',
-//   'cafe',
-//   'zoo'
-// ];
 
 class CustomRoutePage extends StatefulWidget {
   @override
@@ -82,15 +57,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                 itemBuilder: (context, index) {
                                   bool activated =
                                       _places.contains(places[index]);
-                                  bool icon = places[index] == 'zoo' ||
-                                          places[index] == 'church' ||
-                                          places[index] == 'night_club'
-                                      ? false
-                                      : true;
                                   return CircleIconButton(
                                       activated: activated,
                                       type: places[index],
-                                      icon: icon,
                                       onPressed: () {
                                         setState(() {
                                           if (activated)
@@ -156,121 +125,121 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 200,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).accentColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.timer,
-                                size: 40,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.keyboard_arrow_down,
-                                  ),
-                                  SizedBox(
-                                    width: 60,
-                                    child: Switch(
-                                      value: _shortRoute,
-                                      activeColor:
-                                          Theme.of(context).primaryColor,
-                                      inactiveThumbColor:
-                                          Theme.of(context).primaryColor,
-                                      inactiveTrackColor: Theme.of(context)
-                                          .primaryColor
-                                          .withOpacity(0.5),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _shortRoute = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.keyboard_arrow_up,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.info_outline),
-                          onPressed: () => showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                              child: Container(
-                                  height: 150,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.keyboard_arrow_down),
-                                          Expanded(
-                                            child: Text(
-                                              'Short routes: about 3 hours max',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText2
-                                                  .copyWith(fontSize: 16),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.keyboard_arrow_up),
-                                          Expanded(
-                                            child: Text(
-                                                'Long routes: about 5 hours max',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText2
-                                                    .copyWith(fontSize: 16)),
-                                          ),
-                                        ],
-                                      ),
-                                      FlatButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: Text(
-                                            'OK',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline2,
-                                          ))
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Container(
+              //             width: 200,
+              //             decoration: BoxDecoration(
+              //                 color: Theme.of(context).accentColor,
+              //                 borderRadius: BorderRadius.circular(20)),
+              //             padding: EdgeInsets.all(8),
+              //             child: Row(
+              //               mainAxisAlignment: MainAxisAlignment.center,
+              //               children: [
+              //                 Icon(
+              //                   Icons.timer,
+              //                   size: 40,
+              //                 ),
+              //                 SizedBox(
+              //                   width: 10,
+              //                 ),
+              //                 Row(
+              //                   mainAxisAlignment: MainAxisAlignment.center,
+              //                   crossAxisAlignment: CrossAxisAlignment.center,
+              //                   children: [
+              //                     Icon(
+              //                       Icons.keyboard_arrow_down,
+              //                     ),
+              //                     SizedBox(
+              //                       width: 60,
+              //                       child: Switch(
+              //                         value: _shortRoute,
+              //                         activeColor:
+              //                             Theme.of(context).primaryColor,
+              //                         inactiveThumbColor:
+              //                             Theme.of(context).primaryColor,
+              //                         inactiveTrackColor: Theme.of(context)
+              //                             .primaryColor
+              //                             .withOpacity(0.5),
+              //                         onChanged: (value) {
+              //                           setState(() {
+              //                             _shortRoute = value;
+              //                           });
+              //                         },
+              //                       ),
+              //                     ),
+              //                     Icon(
+              //                       Icons.keyboard_arrow_up,
+              //                     )
+              //                   ],
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //           IconButton(
+              //             icon: Icon(Icons.info_outline),
+              //             onPressed: () => showDialog(
+              //               context: context,
+              //               builder: (context) => Dialog(
+              //                 child: Container(
+              //                     height: 150,
+              //                     child: Column(
+              //                       mainAxisAlignment: MainAxisAlignment.center,
+              //                       children: [
+              //                         Row(
+              //                           mainAxisAlignment:
+              //                               MainAxisAlignment.center,
+              //                           children: [
+              //                             Icon(Icons.keyboard_arrow_down),
+              //                             Expanded(
+              //                               child: Text(
+              //                                 'Short routes: about 3 hours max',
+              //                                 style: Theme.of(context)
+              //                                     .textTheme
+              //                                     .bodyText2
+              //                                     .copyWith(fontSize: 16),
+              //                               ),
+              //                             ),
+              //                           ],
+              //                         ),
+              //                         SizedBox(height: 5),
+              //                         Row(
+              //                           mainAxisAlignment:
+              //                               MainAxisAlignment.center,
+              //                           children: [
+              //                             Icon(Icons.keyboard_arrow_up),
+              //                             Expanded(
+              //                               child: Text(
+              //                                   'Long routes: about 5 hours max',
+              //                                   style: Theme.of(context)
+              //                                       .textTheme
+              //                                       .bodyText2
+              //                                       .copyWith(fontSize: 16)),
+              //                             ),
+              //                           ],
+              //                         ),
+              //                         FlatButton(
+              //                             onPressed: () =>
+              //                                 Navigator.pop(context),
+              //                             child: Text(
+              //                               'OK',
+              //                               style: Theme.of(context)
+              //                                   .textTheme
+              //                                   .headline2,
+              //                             ))
+              //                       ],
+              //                     )),
+              //               ),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
                     PrimaryButton(
                       text: 'CREATE',
                       onPressed: () => Navigator.pushNamed(
                           context, '/routePage',
-                          arguments: placeId),
+                          arguments: {'placeId':placeId,'placeTypes':_places,'transports':_transports}),
                       icon: Icons.edit,
                       style: ButtonType.Normal,
                     ),

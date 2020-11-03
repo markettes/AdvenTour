@@ -24,19 +24,6 @@ class _MapPageState extends State<MapPage> {
   bool _fixedPosition = false;
 
   @override
-  void initState() {
-    print('*******************************************');
-    routeEngine.makeShortRoute(Location(40.781026, -73.967028), [
-      CITY_HALL,
-      PARK,
-      TOURIST_ATTRACTION,
-    ], [
-      'walk'
-    ]);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(

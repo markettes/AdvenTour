@@ -4,13 +4,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:Adventour/models/Path.dart' as p;
 
-class Route {
-  List<p.Path> _paths;
+// class Route {
+//   List<p.Path> _paths;
 
-  Route(paths) {
-    _paths = paths;
-  }
+//   Route(List<p.Path> paths) {
+//     _paths = paths;
+//   }
 
-  List<p.Path> get paths => _paths;
-}
+//   List<p.Path> get paths => _paths;
+// }
 

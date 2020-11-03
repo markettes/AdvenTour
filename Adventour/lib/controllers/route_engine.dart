@@ -1,6 +1,8 @@
 import 'dart:collection';
 
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
+import 'package:Adventour/models/Path.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:google_maps_webservice/src/core.dart';
@@ -11,7 +13,7 @@ const MAX_DISTANCE_BICYCLE = 10000;
 const MAX_DISTANCE_PUBLIC = 15000;
 
 class RouteEngine {
-  Future<Route> makeShortRoute(
+  Future<Path> makeShortRoute(
       Location location, List<String> types, List<String> transports) async {
     var maxDistance = transports.contains('car')
         ? MAX_DISTANCE_CAR
@@ -62,9 +64,20 @@ class RouteEngine {
     }
 
     for (Place p in places) {
-      print(p.name);
+      print(p.toString());
     }
 
+    places.insert(0, Place(location.lat,location.lng));
+
+      List<Trajectory> trajectories = [];
+      for (var transport in transports) {
+        trajectories.addAll(await directionsEngine.makeTrajectories(places, transport));
+      }
+      Path path = Path(places.first,places.last,trajectories);
+
+    
+
+    return path;
   }
 }
 

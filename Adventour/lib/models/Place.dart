@@ -28,6 +28,8 @@ const NIGHT_CLUB = "night_club"; // + 60
 const RESTAURANT = "restaurant"; // 60
 const SHOPPING_MALL = "shopping_mall"; // 60
 
+List<String> places = [CHURCH,BAR,RESTAURANT,PARK,CITY_HALL];
+
 
 
 class Place {

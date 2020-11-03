@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
 
@@ -27,13 +28,11 @@ class CircleIconButton extends StatelessWidget {
           ? Theme.of(context).primaryColor
           : Theme.of(context).disabledColor,
       constraints: BoxConstraints(minWidth: 0),
-      child: icon
-          ? Icon(
-              toIcon(type),
-              size: 25,
-              color: Colors.white,
-            )
-          : toImage(type),
+      child: Icon(
+        toIcon(type),
+        size: 25,
+        color: Colors.white,
+      ),
       padding: EdgeInsets.all(10),
       shape: CircleBorder(),
     );
@@ -41,46 +40,48 @@ class CircleIconButton extends StatelessWidget {
 
   IconData toIcon(String type) {
     switch (type) {
-      case 'car':
+      case CAR:
         return Icons.directions_car;
-      case 'walk':
+      case WALK:
         return Icons.directions_walk;
-      case 'bicycle':
+      case BICYCLE:
         return Icons.directions_bike;
-      case 'public':
+      case PUBLIC:
         return Icons.directions_subway;
-      case 'amusement_park':
+      case PARK:
         return Icons.park;
-      case 'museum':
-        return Icons.museum;
-      case 'library':
-        return Icons.local_library;
-      case 'restaurants':
+      case CHURCH:
+        return Icons.location_city;
+      case RESTAURANT:
         return Icons.restaurant;
+      case CITY_HALL:
+        return Icons.house_outlined;
+        case BAR:
+        return Icons.sports_bar;
       default:
         throw Exception();
     }
   }
 
-  ImageIcon toImage(String type) {
-    switch (type) {
-      case 'church':
-        return ImageIcon(
-          AssetImage("assets/church.png"),
-          color: Colors.white,
-        );
-      case 'night_club':
-        return ImageIcon(
-          AssetImage("assets/night_club.png"),
-          color: Colors.white,
-        );
-      case 'zoo':
-        return ImageIcon(
-          AssetImage("assets/zoo.png"),
-          color: Colors.white,
-        );
-      default:
-        throw Exception("No existe asset para esta categoría");
-    }
-  }
+  // ImageIcon toImage(String type) {
+  //   switch (type) {
+  //     case 'church':
+  //       return ImageIcon(
+  //         AssetImage("assets/church.png"),
+  //         color: Colors.white,
+  //       );
+  //     case 'night_club':
+  //       return ImageIcon(
+  //         AssetImage("assets/night_club.png"),
+  //         color: Colors.white,
+  //       );
+  //     case 'zoo':
+  //       return ImageIcon(
+  //         AssetImage("assets/zoo.png"),
+  //         color: Colors.white,
+  //       );
+  //     default:
+  //       throw Exception("No existe asset para esta categoría");
+  //   }
+  // }
 }
