@@ -1,6 +1,5 @@
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
-import 'package:Adventour/pages/main_page.dart';
 import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
@@ -26,13 +25,12 @@ class Adventour extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: themeData,
       //initialRoute: '/mapPage',
-      initialRoute: '/mapPage',
+      initialRoute: '/',
       routes: {
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
         '/': (_) => RootPage(),
-        '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
         '/placePage': (_) => PlacePage(),
         '/creatingRoutePage': (_) => CreatingRoutePage(),

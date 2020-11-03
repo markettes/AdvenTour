@@ -1,4 +1,5 @@
 import 'package:Adventour/models/Path.dart';
+import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/directions.dart';
 
@@ -26,7 +27,8 @@ class DirectionsEngine {
   //   return trajectories;
   // }
 
-    Future<List<Path>> makeTrajectories(List<Place> places, String transport) async {
+    Future<List<Path>> makePaths(List<Place> places, String transport) async {
+      if(places.length < 3) return [];
     String origin = places.first.latitude.toString() +',' + places.first.longitude.toString();
     String destination = places.last.latitude.toString() +',' + places.last.longitude.toString();
     DirectionsResponse response = await _directions.directions(
@@ -35,8 +37,8 @@ class DirectionsEngine {
       waypoints: places.sublist(1,places.length - 1).map((place) => Waypoint.fromPlaceId(place.id)).toList(),
       travelMode: toTravelMode(transport),
     );
-    List<Path> trajectories = response.routes.map((route) => Path.fromGoogleRoute(route,transport)).toList();
-    return trajectories;
+    List<Path> paths = response.routes.map((route) => Path.fromGoogleRoute(route,transport)).toList();
+    return paths;
   }
 }
 

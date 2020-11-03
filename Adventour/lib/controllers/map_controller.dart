@@ -36,29 +36,34 @@ class MapController {
     Marker marker = Marker(
       markerId: MarkerId(place.name),
       position: LatLng(place.latitude, place.longitude),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
       infoWindow: InfoWindow(
-        title: place.name ?? "Unknown",
-        onTap: () => Navigator.of(context).pushNamed(
-          '/placePage',
-          arguments: {
-            'place': place,
-            'goToCoordinates': goToCoordinates,
-            'clearMarkers': clearMarkers,
-            'addMarker': addMarker
-          },
-        ),
-      ),
+          title: place.name ?? "Unknown",
+          onTap: () {
+            if (place.id == 'start')
+              return;
+            else {
+              Navigator.of(context).pushNamed(
+                '/placePage',
+                arguments: {
+                  'place': place,
+                  'tapMap': (){
+                    goToCoordinates(place.latitude, place.longitude, 18);
+                  }
+                },
+              );
+            }
+          }),
     );
 
     _markers[marker.markerId] = marker;
-
   }
 
   void clearMarkers() {
     _markers.clear();
   }
 
-  void goToCoordinates(double latitude,double longitude,double zoom) {
+  void goToCoordinates(double latitude, double longitude, double zoom) {
     // Navigator.pop(context);
     _mapController.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(
@@ -69,7 +74,7 @@ class MapController {
     ));
   }
 
-  void zoomOut(double latitude,double longitude) {
+  void zoomOut(double latitude, double longitude) {
     // Navigator.pop(context);
     _mapController.animateCamera(CameraUpdate.newCameraPosition(
       CameraPosition(

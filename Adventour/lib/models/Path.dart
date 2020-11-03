@@ -1,23 +1,5 @@
-import 'package:Adventour/models/Place.dart';
-import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
-
-class Route {
-  List<Place> _places;
-  List<Path> _paths;
-
-  Route(places, paths) {
-    _places = places;
-    _paths = paths;
-  }
-
-  List<Path> get trajectories => _paths;
-
-  List<Place> get places => _places;
-
-  
-}
 
 class Path {
   List<LatLng> _points;
@@ -34,5 +16,7 @@ class Path {
   }
 
   List<LatLng> get points => _points;
+
+  get transport => _transport;
 
 }

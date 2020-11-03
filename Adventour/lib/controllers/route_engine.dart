@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Path.dart';
+import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
@@ -39,12 +40,9 @@ class RouteEngine {
       if (!contains) placesWithoutDuplicates.add(p);
     }
 
-    // for (var place in placesWithoutDuplicates) {
-    //   print(place.toString());
-    // }
-
     placesWithoutDuplicates.removeWhere((place) =>
         place.rating == null ||
+        place.types.contains('lodging') ||
         place.rating < 4.3 ||
         place.userRatingsTotal < 500);
 
@@ -62,18 +60,14 @@ class RouteEngine {
       }
     }
 
-    for (Place p in places) {
-      print(p.toString());
-    }
+    places.insert(0, Place(location.lat, location.lng,'Start','start'));
 
-    places.insert(0, Place(location.lat, location.lng));
-
-    List<Path> trajectories = [];
+    List<Path> paths = [];
     for (var transport in transports) {
-      trajectories
-          .addAll(await directionsEngine.makeTrajectories(places, transport));
+      paths
+          .addAll(await directionsEngine.makePaths(places, transport));
     }
-    Route route = Route(places, trajectories);
+    Route route = Route(places, paths);
 
     return route;
   }

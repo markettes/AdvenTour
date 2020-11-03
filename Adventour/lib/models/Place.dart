@@ -50,9 +50,11 @@ class Place {
   List<String> _types;
   num _userRatingsTotal;
 
-  Place(latitude, longitude) {
+  Place(latitude, longitude,name,id) {
     _latitude = latitude;
     _longitude = longitude;
+    _name = name;
+    _id = id;
   }
 
   // Place.fromGoogleMaps(Map json) {
@@ -136,6 +138,7 @@ class Place {
     return """
 id = $_id
 name = $_name
+type = $_types
     """;
   }
 }

@@ -2,8 +2,9 @@ import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
-import 'package:Adventour/models/Path.dart' as p;
+import 'package:Adventour/models/Route.dart' as p;
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -38,10 +39,49 @@ class _RoutePageState extends State<RoutePage> {
             future: _makeRoute(),
             builder: (context, snapshot) {
               if (snapshot.hasError) print(snapshot.error);
-              if (!snapshot.hasData) return CircularProgressIndicator();
+              if (!snapshot.hasData)
+                return Center(child: CircularProgressIndicator());
               p.Route route = snapshot.data;
-              _mapController.drawRoute(route.trajectories.first.points);
+              if (route.paths.isEmpty)
+                return Column(
+                  children: [
+                    Expanded(
+                      flex:2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(25),
+                        child: Image.asset(
+                          'assets/logo_adventour.png',
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        children: [
+                          Text(
+                            'There is not route available',
+                            style: Theme.of(context).textTheme.headline2,
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 5),
+                          PrimaryButton(
+                            text: 'EDIT LOCATION',
+                            icon: Icons.edit,
+                            style: ButtonType.Normal,
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              _mapController.drawRoute(route.paths.first.points);
               for (var place in route.places) {
+                print(place.toString());
                 _mapController.addMarker(place, context);
               }
               return GoogleMap(
@@ -72,6 +112,4 @@ class _RoutePageState extends State<RoutePage> {
 
     return route;
   }
-
-
 }

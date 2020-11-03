@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -34,6 +35,7 @@ class _MapPageState extends State<MapPage> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+
           FloatingActionButton(
             heroTag: 'route',
             backgroundColor: Theme.of(context).primaryColor,
@@ -114,7 +116,20 @@ class _MapPageState extends State<MapPage> {
                   //     _scaffoldKey.currentState.openDrawer();
                   //   },
                   // ),
-
+                  MaterialButton(
+                    child: Icon(
+                      Icons.logout,
+                      color: Theme.of(context).buttonColor,
+                    ),
+                    color: Theme.of(context).primaryColor,
+                    height: 53,
+                    shape: CircleBorder(),
+                    elevation: 15,
+                    onPressed: () async {
+                      auth.signOut();
+                    },
+                  ),
+                  SizedBox(height: 5),
                   MaterialButton(
                     child: Icon(
                       Icons.search,
