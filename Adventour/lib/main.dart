@@ -35,7 +35,7 @@ class Adventour extends StatelessWidget {
         '/placePage': (_) => PlacePage(),
         '/creatingRoutePage': (_) => CreatingRoutePage(),
         '/customRoutePage': (_) => CustomRoutePage(),
-        '/routePage':(_) => RoutePage()
+        '/routePage':(_) => RoutePage(),
       },
     );
   }

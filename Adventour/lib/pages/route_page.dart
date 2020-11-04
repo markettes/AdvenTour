@@ -1,115 +1,181 @@
-import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
-import 'package:Adventour/models/Route.dart' as p;
-import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/primary_button.dart';
+import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
-import 'package:Adventour/controllers/search_engine.dart';
 
 class RoutePage extends StatefulWidget {
   @override
   _RoutePageState createState() => _RoutePageState();
 }
 
-class _RoutePageState extends State<RoutePage> {
-  MapController _mapController = MapController();
+class _RoutePageState extends State<RoutePage> with SingleTickerProviderStateMixin{
+  TabController _tabController;
 
-  directions.Location _location;
-  String placeId;
-  List<String> placeTypes;
-  List<String> transports;
+  r.Route route;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
-    placeId = arguments['placeId'];
-    placeTypes = arguments['placeTypes'];
-    transports = arguments['transports'];
+    route = arguments['route'];
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Custom route'),
+      appBar: AppBar(
+        title: Text('Custom route'),
+      ),
+      body: route.paths.isEmpty
+          ? NotRouteAvailable()
+          : TabBarView(
+            controller: _tabController,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              MapView(route: route, tabController: _tabController),
+              Stack(
+                alignment: Alignment.bottomLeft,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SquareIconButton(
+                      icon: Icons.map,
+                      onPressed: () => _tabController.animateTo(0),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+    );
+  }
+}
+
+class MapView extends StatefulWidget  {
+  MapView({
+    @required this.route,
+    @required this.tabController,
+  });
+
+  r.Route route;
+  TabController tabController;
+
+  @override
+  _MapViewState createState() => _MapViewState();
+}
+
+class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
+  MapController mapController = MapController();
+
+  bool _listVisible = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: LatLng(widget.route.places.first.latitude,
+                widget.route.places.first.longitude),
+            zoom: 12.5,
+          ),
+          markers: Set<Marker>.of(mapController.markers.values),
+          polylines:
+              Set<Polyline>.of(mapController.polylines.values),
+          onMapCreated: (googleMapController) => mapController
+              .onMapCreated(googleMapController, () async {
+            print('mapCreated');
+            mapController.drawRoute(widget.route.paths.first.points);
+            for (var place in widget.route.places) {
+              mapController.addMarker(place, context);
+            }
+            setState(() {});
+          }),
+          onCameraMoveStarted: () {
+            _listVisible = false;
+            setState(() {});
+          },
+          onCameraIdle: () {
+            _listVisible = true;
+            setState(() {});
+          },
+          myLocationEnabled: true,
+          myLocationButtonEnabled: false,
+          zoomControlsEnabled: false,
         ),
-        body: FutureBuilder(
-            future: _makeRoute(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) print(snapshot.error);
-              if (!snapshot.hasData)
-                return Center(child: CircularProgressIndicator());
-              p.Route route = snapshot.data;
-              if (route.paths.isEmpty)
-                return Column(
-                  children: [
-                    Expanded(
-                      flex:2,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25),
-                        child: Image.asset(
-                          'assets/logo_adventour.png',
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        children: [
-                          Text(
-                            'There is not route available',
-                            style: Theme.of(context).textTheme.headline2,
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 5),
-                          PrimaryButton(
-                            text: 'EDIT LOCATION',
-                            icon: Icons.edit,
-                            style: ButtonType.Normal,
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              _mapController.drawRoute(route.paths.first.points);
-              for (var place in route.places) {
-                print(place.toString());
-                _mapController.addMarker(place, context);
-              }
-              return GoogleMap(
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(_location.lat, _location.lng),
-                  zoom: 12.5,
-                ),
-                markers: Set<Marker>.of(_mapController.markers.values),
-                polylines: Set<Polyline>.of(_mapController.polylines.values),
-                onMapCreated: _mapController.onMapCreated,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: false,
-                zoomControlsEnabled: false,
-              );
-            }));
+        AnimatedOpacity(
+          // If the widget is visible, animate to 0.0 (invisible).
+          // If the widget is hidden, animate to 1.0 (fully visible).
+          opacity: _listVisible ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 600),
+          curve: Curves.fastOutSlowIn,
+          // The green box must be a child of the AnimatedOpacity widget.
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SquareIconButton(
+              icon: Icons.list,
+              onPressed: () => widget.tabController.animateTo(1),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
-  Future<p.Route> _makeRoute() async {
-    if (placeId == null) {
-      Position position = await Geolocator.getCurrentPosition();
-      _location = directions.Location(position.latitude, position.longitude);
-    } else {
-      _location = await geocoding.searchByPlaceId(placeId);
-    }
+  @override
+  bool get wantKeepAlive => true;
+}
 
-    p.Route route =
-        await routeEngine.makeShortRoute(_location, placeTypes, transports);
+class NotRouteAvailable extends StatelessWidget {
+  const NotRouteAvailable({
+    Key key,
+  }) : super(key: key);
 
-    return route;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          flex: 2,
+          child: Padding(
+            padding: const EdgeInsets.all(25),
+            child: Image.asset(
+              'assets/logo_adventour.png',
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
+        Expanded(
+          flex: 3,
+          child: Column(
+            children: [
+              Text(
+                'There is not route available',
+                style: Theme.of(context).textTheme.headline2,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 5),
+              PrimaryButton(
+                text: 'EDIT LOCATION',
+                icon: Icons.edit,
+                style: ButtonType.Normal,
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

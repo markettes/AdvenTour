@@ -13,9 +13,10 @@ class MapController {
 
   Map<MarkerId, Marker> get markers => _markers;
 
-  void onMapCreated(GoogleMapController controller) {
+  void onMapCreated(GoogleMapController controller,[Function then]) {
     _mapController = controller;
     _changeMapStyle(_mapController);
+    if(then!=null)then();
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
