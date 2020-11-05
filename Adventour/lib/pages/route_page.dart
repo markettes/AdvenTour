@@ -45,12 +45,31 @@ class _RoutePageState extends State<RoutePage>
                   alignment: Alignment.bottomLeft,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(20.0),
                       child: SquareIconButton(
                         icon: Icons.map,
                         onPressed: () => _tabController.animateTo(0),
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          FloatingActionButton(
+                            onPressed: () {
+                              Navigator.of(context).pushNamed('/addPlacesPage');
+                            },
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Icon(
+                              Icons.add,
+                              color: Theme.of(context).buttonColor,
+                              size: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 )
               ],
@@ -137,10 +156,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     List<Polygon> polygons = [];
     for (var place in route.places) {
       Polygon polygon = Polygon(
-        polygonId: place.id,
-        points: [LatLng(place.latitude, place.longitude)],
-        strokeWidth: 30
-      );
+          polygonId: place.id,
+          points: [LatLng(place.latitude, place.longitude)],
+          strokeWidth: 30);
       polygons.add(polygon);
     }
     mapController.drawPolygons(polygons);

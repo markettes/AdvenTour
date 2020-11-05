@@ -1,3 +1,4 @@
+import 'package:Adventour/pages/add_places_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/map_page.dart';
@@ -19,7 +20,9 @@ void main() {
 class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark));
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
@@ -35,7 +38,8 @@ class Adventour extends StatelessWidget {
         '/placePage': (_) => PlacePage(),
         '/creatingRoutePage': (_) => CreatingRoutePage(),
         '/customRoutePage': (_) => CustomRoutePage(),
-        '/routePage':(_) => RoutePage(),
+        '/routePage': (_) => RoutePage(),
+        '/addPlacesPage': (_) => AddPlacesPage()
       },
     );
   }
