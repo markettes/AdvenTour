@@ -13,6 +13,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
+import 'package:intl/intl.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -33,9 +34,24 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void initState() {
-    rootBundle.loadString('assets/map_styles/dark.json').then((string) {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('kk').format(now);
+    
+    // print('*************************************************************');
+    // print(formattedDate);
+    // print('*************************************************************');
+
+    if(int.parse(formattedDate) < 20){
+      rootBundle.loadString('assets/map_styles/light.json').then((string) {
       _mapStyle = string;
     });
+    }
+    else{
+      rootBundle.loadString('assets/map_styles/dark.json').then((string) {
+      _mapStyle = string;
+    });
+    }
+
     super.initState();
   }
 
