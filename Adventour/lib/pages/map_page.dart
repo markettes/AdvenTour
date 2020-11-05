@@ -32,24 +32,26 @@ class _MapPageState extends State<MapPage> {
   String _location;
   String _locationId;
 
+  DateTime now;
+  String formattedDate;
+
   @override
   void initState() {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('kk').format(now);
-    
+    now = DateTime.now();
+    formattedDate = DateFormat('kk').format(now);
+
     // print('*************************************************************');
     // print(formattedDate);
     // print('*************************************************************');
 
-    if(int.parse(formattedDate) < 20){
+    if (int.parse(formattedDate) < 20) {
       rootBundle.loadString('assets/map_styles/light.json').then((string) {
-      _mapStyle = string;
-    });
-    }
-    else{
+        _mapStyle = string;
+      });
+    } else {
       rootBundle.loadString('assets/map_styles/dark.json').then((string) {
-      _mapStyle = string;
-    });
+        _mapStyle = string;
+      });
     }
 
     super.initState();
@@ -144,7 +146,7 @@ class _MapPageState extends State<MapPage> {
                 Position position = snapshot.data;
                 return Listener(
                   child: GoogleMap(
-                    onMapCreated:(GoogleMapController controller) {
+                    onMapCreated: (GoogleMapController controller) {
                       controller.setMapStyle(_mapStyle);
                       print("MAPSTYLE -> $_mapStyle");
                     },
@@ -188,15 +190,20 @@ class _MapPageState extends State<MapPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey,
-                              blurRadius: 20,
-                            )
-                          ]),
+                      decoration: int.parse(formattedDate) < 20
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colors.white,
+                              boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 20,
+                                  )
+                                ])
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colors.white,
+                            ),
                       child: Row(
                         children: [
                           Padding(
