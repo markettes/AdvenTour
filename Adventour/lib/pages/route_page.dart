@@ -14,7 +14,8 @@ class RoutePage extends StatefulWidget {
   _RoutePageState createState() => _RoutePageState();
 }
 
-class _RoutePageState extends State<RoutePage> with SingleTickerProviderStateMixin{
+class _RoutePageState extends State<RoutePage>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   r.Route route;
@@ -36,29 +37,29 @@ class _RoutePageState extends State<RoutePage> with SingleTickerProviderStateMix
       body: route.paths.isEmpty
           ? NotRouteAvailable()
           : TabBarView(
-            controller: _tabController,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              MapView(route: route, tabController: _tabController),
-              Stack(
-                alignment: Alignment.bottomLeft,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SquareIconButton(
-                      icon: Icons.map,
-                      onPressed: () => _tabController.animateTo(0),
+              controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                MapView(route: route, tabController: _tabController),
+                Stack(
+                  alignment: Alignment.bottomLeft,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SquareIconButton(
+                        icon: Icons.map,
+                        onPressed: () => _tabController.animateTo(0),
+                      ),
                     ),
-                  ),
-                ],
-              )
-            ],
-          ),
+                  ],
+                )
+              ],
+            ),
     );
   }
 }
 
-class MapView extends StatefulWidget  {
+class MapView extends StatefulWidget {
   MapView({
     @required this.route,
     @required this.tabController,
@@ -88,16 +89,11 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             zoom: 12.5,
           ),
           markers: Set<Marker>.of(mapController.markers.values),
-          polylines:
-              Set<Polyline>.of(mapController.polylines.values),
-          onMapCreated: (googleMapController) => mapController
-              .onMapCreated(googleMapController, () async {
-            print('mapCreated');
-            mapController.drawRoute(widget.route.paths.first.points);
-            for (var place in widget.route.places) {
-              mapController.addMarker(place, context);
-            }
-            setState(() {});
+          polygons: Set<Polygon>.of(mapController.polygons.values),
+          polylines: Set<Polyline>.of(mapController.polylines.values),
+          onMapCreated: (googleMapController) =>
+              mapController.onMapCreated(googleMapController, () async {
+            drawPath(widget.route);
           }),
           onCameraMoveStarted: () {
             _listVisible = false;
@@ -128,6 +124,27 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         ),
       ],
     );
+  }
+
+  void drawPath(r.Route route) {
+    Polyline polyline = Polyline(
+        polylineId: PolylineId('route'),
+        points: widget.route.paths.first.points,
+        color: Colors.blue,
+        width: 5);
+    mapController.drawPolyline(polyline);
+
+    List<Polygon> polygons = [];
+    for (var place in route.places) {
+      Polygon polygon = Polygon(
+        polygonId: place.id,
+        points: [LatLng(place.latitude, place.longitude)],
+        strokeWidth: 30
+      );
+      polygons.add(polygon);
+    }
+    mapController.drawPolygons(polygons);
+    setState(() {});
   }
 
   @override
