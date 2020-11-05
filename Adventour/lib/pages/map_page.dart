@@ -161,9 +161,14 @@ class _MapPageState extends State<MapPage> {
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: Colors.white,
-                      ),
+                          borderRadius: BorderRadius.circular(40),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 20,
+                            )
+                          ]),
                       child: Row(
                         children: [
                           Padding(
