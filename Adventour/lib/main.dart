@@ -24,7 +24,7 @@ class Adventour extends StatelessWidget {
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      //initialRoute: '/mapPage',
+      darkTheme: ThemeData.dark(),
       initialRoute: '/',
       routes: {
         '/initPage': (_) => InitPage(),
