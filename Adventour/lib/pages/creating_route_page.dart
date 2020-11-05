@@ -45,7 +45,8 @@ class CreatingRouteForm extends StatefulWidget {
 }
 
 class _CreatingRouteFormState extends State<CreatingRouteForm> {
-  TextEditingController _locationController = TextEditingController(text:'Your location');
+  TextEditingController _locationController =
+      TextEditingController(text: 'Your location');
   TextEditingController _dateController =
       TextEditingController(text: DateFormat.yMMMd().format(DateTime.now()));
   DateTime _selectedDate;
@@ -66,28 +67,26 @@ class _CreatingRouteFormState extends State<CreatingRouteForm> {
                   icon: Icons.location_on,
                   onTap: () => PlacesAutocomplete.show(
                     context: context,
-                    onTapPrediction: (prediction){
+                    onTapPrediction: (prediction) {
                       Navigator.pop(context);
-                      
-                        _location = prediction.description;
-                        _locationId = prediction.placeId;
-                        setState(() {
+
+                      _location = prediction.description;
+                      _locationId = prediction.placeId;
+                      setState(() {
                         _locationController.text = _location;
                       });
                     },
-                    onSubmitted: (value){},
+                    onSubmitted: (value) {},
                   ),
                   readOnly: true,
                 ),
               ),
-              Expanded(
-                child: InputText(
-                  controller: _dateController,
-                  labelText: 'Date',
-                  icon: Icons.calendar_today,
-                  onTap: () => _selectDate(context),
-                  readOnly: true,
-                ),
+              InputText(
+                controller: _dateController,
+                labelText: 'Date',
+                icon: Icons.calendar_today,
+                onTap: () => _selectDate(context),
+                readOnly: true,
               )
             ],
           ),
@@ -110,7 +109,8 @@ class _CreatingRouteFormState extends State<CreatingRouteForm> {
                     PrimaryButton(
                       text: 'NEXT',
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/customRoutePage',arguments: _locationId);
+                        Navigator.of(context).pushNamed('/customRoutePage',
+                            arguments: _locationId);
                       },
                       icon: Icons.edit,
                       style: ButtonType.Normal,
