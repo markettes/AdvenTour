@@ -12,13 +12,15 @@ class Path {
 
   Path.fromGoogleRoute(directions.Route route, String transport) {
     List<Stretch> stretchs = [];
+    int stretchId = 0;
     for (var leg in route.legs) {
+      stretchId++;
       List<LatLng> points = [];
       for (var step in leg.steps) {
         points.add(LatLng(step.startLocation.lat, step.startLocation.lng));
       }
       Duration duration = Duration(minutes: leg.duration.value.toInt());
-      stretchs.add(Stretch(points, duration));
+      stretchs.add(Stretch(stretchId.toString(),points, duration));
     }
     _stretchs = stretchs;
     _transport = transport;
@@ -30,13 +32,17 @@ class Path {
 }
 
 class Stretch {
+  String _id;
   List<LatLng> _points;
   Duration _duration;
 
-  Stretch(points,duration){
+  Stretch(id,points,duration){
+    _id = id;
     _points = points;
     _duration = duration;
   }
+
+  String get id => _id;
 
   List<LatLng> get points => _points;
 

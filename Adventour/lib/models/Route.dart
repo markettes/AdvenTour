@@ -26,7 +26,7 @@ Route exampleRoute = Route([
       'ChIJgUOb0elIYA0RlPjrpQdE62I', [MUSEUM], 5)
 ], [
   Path([
-    Stretch([LatLng(39.47018449999999, -0.3705346),LatLng(39.4753061, -0.3764726)], Duration(minutes: 20)),
-    Stretch([LatLng(39.4753061, -0.3764726),LatLng(39.4752113, -0.3552065)], Duration(minutes: 25)),
+    Stretch('1',[LatLng(39.47018449999999, -0.3705346),LatLng(39.4753061, -0.3764726)], Duration(minutes: 20)),
+    Stretch('2',[LatLng(39.4753061, -0.3764726),LatLng(39.4752113, -0.3552065)], Duration(minutes: 25)),
   ], CAR)
 ]);

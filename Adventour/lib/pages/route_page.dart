@@ -30,8 +30,10 @@ class _RoutePageState extends State<RoutePage>
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
+    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     route = arguments['route'];
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Custom route'),
       ),
@@ -41,7 +43,10 @@ class _RoutePageState extends State<RoutePage>
               controller: _tabController,
               physics: NeverScrollableScrollPhysics(),
               children: [
-                MapView(route: route, tabController: _tabController),
+                MapView(
+                    route: route,
+                    tabController: _tabController,
+                    scaffoldKey: _scaffoldKey),
                 Stack(
                   alignment: Alignment.bottomLeft,
                   children: [
@@ -80,13 +85,12 @@ class _RoutePageState extends State<RoutePage>
 }
 
 class MapView extends StatefulWidget {
-  MapView({
-    @required this.route,
-    @required this.tabController,
-  });
+  MapView(
+      {@required this.route, @required this.tabController, this.scaffoldKey});
 
   r.Route route;
   TabController tabController;
+  GlobalKey<ScaffoldState> scaffoldKey;
 
   @override
   _MapViewState createState() => _MapViewState();
@@ -148,21 +152,33 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   void drawRoute(r.Route route) {
     for (var stretch in route.paths.first.stretchs) {
       Polyline polyline = Polyline(
-        polylineId: PolylineId('route'),
-        points: stretch.points,
-        color: Colors.blue,
-        onTap: (){
-          print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        },
-        width: 20);
-    mapController.drawPolyline(polyline);
+          polylineId: PolylineId(stretch.id),
+          points: stretch.points,
+          color: Colors.blue,
+          onTap: () {
+            widget.scaffoldKey.currentState.showBottomSheet(
+                (context) => Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 100,
+                      ),
+                    ),
+                elevation: 20,
+                backgroundColor: Theme.of(context).backgroundColor,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20))));
+          },
+          consumeTapEvents: true,
+          width: 10);
+      mapController.drawPolyline(polyline);
     }
-    
 
     for (var place in route.places) {
       mapController.addMarker(place, context);
     }
-    
+
     setState(() {});
   }
 
