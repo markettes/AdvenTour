@@ -7,12 +7,13 @@ import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
+import 'package:intl/intl.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapController _mapController = MapController();
+  String _mapStyle;
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
@@ -29,6 +31,29 @@ class _MapPageState extends State<MapPage> {
   TextEditingController _locationController = TextEditingController();
   String _location;
   String _locationId;
+
+  @override
+  void initState() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('kk').format(now);
+    
+    // print('*************************************************************');
+    // print(formattedDate);
+    // print('*************************************************************');
+
+    if(int.parse(formattedDate) < 20){
+      rootBundle.loadString('assets/map_styles/light.json').then((string) {
+      _mapStyle = string;
+    });
+    }
+    else{
+      rootBundle.loadString('assets/map_styles/dark.json').then((string) {
+      _mapStyle = string;
+    });
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +144,10 @@ class _MapPageState extends State<MapPage> {
                 Position position = snapshot.data;
                 return Listener(
                   child: GoogleMap(
-                    onMapCreated: _mapController.onMapCreated,
+                    onMapCreated:(GoogleMapController controller) {
+                      controller.setMapStyle(_mapStyle);
+                      print("MAPSTYLE -> $_mapStyle");
+                    },
                     zoomControlsEnabled: false,
                     markers: Set<Marker>.of(_mapController.markers.values),
                     initialCameraPosition: CameraPosition(
