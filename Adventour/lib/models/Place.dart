@@ -68,11 +68,14 @@ class Place {
   List<String> _types;
   num _userRatingsTotal;
 
-  Place(latitude, longitude, name, id) {
+  Place(latitude, longitude, [name, id,types,rating]) {
+    _detailed = false;
     _latitude = latitude;
     _longitude = longitude;
     _name = name;
     _id = id;
+    _types=types;
+    _rating=rating;
   }
 
   // Place.fromGoogleMaps(Map json) {
@@ -172,3 +175,4 @@ type = $_types
 // openingHours = ${_openingHours}
 // weekdaytext = ${_weekdaytext}
 // openNow = ${_openNow}
+

@@ -7,6 +7,7 @@ import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/models/Path.dart' as p;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 
@@ -254,10 +255,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      var route = await _makeRoute();
-                      Navigator.pushNamed(context, '/routePage', arguments: {
-                        'route': route
-                      });
+                      
+                      Navigator.pushNamed(context, '/routePage',
+                          arguments: {'route': r.exampleRoute});
                     },
                     icon: Icons.edit,
                     style: ButtonType.Normal,
@@ -275,13 +275,13 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
     directions.Location location;
     if (placeId == null) {
       Position position = await Geolocator.getCurrentPosition();
-      location =
-          directions.Location(position.latitude, position.longitude);
+      location = directions.Location(position.latitude, position.longitude);
     } else {
       location = await geocoding.searchByPlaceId(placeId);
     }
 
-    return await routeEngine.makeShortRoute(location, _places.expand((e) => e).toList(), _transports);
+    return await routeEngine.makeShortRoute(
+        location, _places.expand((e) => e).toList(), _transports);
   }
 
   void sortPlaceTypes() {

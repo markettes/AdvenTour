@@ -2,37 +2,43 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 
 class Path {
-  List<LatLng> _points;
-  List<LatLng> _wayPoints;
-  List<Duration> _durations;
+  List<Stretch> _stretchs;
   String _transport;
 
+  Path(stretchs,transport){
+    _stretchs = stretchs;
+    _transport = transport;
+  }
+
   Path.fromGoogleRoute(directions.Route route, String transport) {
-    List<LatLng> points = [];
-    List<LatLng> wayPoints = [];
-    List<Duration> durations = [];
-    print(route.legs.first.startLocation);
-    wayPoints.add(LatLng(route.legs.first.startLocation.lat,
-        route.legs.first.startLocation.lng));
+    List<Stretch> stretchs = [];
     for (var leg in route.legs) {
-      print('> ' + leg.duration.value.toString());
-      wayPoints.add(LatLng(leg.endLocation.lat, leg.endLocation.lng));
-      durations.add(Duration(minutes: leg.duration.value.toInt()));
+      List<LatLng> points = [];
       for (var step in leg.steps) {
         points.add(LatLng(step.startLocation.lat, step.startLocation.lng));
       }
+      Duration duration = Duration(minutes: leg.duration.value.toInt());
+      stretchs.add(Stretch(points, duration));
     }
-    _points = points;
+    _stretchs = stretchs;
     _transport = transport;
-    _wayPoints = wayPoints;
-    _durations = durations;
+  }
+
+  List<Stretch> get stretchs => _stretchs;
+
+  get transport => _transport;
+}
+
+class Stretch {
+  List<LatLng> _points;
+  Duration _duration;
+
+  Stretch(points,duration){
+    _points = points;
+    _duration = duration;
   }
 
   List<LatLng> get points => _points;
 
-  List<LatLng> get wayPoints => _wayPoints;
-
-  List<Duration> get durations => _durations;
-
-  get transport => _transport;
+  Duration get duration => _duration;
 }
