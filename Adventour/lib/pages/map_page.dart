@@ -205,9 +205,14 @@ class _MapPageState extends State<MapPage> {
                                 Icons.clear,
                                 size: 30,
                               ),
-                              onPressed: () {
-                                _locationController.clear();
-                              },
+                              onPressed: _mapController.markers.isEmpty
+                                  ? null
+                                  : () {
+                                      setState(() {
+                                        _locationController.clear();
+                                        _mapController.clearMarkers();
+                                      });
+                                    },
                             ),
                           ),
                         ],
@@ -248,28 +253,28 @@ class _MapPageState extends State<MapPage> {
                   //     );
                   //   },
                   // ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  MaterialButton(
-                    child: _mapController.markers.isEmpty
-                        ? Container()
-                        : Icon(
-                            Icons.delete,
-                            color: Theme.of(context).buttonColor,
-                          ),
-                    color: Theme.of(context).primaryColor,
-                    height: 40,
-                    shape: CircleBorder(),
-                    elevation: 15,
-                    onPressed: _mapController.markers.isEmpty
-                        ? null
-                        : () {
-                            setState(() {
-                              _mapController.clearMarkers();
-                            });
-                          },
-                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // MaterialButton(
+                  //   child: _mapController.markers.isEmpty
+                  //       ? Container()
+                  //       : Icon(
+                  //           Icons.delete,
+                  //           color: Theme.of(context).buttonColor,
+                  //         ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 40,
+                  //   shape: CircleBorder(),
+                  //   elevation: 15,
+                  //   onPressed: _mapController.markers.isEmpty
+                  //       ? null
+                  //       : () {
+                  //           setState(() {
+                  //             _mapController.clearMarkers();
+                  //           });
+                  //         },
+                  // ),
                 ],
               ),
             ),
@@ -302,7 +307,9 @@ class _MapPageState extends State<MapPage> {
       _mapController.addMarker(place, context);
     }
 
-    setState(() {});
+    setState(() {
+      _locationController.text = value;
+    });
     if (places.length == 1) {
       Place place = places.first;
       Navigator.pop(context);
