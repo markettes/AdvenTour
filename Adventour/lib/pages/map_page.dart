@@ -200,20 +200,22 @@ class _MapPageState extends State<MapPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 5, right: 5),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.clear,
-                                size: 30,
-                              ),
-                              onPressed: _mapController.markers.isEmpty
-                                  ? null
-                                  : () {
-                                      setState(() {
-                                        _locationController.clear();
-                                        _mapController.clearMarkers();
-                                      });
-                                    },
-                            ),
+                            child: _locationController.text.isEmpty
+                                ? null
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      size: 30,
+                                    ),
+                                    onPressed: _mapController.markers.isEmpty
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              _locationController.clear();
+                                              _mapController.clearMarkers();
+                                            });
+                                          },
+                                  ),
                           ),
                         ],
                       ),
