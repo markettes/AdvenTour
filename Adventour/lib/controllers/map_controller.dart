@@ -8,13 +8,10 @@ class MapController {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> _polylines = {};
-  Map<PolygonId, Polygon> _polygons = {};
 
   Map<PolylineId, Polyline> get polylines => _polylines;
 
   Map<MarkerId, Marker> get markers => _markers;
-
-  Map<PolygonId, Polygon> get polygons => _polygons;
 
   void onMapCreated(GoogleMapController controller,[Function then]) {
     _mapController = controller;
@@ -28,15 +25,7 @@ class MapController {
   }
 
   drawPolyline(Polyline polyline) {
-
     _polylines[polyline.polylineId] = polyline;
-  }
-
-    drawPolygons(List<Polygon> polygons) {
-      for (var polygon in polygons) {
-        _polygons[polygon.polygonId] = polygon;
-      }
-    
   }
 
   void addMarker(Place place, BuildContext context) {

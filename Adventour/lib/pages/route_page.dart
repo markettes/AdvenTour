@@ -2,6 +2,7 @@ import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/models/Path.dart' as p;
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -108,11 +109,10 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             zoom: 12.5,
           ),
           markers: Set<Marker>.of(mapController.markers.values),
-          polygons: Set<Polygon>.of(mapController.polygons.values),
           polylines: Set<Polyline>.of(mapController.polylines.values),
           onMapCreated: (googleMapController) =>
               mapController.onMapCreated(googleMapController, () async {
-            drawPath(widget.route);
+            drawRoute(widget.route);
           }),
           onCameraMoveStarted: () {
             _listVisible = false;
@@ -145,23 +145,24 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  void drawPath(r.Route route) {
-    Polyline polyline = Polyline(
+  void drawRoute(r.Route route) {
+    for (var stretch in route.paths.first.stretchs) {
+      Polyline polyline = Polyline(
         polylineId: PolylineId('route'),
-        points: widget.route.paths.first.points,
+        points: stretch.points,
         color: Colors.blue,
-        width: 5);
+        onTap: (){
+          print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        },
+        width: 20);
     mapController.drawPolyline(polyline);
-
-    List<Polygon> polygons = [];
-    for (var place in route.places) {
-      Polygon polygon = Polygon(
-          polygonId: place.id,
-          points: [LatLng(place.latitude, place.longitude)],
-          strokeWidth: 30);
-      polygons.add(polygon);
     }
-    mapController.drawPolygons(polygons);
+    
+
+    for (var place in route.places) {
+      mapController.addMarker(place, context);
+    }
+    
     setState(() {});
   }
 
