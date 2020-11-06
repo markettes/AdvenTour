@@ -91,6 +91,25 @@ class _RoutePageState extends State<RoutePage>
                               size: 30,
                             ),
                           ),
+                          FloatingActionButton(
+                            onPressed: () {
+                              // Navigator.of(context).pushNamed('/addPlacesPage');
+                              setState(() {
+                                route.removePlace(
+                                  route.places.last,
+                                  route.paths.first.stretchs.last,
+                                );
+                              });
+
+                              _tabController.animateTo(0);
+                            },
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Icon(
+                              Icons.delete,
+                              color: Theme.of(context).buttonColor,
+                              size: 30,
+                            ),
+                          ),
                         ],
                       ),
                     )

@@ -29,6 +29,11 @@ class Route {
     //     [LatLng(39.4752113, -0.3552065), LatLng(39.462531, -0.359762)],
     //     Duration(minutes: 30)));
   }
+
+  void removePlace(Place p, Stretch s) {
+    exampleRoute.places.remove(p);
+    exampleRoute.paths.first.stretchs.remove(s);
+  }
 }
 
 Route exampleRoute = Route([
