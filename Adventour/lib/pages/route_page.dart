@@ -1,6 +1,8 @@
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
+import 'package:Adventour/models/Path.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Path.dart' as p;
 import 'package:Adventour/widgets/primary_button.dart';
@@ -44,9 +46,10 @@ class _RoutePageState extends State<RoutePage>
               physics: NeverScrollableScrollPhysics(),
               children: [
                 MapView(
-                    route: route,
-                    tabController: _tabController,
-                    scaffoldKey: _scaffoldKey),
+                  route: route,
+                  tabController: _tabController,
+                  scaffoldKey: _scaffoldKey,
+                ),
                 Stack(
                   alignment: Alignment.bottomLeft,
                   children: [
@@ -64,7 +67,22 @@ class _RoutePageState extends State<RoutePage>
                         children: [
                           FloatingActionButton(
                             onPressed: () {
-                              Navigator.of(context).pushNamed('/addPlacesPage');
+                              // Navigator.of(context).pushNamed('/addPlacesPage');
+                              setState(() {
+                                route.addNewPlace(
+                                  Place(39.462531, -0.359762, 'Parque Gulliver',
+                                      'ChIJ98E0IMFIYA0RX4pSCR-943Q', PARK, 5),
+                                  Stretch(
+                                      '3',
+                                      [
+                                        LatLng(39.4752113, -0.3552065),
+                                        LatLng(39.462531, -0.359762)
+                                      ],
+                                      Duration(minutes: 30)),
+                                );
+                              });
+
+                              _tabController.animateTo(0);
                             },
                             backgroundColor: Theme.of(context).primaryColor,
                             child: Icon(

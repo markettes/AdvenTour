@@ -255,7 +255,6 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      
                       Navigator.pushNamed(context, '/routePage',
                           arguments: {'route': r.exampleRoute});
                     },
