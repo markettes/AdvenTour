@@ -1,7 +1,9 @@
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
@@ -23,6 +25,7 @@ class _RoutePageState extends State<RoutePage>
 
   r.Route route;
   Duration duration;
+  GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
   void initState() {
@@ -33,7 +36,7 @@ class _RoutePageState extends State<RoutePage>
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
-    GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    _scaffoldKey = GlobalKey<ScaffoldState>();
 
     route = arguments['route'];
     duration = route.duration(0);
@@ -51,24 +54,45 @@ class _RoutePageState extends State<RoutePage>
                 MapView(
                     route: route,
                     tabController: _tabController,
-                    scaffoldKey: _scaffoldKey),
+                    scaffoldKey: _scaffoldKey,),
                 MapListView(
                     duration: duration,
                     route: route,
-                    tabController: _tabController)
+                    tabController: _tabController,
+                    addPlace: addPlace,
+                    removePlace:removePlace,)
               ],
             ),
     );
   }
+
+  addPlace(Place place, Stretch stretch) {
+    setState(() {
+      route.addPlace(place, stretch);
+    });
+  }
+
+  removePlace(int index){
+    if(route.places.length > 2)
+    setState(() {
+      route.removePlace(index);
+    });
+    else _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text('The route needs at least 2 places'),
+    ));
+  }
 }
 
 class MapView extends StatefulWidget {
-  MapView(
-      {@required this.route, @required this.tabController, this.scaffoldKey});
+  MapView({
+    @required this.route,
+    this.scaffoldKey,
+    @required TabController tabController,
+  }) : tabController = tabController;
 
   r.Route route;
-  TabController tabController;
   GlobalKey<ScaffoldState> scaffoldKey;
+  TabController tabController;
 
   @override
   _MapViewState createState() => _MapViewState();
@@ -215,15 +239,19 @@ class NotRouteAvailable extends StatelessWidget {
 }
 
 class MapListView extends StatelessWidget {
-  const MapListView({
+  MapListView({
     @required this.duration,
     @required this.route,
+    @required this.addPlace,
+    @required this.removePlace,
     @required TabController tabController,
-  }) : _tabController = tabController;
+  }) : tabController = tabController;
 
-  final Duration duration;
-  final r.Route route;
-  final TabController _tabController;
+  Duration duration;
+  r.Route route;
+  TabController tabController;
+  Function addPlace;
+  Function removePlace;
 
   @override
   Widget build(BuildContext context) {
@@ -237,25 +265,27 @@ class MapListView extends StatelessWidget {
                 child: Column(
                   children: [
                     Column(
-                        children: [
-                          Icon(
-                            Icons.schedule,
-                            size: 70,
-                          ),
-                          Text(
-                        duration.inHours.toString() +
-                            ':' +
-                            duration.inMinutes.remainder(60).toString(),
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                        ],
-                      ),
-                    
+                      children: [
+                        Icon(
+                          Icons.schedule,
+                          size: 70,
+                        ),
+                        Text(
+                          duration.inHours.toString() +
+                              ':' +
+                              duration.inMinutes.remainder(60).toString(),
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ],
+                    ),
                     SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.flag,size: 50,),
+                        Icon(
+                          Icons.flag,
+                          size: 50,
+                        ),
                         Text(
                           'Start',
                           style: Theme.of(context).textTheme.bodyText1,
@@ -287,8 +317,7 @@ class MapListView extends StatelessWidget {
                                 children: [
                                   SizedBox(
                                       height: 50,
-                                      child:
-                                          CircleIcon(image: place.icon)),
+                                      child: CircleIcon(image: place.icon)),
                                   SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment:
@@ -317,8 +346,9 @@ class MapListView extends StatelessWidget {
                                   caption: 'Delete',
                                   color: Colors.transparent,
                                   icon: Icons.delete,
-                                  foregroundColor: Theme.of(context).primaryColor,
-                                  onTap: () => {},
+                                  foregroundColor:
+                                      Theme.of(context).primaryColor,
+                                  onTap: () => removePlace(index),
                                 ),
                               ],
                             )
@@ -338,27 +368,39 @@ class MapListView extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: SquareIconButton(
               icon: Icons.map,
-              onPressed: () => _tabController.animateTo(0),
+              onPressed: () => tabController.animateTo(0),
             ),
           ),
         ),
         Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: FloatingActionButton(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/addPlacesPage');
-              },
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).buttonColor,
-                size: 30,
+            alignment: Alignment.bottomRight,
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: FloatingActionButton(
+                onPressed: () {
+                  // Navigator.of(context).pushNamed('/addPlacesPage');
+                  addPlace(
+                    Place(39.462531, -0.359762, 'Parque Gulliver',
+                        'ChIJ98E0IMFIYA0RX4pSCR-943Q', PARK, 5,"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",Duration(minutes: 15)),
+                    Stretch(
+                        '3',
+                        [
+                          LatLng(39.4752113, -0.3552065),
+                          LatLng(39.462531, -0.359762)
+                        ],
+                        Duration(minutes: 30)),
+                  );
+
+                  tabController.animateTo(0);
+                },
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).buttonColor,
+                  size: 30,
+                ),
               ),
-            ),
-          ),
-        )
+            ))
       ],
     );
   }

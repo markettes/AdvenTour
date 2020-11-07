@@ -29,6 +29,17 @@ class Route {
     print(placesDuration.toString());
     return pathDuration + placesDuration;
   }
+
+
+  void addPlace(Place place, Stretch stretch) {
+    exampleRoute._places.add(place);
+    exampleRoute._paths.first.stretchs.add(stretch);
+  }
+
+  void removePlace(int index) {
+    exampleRoute.places.removeAt(index);
+    exampleRoute.paths.first.stretchs.removeAt(index);
+  }
 }
 
 Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346),[
@@ -38,8 +49,14 @@ Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346),[
       'ChIJgUOb0elIYA0RlPjrpQdE62I', [MUSEUM], 5,"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",Duration(minutes: 35))
 ], [
   Path([
-    Stretch('1',[LatLng(39.47018449999999, -0.3705346),LatLng(39.4753061, -0.3764726)], Duration(minutes: 20)),
-    Stretch('2',[LatLng(39.4753061, -0.3764726),LatLng(39.4752113, -0.3552065)], Duration(minutes: 25)),
+    Stretch(
+        '1',
+        [LatLng(39.47018449999999, -0.3705346), LatLng(39.4753061, -0.3764726)],
+        Duration(minutes: 20)),
+    Stretch(
+        '2',
+        [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
+        Duration(minutes: 25)),
   ], CAR)
 ]);
 
