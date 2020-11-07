@@ -29,8 +29,6 @@ class _MapPageState extends State<MapPage> {
   bool _fixedPosition = false;
 
   TextEditingController _locationController = TextEditingController();
-  String _location;
-  String _locationId;
 
   DateTime now;
   String formattedDate;
@@ -39,10 +37,6 @@ class _MapPageState extends State<MapPage> {
   void initState() {
     now = DateTime.now();
     formattedDate = DateFormat('kk').format(now);
-
-    // print('*************************************************************');
-    // print(formattedDate);
-    // print('*************************************************************');
 
     if (int.parse(formattedDate) < 20) {
       rootBundle.loadString('assets/map_styles/light.json').then((string) {
@@ -137,6 +131,7 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         alignment: Alignment.topRight,
         children: [
+
           FutureBuilder(
               future: Geolocator.getLastKnownPosition(),
               builder: (context, snapshot) {
@@ -146,10 +141,7 @@ class _MapPageState extends State<MapPage> {
                 Position position = snapshot.data;
                 return Listener(
                   child: GoogleMap(
-                    onMapCreated: (GoogleMapController controller) {
-                      controller.setMapStyle(_mapStyle);
-                      print("MAPSTYLE -> $_mapStyle");
-                    },
+                    onMapCreated: _mapController.onMapCreated,
                     zoomControlsEnabled: false,
                     markers: Set<Marker>.of(_mapController.markers.values),
                     initialCameraPosition: CameraPosition(
@@ -173,20 +165,6 @@ class _MapPageState extends State<MapPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // FUTURO DRAWER
-                  // MaterialButton(
-                  //   child: Icon(
-                  //     Icons.menu,
-                  //     color: Theme.of(context).buttonColor,
-                  //   ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 53,
-                  //   elevation: 15,
-                  //   shape: CircleBorder(),
-                  //   onPressed: () {
-                  //     _scaffoldKey.currentState.openDrawer();
-                  //   },
-                  // ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Container(
@@ -336,6 +314,7 @@ class _MapPageState extends State<MapPage> {
               return Container();
             },
           ),
+
         ],
       ),
     );
