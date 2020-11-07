@@ -1,6 +1,7 @@
-import 'package:Adventour/models/Path.dart';
+
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart';
 
 const CAR = 'car';
@@ -27,9 +28,9 @@ class DirectionsEngine {
   //   return trajectories;
   // }
 
-    Future<List<Path>> makePaths(List<Place> places, String transport) async {
+    Future<List<Path>> makePaths(LatLng start,List<Place> places, String transport) async {
       if(places.length < 3) return [];
-    String origin = places.first.latitude.toString() +',' + places.first.longitude.toString();
+    String origin = start.latitude.toString() +',' + start.longitude.toString();
     String destination = places.last.latitude.toString() +',' + places.last.longitude.toString();
     DirectionsResponse response = await _directions.directions(
       origin,

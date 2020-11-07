@@ -67,8 +67,9 @@ class Place {
   bool _openNow;
   List<String> _types;
   num _userRatingsTotal;
+  Duration _duration;
 
-  Place(latitude, longitude, [name, id,types,rating]) {
+  Place(latitude, longitude, [name, id,types,rating,icon,duration]) {
     _detailed = false;
     _latitude = latitude;
     _longitude = longitude;
@@ -76,6 +77,8 @@ class Place {
     _id = id;
     _types=types;
     _rating=rating;
+    _icon = icon;
+    _duration = duration;
   }
 
   // Place.fromGoogleMaps(Map json) {
@@ -153,6 +156,8 @@ class Place {
   List<String> get types => _types;
 
   num get userRatingsTotal => _userRatingsTotal;
+
+  Duration get duration => _duration;
 
   @override
   String toString() {

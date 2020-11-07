@@ -7,7 +7,6 @@ import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
-import 'package:Adventour/models/Path.dart' as p;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 

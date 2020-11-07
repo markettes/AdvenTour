@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
-import 'package:Adventour/models/Path.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
 const MAX_DISTANCE_WALK = 5000;
@@ -59,15 +59,14 @@ class RouteEngine {
         placesWithoutDuplicates.remove(routePlace);
       }
     }
-
-    places.insert(0, Place(location.lat, location.lng,'Start','start'));
+    LatLng start = LatLng(location.lat, location.lng);
 
     List<Path> paths = [];
     for (var transport in transports) {
       paths
-          .addAll(await directionsEngine.makePaths(places, transport));
+          .addAll(await directionsEngine.makePaths(start,places, transport));
     }
-    Route route = Route(places, paths);
+    Route route = Route(start,places, paths);
 
     return route;
   }
