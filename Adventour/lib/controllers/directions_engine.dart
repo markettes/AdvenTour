@@ -1,5 +1,4 @@
-
-import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart';
@@ -9,7 +8,7 @@ const WALK = 'walk';
 const PUBLIC = 'public';
 const BICYCLE = 'bicycle';
 
-List<String> transports = [CAR,WALK,PUBLIC,BICYCLE];
+List<String> transports = [CAR, WALK, PUBLIC, BICYCLE];
 
 class DirectionsEngine {
   final _directions = GoogleMapsDirections(
@@ -28,17 +27,27 @@ class DirectionsEngine {
   //   return trajectories;
   // }
 
-    Future<List<Path>> makePaths(LatLng start,List<Place> places, String transport) async {
-      if(places.length < 2) return [];
-    String origin = start.latitude.toString() +',' + start.longitude.toString();
-    String destination = places.last.latitude.toString() +',' + places.last.longitude.toString();
+  Future<List<r.Path>> makePaths(
+      LatLng start, List<Place> places, String transport) async {
+    if (places.length < 2) return [];
+    String origin =
+        start.latitude.toString() + ',' + start.longitude.toString();
+        Place furthestPlace = getFurthestPlace(start, places);
+    String destination = furthestPlace.latitude.toString() +
+        ',' +
+        furthestPlace.longitude.toString();
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
-      waypoints: places.sublist(0,places.length - 1).map((place) => Waypoint.fromPlaceId(place.id)).toList(),
+      waypoints: places
+          .sublist(0, places.length - 1)
+          .map((place) => Waypoint.fromPlaceId(place.id))
+          .toList(),
       travelMode: toTravelMode(transport),
     );
-    List<Path> paths = response.routes.map((route) => Path.fromGoogleRoute(route,transport)).toList();
+    List<r.Path> paths = response.routes
+        .map((route) => r.Path.fromGoogleRoute(route, transport))
+        .toList();
     return paths;
   }
 }

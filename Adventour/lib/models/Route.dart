@@ -8,7 +8,7 @@ class Route {
   List<Place> _places;
   List<Path> _paths;
 
-  Route(start,places, paths) {
+  Route(start, places, paths) {
     _start = start;
     _places = places;
     _paths = paths;
@@ -18,31 +18,57 @@ class Route {
 
   List<Path> get paths => _paths;
 
+  set paths(List<Path> paths) => _paths = paths;
+
   List<Place> get places => _places;
 
-  Duration duration(int index){
-    List<Duration> stretchsDurations = _paths[index].stretchs.map((stretch) => stretch.duration).toList();
-    Duration pathDuration = stretchsDurations.reduce((value, element) => value + element);
-    List<Duration> placesDurations = _places.map((place) => place.duration).toList();
-    Duration placesDuration = placesDurations.reduce((value, element) => value + element);
+  Duration duration(int index) {
+    List<Duration> stretchsDurations =
+        _paths[index].stretchs.map((stretch) => stretch.duration).toList();
+    Duration pathDuration =
+        stretchsDurations.reduce((value, element) => value + element);
+    List<Duration> placesDurations =
+        _places.map((place) => place.duration).toList();
+    Duration placesDuration =
+        placesDurations.reduce((value, element) => value + element);
     return pathDuration + placesDuration;
   }
 
+  void addPlace(Place place) => exampleRoute._places.add(place);
 
-  void addPlace(Place place) =>
-    exampleRoute._places.add(place);
-  
+  void removePlace(int index) => exampleRoute.places.removeAt(index);
 
-  void removePlace(int index) =>
-    exampleRoute.places.removeAt(index);
-  
+  sortPlaces(int index) {
+    List<Place> places = [];
+    for (var stretch in _paths[index].stretchs) {
+      print('?'+stretch.points.last.latitude.toString());
+      places.add(_places.firstWhere((place) =>
+          place.latitude == stretch.points.last.latitude &&
+          place.longitude == stretch.points.last.longitude));
+    }
+    _places = places;
+  }
 }
 
-Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346),[
-  Place(39.4753061, -0.3764726, 'Catedral de Valencia',
-      'ChIJb2UMoVJPYA0R2uk8Hly_1uU', CHURCH, 5,"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",Duration(minutes: 20)),
-  Place(39.4752113, -0.3552065, 'Ciudad de las artes y de las ciencias',
-      'ChIJgUOb0elIYA0RlPjrpQdE62I', [MUSEUM], 5,"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",Duration(minutes: 35))
+Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346), [
+  Place(
+      39.4753061,
+      -0.3764726,
+      'Catedral de Valencia',
+      'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
+      CHURCH,
+      5,
+      "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+      Duration(minutes: 20)),
+  Place(
+      39.4752113,
+      -0.3552065,
+      'Ciudad de las artes y de las ciencias',
+      'ChIJgUOb0elIYA0RlPjrpQdE62I',
+      [MUSEUM],
+      5,
+      "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+      Duration(minutes: 35))
 ], [
   Path([
     Stretch(
@@ -60,7 +86,7 @@ class Path {
   List<Stretch> _stretchs;
   String _transport;
 
-  Path(stretchs,transport){
+  Path(stretchs, transport) {
     _stretchs = stretchs;
     _transport = transport;
   }
@@ -70,12 +96,13 @@ class Path {
     int stretchId = 0;
     for (var leg in route.legs) {
       stretchId++;
+      
       List<LatLng> points = [];
       for (var step in leg.steps) {
         points.add(LatLng(step.startLocation.lat, step.startLocation.lng));
       }
       Duration duration = Duration(minutes: leg.duration.value.toInt());
-      stretchs.add(Stretch(stretchId.toString(),points, duration));
+      stretchs.add(Stretch(stretchId.toString(), points, duration));
     }
     _stretchs = stretchs;
     _transport = transport;
@@ -91,7 +118,7 @@ class Stretch {
   List<LatLng> _points;
   Duration _duration;
 
-  Stretch(id,points,duration){
+  Stretch(id, points, duration) {
     _id = id;
     _points = points;
     _duration = duration;

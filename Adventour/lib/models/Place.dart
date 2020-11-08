@@ -1,4 +1,6 @@
 import 'package:Adventour/libraries/place.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // NO EN RUTAS PERO IMPLEMENTAR DE OTRA FROMA
 // const ZOO = "zoo";
@@ -101,6 +103,7 @@ class Place {
     _types = result.types;
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
+     _duration = Duration(minutes: 30);
   }
 
   Place.fromDetails(PlaceDetails details) {
@@ -160,6 +163,8 @@ class Place {
 
   Duration get duration => _duration;
 
+
+
   @override
   String toString() {
     return """
@@ -169,6 +174,16 @@ type = $_types
     """;
   }
 }
+
+  Place getFurthestPlace(LatLng location,List<Place> places){
+    if(places.isEmpty)return null;
+    Place furthestPlace = places.first;
+    for (var place in places.sublist(1)) {
+      if(Geolocator.distanceBetween(location.latitude, location.longitude, place.latitude, place.longitude)>Geolocator.distanceBetween(location.latitude, location.longitude, furthestPlace.latitude, furthestPlace.longitude))furthestPlace = place;
+    }
+    return furthestPlace;
+  }
+
 
 // icon = $_icon
 // adress = $_adress

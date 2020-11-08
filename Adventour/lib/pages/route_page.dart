@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
@@ -71,12 +72,13 @@ class _RoutePageState extends State<RoutePage>
     );
   }
 
-  removePlace(int index) {
-    if (route.places.length > 2)
-      setState(() {
-        route.removePlace(index);
-      });
-    else
+  Future removePlace(int index) async {
+    if (route.places.length > 2) {
+      route.removePlace(index);
+      route.paths = await directionsEngine.makePaths(route.start, route.places, CAR);
+      route.sortPlaces(0);
+      setState(() {});
+    } else
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('The route needs at least 2 places'),
       ));
@@ -85,8 +87,9 @@ class _RoutePageState extends State<RoutePage>
   Future _onTapPrediction(Prediction prediction) async {
     Place place = await searchEngine.searchWithDetails(prediction.placeId);
     route.addPlace(place);
-    route = await routeEngine.updateRoute(route);
-      print('?'+route.paths.first.stretchs.length.toString());
+    route.paths = await directionsEngine.makePaths(route.start, route.places, CAR);
+    print('?' + route.paths.first.stretchs.length.toString());
+    route.sortPlaces(0);
     Navigator.pop(context);
     setState(() {});
   }
@@ -161,7 +164,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   }
 
   void drawRoute(r.Route route) {
+    print('?' + route.paths.first.stretchs.length.toString());
     for (var stretch in route.paths.first.stretchs) {
+      print('?stretch');
       Polyline polyline = Polyline(
           polylineId: PolylineId(stretch.id),
           points: stretch.points,
@@ -322,33 +327,37 @@ class MapListView extends StatelessWidget {
                             Slidable(
                               actionPane: SlidableDrawerActionPane(),
                               actionExtentRatio: 0.25,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                      height: 50,
-                                      child: CircleIcon(image: place.icon)),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        place.name,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
-                                      ),
-                                      Row(
+                              child: Expanded(
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                        height: 50,
+                                        child: CircleIcon(image: place.icon)),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Text(place.duration.inMinutes
-                                                  .toString() +
-                                              ' min'),
-                                          SizedBox(width: 5),
+                                          Text(
+                                            place.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(place.duration.inMinutes
+                                                      .toString() +
+                                                  ' min'),
+                                              SizedBox(width: 5),
+                                            ],
+                                          )
                                         ],
-                                      )
-                                    ],
-                                  )
-                                ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                               actions: <Widget>[
                                 IconSlideAction(
@@ -390,10 +399,8 @@ class MapListView extends StatelessWidget {
                   await PlacesAutocomplete.show(
                     context: context,
                     onTapPrediction: onTapPrediction,
-                    onSubmitted: (value){},
+                    onSubmitted: (value) {},
                   );
-
-                  tabController.animateTo(0);
                 },
                 backgroundColor: Theme.of(context).primaryColor,
                 child: Icon(

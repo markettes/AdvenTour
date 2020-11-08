@@ -67,18 +67,9 @@ class RouteEngine {
     }
     Route route = Route(start, places, paths);
 
-    return route;
-  }
+    route.sortPlaces(0);
 
-  Future<Route> updateRoute(Route route) async {
-    List<Path> paths = [];
-    for (var place in route.places) {
-      print('?' + place.toString());
-    }
-    paths.addAll(
-        await directionsEngine.makePaths(route.start, route.places, CAR));
-    Route newRoute = Route(route.start, route.places, paths);
-    return newRoute;
+    return route;
   }
 }
 
