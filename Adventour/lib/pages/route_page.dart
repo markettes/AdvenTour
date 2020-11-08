@@ -1,9 +1,11 @@
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
@@ -13,6 +15,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:google_maps_webservice/src/places.dart';
 
 class RoutePage extends StatefulWidget {
   @override
@@ -52,34 +55,40 @@ class _RoutePageState extends State<RoutePage>
               physics: NeverScrollableScrollPhysics(),
               children: [
                 MapView(
-                    route: route,
-                    tabController: _tabController,
-                    scaffoldKey: _scaffoldKey,),
+                  route: route,
+                  tabController: _tabController,
+                  scaffoldKey: _scaffoldKey,
+                ),
                 MapListView(
-                    duration: duration,
-                    route: route,
-                    tabController: _tabController,
-                    addPlace: addPlace,
-                    removePlace:removePlace,)
+                  duration: duration,
+                  route: route,
+                  tabController: _tabController,
+                  onTapPrediction: _onTapPrediction,
+                  removePlace: removePlace,
+                )
               ],
             ),
     );
   }
 
-  addPlace(Place place, Stretch stretch) {
-    setState(() {
-      route.addPlace(place, stretch);
-    });
+  removePlace(int index) {
+    if (route.places.length > 2)
+      setState(() {
+        route.removePlace(index);
+      });
+    else
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('The route needs at least 2 places'),
+      ));
   }
 
-  removePlace(int index){
-    if(route.places.length > 2)
-    setState(() {
-      route.removePlace(index);
-    });
-    else _scaffoldKey.currentState.showSnackBar(SnackBar(
-      content: Text('The route needs at least 2 places'),
-    ));
+  Future _onTapPrediction(Prediction prediction) async {
+    Place place = await searchEngine.searchWithDetails(prediction.placeId);
+    route.addPlace(place);
+    route = await routeEngine.updateRoute(route);
+      print('?'+route.paths.first.stretchs.length.toString());
+    Navigator.pop(context);
+    setState(() {});
   }
 }
 
@@ -242,7 +251,7 @@ class MapListView extends StatelessWidget {
   MapListView({
     @required this.duration,
     @required this.route,
-    @required this.addPlace,
+    @required this.onTapPrediction,
     @required this.removePlace,
     @required TabController tabController,
   }) : tabController = tabController;
@@ -250,7 +259,7 @@ class MapListView extends StatelessWidget {
   Duration duration;
   r.Route route;
   TabController tabController;
-  Function addPlace;
+  Function(Prediction) onTapPrediction;
   Function removePlace;
 
   @override
@@ -377,18 +386,11 @@ class MapListView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: FloatingActionButton(
-                onPressed: () {
-                  // Navigator.of(context).pushNamed('/addPlacesPage');
-                  addPlace(
-                    Place(39.462531, -0.359762, 'Parque Gulliver',
-                        'ChIJ98E0IMFIYA0RX4pSCR-943Q', PARK, 5,"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",Duration(minutes: 15)),
-                    Stretch(
-                        '3',
-                        [
-                          LatLng(39.4752113, -0.3552065),
-                          LatLng(39.462531, -0.359762)
-                        ],
-                        Duration(minutes: 30)),
+                onPressed: () async {
+                  await PlacesAutocomplete.show(
+                    context: context,
+                    onTapPrediction: onTapPrediction,
+                    onSubmitted: (value){},
                   );
 
                   tabController.animateTo(0);

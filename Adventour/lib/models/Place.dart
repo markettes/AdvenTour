@@ -115,14 +115,15 @@ class Place {
     _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
     _reviews = details.reviews;
-    if (_reviews != null) {
+    // if (_reviews != null) {
       _reviews.sort((a, b) => b.rating.compareTo(a.rating));
-    }
-    if (details.openingHours != null) {
+    // }
+    // if (details.openingHours != null) {
       _openingHours = details.openingHours;
       _weekdaytext = details.openingHours.weekdayText;
       _openNow = details.openingHours.openNow;
-    }
+    // }
+    _duration = Duration(minutes: 30);
   }
 
   get detailed => _detailed;

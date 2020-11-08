@@ -63,12 +63,22 @@ class RouteEngine {
 
     List<Path> paths = [];
     for (var transport in transports) {
-      paths
-          .addAll(await directionsEngine.makePaths(start,places, transport));
+      paths.addAll(await directionsEngine.makePaths(start, places, transport));
     }
-    Route route = Route(start,places, paths);
+    Route route = Route(start, places, paths);
 
     return route;
+  }
+
+  Future<Route> updateRoute(Route route) async {
+    List<Path> paths = [];
+    for (var place in route.places) {
+      print('?' + place.toString());
+    }
+    paths.addAll(
+        await directionsEngine.makePaths(route.start, route.places, CAR));
+    Route newRoute = Route(route.start, route.places, paths);
+    return newRoute;
   }
 }
 

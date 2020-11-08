@@ -29,13 +29,13 @@ class DirectionsEngine {
   // }
 
     Future<List<Path>> makePaths(LatLng start,List<Place> places, String transport) async {
-      if(places.length < 3) return [];
+      if(places.length < 2) return [];
     String origin = start.latitude.toString() +',' + start.longitude.toString();
     String destination = places.last.latitude.toString() +',' + places.last.longitude.toString();
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
-      waypoints: places.sublist(1,places.length - 1).map((place) => Waypoint.fromPlaceId(place.id)).toList(),
+      waypoints: places.sublist(0,places.length - 1).map((place) => Waypoint.fromPlaceId(place.id)).toList(),
       travelMode: toTravelMode(transport),
     );
     List<Path> paths = response.routes.map((route) => Path.fromGoogleRoute(route,transport)).toList();

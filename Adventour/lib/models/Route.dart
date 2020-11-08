@@ -14,32 +14,28 @@ class Route {
     _paths = paths;
   }
 
+  LatLng get start => _start;
+
   List<Path> get paths => _paths;
 
   List<Place> get places => _places;
 
   Duration duration(int index){
     List<Duration> stretchsDurations = _paths[index].stretchs.map((stretch) => stretch.duration).toList();
-    print(stretchsDurations.toString());
     Duration pathDuration = stretchsDurations.reduce((value, element) => value + element);
-    print(pathDuration.toString());
     List<Duration> placesDurations = _places.map((place) => place.duration).toList();
-    print(placesDurations.toString());
     Duration placesDuration = placesDurations.reduce((value, element) => value + element);
-    print(placesDuration.toString());
     return pathDuration + placesDuration;
   }
 
 
-  void addPlace(Place place, Stretch stretch) {
+  void addPlace(Place place) =>
     exampleRoute._places.add(place);
-    exampleRoute._paths.first.stretchs.add(stretch);
-  }
+  
 
-  void removePlace(int index) {
+  void removePlace(int index) =>
     exampleRoute.places.removeAt(index);
-    exampleRoute.paths.first.stretchs.removeAt(index);
-  }
+  
 }
 
 Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346),[
