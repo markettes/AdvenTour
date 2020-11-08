@@ -58,40 +58,188 @@ class _MapPageState extends State<MapPage> {
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawer: Drawer(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: MaterialButton(
-                      onPressed: () {
-                        auth.signOut();
-                      },
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            size: 35,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            'Logout',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          )
-                        ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            //----
+            Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.deepOrange,
+                  image: DecorationImage(
+                    image: AssetImage('assets/drawer_background.jpg'),
+                    fit: BoxFit.cover,
+                  ) 
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: auth.currentUser.photoUrl != null
+                                ? NetworkImage('${auth.currentUser.photoUrl}')
+                                : AssetImage("assets/empty_photo.jpg"),
+                              fit: BoxFit.cover,
+                            ),
+                            shape: BoxShape.circle),
                       ),
-                    ),
-                  )
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          "${auth.currentUser.email}",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+            Expanded(
+              flex: 3,
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.flag,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Highlights',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                   Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Favourites',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                   Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.settings,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Settings',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                   Row(
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Account',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      MaterialButton(
+                        onPressed: () {
+                          auth.signOut();
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.logout,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Logout',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: Column(
@@ -131,7 +279,6 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         alignment: Alignment.topRight,
         children: [
-
           FutureBuilder(
               future: Geolocator.getLastKnownPosition(),
               builder: (context, snapshot) {
@@ -314,7 +461,6 @@ class _MapPageState extends State<MapPage> {
               return Container();
             },
           ),
-
         ],
       ),
     );
