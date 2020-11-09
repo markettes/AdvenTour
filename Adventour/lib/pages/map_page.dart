@@ -62,7 +62,6 @@ class _MapPageState extends State<MapPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              //----
               Expanded(
                 flex: 1,
                 child: Container(
@@ -116,88 +115,7 @@ class _MapPageState extends State<MapPage> {
                         Expanded(
                           child: MaterialButton(
                             onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.flag,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Highlights',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Favourites',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.settings,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Settings',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
+                              Navigator.pushNamed(context, '/profile');
                             },
                             child: Row(
                               children: [
@@ -211,34 +129,6 @@ class _MapPageState extends State<MapPage> {
                                 ),
                                 Text(
                                   'Account',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              auth.signOut();
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Logout',
                                   style: Theme.of(context).textTheme.bodyText1,
                                 )
                               ],
