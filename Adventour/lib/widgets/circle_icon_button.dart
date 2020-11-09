@@ -8,12 +8,14 @@ class CircleIconButton extends StatelessWidget {
     @required this.onPressed,
     this.activated = true,
     this.icon = true,
+    this.size = 25,
   });
 
   String type;
   Function onPressed;
   bool activated;
   bool icon;
+  double size;
 
   void setIcon(bool estado) {
     this.icon = estado;
@@ -30,7 +32,7 @@ class CircleIconButton extends StatelessWidget {
       constraints: BoxConstraints(minWidth: 0),
       child: Icon(
         toIcon(type),
-        size: 25,
+        size: size,
         color: Colors.white,
       ),
       padding: EdgeInsets.all(10),

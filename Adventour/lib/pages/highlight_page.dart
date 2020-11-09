@@ -1,4 +1,5 @@
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/pages/creating_route_page.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
@@ -13,6 +14,11 @@ class _HighlightPageState extends State<HighlightPage> {
   TextEditingController _locationController = TextEditingController();
   Place place;
   String photo;
+  List<String> routes = [
+    'Barrio del Carmen',
+    'Valencia center',
+    'Valencia beach'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +31,283 @@ class _HighlightPageState extends State<HighlightPage> {
         title: Text(place.name + ' highlights'),
       ),
       body: SafeArea(
-        child: ScrollColumnExpandable(
+        child: Column(
           children: [
             Container(
               child: Image.network(
                 photo,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {},
+                leading: Container(
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.teal[100],
+                      shape: BoxShape.circle,
+                    )),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Valencia center'),
+                  ],
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.alarm,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text('3h 13min'),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.directions_car,
+                            size: 20,
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 20,
+                        ),
+                        Text('3'),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.park,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.history_edu,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.restaurant,
+                          size: 20,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {},
+                leading: Container(
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.teal[100],
+                      shape: BoxShape.circle,
+                    )),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text('Barrio del Carmen')],
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.alarm,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text('4h 31min'),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.directions_walk,
+                            size: 20,
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 20,
+                        ),
+                        Text('5'),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.house_outlined,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.sports_bar,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.camera_alt,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.local_cafe,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.gavel,
+                          size: 20,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListTile(
+                onTap: () {},
+                leading: Container(
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.teal[100],
+                      shape: BoxShape.circle,
+                    )),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Valencia beach'),
+                  ],
+                ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5, bottom: 5),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.alarm,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text('5h 01min'),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.directions_car,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Icon(
+                            Icons.directions_walk,
+                            size: 20,
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 20,
+                        ),
+                        Text('7'),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.local_library,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.location_city,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.theater_comedy,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.sports,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.museum,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.nightlife,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Icon(
+                          Icons.local_mall,
+                          size: 20,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             )
           ],
