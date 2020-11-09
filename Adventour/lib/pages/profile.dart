@@ -141,15 +141,13 @@ class _ProfileState extends State<Profile> {
                     RaisedButton(
                       onPressed: () async {
                         var userController = auth.currentUser;
-                        checkCurrentPasswordValid = await userController
-                           .signInWithEmailAndPassword(email: auth.currentUser.email, password: _passwordController.text)
+                        checkCurrentPasswordValid = await userController.signInWithEmailAndPassword(email: userController.email, password: _passwordController.text);
 
                         setState(() {});
 
                         if (_formKey.currentState.validate() &&
                             checkCurrentPasswordValid) {
-                          userController
-                              .updatePassword(_newPasswordController.text);
+                          userController.updatePassword(_newPasswordController.text);
                           Navigator.pop(context);
                         }
                       },
