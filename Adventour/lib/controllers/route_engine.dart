@@ -60,12 +60,11 @@ class RouteEngine {
       }
     }
 
-    places.insert(0, Place(location.lat, location.lng,'Start','start'));
+    places.insert(0, Place(location.lat, location.lng, 'Start', 'start'));
 
     List<Path> paths = [];
     for (var transport in transports) {
-      paths
-          .addAll(await directionsEngine.makePaths(places, transport));
+      paths.addAll(await directionsEngine.makePaths(places, transport));
     }
     Route route = Route(places, paths);
 
