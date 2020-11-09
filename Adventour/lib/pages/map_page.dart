@@ -6,6 +6,7 @@ import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/widgets/input_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
@@ -32,6 +33,9 @@ class _MapPageState extends State<MapPage> {
 
   DateTime now;
   String formattedDate;
+
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool _isHL = false;
 
   @override
   void initState() {
@@ -502,9 +506,21 @@ class _MapPageState extends State<MapPage> {
 
   Future _onTapPrediction(Prediction prediction) async {
     _mapController.clearMarkers();
+    var data = await _firestore.collection('Highlights').get();
+
     Place place = (await searchEngine.searchByText(prediction.description,
             Location(_position.latitude, _position.longitude), 1000))
         .first;
+
+    for (var i = 0; i < data.docs.length; i++) {
+      if (data.docs[i].get('id') == prediction.placeId) {
+        Navigator.pop(context);
+        return Navigator.of(context).pushNamed(
+          '/highlightPage',
+          arguments: {'place': place, 'photo': data.docs[i].get('photo')},
+        );
+      }
+    }
 
     _mapController.addMarker(place, context);
     setState(() {
