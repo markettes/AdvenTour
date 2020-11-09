@@ -10,11 +10,12 @@ class _ProfileState extends State<Profile> {
   var _passwordController = TextEditingController();
   var _newPasswordController = TextEditingController();
   var _repeatPasswordController = TextEditingController();
-   bool checkCurrentPasswordValid = true;
-
+  bool checkCurrentPasswordValid = true;
+  var _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Profile"),
       ),
@@ -97,49 +98,63 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Text(
-                            "Manage Password",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 30,
+                    Flexible(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "Manage Password",
+                              style: Theme.of(context).textTheme.display1,
                             ),
-                          )),
-                        ],
+                            TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Password",
+                                errorText: checkCurrentPasswordValid
+                                    ? null
+                                    : "Please double check your current password",
+                              ),
+                              controller: _passwordController,
+                            ),
+                            TextFormField(
+                              decoration:
+                                  InputDecoration(hintText: "New Password"),
+                              controller: _newPasswordController,
+                              obscureText: true,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Repeat Password",
+                              ),
+                              obscureText: true,
+                              controller: _repeatPasswordController,
+                              validator: (value) {
+                                return _newPasswordController.text == value
+                                    ? null
+                                    : "Please validate your entered password";
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     ),
+                    RaisedButton(
+                      onPressed: () async {
+                        var userController = auth.currentUser;
+                        checkCurrentPasswordValid = await userController
+                            .validateCurrentPassword(_passwordController.text);
 
-                     TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Password",
-                        errorText: checkCurrentPasswordValid
-                            ? null
-                            : "Please double check your current password",
-                      ),
-                      controller: _passwordController,
-                    ),
-                    TextFormField(
-                      decoration:
-                          InputDecoration(hintText: "New Password"),
-                      controller: _newPasswordController,
-                      obscureText: true,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Repeat Password",
-                      ),
-                      obscureText: true,
-                      controller: _repeatPasswordController,
-                      validator: (value) {
-                        return _newPasswordController.text == value
-                            ? null
-                            : "Please validate your entered password";
+                        setState(() {});
+
+                        if (_formKey.currentState.validate() &&
+                            checkCurrentPasswordValid) {
+                          userController
+                              .updateUserPassword(_newPasswordController.text);
+                          Navigator.pop(context);
+                        }
                       },
-                    )
+                      child: Text("Save Profile"),
+                    ),
                   ],
                 ),
               ),
@@ -148,5 +163,18 @@ class _ProfileState extends State<Profile> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _newPasswordController.dispose();
+    _repeatPasswordController.dispose();
+    super.dispose();
   }
 }
