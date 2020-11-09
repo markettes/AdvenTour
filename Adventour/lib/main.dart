@@ -1,12 +1,16 @@
+import 'package:Adventour/pages/add_places_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
-import 'package:Adventour/pages/main_page.dart';
 import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
+import 'package:Adventour/pages/creating_route_page.dart';
+import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:Adventour/pages/custom_route_page.dart';
 
 void main() {
   //SdkContext.init(IsolateOrigin.main);
@@ -16,19 +20,26 @@ void main() {
 class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       title: 'AdvenTour',
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      initialRoute: '/mapPage',
+      darkTheme: themeData,
+      initialRoute: '/',
       routes: {
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
         '/': (_) => RootPage(),
-        '/mainPage': (_) => MainPage(),
         '/mapPage': (_) => MapPage(),
-        '/placePage':(_)=> PlacePage()
+        '/placePage': (_) => PlacePage(),
+        '/creatingRoutePage': (_) => CreatingRoutePage(),
+        '/customRoutePage': (_) => CustomRoutePage(),
+        '/routePage': (_) => RoutePage(),
+        '/addPlacesPage': (_) => AddPlacesPage()
       },
     );
   }
@@ -43,6 +54,7 @@ class Adventour extends StatelessWidget {
     cursorColor: Colors.deepPurple[600],
     buttonColor: Colors.white,
     dividerColor: Colors.black,
+    disabledColor: Colors.deepPurple[200],
     textTheme: TextTheme(
         headline1: TextStyle(
           fontWeight: FontWeight.w500,

@@ -4,9 +4,10 @@ import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:Adventour/pages/init_page.dart';
-import 'package:Adventour/pages/main_page.dart';
 
 import 'package:flutter/material.dart';
+
+import 'map_page.dart';
 
 class RootPage extends StatelessWidget {
   @override
@@ -30,7 +31,7 @@ class RootPage extends StatelessWidget {
                       await _showUserNameDialog(context));
               });
 
-              return MainPage();
+              return MapPage();
             },
           );
         });

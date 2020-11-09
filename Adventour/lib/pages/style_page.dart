@@ -43,24 +43,24 @@ class StylePage extends StatelessWidget {
                   style: ButtonType.Void,
                   icon: Icons.edit,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircleIconButton(
-                      type: CircleIconButtonType.Food,
-                      onPressed: () {},
-                    ),
-                    CircleIconButton(
-                      type: CircleIconButtonType.Museum,
-                      onPressed: () {},
-                    ),
-                  ],
-                ),
-                InputText(
-                  obscured: false,
-                  icon: Icons.location_on,
-                  labelText: 'Location',
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     CircleIconButton(
+                //       type: CircleIconButtonType.Food,
+                //       onPressed: () {},
+                //     ),
+                //     CircleIconButton(
+                //       type: CircleIconButtonType.Museum,
+                //       onPressed: () {},
+                //     ),
+                //   ],
+                // ),
+                // InputText(
+                //   obscured: false,
+                //   icon: Icons.location_on,
+                //   labelText: 'Location',
+                // ),
                 SquareIconButton(
                   icon: Icons.map,
                   onPressed: () {

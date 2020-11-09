@@ -117,7 +117,7 @@ String signInEmailError(FirebaseAuthException exception) {
 
 String signInPasswordError(FirebaseAuthException exception) {
   if (exception.code == 'weak-password') {
-    return 'Your password is wrong, it should have at least 6 characters';
+    return 'It should have at least 6 characters';
   }
   return null;
 }

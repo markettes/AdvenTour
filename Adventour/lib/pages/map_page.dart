@@ -1,11 +1,20 @@
+import 'dart:async';
+
+import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/controllers/map_controller.dart';
+import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/widgets/category_checkbox.dart';
+import 'package:Adventour/widgets/input_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart' as Location;
+import 'package:Adventour/pages/search_page.dart';
+import 'package:google_maps_webservice/src/core.dart';
+import 'package:google_maps_webservice/src/places.dart';
+import 'package:intl/intl.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -13,9 +22,41 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  GoogleMapController _mapController;
-  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
-  SearchEngine _seachEngine = SearchEngine();
+  MapController _mapController = MapController();
+  String _mapStyle;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Position _position;
+  bool _fixedPosition = false;
+
+  TextEditingController _locationController = TextEditingController();
+  String _location;
+  String _locationId;
+
+  DateTime now;
+  String formattedDate;
+
+  @override
+  void initState() {
+    now = DateTime.now();
+    formattedDate = DateFormat('kk').format(now);
+
+    // print('*************************************************************');
+    // print(formattedDate);
+    // print('*************************************************************');
+
+    if (int.parse(formattedDate) < 20) {
+      rootBundle.loadString('assets/map_styles/light.json').then((string) {
+        _mapStyle = string;
+      });
+    } else {
+      rootBundle.loadString('assets/map_styles/dark.json').then((string) {
+        _mapStyle = string;
+      });
+    }
+
+    super.initState();
+  }
 
   List<CategoryCheckbox> buttons = [
     CategoryCheckbox("Restaurant", Icons.restaurant),
@@ -28,121 +69,352 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    _add();
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      key: _scaffoldKey,
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: MaterialButton(
+                      onPressed: () {
+                        auth.signOut();
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            size: 35,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            'Logout',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'route',
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () => Navigator.pushNamed(context, '/creatingRoutePage'),
+            child: Icon(
+              Icons.flag,
+              color: Theme.of(context).buttonColor,
+            ),
+          ),
+          SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'current_location',
+            backgroundColor: Theme.of(context).primaryColor,
+            onPressed: () async {
+              if (_position != null) {
+                _mapController.goToCoordinates(
+                    _position.latitude, _position.longitude, 18);
+                setState(() {
+                  _fixedPosition = true;
+                });
+              }
+            },
+            child: Icon(
+              Icons.gps_fixed,
+              color: _fixedPosition
+                  ? Colors.blue[200]
+                  : Theme.of(context).buttonColor,
+            ),
+          ),
+        ],
+      ),
       body: Stack(
-        alignment: AlignmentDirectional.topCenter,
+        alignment: Alignment.topRight,
         children: [
           FutureBuilder(
-              future: Geolocator.getCurrentPosition(
-                  desiredAccuracy: LocationAccuracy.high),
+              future: Geolocator.getLastKnownPosition(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 if (!snapshot.hasData)
                   return Center(child: CircularProgressIndicator());
                 Position position = snapshot.data;
-                LatLng currentPosition =
-                    LatLng(position.latitude, position.longitude);
-                return GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  zoomControlsEnabled: false,
-                  markers: Set<Marker>.of(_markers.values),
-                  initialCameraPosition: CameraPosition(
-                    target: currentPosition,
-                    zoom: 11.0,
+                return Listener(
+                  child: GoogleMap(
+                    onMapCreated: (GoogleMapController controller) {
+                      controller.setMapStyle(_mapStyle);
+                      print("MAPSTYLE -> $_mapStyle");
+                    },
+                    zoomControlsEnabled: false,
+                    markers: Set<Marker>.of(_mapController.markers.values),
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(position.latitude, position.longitude),
+                      zoom: 11.0,
+                    ),
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
                   ),
-                  onTap: (position) {
-                    print(position);
+                  onPointerMove: (event) {
+                    if (_fixedPosition)
+                      setState(() {
+                        _fixedPosition = false;
+                      });
                   },
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
                 );
               }),
-          Container(
-            height: 40,
-            alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(
-              top: 50,
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // FUTURO DRAWER
+                  // MaterialButton(
+                  //   child: Icon(
+                  //     Icons.menu,
+                  //     color: Theme.of(context).buttonColor,
+                  //   ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 53,
+                  //   elevation: 15,
+                  //   shape: CircleBorder(),
+                  //   onPressed: () {
+                  //     _scaffoldKey.currentState.openDrawer();
+                  //   },
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Container(
+                      decoration: int.parse(formattedDate) < 20
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colors.white,
+                              boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 20,
+                                  )
+                                ])
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              color: Colors.white,
+                            ),
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.menu,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                _scaffoldKey.currentState.openDrawer();
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: 'Search...',
+                              ),
+                              controller: _locationController,
+                              onTap: () async {
+                                setState(() {
+                                  _fixedPosition = false;
+                                });
+                                await PlacesAutocomplete.show(
+                                  context: context,
+                                  onTapPrediction: _onTapPrediction,
+                                  onSubmitted: _onSubmitted,
+                                );
+                              },
+                              readOnly: true,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: _locationController.text.isEmpty
+                                ? null
+                                : IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      size: 30,
+                                    ),
+                                    onPressed: _mapController.markers.isEmpty
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              _locationController.clear();
+                                              _mapController.clearMarkers();
+                                            });
+                                          },
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // MaterialButton(
+                  //   child: Icon(
+                  //     Icons.logout,
+                  //     color: Theme.of(context).buttonColor,
+                  //   ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 53,
+                  //   shape: CircleBorder(),
+                  //   elevation: 15,
+                  //   onPressed: () async {
+                  //     auth.signOut();
+                  //   },
+                  // ),
+                  // SizedBox(height: 5),
+                  // MaterialButton(
+                  //   child: Icon(
+                  //     Icons.search,
+                  //     color: Theme.of(context).buttonColor,
+                  //   ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 53,
+                  //   shape: CircleBorder(),
+                  //   elevation: 15,
+                  //   onPressed: () async {
+                  //     setState(() {
+                  //       _fixedPosition = false;
+                  //     });
+                  //     await PlacesAutocomplete.show(
+                  //       context: context,
+                  //       onTapPrediction: _onTapPrediction,
+                  //       onSubmitted: _onSubmitted,
+                  //     );
+                  //   },
+                  // ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // MaterialButton(
+                  //   child: _mapController.markers.isEmpty
+                  //       ? Container()
+                  //       : Icon(
+                  //           Icons.delete,
+                  //           color: Theme.of(context).buttonColor,
+                  //         ),
+                  //   color: Theme.of(context).primaryColor,
+                  //   height: 40,
+                  //   shape: CircleBorder(),
+                  //   elevation: 15,
+                  //   onPressed: _mapController.markers.isEmpty
+                  //       ? null
+                  //       : () {
+                  //           setState(() {
+                  //             _mapController.clearMarkers();
+                  //           });
+                  //         },
+                  // ),
+                ],
+              ),
             ),
-            //padding: EdgeInsets.fromLTRB(10, 5, 5, 5),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return buttons[index];
-              },
-              physics: BouncingScrollPhysics(),
-            ),
+          ),
+          StreamBuilder(
+            stream: Geolocator.getPositionStream(
+                desiredAccuracy: LocationAccuracy.medium),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              if (!snapshot.hasData)
+                return Center(child: CircularProgressIndicator());
+              _position = snapshot.data;
+              if (_fixedPosition) {
+                _mapController.goToCoordinates(
+                    _position.latitude, _position.longitude, 18);
+              }
+              return Container();
+            },
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: _currentLocation,
-        isExtended: false,
-        label: Icon(
-          Icons.location_on,
-          color: Theme.of(context).buttonColor,
-        ),
-      ),
     );
   }
 
-  void _currentLocation() async {
-    final GoogleMapController controller = _mapController;
-    Location.LocationData currentLocation;
-    var location = new Location.Location();
-    try {
-      currentLocation = await location.getLocation();
-    } on Exception {
-      currentLocation = null;
-    }
-
-    controller.animateCamera(CameraUpdate.newCameraPosition(
-      CameraPosition(
-        bearing: 0,
-        target: LatLng(currentLocation.latitude, currentLocation.longitude),
-        zoom: 18.0,
-      ),
-    ));
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-    _changeMapStyle(_mapController);
-    _searchRestaurants(controller);
-  }
-
-  Future _changeMapStyle(GoogleMapController controller) async {
-    String style = await rootBundle.loadString("assets/map_style.json");
-    controller.setMapStyle(style);
-  }
-
-  Future _searchRestaurants(GoogleMapController controller) async {
-    List<Place> places =
-        await _seachEngine.searchByLocation(39.5305989, -0.3489142);
+  Future _onSubmitted(String value) async {
+    List<Place> places = await searchEngine.searchByText(
+        value, Location(_position.latitude, _position.longitude), 1000);
+    _mapController.clearMarkers();
     for (var place in places) {
-      print(place.toString());
+      _mapController.addMarker(place, context);
     }
-  }
-
-  void _add() {
-    // var markerIdVal = MyWayToGenerateId();
-    final MarkerId markerId = MarkerId('1');
-
-    // creating a new MARKER
-    final Marker marker = Marker(
-      markerId: markerId,
-      position: LatLng(39.531600, -0.349953),
-      infoWindow: InfoWindow(title: markerId.toString(), snippet: '*'),
-      onTap: () {
-        // _onMarkerTapped(markerId);
-      },
-    );
 
     setState(() {
-      // adding a new marker to map
-      _markers[markerId] = marker;
+      _locationController.text = value;
     });
+    if (places.length == 1) {
+      Place place = places.first;
+      Navigator.pop(context);
+      _mapController.goToCoordinates(place.latitude, place.longitude, 15);
+    }
+    if (places.length > 1) {
+      Navigator.pop(context);
+      _mapController.zoomOut(_position.latitude, _position.longitude);
+    }
+  }
+
+  Future _onTapPrediction(Prediction prediction) async {
+    _mapController.clearMarkers();
+    Place place = (await searchEngine.searchByText(prediction.description,
+            Location(_position.latitude, _position.longitude), 1000))
+        .first;
+
+    _mapController.addMarker(place, context);
+    setState(() {
+      _locationController.text = prediction.description;
+    });
+    Navigator.pop(context);
+    _mapController.goToCoordinates(place.latitude, place.longitude, 15);
   }
 }
+
+// Future<Place> _touchedPlace(LatLng point) async {
+//   List<Place> places = await searchEngine.searchByLocation(
+//       Location(point.latitude, point.longitude), 50);
+
+//   int menor = 100;
+//   Place place;
+//   for (var p in places) {
+//     int _distanceInMeters = Geolocator.distanceBetween(
+//             point.latitude, point.longitude, p.latitude, p.longitude)
+//         .round();
+//     if (_distanceInMeters < menor) {
+//       menor = _distanceInMeters;
+//       place = p;
+//     }
+//   }
+
+//   if (place != null) {
+//     place = await searchEngine.searchWithDetails(place.id);
+//     print(place.toString());
+
+//     _clearMarkers();
+//     _addMarkers([place]);
+//     Navigator.of(context).pushNamed('/placePage', arguments: {
+//       place: place,
+//       _goToPlace: _goToPlace,
+//       _clearMarkers: _clearMarkers,
+//       _addMarkers: _addMarkers
+//     });
+//   }
+// }

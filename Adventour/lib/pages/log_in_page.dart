@@ -68,10 +68,10 @@ class _LogInFormState extends State<LogInForm> {
               return null;
             },
           ),
-          Text(
-            'Forgot password?',
-            style: Theme.of(context).textTheme.bodyText1,
-          ),
+          // Text(
+          //   'Forgot password?',
+          //   style: Theme.of(context).textTheme.bodyText1,
+          // ),
           PrimaryButton(
             text: 'LOG IN',
             style: ButtonType.Normal,
