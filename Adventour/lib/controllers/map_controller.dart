@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
+import 'package:intl/intl.dart';
 
 class MapController {
   GoogleMapController _mapController;
@@ -20,8 +21,22 @@ class MapController {
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
-    String style = await rootBundle.loadString("assets/map_style.json");
+
+    DateTime now;
+    String formattedDate;
+    String style;
+
+    now = DateTime.now();
+    formattedDate = DateFormat('kk').format(now);
+
+    if (int.parse(formattedDate) < 20) {
+      style = await rootBundle.loadString("assets/map_styles/light.json");
+    } else {
+      style = await rootBundle.loadString("assets/map_styles/dark.json");
+    }
+
     controller.setMapStyle(style);
+    
   }
 
   drawPolyline(Polyline polyline) {
