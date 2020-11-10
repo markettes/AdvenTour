@@ -2,13 +2,13 @@ import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart';
+import 'package:google_maps_webservice/src/core.dart';
 
 const CAR = 'car';
 const WALK = 'walk';
-const PUBLIC = 'public';
 const BICYCLE = 'bicycle';
 
-List<String> transports = [CAR, WALK, PUBLIC, BICYCLE];
+List<String> transports = [CAR, WALK, BICYCLE];
 
 class DirectionsEngine {
   final _directions = GoogleMapsDirections(
@@ -32,21 +32,25 @@ class DirectionsEngine {
     if (places.length < 2) return [];
     String origin =
         start.latitude.toString() + ',' + start.longitude.toString();
-        Place furthestPlace = getFurthestPlace(start, places);
+    Place furthestPlace = getFurthestPlace(start, places);
     String destination = furthestPlace.latitude.toString() +
         ',' +
         furthestPlace.longitude.toString();
+    List<Waypoint> waypoints = [Waypoint.optimize()];
+    for (var place in places) {
+      if (place != furthestPlace) waypoints.add(Waypoint.fromPlaceId(place.id));
+    }
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
-      waypoints: places
-          .sublist(0, places.length - 1)
-          .map((place) => Waypoint.fromPlaceId(place.id))
-          .toList(),
+      waypoints: waypoints,
+      units: Unit.metric,
       travelMode: toTravelMode(transport),
     );
+    if(response.hasNoResults) return [];
     List<r.Path> paths = response.routes
-        .map((route) => r.Path.fromGoogleRoute(route, transport))
+        .map((route) => r.Path.fromGoogleRoute(
+            route, response.geocodedWaypoints, transport))
         .toList();
     return paths;
   }
@@ -54,13 +58,11 @@ class DirectionsEngine {
 
 TravelMode toTravelMode(String transport) {
   switch (transport) {
-    case 'car':
+    case CAR:
       return TravelMode.driving;
-    case 'walk':
+    case WALK:
       return TravelMode.walking;
-    case 'public':
-      return TravelMode.transit;
-    case 'bicycle':
+    case BICYCLE:
       return TravelMode.bicycling;
   }
 }
