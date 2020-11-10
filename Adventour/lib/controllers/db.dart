@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Adventour/models/User.dart';
 
@@ -26,10 +27,19 @@ class DB {
     return User.fromFirestore(snapshot);
   }
 
-  Future<void> changeUserName(User user,String newName){
-    _firestore.doc('Users/${user.id}').update({
-      'userName': newName
-    });
+  Future<void> changeUserName(User user, String newName) {
+    _firestore.doc('Users/${user.id}').update({'userName': newName});
+  }
+
+  Future<User> getCurrentUserName(String email) async {
+    QueryDocumentSnapshot snapshot = (await _firestore
+            .collection('Users')
+            .where('email', isEqualTo: auth.currentUserEmail)
+            .get())
+        .docs
+        .first;
+    _currentUserId = snapshot.id;
+    return User.fromFirestore(snapshot);
   }
 }
 

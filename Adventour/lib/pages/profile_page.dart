@@ -1,19 +1,29 @@
+import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/models/User.dart';
+import 'package:Adventour/widgets/primary_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/auth.dart';
 
-class Profile extends StatefulWidget {
+class ProfilePage extends StatefulWidget {
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfilePageState extends State<ProfilePage> {
   var _passwordController = TextEditingController();
   var _newPasswordController = TextEditingController();
   var _repeatPasswordController = TextEditingController();
   bool checkCurrentPasswordValid = true;
   var _formKey = GlobalKey<FormState>();
+
+  String userName;
+
   @override
   Widget build(BuildContext context) {
+    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
+    user.then((value) => userName = value.userName);
+
     return Scaffold(
       //resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -23,7 +33,6 @@ class _ProfileState extends State<Profile> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            flex: 1,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.deepOrange,
@@ -34,7 +43,6 @@ class _ProfileState extends State<Profile> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     width: 100,
@@ -59,6 +67,7 @@ class _ProfileState extends State<Profile> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
@@ -67,11 +76,16 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Icon(
                                 Icons.person,
-                                size: 50,
+                                size: 30,
                                 color: Theme.of(context).primaryColor,
                               ),
+                              SizedBox(
+                                width: 5,
+                              ),
                               Text(
-                                '${auth.currentUser.displayName}',
+                                auth.currentUser.displayName != null
+                                    ? auth.currentUser.displayName
+                                    : userName,
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ],
@@ -86,8 +100,11 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Icon(
                                 Icons.email,
-                                size: 50,
+                                size: 30,
                                 color: Theme.of(context).primaryColor,
+                              ),
+                              SizedBox(
+                                width: 5,
                               ),
                               Text(
                                 '${auth.currentUser.email}',
@@ -98,6 +115,9 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Flexible(
                       child: Form(
                         key: _formKey,
@@ -105,53 +125,70 @@ class _ProfileState extends State<Profile> {
                           children: <Widget>[
                             Text(
                               "Manage Password",
-                              style: Theme.of(context).textTheme.display1,
+                              style: Theme.of(context).textTheme.headline2,
                             ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Password",
-                                errorText: checkCurrentPasswordValid
-                                    ? null
-                                    : "Please double check your current password",
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 30, left: 30),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Actual password",
+                                  errorText: checkCurrentPasswordValid
+                                      ? null
+                                      : "Please double check your current password",
+                                ),
+                                controller: _passwordController,
+                                obscureText: true,
                               ),
-                              controller: _passwordController,
                             ),
-                            TextFormField(
-                              decoration:
-                                  InputDecoration(hintText: "New Password"),
-                              controller: _newPasswordController,
-                              obscureText: true,
-                            ),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Repeat Password",
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 30, left: 30),
+                              child: TextFormField(
+                                decoration:
+                                    InputDecoration(hintText: "New Password"),
+                                controller: _newPasswordController,
+                                obscureText: true,
                               ),
-                              obscureText: true,
-                              controller: _repeatPasswordController,
-                              validator: (value) {
-                                return _newPasswordController.text == value
-                                    ? null
-                                    : "Please validate your entered password";
-                              },
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 30, left: 30),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "Repeat Password",
+                                ),
+                                obscureText: true,
+                                controller: _repeatPasswordController,
+                                validator: (value) {
+                                  return _newPasswordController.text == value
+                                      ? null
+                                      : "Please validate your entered password";
+                                },
+                              ),
                             )
                           ],
                         ),
                       ),
                     ),
-                    RaisedButton(
+                    PrimaryButton(
+                      text: 'SAVE PROFILE',
                       onPressed: () async {
                         var userController = auth.currentUser;
-                        checkCurrentPasswordValid = await userController.signInWithEmailAndPassword(email: userController.email, password: _passwordController.text);
+                        checkCurrentPasswordValid =
+                            await userController.signInWithEmailAndPassword(
+                                email: userController.email,
+                                password: _passwordController.text);
 
                         setState(() {});
 
                         if (_formKey.currentState.validate() &&
                             checkCurrentPasswordValid) {
-                          userController.updatePassword(_newPasswordController.text);
+                          userController
+                              .updatePassword(_newPasswordController.text);
                           Navigator.pop(context);
                         }
                       },
-                      child: Text("Save Profile"),
                     ),
                   ],
                 ),
