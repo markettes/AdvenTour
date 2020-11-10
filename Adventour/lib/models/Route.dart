@@ -7,8 +7,10 @@ class Route {
   LatLng _start;
   List<Place> _places;
   List<Path> _paths;
+  String name;
+  String img;
 
-  Route(start, places, paths) {
+  Route(start, places, paths, [this.name, this.img]) {
     _start = start;
     _places = places;
     _paths = paths;
