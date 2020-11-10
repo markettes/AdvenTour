@@ -2,6 +2,7 @@ import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/pages/creating_route_page.dart';
 import 'package:Adventour/pages/search_page.dart';
+import 'package:Adventour/widgets/route_tile.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +26,7 @@ class _HighlightPageState extends State<HighlightPage> {
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
     photo = args['photo'];
+    print('hola');
 
     return Scaffold(
       appBar: AppBar(
@@ -38,81 +40,7 @@ class _HighlightPageState extends State<HighlightPage> {
                 photo,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                onTap: () {},
-                leading: Container(
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.teal[100],
-                      shape: BoxShape.circle,
-                    )),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Valencia center'),
-                  ],
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.alarm,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text('3h 13min'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_car,
-                            size: 20,
-                          )
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 20,
-                        ),
-                        Text('3'),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.park,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.history_edu,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.restaurant,
-                          size: 20,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
+            RouteTile(exampleRoute),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
