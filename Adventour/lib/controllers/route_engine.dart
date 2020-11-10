@@ -1,4 +1,3 @@
-import 'dart:collection';
 
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -51,13 +50,18 @@ class RouteEngine {
     List<Place> places = [];
 
     for (String type in types) {
-      Place routePlace = placesWithoutDuplicates.firstWhere((place) {
-        return place.types.contains(type);
-      }, orElse: () {});
+      Place routePlace = placesWithoutDuplicates.firstWhere((place) =>
+         place.types.contains(type)
+      , orElse: () {});
       if (routePlace != null) {
         places.add(routePlace);
         placesWithoutDuplicates.remove(routePlace);
       }
+    }
+          print('?places');
+    for (var place in places) {
+
+      print('?'+place.name);
     }
     LatLng start = LatLng(location.lat, location.lng);
 
@@ -66,8 +70,6 @@ class RouteEngine {
       paths.addAll(await directionsEngine.makePaths(start, places, transport));
     }
     Route route = Route(start, places, paths);
-
-    route.sortPlaces(0);
 
     return route;
   }

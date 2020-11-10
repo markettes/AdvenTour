@@ -48,40 +48,28 @@ class CircleIconButton extends StatelessWidget {
         return Icons.directions_walk;
       case BICYCLE:
         return Icons.directions_bike;
-      case PUBLIC:
-        return Icons.directions_subway;
-      case "park":
+      case PARK:
         return Icons.park;
-      case "church":
+      case PLACE_OF_WORSHIP:
         return Icons.history_edu;
-      case "restaurant":
+      case RESTAURANT:
         return Icons.restaurant;
-      case "city_hall":
-        return Icons.house_outlined;
-      case BAR:
-        return Icons.sports_bar;
-      case "tourist_attraction":
+      case TOURIST_ATTRACTION:
         return Icons.camera_alt;
-      case CAFE:
-        return Icons.local_cafe;
       case COURTHOUSE:
         return Icons.gavel;
-      case "library":
-        return Icons.local_library;
-      case MOSQUE:
-        return Icons.location_city;
-      case "movie_theater":
+      case MOVIE_THEATER:
         return Icons.theater_comedy;
-      case "stadium":
+      case STADIUM:
         return Icons.sports;
-      case "art_gallery":
+      case MUSEUM:
         return Icons.museum;
-      case "night_club":
+      case NIGHT_CLUB:
         return Icons.nightlife;
-      case "shopping_mall":
+      case SHOPPING_MALL:
         return Icons.local_mall;
       default:
-        throw Exception('Icon not available');
+        throw Exception('Icon not available for $type');
     }
   }
 }

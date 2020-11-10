@@ -8,7 +8,7 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_webservice/directions.dart' as directions;
+import 'package:google_maps_webservice/src/core.dart';
 
 class CustomRoutePage extends StatefulWidget {
   @override
@@ -18,7 +18,7 @@ class CustomRoutePage extends StatefulWidget {
 class _CustomRoutePageState extends State<CustomRoutePage> {
   bool _shortRoute = true;
   List<String> _transports = [WALK];
-  var _places = [PARK, TOURIST_ATTRACTION, RESTAURANT];
+  List<String> _places = [PARK, TOURIST_ATTRACTION, RESTAURANT];
   String placeId;
 
   @override
@@ -70,7 +70,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                     _places.contains(places[index]);
                                 return CircleIconButton(
                                     activated: activated,
-                                    type: places[index][0],
+                                    type: places[index],
                                     onPressed: () {
                                       if (activated) {
                                         if (_places.length > 3)
@@ -254,9 +254,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      // r.Route route = await _makeRoute();
+                      r.Route route = await _makeRoute();
                       Navigator.pushNamed(context, '/routePage',
-                          arguments: {'route': r.exampleRoute});
+                          arguments: {'route': route});
                     },
                     icon: Icons.edit,
                     style: ButtonType.Normal,
@@ -271,20 +271,20 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
   }
 
   Future<r.Route> _makeRoute() async {
-    directions.Location location;
+    Location location;
     if (placeId == null) {
       Position position = await Geolocator.getCurrentPosition();
-      location = directions.Location(position.latitude, position.longitude);
+      location = Location(position.latitude, position.longitude);
     } else {
       location = await geocoding.searchByPlaceId(placeId);
     }
 
     return await routeEngine.makeShortRoute(
-        location, _places.expand((e) => e).toList(), _transports);
+        location, _places, _transports);
   }
 
   void sortPlaceTypes() {
-    List<List<String>> sorted = [];
+    List sorted = [];
     sorted.addAll(_places);
     for (var placeType in places) {
       if (!sorted.contains(placeType)) sorted.add(placeType);

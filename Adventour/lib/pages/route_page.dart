@@ -28,8 +28,8 @@ class _RoutePageState extends State<RoutePage>
   TabController _tabController;
 
   r.Route route;
-  Duration duration;
   GlobalKey<ScaffoldState> _scaffoldKey;
+  int _selectedPath = 0;
 
   @override
   void initState() {
@@ -43,7 +43,6 @@ class _RoutePageState extends State<RoutePage>
     _scaffoldKey = GlobalKey<ScaffoldState>();
 
     route = arguments['route'];
-    duration = route.duration(0);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -56,13 +55,15 @@ class _RoutePageState extends State<RoutePage>
               physics: NeverScrollableScrollPhysics(),
               children: [
                 MapView(
-                  route: route,
+                  places: route.places,
                   tabController: _tabController,
                   scaffoldKey: _scaffoldKey,
+                  selectedPath: route.paths[_selectedPath],
+                  nextTransport: nextTransport,
                 ),
                 MapListView(
-                  duration: duration,
-                  route: route,
+                  path: route.paths[_selectedPath],
+                  places: route.places,
                   tabController: _tabController,
                   onTapPrediction: _onTapPrediction,
                   removePlace: removePlace,
@@ -72,11 +73,11 @@ class _RoutePageState extends State<RoutePage>
     );
   }
 
-  Future removePlace(int index) async {
+  Future removePlace(Place place) async {
     if (route.places.length > 2) {
-      route.removePlace(index);
-      route.paths = await directionsEngine.makePaths(route.start, route.places, CAR);
-      route.sortPlaces(0);
+      route.removePlace(place);
+      route.paths =
+          await directionsEngine.makePaths(route.start, route.places, CAR);
       setState(() {});
     } else
       _scaffoldKey.currentState.showSnackBar(SnackBar(
@@ -87,24 +88,37 @@ class _RoutePageState extends State<RoutePage>
   Future _onTapPrediction(Prediction prediction) async {
     Place place = await searchEngine.searchWithDetails(prediction.placeId);
     route.addPlace(place);
-    route.paths = await directionsEngine.makePaths(route.start, route.places, CAR);
+    route.paths =
+        await directionsEngine.makePaths(route.start, route.places, CAR);
     print('?' + route.paths.first.stretchs.length.toString());
-    route.sortPlaces(0);
     Navigator.pop(context);
+    _tabController.animateTo(0);
+    setState(() {});
+  }
+
+  void nextTransport() {
+    if (_selectedPath == route.paths.length - 1)
+      _selectedPath = 0;
+    else
+      _selectedPath++;
     setState(() {});
   }
 }
 
 class MapView extends StatefulWidget {
   MapView({
-    @required this.route,
+    @required this.places,
     this.scaffoldKey,
+    this.selectedPath,
+    this.nextTransport,
     @required TabController tabController,
   }) : tabController = tabController;
 
-  r.Route route;
+  List<Place> places;
   GlobalKey<ScaffoldState> scaffoldKey;
   TabController tabController;
+  r.Path selectedPath;
+  Function nextTransport;
 
   @override
   _MapViewState createState() => _MapViewState();
@@ -118,19 +132,20 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      alignment: Alignment.bottomRight,
       children: [
         GoogleMap(
           initialCameraPosition: CameraPosition(
-            target: LatLng(widget.route.places.first.latitude,
-                widget.route.places.first.longitude),
+            target: LatLng(widget.places.first.latitude, widget.places.first.longitude),
             zoom: 12.5,
           ),
           markers: Set<Marker>.of(mapController.markers.values),
           polylines: Set<Polyline>.of(mapController.polylines.values),
           onMapCreated: (googleMapController) =>
               mapController.onMapCreated(googleMapController, () async {
-            drawRoute(widget.route);
+            drawPath(widget.selectedPath);
+            for (var place in widget.places) {
+              mapController.addMarker(place, context);
+            }
           }),
           onCameraMoveStarted: () {
             _listVisible = false;
@@ -144,29 +159,50 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
         ),
-        AnimatedOpacity(
-          // If the widget is visible, animate to 0.0 (invisible).
-          // If the widget is hidden, animate to 1.0 (fully visible).
-          opacity: _listVisible ? 1.0 : 0.0,
-          duration: Duration(milliseconds: 600),
-          curve: Curves.fastOutSlowIn,
-          // The green box must be a child of the AnimatedOpacity widget.
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SquareIconButton(
-              icon: Icons.list,
-              onPressed: () => widget.tabController.animateTo(1),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: AnimatedOpacity(
+            // If the widget is visible, animate to 0.0 (invisible).
+            // If the widget is hidden, animate to 1.0 (fully visible).
+            opacity: _listVisible ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 600),
+            curve: Curves.fastOutSlowIn,
+            // The green box must be a child of the AnimatedOpacity widget.
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SquareIconButton(
+                icon: Icons.list,
+                onPressed: () => widget.tabController.animateTo(1),
+              ),
             ),
           ),
         ),
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: AnimatedOpacity(
+            // If the widget is visible, animate to 0.0 (invisible).
+            // If the widget is hidden, animate to 1.0 (fully visible).
+            opacity: _listVisible ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 600),
+            curve: Curves.fastOutSlowIn,
+            // The green box must be a child of the AnimatedOpacity widget.
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleIconButton(
+                type: widget.selectedPath.transport,
+                onPressed: widget.nextTransport,
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
 
-  void drawRoute(r.Route route) {
-    print('?' + route.paths.first.stretchs.length.toString());
-    for (var stretch in route.paths.first.stretchs) {
-      print('?stretch');
+  void drawPath(r.Path path) {
+    print('?' + path.transport);
+    print('?' + path.stretchs.length.toString());
+    for (var stretch in path.stretchs) {
       Polyline polyline = Polyline(
           polylineId: PolylineId(stretch.id),
           points: stretch.points,
@@ -193,10 +229,6 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           consumeTapEvents: true,
           width: 4);
       mapController.drawPolyline(polyline);
-    }
-
-    for (var place in route.places) {
-      mapController.addMarker(place, context);
     }
 
     setState(() {});
@@ -254,28 +286,32 @@ class NotRouteAvailable extends StatelessWidget {
 
 class MapListView extends StatelessWidget {
   MapListView({
-    @required this.duration,
-    @required this.route,
+    @required this.path,
+    @required this.places,
     @required this.onTapPrediction,
     @required this.removePlace,
     @required TabController tabController,
   }) : tabController = tabController;
 
-  Duration duration;
-  r.Route route;
+  r.Path path;
+  List<Place> places;
   TabController tabController;
   Function(Prediction) onTapPrediction;
   Function removePlace;
+  Duration _duration;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(10),
+    _duration = path.duration(places
+        .map((place) => place.duration)
+        .reduce((value, element) => value + element));
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
                 child: Column(
                   children: [
                     Column(
@@ -285,9 +321,9 @@ class MapListView extends StatelessWidget {
                           size: 70,
                         ),
                         Text(
-                          duration.inHours.toString() +
+                          _duration.inHours.toString() +
                               ':' +
-                              duration.inMinutes.remainder(60).toString(),
+                              _duration.inMinutes.remainder(60).toString(),
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ],
@@ -307,13 +343,14 @@ class MapListView extends StatelessWidget {
                       ],
                     ),
                     ListView.separated(
-                      itemCount: route.paths.first.stretchs.length,
+                      itemCount: path.stretchs.length,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       separatorBuilder: (context, index) => SizedBox(height: 5),
                       itemBuilder: (context, index) {
-                        var stretch = route.paths.first.stretchs[index];
-                        var place = route.places[index];
+                        var stretch = path.stretchs[index];
+                        var place = places.firstWhere(
+                            (place) => place.id == stretch.destinationId);
                         return Column(
                           children: [
                             Row(
@@ -327,37 +364,31 @@ class MapListView extends StatelessWidget {
                             Slidable(
                               actionPane: SlidableDrawerActionPane(),
                               actionExtentRatio: 0.25,
-                              child: Expanded(
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                        height: 50,
-                                        child: CircleIcon(image: place.icon)),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            place.name,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                          ),
-                                          Row(
-                                            children: [
-                                              Text(place.duration.inMinutes
-                                                      .toString() +
-                                                  ' min'),
-                                              SizedBox(width: 5),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                      height: 50,
+                                      child: CircleIcon(image: place.icon)),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          place.name,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        Text(place.adress),
+                                        Text(place.duration.inMinutes
+                                                .toString() +
+                                            ' min')
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
                               actions: <Widget>[
                                 IconSlideAction(
@@ -366,7 +397,7 @@ class MapListView extends StatelessWidget {
                                   icon: Icons.delete,
                                   foregroundColor:
                                       Theme.of(context).primaryColor,
-                                  onTap: () => removePlace(index),
+                                  onTap: () => removePlace(place),
                                 ),
                               ],
                             )
@@ -374,26 +405,21 @@ class MapListView extends StatelessWidget {
                         );
                       },
                     ),
+                    SizedBox(height: 100)
                   ],
                 ),
               ),
-            ),
-          ],
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            ],
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
             child: SquareIconButton(
               icon: Icons.map,
               onPressed: () => tabController.animateTo(0),
             ),
           ),
-        ),
-        Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
+          Align(
+              alignment: Alignment.bottomRight,
               child: FloatingActionButton(
                 onPressed: () async {
                   await PlacesAutocomplete.show(
@@ -403,14 +429,15 @@ class MapListView extends StatelessWidget {
                   );
                 },
                 backgroundColor: Theme.of(context).primaryColor,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 child: Icon(
                   Icons.add,
                   color: Theme.of(context).buttonColor,
                   size: 30,
                 ),
-              ),
-            ))
-      ],
+              ))
+        ],
+      ),
     );
   }
 }

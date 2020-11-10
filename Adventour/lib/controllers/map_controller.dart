@@ -36,7 +36,7 @@ class MapController {
     }
 
     controller.setMapStyle(style);
-    
+
   }
 
   drawPolyline(Polyline polyline) {
