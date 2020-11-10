@@ -40,7 +40,7 @@ class _HighlightPageState extends State<HighlightPage> {
                 photo,
               ),
             ),
-            RouteTile(exampleRoute),
+            // RouteTile(exampleRoute),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(

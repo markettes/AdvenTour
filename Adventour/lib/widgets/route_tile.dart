@@ -1,5 +1,4 @@
 import 'package:Adventour/models/Route.dart' as r;
-import 'package:Adventour/widgets/little_icon.dart';
 import 'package:flutter/material.dart';
 
 class RouteTile extends StatelessWidget {
@@ -8,9 +7,9 @@ class RouteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('hola');
-    List<String> types = route.getPlacesTypes(route.places);
-    print('hola2');
+    // print('hola');
+    // List<String> types = route.getPlacesTypes(route.places);
+    // print('hola2');
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -45,15 +44,15 @@ class RouteTile extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  Text(route.duration(0).inHours.toString() +
-                      ' h' +
-                      ' ' +
-                      route.duration(0).toString().substring(2, 4) +
-                      ' min'),
+                  // Text(route.duration(0).inHours.toString() +
+                  //     ' h' +
+                  //     ' ' +
+                  //     route.duration(0).toString().substring(2, 4) +
+                  //     ' min'),
                   SizedBox(
                     width: 5,
                   ),
-                  LittleIcon(type: route.paths.first.transport),
+                  // LittleIcon(type: route.paths.first.transport),
                 ],
               ),
             ),
@@ -67,7 +66,7 @@ class RouteTile extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                LittleIcon(type: types.first),
+                // LittleIcon(type: types.first),
               ],
             )
           ],
