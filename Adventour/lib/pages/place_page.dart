@@ -124,7 +124,7 @@ class PlaceBodyInfo extends StatelessWidget {
                         " opinions",
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
-                  
+
                   // Expanded(
                   //   child: Row(
                   //     mainAxisAlignment: MainAxisAlignment.end,
@@ -201,25 +201,11 @@ class PlaceBodyInfo extends StatelessWidget {
   }
 
   String openAndClose() {
-    int dia;
-    if (DateTime.now().weekday == 7) {
-      dia = 0;
-    } else {
-      dia = DateTime.now().weekday;
+    String _schedule = '';
+    for (var i = 0; i < place.weekdaytext.length; i++) {
+      _schedule = _schedule + place.weekdaytext[i] + '\n';
     }
-    if (place.openingHours.periods[dia].open.duration.isEmpty) {
-      return "null";
-    } else {
-      String numHorasAbierto = "${place.openingHours.periods[dia].open.duration}";
-      String horasAbierto = numHorasAbierto.substring(0, 2) +
-          ":" +
-          numHorasAbierto.substring(2, 4);
-      String numHorasCerrado = "${place.openingHours.periods[dia].close.duration}";
-      String horasCerrado = numHorasCerrado.substring(0, 2) +
-          ":" +
-          numHorasCerrado.substring(2, 4);
-      return horasAbierto + " - " + horasCerrado;
-    }
+    return _schedule;
   }
 }
 
