@@ -15,6 +15,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var _newPasswordController = TextEditingController();
   var _repeatPasswordController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
+  String _passwordError;
   bool checkCurrentPasswordValid = true;
 
   String userName;
@@ -146,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   hintText: "Actual password",
                                   errorText: checkCurrentPasswordValid
                                       ? null
-                                      : "Please double check your current password",
+                                      : "$_passwordError",
                                 ),
                                 controller: _passwordController,
                                 obscureText: true,
@@ -160,6 +161,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                     InputDecoration(hintText: "New Password"),
                                 controller: _newPasswordController,
                                 obscureText: true,
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Password can\'t be empty';
+                                  }
+                                  return _newPasswordController.text == value
+                                      ? null
+                                      : "Please validate your entered password";
+                                },
                               ),
                             ),
                             Padding(
@@ -172,6 +181,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 obscureText: true,
                                 controller: _repeatPasswordController,
                                 validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Password can\'t be empty';
+                                  }
                                   return _newPasswordController.text == value
                                       ? null
                                       : "Please validate your entered password";
@@ -185,24 +197,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     PrimaryButton(
                       text: 'SAVE PROFILE',
                       onPressed: () {
-                        print("frfgergerg");
                         var userController = auth.currentUser;
-                        if (_passwordController.text == "") {
-                          checkCurrentPasswordValid = false;
-                          setState(() {});
-                        } else {
+                        try {
                           auth.signIn(
                               userController.email, _passwordController.text);
                           checkCurrentPasswordValid = true;
-                          setState(() {});
+                        } catch (e) {
+                          _showError(e);
                         }
+                        setState(() {});
 
                         if (_formKey.currentState.validate() &&
                             checkCurrentPasswordValid) {
                           userController
                               .updatePassword(_newPasswordController.text);
                           Navigator.pop(context);
-                      }
+                        }
                       },
                     ),
                   ],
@@ -213,5 +223,11 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  void _showError(e) {
+    setState(() {
+      _passwordError = logInPasswordError(e);
+    });
   }
 }
