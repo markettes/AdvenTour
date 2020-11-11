@@ -14,10 +14,23 @@ class _ProfilePageState extends State<ProfilePage> {
   var _passwordController = TextEditingController();
   var _newPasswordController = TextEditingController();
   var _repeatPasswordController = TextEditingController();
-  bool checkCurrentPasswordValid = true;
   var _formKey = GlobalKey<FormState>();
+  bool checkCurrentPasswordValid = true;
 
   String userName;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _newPasswordController.dispose();
+    _repeatPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: 5,
                               ),
                               Text(
-                                auth.currentUser.displayName != null
-                                    ? auth.currentUser.displayName
-                                    : userName,
+                                userName,
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ],
@@ -173,21 +184,25 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     PrimaryButton(
                       text: 'SAVE PROFILE',
-                      onPressed: () async {
+                      onPressed: () {
+                        print("frfgergerg");
                         var userController = auth.currentUser;
-                        checkCurrentPasswordValid =
-                            await userController.signInWithEmailAndPassword(
-                                email: userController.email,
-                                password: _passwordController.text);
-
-                        setState(() {});
+                        if (_passwordController.text == "") {
+                          checkCurrentPasswordValid = false;
+                          setState(() {});
+                        } else {
+                          auth.signIn(
+                              userController.email, _passwordController.text);
+                          checkCurrentPasswordValid = true;
+                          setState(() {});
+                        }
 
                         if (_formKey.currentState.validate() &&
                             checkCurrentPasswordValid) {
                           userController
                               .updatePassword(_newPasswordController.text);
                           Navigator.pop(context);
-                        }
+                      }
                       },
                     ),
                   ],
@@ -198,18 +213,5 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    _newPasswordController.dispose();
-    _repeatPasswordController.dispose();
-    super.dispose();
   }
 }
