@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var _formKey = GlobalKey<FormState>();
   String _passwordError;
   bool checkCurrentPasswordValid = true;
-
+bool googleAccount; 
   String userName;
 
   @override
@@ -35,8 +35,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
-    user.then((value) => userName = value.userName);
+    getUsername();
+
+    var userController = auth.currentUser;
+    if(userController != null){
+    userController.providerData.forEach( (profile){
+    googleAccount = profile.providerId == "google.com";
+                          });
+                        }
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -45,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: Container(
@@ -57,6 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                
                 children: [
                   Container(
                     width: 100,
@@ -81,7 +89,6 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
@@ -97,7 +104,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: 5,
                               ),
                               Text(
-                                userName,
+                               auth.currentUser.displayName != null
+                                    ? auth.currentUser.displayName
+                                    : userName,
                                 style: Theme.of(context).textTheme.bodyText1,
                               ),
                             ],
@@ -130,7 +139,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 10,
                     ),
-                    Flexible(
+                   
+                    !googleAccount
+                    ? Flexible(
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -193,8 +204,11 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                    ),
-                    PrimaryButton(
+                    )
+                    : SizedBox(),
+
+                    !googleAccount
+                    ? PrimaryButton(
                       text: 'SAVE PROFILE',
                       onPressed: () async {
                         try {
@@ -212,7 +226,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.pop(context);
                         }
                       },
-                    ),
+                    )
+                    : SizedBox(),
+                    
                   ],
                 ),
               ),
@@ -223,6 +239,10 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void getUsername() async{
+    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
+    user.then((value) => userName = value.userName);
+  }
   void _showError(e) {
     setState(() {
       
