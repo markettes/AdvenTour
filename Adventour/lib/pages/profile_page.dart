@@ -39,7 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
     user.then((value) => userName = value.userName);
 
     return Scaffold(
-      //resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Profile"),
       ),
@@ -150,7 +150,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       : "$_passwordError",
                                 ),
                                 controller: _passwordController,
-                                obscureText: true,
+                                obscureText: false,
                               ),
                             ),
                             Padding(
@@ -196,21 +196,19 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     PrimaryButton(
                       text: 'SAVE PROFILE',
-                      onPressed: () {
-                        var userController = auth.currentUser;
+                      onPressed: () async {
                         try {
-                          auth.signIn(
-                              userController.email, _passwordController.text);
-                          checkCurrentPasswordValid = true;
+                           await auth.signIn(
+                              auth.currentUser.email, _passwordController.text);
+                          setState(() {checkCurrentPasswordValid = true;});
                         } catch (e) {
+                          checkCurrentPasswordValid = false;
                           _showError(e);
+                           setState(() {});
                         }
-                        setState(() {});
-
                         if (_formKey.currentState.validate() &&
                             checkCurrentPasswordValid) {
-                          userController
-                              .updatePassword(_newPasswordController.text);
+                          auth.currentUser.updatePassword(_newPasswordController.text);
                           Navigator.pop(context);
                         }
                       },
@@ -227,6 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _showError(e) {
     setState(() {
+      
       _passwordError = logInPasswordError(e);
     });
   }
