@@ -74,23 +74,31 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future removePlace(Place place) async {
-    if (route.places.length > 2) {
+
+    if (route.places.length > 3) {
       route.removePlace(place);
-      route.paths =
-          await directionsEngine.makePaths(route.start, route.places, CAR);
+      List<Path> paths = [];
+      for (var transport in route.transports) {
+        paths.add(await directionsEngine.makePath(
+            route.start, route.places, transport));
+      }
+      route.paths = paths;
       setState(() {});
     } else
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('The route needs at least 2 places'),
+        content: Text('The route needs at least 3 places'),
       ));
   }
 
   Future _onTapPrediction(Prediction prediction) async {
     Place place = await searchEngine.searchWithDetails(prediction.placeId);
     route.addPlace(place);
-    route.paths =
-        await directionsEngine.makePaths(route.start, route.places, CAR);
-    print('?' + route.paths.first.stretchs.length.toString());
+    List<Path> paths = [];
+    for (var transport in route.transports) {
+      paths.add(await directionsEngine.makePath(
+          route.start, route.places, transport));
+    }
+    route.paths = paths;
     Navigator.pop(context);
     _tabController.animateTo(0);
     setState(() {});
@@ -135,7 +143,8 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
       children: [
         GoogleMap(
           initialCameraPosition: CameraPosition(
-            target: LatLng(widget.places.first.latitude, widget.places.first.longitude),
+            target: LatLng(
+                widget.places.first.latitude, widget.places.first.longitude),
             zoom: 12.5,
           ),
           markers: Set<Marker>.of(mapController.markers.values),
@@ -200,8 +209,6 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   }
 
   void drawPath(r.Path path) {
-    print('?' + path.transport);
-    print('?' + path.stretchs.length.toString());
     for (var stretch in path.stretchs) {
       Polyline polyline = Polyline(
           polylineId: PolylineId(stretch.id),
@@ -302,6 +309,9 @@ class MapListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    for (var stretch in path.stretchs) {
+      print(stretch.destinationId);
+    }
     _duration = path.duration(places
         .map((place) => place.duration)
         .reduce((value, element) => value + element));
@@ -321,9 +331,7 @@ class MapListView extends StatelessWidget {
                           size: 70,
                         ),
                         Text(
-                          _duration.inHours.toString() +
-                              ':' +
-                              _duration.inMinutes.remainder(60).toString(),
+                          formatDuration(),
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ],
@@ -349,6 +357,8 @@ class MapListView extends StatelessWidget {
                       separatorBuilder: (context, index) => SizedBox(height: 5),
                       itemBuilder: (context, index) {
                         var stretch = path.stretchs[index];
+                        print('destinationId');
+                        print('?' + stretch.destinationId);
                         var place = places.firstWhere(
                             (place) => place.id == stretch.destinationId);
                         return Column(
@@ -439,5 +449,18 @@ class MapListView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String formatDuration() {
+    String hours, minutes;
+    if (_duration.inHours < 10)
+      hours = '0' + _duration.inHours.toString();
+    else
+      hours = _duration.inHours.toString();
+    if (_duration.inMinutes.remainder(60) < 10)
+      minutes = '0' + _duration.inMinutes.remainder(60).toString();
+    else
+      minutes = _duration.inMinutes.remainder(60).toString();
+    return hours + ':' + minutes;
   }
 }

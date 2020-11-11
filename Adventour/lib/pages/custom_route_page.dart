@@ -18,7 +18,7 @@ class CustomRoutePage extends StatefulWidget {
 class _CustomRoutePageState extends State<CustomRoutePage> {
   bool _shortRoute = true;
   List<String> _transports = [WALK];
-  List<String> _places = [PARK, TOURIST_ATTRACTION, RESTAURANT];
+  List<String> _places = [PARK, TOURIST_ATTRACTION, RESTAURANT,MUSEUM];
   String placeId;
 
   @override
@@ -73,7 +73,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                                     type: places[index],
                                     onPressed: () {
                                       if (activated) {
-                                        if (_places.length > 3)
+                                        if (_places.length > 4)
                                           _places.remove(places[index]);
                                         sortPlaceTypes();
                                       } else {

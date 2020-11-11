@@ -67,9 +67,11 @@ class RouteEngine {
 
     List<Path> paths = [];
     for (var transport in transports) {
-      paths.addAll(await directionsEngine.makePaths(start, places, transport));
+      Path path = await directionsEngine.makePath(start, places, transport);
+      if(path != null) paths.add(path);
+      
     }
-    Route route = Route(start, places, paths);
+    Route route = Route(start, places, paths,transports);
 
     return route;
   }

@@ -7,13 +7,15 @@ class Route {
   LatLng _start;
   List<Place> _places;
   List<Path> _paths;
+  List<String> _transports;
   String name;
   String img;
 
-  Route(start, places, paths, [this.name, this.img]) {
+  Route(start, places, paths,transports, [this.name, this.img]) {
     _start = start;
     _places = places;
     _paths = paths;
+    _transports = transports;
   }
 
   LatLng get start => _start;
@@ -23,6 +25,8 @@ class Route {
   set paths(List<Path> paths) => _paths = paths;
 
   List<Place> get places => _places;
+
+  List<String> get transports => _transports;
 
   void addPlace(Place place) => _places.add(place);
 
@@ -72,6 +76,10 @@ class Path {
 
   Path.fromGoogleRoute(directions.Route route,
       List<directions.GeocodedWaypoint> waypoints, String transport) {
+        print('?waypoints');
+        for (var waypoint in waypoints) {
+          print('?'+waypoint.placeId);
+        }
     List<Stretch> stretchs = [];
     for (var i = 0; i < route.legs.length; i++) {
       var leg = route.legs[i];
@@ -79,7 +87,7 @@ class Path {
       for (var step in leg.steps) {
         points.add(LatLng(step.startLocation.lat, step.startLocation.lng));
       }
-      Duration duration = Duration(minutes: leg.duration.value.toInt());
+      Duration duration = Duration(seconds: leg.duration.value);
       stretchs.add(Stretch(transport + i.toString(), points, duration,
           waypoints[i + 1].placeId));
     }

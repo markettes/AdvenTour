@@ -27,9 +27,12 @@ class DirectionsEngine {
   //   return trajectories;
   // }
 
-  Future<List<r.Path>> makePaths(
+  Future<r.Path> makePath(
       LatLng start, List<Place> places, String transport) async {
-    if (places.length < 2) return [];
+        for (var place in places) {
+          print('?'+place.name+place.id);
+        }
+    if (places.length < 3) return null;
     String origin =
         start.latitude.toString() + ',' + start.longitude.toString();
     Place furthestPlace = getFurthestPlace(start, places);
@@ -47,12 +50,12 @@ class DirectionsEngine {
       units: Unit.metric,
       travelMode: toTravelMode(transport),
     );
-    if(response.hasNoResults) return [];
-    List<r.Path> paths = response.routes
+    if(response.hasNoResults) return null;
+    r.Path path = response.routes
         .map((route) => r.Path.fromGoogleRoute(
             route, response.geocodedWaypoints, transport))
-        .toList();
-    return paths;
+        .first;
+    return path;
   }
 }
 
