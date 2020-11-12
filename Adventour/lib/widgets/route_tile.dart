@@ -7,9 +7,20 @@ class RouteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print('hola');
+    print('hola3');
     // List<String> types = route.getPlacesTypes(route.places);
-    // print('hola2');
+    print('hola4');
+    int time = 0;
+    for (var place in route.places) {
+      time += place.duration.inHours;
+    }
+    for (var path in route.paths) {
+      for (var stretch in path.stretchs) {
+        time += stretch.duration.inHours;
+      }
+    }
+
+    print(time);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),

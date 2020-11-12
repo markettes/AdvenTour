@@ -15,18 +15,14 @@ class _HighlightPageState extends State<HighlightPage> {
   TextEditingController _locationController = TextEditingController();
   Place place;
   String photo;
-  List<String> routes = [
-    'Barrio del Carmen',
-    'Valencia center',
-    'Valencia beach'
-  ];
 
   @override
   Widget build(BuildContext context) {
+    print('hola1');
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
     photo = args['photo'];
-    print('hola');
+    print('hola2');
 
     return Scaffold(
       appBar: AppBar(

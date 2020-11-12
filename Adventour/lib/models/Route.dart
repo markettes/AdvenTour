@@ -11,7 +11,7 @@ class Route {
   String name;
   String img;
 
-  Route(start, places, paths,transports, [this.name, this.img]) {
+  Route(start, places, paths, transports, [this.name, this.img]) {
     _start = start;
     _places = places;
     _paths = paths;
@@ -33,37 +33,46 @@ class Route {
   void removePlace(Place place) => _places.remove(place);
 }
 
-// Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346), [
-//   Place(
-//       39.4753061,
-//       -0.3764726,
-//       'Catedral de Valencia',
-//       'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
-//       CHURCH,
-//       5,
-//       "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-//       Duration(minutes: 20)),
-//   Place(
-//       39.4752113,
-//       -0.3552065,
-//       'Ciudad de las artes y de las ciencias',
-//       'ChIJgUOb0elIYA0RlPjrpQdE62I',
-//       [MUSEUM],
-//       5,
-//       "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-//       Duration(minutes: 35))
-// ], [
-//   Path([
-//     Stretch(
-//         '1',
-//         [LatLng(39.47018449999999, -0.3705346), LatLng(39.4753061, -0.3764726)],
-//         Duration(minutes: 20)),
-//     Stretch(
-//         '2',
-//         [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
-//         Duration(minutes: 25)),
-//   ], CAR)
-// ]);
+Route exampleRoute = Route(
+  LatLng(39.47018449999999, -0.3705346),
+  [
+    Place(
+        39.4753061,
+        -0.3764726,
+        'Catedral de Valencia',
+        'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
+        TOURIST_ATTRACTION,
+        5,
+        "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+        Duration(minutes: 20)),
+    Place(
+        39.4752113,
+        -0.3552065,
+        'Ciudad de las artes y de las ciencias',
+        'ChIJgUOb0elIYA0RlPjrpQdE62I',
+        [MUSEUM],
+        5,
+        "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+        Duration(minutes: 35))
+  ],
+  [
+    Path([
+      Stretch(
+        '1',
+        [LatLng(39.47018449999999, -0.3705346), LatLng(39.4753061, -0.3764726)],
+        Duration(minutes: 20),
+        'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
+      ),
+      Stretch(
+        '2',
+        [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
+        Duration(minutes: 25),
+        'ChIJgUOb0elIYA0RlPjrpQdE62I',
+      ),
+    ], WALK)
+  ],
+  WALK,
+);
 
 class Path {
   List<Stretch> _stretchs;
@@ -76,10 +85,10 @@ class Path {
 
   Path.fromGoogleRoute(directions.Route route,
       List<directions.GeocodedWaypoint> waypoints, String transport) {
-        print('?waypoints');
-        for (var waypoint in waypoints) {
-          print('?'+waypoint.placeId);
-        }
+    print('?waypoints');
+    for (var waypoint in waypoints) {
+      print('?' + waypoint.placeId);
+    }
     List<Stretch> stretchs = [];
     for (var i = 0; i < route.legs.length; i++) {
       var leg = route.legs[i];
