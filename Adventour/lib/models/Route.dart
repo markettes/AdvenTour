@@ -9,15 +9,18 @@ class Route {
   List<Path> _paths;
   List<String> _transports;
   String _name;
+
   String _image;
 
   Route(start, places, paths, transports, [name, image]) {
+
     _start = start;
     _places = places;
     _paths = paths;
     _transports = transports;
     _name = name;
     _image = image;
+
   }
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +41,10 @@ class Route {
 
   List<Place> get places => _places;
 
+  String get name => _name;
+
+  String get image => _image;
+
   List<String> get transports => _transports;
 
   void addPlace(Place place) => _places.add(place);
@@ -45,37 +52,48 @@ class Route {
   void removePlace(Place place) => _places.remove(place);
 }
 
-// Route exampleRoute = Route(LatLng(39.47018449999999, -0.3705346), [
-//   Place(
-//       39.4753061,
-//       -0.3764726,
-//       'Catedral de Valencia',
-//       'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
-//       CHURCH,
-//       5,
-//       "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-//       Duration(minutes: 20)),
-//   Place(
-//       39.4752113,
-//       -0.3552065,
-//       'Ciudad de las artes y de las ciencias',
-//       'ChIJgUOb0elIYA0RlPjrpQdE62I',
-//       [MUSEUM],
-//       5,
-//       "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-//       Duration(minutes: 35))
-// ], [
-//   Path([
-//     Stretch(
-//         '1',
-//         [LatLng(39.47018449999999, -0.3705346), LatLng(39.4753061, -0.3764726)],
-//         Duration(minutes: 20)),
-//     Stretch(
-//         '2',
-//         [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
-//         Duration(minutes: 25)),
-//   ], CAR)
-// ]);
+Route exampleRoute = Route(
+  LatLng(39.47018449999999, -0.3705346),
+  [
+    Place(
+        39.4753061,
+        -0.3764726,
+        'Catedral de Valencia',
+        'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
+        TOURIST_ATTRACTION,
+        5,
+        "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+        Duration(minutes: 20)),
+    Place(
+        39.4752113,
+        -0.3552065,
+        'Ciudad de las artes y de las ciencias',
+        'ChIJgUOb0elIYA0RlPjrpQdE62I',
+        [MUSEUM],
+        5,
+        "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+        Duration(minutes: 35))
+  ],
+  [
+    Path([
+      Stretch(
+        '1',
+        [LatLng(39.47018449999999, -0.3705346), LatLng(39.4753061, -0.3764726)],
+        Duration(minutes: 20),
+        'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
+      ),
+      Stretch(
+        '2',
+        [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
+        Duration(minutes: 25),
+        'ChIJgUOb0elIYA0RlPjrpQdE62I',
+      ),
+    ], WALK)
+  ],
+  WALK,
+  'Valencia Center',
+  'https://www.thetimes.co.uk/imageserver/image/methode%2Ftimes%2Fprod%2Fweb%2Fbin%2Fc139090c-acf0-11e7-88ab-06bb8ee1988e.jpg?crop=1478%2C831%2C8%2C138',
+);
 
 class Path {
   List<Stretch> _stretchs;

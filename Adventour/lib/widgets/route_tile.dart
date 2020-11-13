@@ -7,9 +7,21 @@ class RouteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print('hola');
-    // List<String> types = route.getPlacesTypes(route.places);
-    // print('hola2');
+    print('hola3');
+    print('hola4');
+    int time = 0;
+    print(route);
+    for (var place in route.places) {
+      print('hola5');
+      time += place.duration.inHours;
+    }
+    for (var path in route.paths) {
+      for (var stretch in path.stretchs) {
+        time += stretch.duration.inHours;
+      }
+    }
+
+    print(time);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -52,7 +64,6 @@ class RouteTile extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  // LittleIcon(type: route.paths.first.transport),
                 ],
               ),
             ),
@@ -66,7 +77,6 @@ class RouteTile extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                // LittleIcon(type: types.first),
               ],
             )
           ],

@@ -12,6 +12,7 @@ import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:Adventour/pages/profile_page.dart';
 import 'package:Adventour/pages/custom_route_page.dart';
 
 void main() {
@@ -33,6 +34,7 @@ class Adventour extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/initPage': (_) => InitPage(),
+        '/profile': (_) => ProfilePage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
         '/': (_) => RootPage(),

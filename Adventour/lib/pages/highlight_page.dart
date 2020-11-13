@@ -1,9 +1,6 @@
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart';
-import 'package:Adventour/pages/creating_route_page.dart';
-import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/route_tile.dart';
-import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
 class HighlightPage extends StatefulWidget {
@@ -15,18 +12,14 @@ class _HighlightPageState extends State<HighlightPage> {
   TextEditingController _locationController = TextEditingController();
   Place place;
   String photo;
-  List<String> routes = [
-    'Barrio del Carmen',
-    'Valencia center',
-    'Valencia beach'
-  ];
 
   @override
   Widget build(BuildContext context) {
+    print('hola1');
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
     photo = args['photo'];
-    print('hola');
+    print('hola2');
 
     return Scaffold(
       appBar: AppBar(
