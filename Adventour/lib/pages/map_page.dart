@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -63,48 +64,79 @@ class _MapPageState extends State<MapPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.deepOrange,
-                  image: DecorationImage(
-                    image: AssetImage('assets/drawer_background.jpg'),
-                    fit: BoxFit.cover,
-                  )),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: auth.currentUser.photoURL != null
-                          ? NetworkImage(
-                              auth.currentUser.photoURL,
-                            )
-                          : AssetImage("assets/empty_photo.jpg"),
+          Container(
+            height: 180,
+            decoration: BoxDecoration(
+                color: Colors.deepOrange,
+                image: DecorationImage(
+                  image: AssetImage('assets/drawer_background.jpg'),
+                  fit: BoxFit.cover,
+                )),
+            child: StreamBuilder(
+                stream: db.getUser(db.currentUserId),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) print(snapshot.error);
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  var user = snapshot.data;
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: user.image != ''
+                              ? NetworkImage(
+                                  user.image,
+                                )
+                              : AssetImage("assets/empty_photo.jpg"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            user.email,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontSize: 20),
+                          ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Text(
-                        auth.currentUser.email,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
+                  );
+                }),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/profilePage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'My profile',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
                         ),
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 3,
-            child: Column(
-              children: [
                 Row(
                   children: [
                     Expanded(
@@ -186,60 +218,36 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
-                          //Navigator
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.person,
-                              size: 35,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Account',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
+                
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: MaterialButton(
+                          onPressed: () {
+                            auth.signOut();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.logout,
+                                size: 35,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Logout',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
-                          auth.signOut();
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.logout,
-                              size: 35,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Logout',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -60,10 +60,10 @@ class Auth {
       final UserCredential result =
           await _firebaseAuth.signInWithCredential(credential);
 
-          if(result.additionalUserInfo.isNewUser){
-            myuser.User user = myuser.User('',result.user.email);
-            db.addUser(user);
-          }
+      if (result.additionalUserInfo.isNewUser) {
+        myuser.User user = myuser.User('', result.user.email,result.user.photoURL);
+        db.addUser(user);
+      }
 
       return result;
     }
@@ -73,8 +73,9 @@ class Auth {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future changePassword(String newPassword) async {
-    _firebaseAuth.currentUser.updatePassword(newPassword);
+  Future changePassword(String password, String newPassword) async {
+    await reauthCurrentUser(password);
+    await _firebaseAuth.currentUser.updatePassword(newPassword);
   }
 
   Future changeEmail(String newEmail) async {
@@ -119,6 +120,14 @@ String signInPasswordError(FirebaseAuthException exception) {
   if (exception.code == 'weak-password') {
     return 'It should have at least 6 characters';
   }
+  return null;
+}
+
+String changePasswordError(FirebaseAuthException exception) {
+  if (exception.code == 'weak-password')
+    return 'It should have at least 6 characters';
+  if (exception.code == 'wrong-password') return 'Your password is wrong';
+  if (exception.code == 'requires-recent-login') return 'Try it later';
   return null;
 }
 

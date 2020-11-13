@@ -1,5 +1,6 @@
 import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,16 +26,21 @@ class RootPage extends StatelessWidget {
               if (snapshot.hasError) print(snapshot.error);
               if (!snapshot.hasData) return InitPage();
               var user = snapshot.data;
-              db.signIn(user.email).then((user) async {
-                if (user.userName == '')
-                  db.changeUserName(user,
-                      await _showUserNameDialog(context));
-              });
-
+              signIn(user.email, context);
               return MapPage();
             },
           );
         });
+  }
+
+  Future signIn(String email, BuildContext context) async {
+    String id = await db.signIn(email);
+    db.currentUserId = id;
+    User user = await db.getUser(id).first;
+      if (user.userName == '') {
+        user.userName = await _showUserNameDialog(context);
+        db.updateUser(user.id, user);
+      }
   }
 
   Future<String> _showUserNameDialog(BuildContext context) {

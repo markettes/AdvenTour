@@ -7,39 +7,47 @@ class DB {
 
   String _currentUserId;
 
-  get currentUserId => _currentUserId;
+  String get currentUserId => _currentUserId;
+
+  set currentUserId(String userId) => _currentUserId = userId;
 
 //----------------------------USERS-----------------------------------
 
   Future addUser(User user) {
-    _firestore.collection('Users').add(user.toFirestore());
+    _firestore.collection('Users').add(user.toJson());
   }
 
-  Future<User> signIn(String email) async {
+  Stream<User> getUser(String userId) {
+    return _firestore
+        .doc('Users/$userId')
+        .snapshots()
+        .map((doc) => User.fromFirestore(doc));
+  }
+
+  Future<String> signIn(String email) async {
     QueryDocumentSnapshot snapshot = (await _firestore
             .collection('Users')
             .where('email', isEqualTo: email)
             .get())
         .docs
         .first;
-    _currentUserId = snapshot.id;
-    return User.fromFirestore(snapshot);
+        return snapshot.id;
   }
 
-  Future<void> changeUserName(User user, String newName) {
-    _firestore.doc('Users/${user.id}').update({'userName': newName});
+  Future<void> updateUser(String userId, User user) {
+    _firestore.doc('Users/$userId').update(user.toJson());
   }
 
-  Future<User> getCurrentUserName(String email) async {
-    QueryDocumentSnapshot snapshot = (await _firestore
-            .collection('Users')
-            .where('email', isEqualTo: auth.currentUserEmail)
-            .get())
-        .docs
-        .first;
-    _currentUserId = snapshot.id;
-    return User.fromFirestore(snapshot);
-  }
+  // Future<User> getCurrentUserName(String email) async {
+  //   QueryDocumentSnapshot snapshot = (await _firestore
+  //           .collection('Users')
+  //           .where('email', isEqualTo: auth.currentUserEmail)
+  //           .get())
+  //       .docs
+  //       .first;
+  //   _currentUserId = snapshot.id;
+  //   return User.fromFirestore(snapshot);
+  // }
 }
 
 DB db;
