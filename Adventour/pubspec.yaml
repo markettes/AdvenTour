@@ -32,6 +32,7 @@ dependencies:
   geolocator: ^6.1.0
   location: ^3.0.0
   google_maps_flutter: ^0.5.27+3
+  google_map_polyline: 
   google_sign_in: ^4.5.5
   carousel_slider: ^2.3.1
 
