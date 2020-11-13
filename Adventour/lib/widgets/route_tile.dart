@@ -64,7 +64,6 @@ class RouteTile extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  // LittleIcon(type: route.paths.first.transport),
                 ],
               ),
             ),
@@ -78,7 +77,6 @@ class RouteTile extends StatelessWidget {
                 SizedBox(
                   width: 5,
                 ),
-                // LittleIcon(type: types.first),
               ],
             )
           ],
