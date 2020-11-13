@@ -58,205 +58,200 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      key: _scaffoldKey,
-      drawer: SafeArea(
-        child: Drawer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              //----
-              Expanded(
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.deepOrange,
-                      image: DecorationImage(
-                        image: AssetImage('assets/drawer_background.jpg'),
-                        fit: BoxFit.cover,
-                      )),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: auth.currentUser.photoUrl != null
-                                    ? NetworkImage(
-                                        '${auth.currentUser.photoUrl}')
-                                    : AssetImage("assets/empty_photo.jpg"),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: BoxShape.circle),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            "${auth.currentUser.email}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
 
-              Expanded(
-                flex: 3,
+    var drawer = Drawer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.deepOrange,
+                  image: DecorationImage(
+                    image: AssetImage('assets/drawer_background.jpg'),
+                    fit: BoxFit.cover,
+                  )),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.flag,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Highlights',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: auth.currentUser.photoURL != null
+                          ? NetworkImage(
+                              auth.currentUser.photoURL,
+                            )
+                          : AssetImage("assets/empty_photo.jpg"),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.star,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Favourites',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Text(
+                        auth.currentUser.email,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
                         ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.settings,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Settings',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              //Navigator
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.person,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Account',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              auth.signOut();
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Logout',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/routesPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.flag,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'My routes',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.star,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Favourites',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.settings,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Settings',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          //Navigator
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Account',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          auth.signOut();
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.logout,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Logout',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      key: _scaffoldKey,
+      drawer: SafeArea(
+        child: drawer,
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -275,7 +270,11 @@ class _MapPageState extends State<MapPage> {
             heroTag: 'current_location',
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () async {
-              if (_position != null) {
+              if (_fixedPosition)
+                setState(() {
+                  _fixedPosition = false;
+                });
+              else if (_position != null) {
                 _mapController.goToCoordinates(
                     _position.latitude, _position.longitude, 18);
                 setState(() {
@@ -286,7 +285,7 @@ class _MapPageState extends State<MapPage> {
             child: Icon(
               Icons.gps_fixed,
               color: _fixedPosition
-                  ? Colors.blue[200]
+                  ? Colors.lightBlue
                   : Theme.of(context).buttonColor,
             ),
           ),
@@ -402,62 +401,6 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ),
                   ),
-                  // MaterialButton(
-                  //   child: Icon(
-                  //     Icons.logout,
-                  //     color: Theme.of(context).buttonColor,
-                  //   ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 53,
-                  //   shape: CircleBorder(),
-                  //   elevation: 15,
-                  //   onPressed: () async {
-                  //     auth.signOut();
-                  //   },
-                  // ),
-                  // SizedBox(height: 5),
-                  // MaterialButton(
-                  //   child: Icon(
-                  //     Icons.search,
-                  //     color: Theme.of(context).buttonColor,
-                  //   ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 53,
-                  //   shape: CircleBorder(),
-                  //   elevation: 15,
-                  //   onPressed: () async {
-                  //     setState(() {
-                  //       _fixedPosition = false;
-                  //     });
-                  //     await PlacesAutocomplete.show(
-                  //       context: context,
-                  //       onTapPrediction: _onTapPrediction,
-                  //       onSubmitted: _onSubmitted,
-                  //     );
-                  //   },
-                  // ),
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
-                  // MaterialButton(
-                  //   child: _mapController.markers.isEmpty
-                  //       ? Container()
-                  //       : Icon(
-                  //           Icons.delete,
-                  //           color: Theme.of(context).buttonColor,
-                  //         ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 40,
-                  //   shape: CircleBorder(),
-                  //   elevation: 15,
-                  //   onPressed: _mapController.markers.isEmpty
-                  //       ? null
-                  //       : () {
-                  //           setState(() {
-                  //             _mapController.clearMarkers();
-                  //           });
-                  //         },
-                  // ),
                 ],
               ),
             ),
@@ -561,3 +504,60 @@ class _MapPageState extends State<MapPage> {
 //     });
 //   }
 // }
+
+// MaterialButton(
+//   child: Icon(
+//     Icons.logout,
+//     color: Theme.of(context).buttonColor,
+//   ),
+//   color: Theme.of(context).primaryColor,
+//   height: 53,
+//   shape: CircleBorder(),
+//   elevation: 15,
+//   onPressed: () async {
+//     auth.signOut();
+//   },
+// ),
+// SizedBox(height: 5),
+// MaterialButton(
+//   child: Icon(
+//     Icons.search,
+//     color: Theme.of(context).buttonColor,
+//   ),
+//   color: Theme.of(context).primaryColor,
+//   height: 53,
+//   shape: CircleBorder(),
+//   elevation: 15,
+//   onPressed: () async {
+//     setState(() {
+//       _fixedPosition = false;
+//     });
+//     await PlacesAutocomplete.show(
+//       context: context,
+//       onTapPrediction: _onTapPrediction,
+//       onSubmitted: _onSubmitted,
+//     );
+//   },
+// ),
+// SizedBox(
+//   height: 5,
+// ),
+// MaterialButton(
+//   child: _mapController.markers.isEmpty
+//       ? Container()
+//       : Icon(
+//           Icons.delete,
+//           color: Theme.of(context).buttonColor,
+//         ),
+//   color: Theme.of(context).primaryColor,
+//   height: 40,
+//   shape: CircleBorder(),
+//   elevation: 15,
+//   onPressed: _mapController.markers.isEmpty
+//       ? null
+//       : () {
+//           setState(() {
+//             _mapController.clearMarkers();
+//           });
+//         },
+// ),

@@ -112,6 +112,14 @@ class Place {
     _duration = Duration(minutes: 30);
   }
 
+    Map<String, dynamic> toJson() => {
+        'latitude': _latitude,
+        'longitude': _longitude,
+        'name': _name,
+        'icon': _icon,
+        'duration': _duration,//parsear
+      };
+
   get detailed => _detailed;
 
   get id => _id;

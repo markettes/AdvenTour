@@ -14,7 +14,7 @@ class Auth {
 
   Stream<User> get authStatusChanges => _firebaseAuth.authStateChanges();
 
-  get currentUser => _firebaseAuth.currentUser;
+  User get currentUser => _firebaseAuth.currentUser;
 
   get currentUserEmail => _firebaseAuth.currentUser.email;
 

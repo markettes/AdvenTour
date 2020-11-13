@@ -8,15 +8,27 @@ class Route {
   List<Place> _places;
   List<Path> _paths;
   List<String> _transports;
-  String name;
-  String img;
+  String _name;
+  String _image;
 
-  Route(start, places, paths,transports, [this.name, this.img]) {
+  Route(start, places, paths, transports, [name, image]) {
     _start = start;
     _places = places;
     _paths = paths;
     _transports = transports;
+    _name = name;
+    _image = image;
   }
+
+  Map<String, dynamic> toJson() => {
+        'latitude': _start.latitude,
+        'longitude': _start.longitude,
+        'places': _places.map((place) => place.toJson()).toList(),
+        'paths': _paths.map((path) => path.toJson()).toList(),
+        'transports': _transports,
+        'name': _name,
+        'image': _image,
+      };
 
   LatLng get start => _start;
 
@@ -76,10 +88,10 @@ class Path {
 
   Path.fromGoogleRoute(directions.Route route,
       List<directions.GeocodedWaypoint> waypoints, String transport) {
-        print('?waypoints');
-        for (var waypoint in waypoints) {
-          print('?'+waypoint.placeId);
-        }
+    print('?waypoints');
+    for (var waypoint in waypoints) {
+      print('?' + waypoint.placeId);
+    }
     List<Stretch> stretchs = [];
     for (var i = 0; i < route.legs.length; i++) {
       var leg = route.legs[i];
@@ -94,6 +106,10 @@ class Path {
     _stretchs = stretchs;
     _transport = transport;
   }
+
+      Map<String, dynamic> toJson() => {
+        //TODO
+      };
 
   List<Stretch> get stretchs => _stretchs;
 
