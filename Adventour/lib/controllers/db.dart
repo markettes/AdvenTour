@@ -1,4 +1,5 @@
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/models/Route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Adventour/models/User.dart';
 
@@ -48,6 +49,12 @@ class DB {
   //   _currentUserId = snapshot.id;
   //   return User.fromFirestore(snapshot);
   // }
+
+  Future addRoute(Route route) {
+    print('hola1');
+    _firestore.collection('Users/$_currentUserId/Routes').add(route.toJson());
+    print('hola2');
+  }
 }
 
 DB db;

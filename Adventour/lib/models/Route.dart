@@ -13,14 +13,12 @@ class Route {
   String _image;
 
   Route(start, places, paths, transports, [name, image]) {
-
     _start = start;
     _places = places;
     _paths = paths;
     _transports = transports;
     _name = name;
     _image = image;
-
   }
 
   Map<String, dynamic> toJson() => {
@@ -125,8 +123,9 @@ class Path {
     _transport = transport;
   }
 
-      Map<String, dynamic> toJson() => {
-        //TODO
+  Map<String, dynamic> toJson() => {
+        'stretchs': _stretchs.map((stretch) => stretch.toJson()).toList(),
+        'transport': _transport
       };
 
   List<Stretch> get stretchs => _stretchs;
@@ -158,6 +157,16 @@ class Stretch {
     _duration = duration;
     _destinationId = destionationId;
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': _id,
+        'points': _points
+            .map((point) =>
+                {'latitude': point.latitude, 'longitude': point.longitude})
+            .toList(),
+        'duration': _duration.inMinutes,
+        'destinationId': _destinationId
+      };
 
   String get id => _id;
 
