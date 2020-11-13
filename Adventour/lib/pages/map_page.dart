@@ -259,7 +259,7 @@ class _MapPageState extends State<MapPage> {
           FloatingActionButton(
             heroTag: 'route',
             backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () => Navigator.pushNamed(context, '/creatingRoutePage'),
+            onPressed: () => Navigator.pushNamed(context, '/customRoutePage'),
             child: Icon(
               Icons.flag,
               color: Theme.of(context).buttonColor,

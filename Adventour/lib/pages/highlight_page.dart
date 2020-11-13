@@ -1,6 +1,6 @@
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart';
-import 'package:Adventour/widgets/route_tile.dart';
+import 'package:Adventour/widgets/route_widget.dart';
 import 'package:flutter/material.dart';
 
 class HighlightPage extends StatefulWidget {

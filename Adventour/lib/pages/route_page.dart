@@ -30,6 +30,7 @@ class _RoutePageState extends State<RoutePage>
   r.Route route;
   GlobalKey<ScaffoldState> _scaffoldKey;
   int _selectedPath = 0;
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _snackBarController;
 
   @override
   void initState() {
@@ -65,7 +66,7 @@ class _RoutePageState extends State<RoutePage>
                   path: route.paths[_selectedPath],
                   places: route.places,
                   tabController: _tabController,
-                  onTapPrediction: _onTapPrediction,
+                  onPressedAdd: _onPressedAdd,
                   removePlace: removePlace,
                 )
               ],
@@ -74,7 +75,6 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future removePlace(Place place) async {
-
     if (route.places.length > 3) {
       route.removePlace(place);
       List<Path> paths = [];
@@ -84,10 +84,14 @@ class _RoutePageState extends State<RoutePage>
       }
       route.paths = paths;
       setState(() {});
-    } else
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('The route needs at least 3 places'),
-      ));
+    } else {
+      if (_snackBarController != null) _snackBarController.close();
+      _snackBarController = _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text('The route needs at least 3 places'),
+        ),
+      );
+    }
   }
 
   Future _onTapPrediction(Prediction prediction) async {
@@ -102,6 +106,23 @@ class _RoutePageState extends State<RoutePage>
     Navigator.pop(context);
     _tabController.animateTo(0);
     setState(() {});
+  }
+
+  Future _onPressedAdd() async {
+    if (route.places.length < 8)
+      await PlacesAutocomplete.show(
+        context: context,
+        onTapPrediction: _onTapPrediction,
+        onSubmitted: (value) {},
+      );
+    else {
+      if (_snackBarController != null) _snackBarController.close();
+      _snackBarController = _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text('The route has at most 8 places'),
+        ),
+      );
+    }
   }
 
   void nextTransport() {
@@ -295,23 +316,20 @@ class MapListView extends StatelessWidget {
   MapListView({
     @required this.path,
     @required this.places,
-    @required this.onTapPrediction,
     @required this.removePlace,
+    @required this.onPressedAdd,
     @required TabController tabController,
   }) : tabController = tabController;
 
   r.Path path;
   List<Place> places;
   TabController tabController;
-  Function(Prediction) onTapPrediction;
+  Function onPressedAdd;
   Function removePlace;
   Duration _duration;
 
   @override
   Widget build(BuildContext context) {
-    for (var stretch in path.stretchs) {
-      print(stretch.destinationId);
-    }
     _duration = path.duration(places
         .map((place) => place.duration)
         .reduce((value, element) => value + element));
@@ -357,8 +375,6 @@ class MapListView extends StatelessWidget {
                       separatorBuilder: (context, index) => SizedBox(height: 5),
                       itemBuilder: (context, index) {
                         var stretch = path.stretchs[index];
-                        print('destinationId');
-                        print('?' + stretch.destinationId);
                         var place = places.firstWhere(
                             (place) => place.id == stretch.destinationId);
                         return Column(
@@ -431,13 +447,7 @@ class MapListView extends StatelessWidget {
           Align(
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
-                onPressed: () async {
-                  await PlacesAutocomplete.show(
-                    context: context,
-                    onTapPrediction: onTapPrediction,
-                    onSubmitted: (value) {},
-                  );
-                },
+                onPressed: onPressedAdd,
                 backgroundColor: Theme.of(context).primaryColor,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 child: Icon(

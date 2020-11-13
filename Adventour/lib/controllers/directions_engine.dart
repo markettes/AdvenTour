@@ -29,16 +29,11 @@ class DirectionsEngine {
 
   Future<r.Path> makePath(
       LatLng start, List<Place> places, String transport) async {
-        for (var place in places) {
-          print('?'+place.name+place.id);
-        }
     if (places.length < 3) return null;
     String origin =
         start.latitude.toString() + ',' + start.longitude.toString();
     Place furthestPlace = getFurthestPlace(start, places);
-    String destination = furthestPlace.latitude.toString() +
-        ',' +
-        furthestPlace.longitude.toString();
+    String destination = 'place_id:' + furthestPlace.id;
     List<Waypoint> waypoints = [Waypoint.optimize()];
     for (var place in places) {
       if (place != furthestPlace) waypoints.add(Waypoint.fromPlaceId(place.id));

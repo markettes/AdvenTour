@@ -12,7 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 const PLACE_OF_WORSHIP = "place_of_worship"; // + 30
 const MOVIE_THEATER = "movie_theater"; // 30
 const PARK = "park"; // + 20
-const COURTHOUSE = "courthouse";
 const STADIUM = "stadium"; // 20
 const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
 //LARGE
@@ -20,6 +19,7 @@ const MUSEUM = "museum"; // + 45
 const NIGHT_CLUB = "night_club"; // + 60
 const RESTAURANT = "restaurant"; // 60
 const SHOPPING_MALL = "shopping_mall"; // 60
+const NATURAL = "natural_feature";
 
 List places = [
   RESTAURANT,
@@ -27,11 +27,11 @@ List places = [
   MOVIE_THEATER,
   PARK,
   STADIUM,
-  COURTHOUSE,
   TOURIST_ATTRACTION,
   MUSEUM,
   NIGHT_CLUB,
-  SHOPPING_MALL
+  SHOPPING_MALL,
+  NATURAL
 ];
 
 class Place {
@@ -53,14 +53,14 @@ class Place {
   num _userRatingsTotal;
   Duration _duration;
 
-  Place(latitude, longitude, [name, id,types,rating,icon,duration]) {
+  Place(latitude, longitude, [name, id, types, rating, icon, duration]) {
     _detailed = false;
     _latitude = latitude;
     _longitude = longitude;
     _name = name;
     _id = id;
-    _types=types;
-    _rating=rating;
+    _types = types;
+    _rating = rating;
     _icon = icon;
     _duration = duration;
   }
@@ -86,7 +86,7 @@ class Place {
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
     _adress = result.vicinity;
-     _duration = Duration(minutes: 30);
+    _duration = Duration(minutes: 30);
   }
 
   Place.fromDetails(PlaceDetails details) {
@@ -112,12 +112,12 @@ class Place {
     _duration = Duration(minutes: 30);
   }
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'latitude': _latitude,
         'longitude': _longitude,
         'name': _name,
         'icon': _icon,
-        'duration': _duration,//parsear
+        'duration': _duration, //parsear
       };
 
   get detailed => _detailed;
@@ -154,8 +154,6 @@ class Place {
 
   Duration get duration => _duration;
 
-
-
   @override
   String toString() {
     return """
@@ -166,14 +164,21 @@ type = $_types
   }
 }
 
-  Place getFurthestPlace(LatLng location,List<Place> places){
-    if(places.isEmpty)return null;
-    Place furthestPlace = places.first;
-    for (var place in places) {
-      if(Geolocator.distanceBetween(location.latitude, location.longitude, place.latitude, place.longitude)>Geolocator.distanceBetween(location.latitude, location.longitude, furthestPlace.latitude, furthestPlace.longitude))furthestPlace = place;
-    }
-    return furthestPlace;
+Place getFurthestPlace(LatLng location, List<Place> places) {
+  if (places.isEmpty) return null;
+  Place furthestPlace = places.first;
+  for (var place in places) {
+    if (Geolocator.distanceBetween(location.latitude, location.longitude,
+            place.latitude, place.longitude) >
+        Geolocator.distanceBetween(
+            location.latitude,
+            location.longitude,
+            furthestPlace.latitude,
+            furthestPlace.longitude)) furthestPlace = place;
   }
+  return furthestPlace;
+}
+
 
 
 // icon = $_icon
@@ -187,4 +192,3 @@ type = $_types
 // openingHours = ${_openingHours}
 // weekdaytext = ${_weekdaytext}
 // openNow = ${_openNow}
-

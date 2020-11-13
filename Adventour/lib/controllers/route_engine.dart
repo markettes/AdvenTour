@@ -12,8 +12,8 @@ const MAX_DISTANCE_BICYCLE = 10000;
 const MAX_DISTANCE_PUBLIC = 15000;
 
 class RouteEngine {
-  Future<Route> makeShortRoute(
-      Location location, List<String> types, List<String> transports) async {
+  Future<Route> makeRoute(
+      Location location, List<String> types) async {
     var maxDistance = transports.contains('car')
         ? MAX_DISTANCE_CAR
         : transports.contains('public')
@@ -57,11 +57,6 @@ class RouteEngine {
         places.add(routePlace);
         placesWithoutDuplicates.remove(routePlace);
       }
-    }
-          print('?places');
-    for (var place in places) {
-
-      print('?'+place.name);
     }
     LatLng start = LatLng(location.lat, location.lng);
 

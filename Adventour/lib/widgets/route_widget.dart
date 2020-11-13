@@ -1,9 +1,9 @@
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:flutter/material.dart';
 
-class RouteTile extends StatelessWidget {
+class RouteWidget extends StatelessWidget {
   final r.Route route;
-  const RouteTile(this.route);
+  const RouteWidget(this.route);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class RouteTile extends StatelessWidget {
             color: Colors.teal[100],
             shape: BoxShape.circle,
             image: DecorationImage(
-                image: NetworkImage(route.img), fit: BoxFit.fill),
+                image: NetworkImage(route.image), fit: BoxFit.fill),
           ),
         ),
         title: Row(

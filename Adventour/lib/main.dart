@@ -5,7 +5,6 @@ import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
-import 'package:Adventour/pages/creating_route_page.dart';
 import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/routes_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
@@ -40,7 +39,6 @@ class Adventour extends StatelessWidget {
         '/': (_) => RootPage(),
         '/mapPage': (_) => MapPage(),
         '/placePage': (_) => PlacePage(),
-        '/creatingRoutePage': (_) => CreatingRoutePage(),
         '/customRoutePage': (_) => CustomRoutePage(),
         '/routePage': (_) => RoutePage(),
         '/addPlacesPage': (_) => AddPlacesPage(),
