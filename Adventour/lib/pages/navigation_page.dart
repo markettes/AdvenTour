@@ -1,6 +1,9 @@
 import 'dart:ffi';
 
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
+import 'package:Adventour/models/Path.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/pages/search_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -24,6 +27,28 @@ class NavigationPage extends StatefulWidget {
 class _NavigationPageState extends State<NavigationPage> {
   final Set<Polyline> polyline = {};
 
+  r.Route route1 = r.Route([
+    Place(39.47018449999999, -0.3705346, 'Start', 'Start'),
+    Place(39.4753061, -0.3764726, 'Catedral de Valencia',
+        'ChIJb2UMoVJPYA0R2uk8Hly_1uU', CHURCH, 5),
+    Place(39.4752113, -0.3552065, 'Ciudad de las artes y de las ciencias',
+        'ChIJgUOb0elIYA0RlPjrpQdE62I', [MUSEUM], 5)
+  ], [
+    Path([
+      Stretch(
+          '1',
+          [
+            LatLng(39.47018449999999, -0.3705346),
+            LatLng(39.4753061, -0.3764726)
+          ],
+          Duration(minutes: 20)),
+      Stretch(
+          '2',
+          [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
+          Duration(minutes: 25))
+    ], CAR)
+  ]);
+
   r.Route route;
   GoogleMapController mapController;
   List<LatLng> routeCoords;
@@ -32,10 +57,15 @@ class _NavigationPageState extends State<NavigationPage> {
   );
 
   getSomePoints() async {
-    routeCoords = await googleMapPolyline.getCoordinatesWithLocation(
-        origin: LatLng(39.432346, -0.425294),
-        destination: LatLng(39.433756, -0.427180),
-        mode: RouteMode.driving);
+    for (var i = 0; i < route1.places.length - 1; i++) {
+      Place start = route1.places[i];
+      Place end = route1.places[i + 1];
+
+      routeCoords.addAll(await googleMapPolyline.getCoordinatesWithLocation(
+          origin: LatLng(start.latitude, start.longitude),
+          destination: LatLng(end.latitude, end.longitude),
+          mode: RouteMode.driving));
+    }
   }
 
   Location location;

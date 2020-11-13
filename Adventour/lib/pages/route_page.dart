@@ -1,12 +1,14 @@
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Path.dart' as p;
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 
@@ -97,7 +99,25 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
-  MapController mapController = MapController();
+  GoogleMapController mapController;
+  final Set<Polyline> polyline = {};
+  List<LatLng> routeCoords = List();
+  GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(
+    apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+  );
+
+  getSomePoints() async {
+    for (var i = 0; i < widget.route.places.length - 1; i++) {
+      Place start = widget.route.places[i];
+      Place end = widget.route.places[i + 1];
+      routeCoords.addAll(
+        await googleMapPolyline.getCoordinatesWithLocation(
+            origin: LatLng(start.latitude, start.longitude),
+            destination: LatLng(end.latitude, end.longitude),
+            mode: RouteMode.walking),
+      );
+    }
+  }
 
   bool _listVisible = true;
 
@@ -112,12 +132,31 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 widget.route.places.first.longitude),
             zoom: 12.5,
           ),
-          markers: Set<Marker>.of(mapController.markers.values),
-          polylines: Set<Polyline>.of(mapController.polylines.values),
-          onMapCreated: (googleMapController) =>
-              mapController.onMapCreated(googleMapController, () async {
+          //markers: Set<Marker>.of(mapController.markers.values),
+          polylines: polyline,
+          onMapCreated: (googleMapController) {
+            setState(() {
+              mapController = googleMapController;
+              polyline.add(
+                Polyline(
+                  polylineId: PolylineId('route1'),
+                  visible: true,
+                  points: routeCoords,
+                  width: 8,
+                  color: Theme.of(context).primaryColor,
+                  startCap: Cap.roundCap,
+                  endCap: Cap.buttCap,
+                ),
+              );
+            });
+          }
+          /*
+            mapController.onMapCreated(googleMapController, () async {
             drawRoute(widget.route);
-          }),
+            
+          })
+          */
+          ,
           onCameraMoveStarted: () {
             _listVisible = false;
             setState(() {});
@@ -149,6 +188,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     );
   }
 
+/*
   void drawRoute(r.Route route) {
     for (var stretch in route.paths.first.stretchs) {
       Polyline polyline = Polyline(
@@ -181,7 +221,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
 
     setState(() {});
   }
-
+*/
   @override
   bool get wantKeepAlive => true;
 }
