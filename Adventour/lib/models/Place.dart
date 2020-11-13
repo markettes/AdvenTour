@@ -117,7 +117,7 @@ class Place {
         'longitude': _longitude,
         'name': _name,
         'icon': _icon,
-        'duration': _duration, //parsear
+        'duration': _duration.inMinutes,
       };
 
   get detailed => _detailed;
@@ -178,8 +178,6 @@ Place getFurthestPlace(LatLng location, List<Place> places) {
   }
   return furthestPlace;
 }
-
-
 
 // icon = $_icon
 // adress = $_adress

@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
@@ -48,6 +49,15 @@ class _RoutePageState extends State<RoutePage>
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Custom route'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {
+              db.addRoute(route);
+              print('hola3');
+            },
+          )
+        ],
       ),
       body: route.paths.isEmpty
           ? NotRouteAvailable()
