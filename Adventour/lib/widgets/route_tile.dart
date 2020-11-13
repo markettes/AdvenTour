@@ -8,10 +8,11 @@ class RouteTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('hola3');
-    // List<String> types = route.getPlacesTypes(route.places);
     print('hola4');
     int time = 0;
+    print(route);
     for (var place in route.places) {
+      print('hola5');
       time += place.duration.inHours;
     }
     for (var path in route.paths) {

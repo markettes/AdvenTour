@@ -8,14 +8,16 @@ class Route {
   List<Place> _places;
   List<Path> _paths;
   List<String> _transports;
-  String name;
-  String img;
+  String _name;
+  String _img;
 
-  Route(start, places, paths, transports, [this.name, this.img]) {
+  Route(start, places, paths, transports, [name, img]) {
     _start = start;
     _places = places;
     _paths = paths;
     _transports = transports;
+    _name = name;
+    _img = img;
   }
 
   LatLng get start => _start;
@@ -25,6 +27,10 @@ class Route {
   set paths(List<Path> paths) => _paths = paths;
 
   List<Place> get places => _places;
+
+  String get name => _name;
+
+  String get img => _img;
 
   List<String> get transports => _transports;
 
@@ -72,6 +78,8 @@ Route exampleRoute = Route(
     ], WALK)
   ],
   WALK,
+  'Valencia Center',
+  'https://www.thetimes.co.uk/imageserver/image/methode%2Ftimes%2Fprod%2Fweb%2Fbin%2Fc139090c-acf0-11e7-88ab-06bb8ee1988e.jpg?crop=1478%2C831%2C8%2C138',
 );
 
 class Path {

@@ -1,9 +1,6 @@
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart';
-import 'package:Adventour/pages/creating_route_page.dart';
-import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/route_tile.dart';
-import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
 class HighlightPage extends StatefulWidget {
@@ -36,7 +33,7 @@ class _HighlightPageState extends State<HighlightPage> {
                 photo,
               ),
             ),
-            // RouteTile(exampleRoute),
+            RouteTile(exampleRoute),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(
