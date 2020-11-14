@@ -109,15 +109,35 @@ class _NavigationPageState extends State<NavigationPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          // leading: IconButton(onPressed: (){
-          //   AlertDialog(
-          //     title: Text("¿Deseas cancelar la ruta?"),
-          //     actions: [],
-          //   ),
-          // },),
+          backgroundColor: Theme.of(context).primaryColor,
+          leading: IconButton(
+            icon: Icon(Icons.cancel),
+            color: Theme.of(context).buttonColor,
+            onPressed: () {
+              return AlertDialog(
+                title: Text("¿Deseas cancelar la ruta?"),
+                content: Text(
+                    "Si cancelas la ruta perderás todo el progreso realizado hasta ahora. ¿Seguro que quieres cancelarla?"),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        return Navigator.of(context).pop();
+                      },
+                      child: Text("Volver a la ruta")),
+                  TextButton(onPressed: null, child: Text("Sí")) //Cancelar ruta
+                ],
+              );
+            },
+          ),
           title: Text("Título de la ruta?"),
-          actions: [],
+          actions: [
+            IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {},
+            )
+          ], //Menú de los tres puntitos.
         ),
+        bottomNavigationBar: null, //Falta esto
         body: Container(
           child: GoogleMap(
             onMapCreated: (GoogleMapController controller) {
