@@ -35,7 +35,6 @@ class _RoutePageState extends State<RoutePage>
   r.Route route;
   GlobalKey<ScaffoldState> _scaffoldKey;
   int _selectedPath = 0;
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _snackBarController;
 
   @override
   void initState() {

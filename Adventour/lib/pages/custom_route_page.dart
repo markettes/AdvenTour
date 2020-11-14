@@ -6,6 +6,7 @@ import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/input_text.dart';
+import 'package:Adventour/widgets/place_types_list.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
@@ -28,7 +29,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
 
   @override
   void initState() {
-    sortPlaceTypes();
+    sortPlaceTypes(_placeTypes);
     super.initState();
   }
 
@@ -84,42 +85,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
-                            child: ListView.separated(
-                              itemCount: placeTypes.length,
-                              scrollDirection: Axis.horizontal,
-                              separatorBuilder: (context, index) =>
-                                  SizedBox(width: 5),
-                              itemBuilder: (context, index) {
-                                bool activated =
-                                    _placeTypes.contains(placeTypes[index]);
-                                return CircleIconButton(
-                                    activated: activated,
-                                    type: placeTypes[index],
-                                    onPressed: () {
-                                      if (activated) {
-                                        if (_placeTypes.length > 4) {
-                                          _placeTypes.remove(placeTypes[index]);
-                                          sortPlaceTypes();
-                                          setState(() {});
-                                        } else
-                                          Toast.show(
-                                              'The route needs at least 4 type places',
-                                              context,
-                                              duration: 3);
-                                      } else {
-                                        if (_placeTypes.length < 8) {
-                                          _placeTypes.add(placeTypes[index]);
-                                          sortPlaceTypes();
-                                          setState(() {});
-                                        } else
-                                          Toast.show(
-                                              'The route has at most 7 type places',
-                                              context,
-                                              duration: 3);
-                                      }
-                                    });
-                              },
-                            ),
+                            child: PlaceTypesList(
+                                selectedTypes: _placeTypes,
+                                onTap: _onTapPlaceType),
                           ),
                         )
                       ],
@@ -135,9 +103,11 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      RouteEngineResponse routeEngineResponse = await _makeRoute();
-                      Navigator.pushNamed(context, '/routePage',
-                          arguments: {'routeEngineResponse': routeEngineResponse});
+                      RouteEngineResponse routeEngineResponse =
+                          await _makeRoute();
+                      Navigator.pushNamed(context, '/routePage', arguments: {
+                        'routeEngineResponse': routeEngineResponse
+                      });
                     },
                     icon: Icons.edit,
                     style: ButtonType.Normal,
@@ -163,14 +133,26 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
     return await routeEngine.makeRoute(location, _placeTypes);
   }
 
-  void sortPlaceTypes() {
-    List sorted = [];
-    sorted.addAll(_placeTypes);
-    for (var placeType in placeTypes) {
-      if (!sorted.contains(placeType)) sorted.add(placeType);
+  Future _onTapPlaceType(String placeType, bool activated) {
+    if (activated) {
+      if (_placeTypes.length > 4) {
+        _placeTypes.remove(placeType);
+        sortPlaceTypes(_placeTypes);
+        setState(() {});
+      } else
+        Toast.show('The route needs at least 4 type places', context,
+            duration: 3);
+    } else {
+      if (_placeTypes.length < 8) {
+        _placeTypes.add(placeType);
+        sortPlaceTypes(_placeTypes);
+        setState(() {});
+      } else
+        Toast.show('The route has at most 7 type places', context, duration: 3);
     }
-    placeTypes = sorted;
   }
+
+
 }
 
 // Expanded(

@@ -179,6 +179,15 @@ Place getFurthestPlace(LatLng location, List<Place> places) {
   return furthestPlace;
 }
 
+  void sortPlaceTypes(List<String> selectedTypes) {
+    List sorted = [];
+    sorted.addAll(selectedTypes);
+    for (var placeType in placeTypes) {
+      if (!sorted.contains(placeType)) sorted.add(placeType);
+    }
+    placeTypes = sorted;
+  }
+
 // icon = $_icon
 // adress = $_adress
 // latitude = $_latitude
