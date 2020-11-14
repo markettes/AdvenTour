@@ -182,7 +182,7 @@ class _MapPageState extends State<MapPage> {
                               width: 10,
                             ),
                             Text(
-                              'My routes',
+                              'My history',
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
