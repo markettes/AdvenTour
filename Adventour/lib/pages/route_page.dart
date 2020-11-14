@@ -100,11 +100,13 @@ class MapView extends StatefulWidget {
 
 class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   GoogleMapController mapController;
+  List<Marker> markers = List();
   final Set<Polyline> polyline = {};
   List<LatLng> routeCoords = List();
   GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(
     apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
   );
+  String cont = "0";
 
   getSomePoints() async {
     for (var i = 0; i < widget.route.places.length - 1; i++) {
@@ -112,11 +114,21 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
       Place end = widget.route.places[i + 1];
       routeCoords.addAll(
         await googleMapPolyline.getCoordinatesWithLocation(
-            origin: LatLng(start.latitude, start.longitude),
-            destination: LatLng(end.latitude, end.longitude),
-            mode: RouteMode.walking),
+          origin: LatLng(start.latitude, start.longitude),
+          destination: LatLng(end.latitude, end.longitude),
+          mode: toRouteMode(
+            widget.route.paths[widget.route.paths.length - 1].transport,
+          ),
+        ),
       );
     }
+    print(routeCoords);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSomePoints();
   }
 
   bool _listVisible = true;
@@ -133,8 +145,18 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             zoom: 12.5,
           ),
           //markers: Set<Marker>.of(mapController.markers.values),
+          markers: markers.toSet(),
           polylines: polyline,
           onMapCreated: (googleMapController) {
+            for (var place in widget.route.places) {
+              markers.add(Marker(
+                  markerId: MarkerId(cont),
+                  position: LatLng(place.latitude, place.longitude),
+                  infoWindow: InfoWindow(title: place.name)));
+              setState(() {
+                cont += "0";
+              });
+            }
             setState(() {
               mapController = googleMapController;
               polyline.add(
@@ -224,6 +246,20 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
 */
   @override
   bool get wantKeepAlive => true;
+
+  RouteMode toRouteMode(String transport) {
+    switch (transport) {
+      case 'car':
+        return RouteMode.driving;
+      case 'walk':
+        return RouteMode.walking;
+      case 'bicycle':
+        return RouteMode.bicycling;
+      default:
+        return throw new Exception(
+            "No se puede ir con este tipo de transporte");
+    }
+  }
 }
 
 class NotRouteAvailable extends StatelessWidget {
