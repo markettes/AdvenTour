@@ -1,5 +1,5 @@
-import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
+import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -13,7 +13,9 @@ import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:toast/toast.dart';
@@ -31,7 +33,9 @@ class _RoutePageState extends State<RoutePage>
   List<Place> recommendations;
 
   r.Route route;
+  GlobalKey<ScaffoldState> _scaffoldKey;
   int _selectedPath = 0;
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _snackBarController;
 
   @override
   void initState() {
@@ -42,23 +46,16 @@ class _RoutePageState extends State<RoutePage>
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
+    _scaffoldKey = GlobalKey<ScaffoldState>();
 
     routeEngineResponse = arguments['routeEngineResponse'];
     route = routeEngineResponse.route;
     recommendations = routeEngineResponse.recommendations;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Custom route'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              db.addRoute(route);
-              print('hola3');
-            },
-          )
-        ],
       ),
       body: route.paths.isEmpty
           ? NotRouteAvailable()
@@ -93,16 +90,20 @@ class _RoutePageState extends State<RoutePage>
             route.start, route.places, transport));
       }
       route.paths = paths;
+      _tabController.animateTo(0);
       setState(() {});
     } else
       Toast.show('The route needs at least 3 places', context, duration: 3);
   }
 
   Future _onTapPrediction(Prediction prediction) async {
-    Place place = await searchEngine.searchWithDetails(prediction.placeId);
-    _addPlace(place);
-    Navigator.pop(context);
-    _tabController.animateTo(0);
+    if (!route.places.map((place) => place.id).toList().contains(prediction.placeId)) {
+      Place place = await searchEngine.searchWithDetails(prediction.placeId);
+      await _addPlace(place);
+    } else {
+      FocusScope.of(context).requestFocus(FocusNode());
+      Toast.show('This place is already on the route', context, duration: 3);
+    }
   }
 
   Future _addPlace(Place place) async {
@@ -113,6 +114,8 @@ class _RoutePageState extends State<RoutePage>
           route.start, route.places, transport));
     }
     route.paths = paths;
+    Navigator.pop(context);
+    _tabController.animateTo(0);
     setState(() {});
   }
 
@@ -124,16 +127,15 @@ class _RoutePageState extends State<RoutePage>
           onSubmitted: (value) {},
           placeholder: ListView.separated(
             itemCount: recommendations.length,
-            padding: EdgeInsets.only(top:8),
+            padding: EdgeInsets.only(top: 8),
             separatorBuilder: (context, index) => SizedBox(height: 8),
             itemBuilder: (context, index) {
               Place place = recommendations[index];
               Widget placeWidget = PlaceWidget(
                 place: place,
-                onTap: () {
+                onTap: () async {
+                  recommendations.remove(place);
                   _addPlace(place);
-                  Navigator.pop(context);
-                  _tabController.animateTo(0);
                 },
               );
               if (index == 0)
