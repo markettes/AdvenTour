@@ -3,32 +3,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
+import 'package:intl/intl.dart';
 
 class MapController {
   GoogleMapController _mapController;
-  Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
+  Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> _polylines = {};
 
   Map<PolylineId, Polyline> get polylines => _polylines;
 
   Map<MarkerId, Marker> get markers => _markers;
 
-  void onMapCreated(GoogleMapController controller) {
+  void onMapCreated(GoogleMapController controller,[Function then]) {
     _mapController = controller;
     _changeMapStyle(_mapController);
+    if(then!=null)then();
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
-    String style = await rootBundle.loadString("assets/map_style.json");
+
+    DateTime now;
+    String formattedDate;
+    String style;
+
+    now = DateTime.now();
+    formattedDate = DateFormat('kk').format(now);
+
+    if (int.parse(formattedDate) < 20) {
+      style = await rootBundle.loadString("assets/map_styles/light.json");
+    } else {
+      style = await rootBundle.loadString("assets/map_styles/dark.json");
+    }
+
     controller.setMapStyle(style);
+
   }
 
-  drawRoute(List<LatLng> points) {
-    Polyline polyline = Polyline(
-        polylineId: PolylineId('route'),
-        points: points,
-        color: Colors.blue,
-        width: 5);
+  drawPolyline(Polyline polyline) {
     _polylines[polyline.polylineId] = polyline;
   }
 

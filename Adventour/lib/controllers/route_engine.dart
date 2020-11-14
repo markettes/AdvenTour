@@ -1,10 +1,9 @@
-import 'dart:collection';
 
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
-import 'package:Adventour/models/Path.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
 const MAX_DISTANCE_WALK = 5000;
@@ -13,8 +12,8 @@ const MAX_DISTANCE_BICYCLE = 10000;
 const MAX_DISTANCE_PUBLIC = 15000;
 
 class RouteEngine {
-  Future<Route> makeShortRoute(
-      Location location, List<String> types, List<String> transports) async {
+  Future<RouteEngineResponse> makeRoute(
+      Location location, List<String> types) async {
     var maxDistance = transports.contains('car')
         ? MAX_DISTANCE_CAR
         : transports.contains('public')
@@ -51,26 +50,40 @@ class RouteEngine {
     List<Place> places = [];
 
     for (String type in types) {
-      Place routePlace = placesWithoutDuplicates.firstWhere((place) {
-        return place.types.contains(type);
-      }, orElse: () {});
+      Place routePlace = placesWithoutDuplicates.firstWhere((place) =>
+         place.types.contains(type)
+      , orElse: () {});
       if (routePlace != null) {
         places.add(routePlace);
         placesWithoutDuplicates.remove(routePlace);
       }
     }
-
-    places.insert(0, Place(location.lat, location.lng,'Start','start'));
+    LatLng start = LatLng(location.lat, location.lng);
 
     List<Path> paths = [];
     for (var transport in transports) {
-      paths
-          .addAll(await directionsEngine.makePaths(places, transport));
+      Path path = await directionsEngine.makePath(start, places, transport);
+      if(path != null) paths.add(path);
+      
     }
-    Route route = Route(places, paths);
+    Route route = Route(start, places, paths,transports);
 
-    return route;
+    return RouteEngineResponse(route,placesWithoutDuplicates);
   }
 }
 
 RouteEngine routeEngine = RouteEngine();
+
+class RouteEngineResponse {
+  Route _route;
+  List<Place> _recommendations;
+
+  RouteEngineResponse(route,recommendations){
+    _route = route;
+    _recommendations = recommendations;
+  }
+
+  Route get route => _route;
+
+  List<Place> get recommendations => _recommendations;
+}

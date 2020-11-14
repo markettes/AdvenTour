@@ -32,8 +32,8 @@ class _InputTextState extends State<InputText> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 50,
-        right: 50,
+        left: 40,
+        right: 40,
         top: 8,
         bottom: 8,
       ),

@@ -1,4 +1,6 @@
 import 'package:Adventour/libraries/place.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 // NO EN RUTAS PERO IMPLEMENTAR DE OTRA FROMA
 // const ZOO = "zoo";
@@ -7,47 +9,29 @@ import 'package:Adventour/libraries/place.dart';
 //const CASINO = "casino";
 
 //SHORT
-const BAR = "bar"; //30
-const CAFE = "cafe"; //30
-const CHURCH = ["church", "mosque", "synagogue", "hindu_temple"]; // + 30
-const CITY_HALL = ["city_hall", "courthouse"]; //20
-const COURTHOUSE = "courthouse"; //20
-const LIBRARY = ["library", "university"]; // 30
-const MOSQUE = "mosque"; // + 30
-const MOVIE_THEATER = ["movie_theater"]; // 30
-const PARK = ["park"]; // + 20
-const STADIUM = ["stadium"]; // 20
-const SYNAGOGUE = "synagogue"; // + 30
-const TOURIST_ATTRACTION = ["tourist_attraction"]; // + 30
-const UNIVERSITY = "university"; // 20
+const PLACE_OF_WORSHIP = "place_of_worship"; // + 30
+const MOVIE_THEATER = "movie_theater"; // 30
+const PARK = "park"; // + 20
+const STADIUM = "stadium"; // 20
+const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
 //LARGE
-const ART_GALLERY = ["art_gallery", "museum"]; // 45
-const HINDU_TEMPLE = "hindu_temple"; // + 40
 const MUSEUM = "museum"; // + 45
-const NIGHT_CLUB = ["night_club"]; // + 60
-const RESTAURANT = ["restaurant", "cafe", "bar"]; // 60
-const SHOPPING_MALL = ["shopping_mall"]; // 60
+const NIGHT_CLUB = "night_club"; // + 60
+const RESTAURANT = "restaurant"; // 60
+const SHOPPING_MALL = "shopping_mall"; // 60
+const NATURAL = "natural_feature";
 
-List<List> places = [
+List placeTypes = [
   RESTAURANT,
-  //BAR,
-  //CAFE,
-  CITY_HALL,
-  //COURTHOUSE,
-  CHURCH,
-  //MOSQUE,
-  //SYNAGOGUE,
-  //HINDU_TEMPLE,
+  PLACE_OF_WORSHIP,
   MOVIE_THEATER,
   PARK,
   STADIUM,
   TOURIST_ATTRACTION,
-  LIBRARY,
-  //UNIVERSITY,
-  ART_GALLERY,
-  //MUSEUM,
+  MUSEUM,
   NIGHT_CLUB,
-  SHOPPING_MALL
+  SHOPPING_MALL,
+  NATURAL
 ];
 
 class Place {
@@ -67,12 +51,18 @@ class Place {
   bool _openNow;
   List<String> _types;
   num _userRatingsTotal;
+  Duration _duration;
 
-  Place(latitude, longitude, name, id) {
+  Place(latitude, longitude, [name, id, types, rating, icon, duration]) {
+    _detailed = false;
     _latitude = latitude;
     _longitude = longitude;
     _name = name;
     _id = id;
+    _types = types;
+    _rating = rating;
+    _icon = icon;
+    _duration = duration;
   }
 
   // Place.fromGoogleMaps(Map json) {
@@ -95,6 +85,8 @@ class Place {
     _types = result.types;
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
+    _adress = result.vicinity;
+    _duration = Duration(minutes: 30);
   }
 
   Place.fromDetails(PlaceDetails details) {
@@ -117,7 +109,16 @@ class Place {
       _weekdaytext = details.openingHours.weekdayText;
       _openNow = details.openingHours.openNow;
     }
+    _duration = Duration(minutes: 30);
   }
+
+  Map<String, dynamic> toJson() => {
+        'latitude': _latitude,
+        'longitude': _longitude,
+        'name': _name,
+        'icon': _icon,
+        'duration': _duration.inMinutes,
+      };
 
   get detailed => _detailed;
 
@@ -151,6 +152,8 @@ class Place {
 
   num get userRatingsTotal => _userRatingsTotal;
 
+  Duration get duration => _duration;
+
   @override
   String toString() {
     return """
@@ -160,6 +163,30 @@ type = $_types
     """;
   }
 }
+
+Place getFurthestPlace(LatLng location, List<Place> places) {
+  if (places.isEmpty) return null;
+  Place furthestPlace = places.first;
+  for (var place in places) {
+    if (Geolocator.distanceBetween(location.latitude, location.longitude,
+            place.latitude, place.longitude) >
+        Geolocator.distanceBetween(
+            location.latitude,
+            location.longitude,
+            furthestPlace.latitude,
+            furthestPlace.longitude)) furthestPlace = place;
+  }
+  return furthestPlace;
+}
+
+  void sortPlaceTypes(List<String> selectedTypes) {
+    List sorted = [];
+    sorted.addAll(selectedTypes);
+    for (var placeType in placeTypes) {
+      if (!sorted.contains(placeType)) sorted.add(placeType);
+    }
+    placeTypes = sorted;
+  }
 
 // icon = $_icon
 // adress = $_adress

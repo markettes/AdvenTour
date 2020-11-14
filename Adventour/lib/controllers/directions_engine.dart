@@ -1,14 +1,14 @@
-import 'package:Adventour/models/Path.dart';
-import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Place.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart';
+import 'package:google_maps_webservice/src/core.dart';
 
 const CAR = 'car';
 const WALK = 'walk';
-const PUBLIC = 'public';
 const BICYCLE = 'bicycle';
 
-List<String> transports = [CAR,WALK,PUBLIC,BICYCLE];
+List<String> transports = [CAR, WALK, BICYCLE];
 
 class DirectionsEngine {
   final _directions = GoogleMapsDirections(
@@ -27,30 +27,40 @@ class DirectionsEngine {
   //   return trajectories;
   // }
 
-    Future<List<Path>> makePaths(List<Place> places, String transport) async {
-      if(places.length < 3) return [];
-    String origin = places.first.latitude.toString() +',' + places.first.longitude.toString();
-    String destination = places.last.latitude.toString() +',' + places.last.longitude.toString();
+  Future<r.Path> makePath(
+      LatLng start, List<Place> places, String transport) async {
+    if (places.length < 3) return null;
+    String origin =
+        start.latitude.toString() + ',' + start.longitude.toString();
+    Place furthestPlace = getFurthestPlace(start, places);
+    String destination = 'place_id:' + furthestPlace.id;
+    List<Waypoint> waypoints = [Waypoint.optimize()];
+    for (var place in places) {
+      if (place != furthestPlace) waypoints.add(Waypoint.fromPlaceId(place.id));
+    }
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
-      waypoints: places.sublist(1,places.length - 1).map((place) => Waypoint.fromPlaceId(place.id)).toList(),
+      waypoints: waypoints,
+      units: Unit.metric,
       travelMode: toTravelMode(transport),
     );
-    List<Path> paths = response.routes.map((route) => Path.fromGoogleRoute(route,transport)).toList();
-    return paths;
+    if(response.hasNoResults) return null;
+    r.Path path = response.routes
+        .map((route) => r.Path.fromGoogleRoute(
+            route, response.geocodedWaypoints, transport))
+        .first;
+    return path;
   }
 }
 
 TravelMode toTravelMode(String transport) {
   switch (transport) {
-    case 'car':
+    case CAR:
       return TravelMode.driving;
-    case 'walk':
+    case WALK:
       return TravelMode.walking;
-    case 'public':
-      return TravelMode.transit;
-    case 'bicycle':
+    case BICYCLE:
       return TravelMode.bicycling;
   }
 }

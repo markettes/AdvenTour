@@ -124,7 +124,7 @@ class PlaceBodyInfo extends StatelessWidget {
                         " opinions",
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
-                  
+
                   // Expanded(
                   //   child: Row(
                   //     mainAxisAlignment: MainAxisAlignment.end,
