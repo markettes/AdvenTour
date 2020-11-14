@@ -1,6 +1,5 @@
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
-import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -10,14 +9,14 @@ import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
+import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_maps_webservice/src/places.dart';
+import 'package:toast/toast.dart';
 
 class RoutePage extends StatefulWidget {
   @override
@@ -28,10 +27,11 @@ class _RoutePageState extends State<RoutePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
+  RouteEngineResponse routeEngineResponse;
+  List<Place> recommendations;
+
   r.Route route;
-  GlobalKey<ScaffoldState> _scaffoldKey;
   int _selectedPath = 0;
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> _snackBarController;
 
   @override
   void initState() {
@@ -42,11 +42,12 @@ class _RoutePageState extends State<RoutePage>
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
-    _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    route = arguments['route'];
+    routeEngineResponse = arguments['routeEngineResponse'];
+    route = routeEngineResponse.route;
+    recommendations = routeEngineResponse.recommendations;
+
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Custom route'),
         actions: [
@@ -68,7 +69,6 @@ class _RoutePageState extends State<RoutePage>
                 MapView(
                   places: route.places,
                   tabController: _tabController,
-                  scaffoldKey: _scaffoldKey,
                   selectedPath: route.paths[_selectedPath],
                   nextTransport: nextTransport,
                 ),
@@ -77,62 +77,81 @@ class _RoutePageState extends State<RoutePage>
                   places: route.places,
                   tabController: _tabController,
                   onPressedAdd: _onPressedAdd,
-                  removePlace: removePlace,
+                  removePlace: _removePlace,
                 )
               ],
             ),
     );
   }
 
-  Future removePlace(Place place) async {
+  Future _removePlace(Place place) async {
     if (route.places.length > 3) {
       route.removePlace(place);
       List<Path> paths = [];
-      for (var transport in route.transports) {
+      for (var transport in transports) {
         paths.add(await directionsEngine.makePath(
             route.start, route.places, transport));
       }
       route.paths = paths;
       setState(() {});
-    } else {
-      if (_snackBarController != null) _snackBarController.close();
-      _snackBarController = _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: Text('The route needs at least 3 places'),
-        ),
-      );
-    }
+    } else
+      Toast.show('The route needs at least 3 places', context, duration: 3);
   }
 
   Future _onTapPrediction(Prediction prediction) async {
     Place place = await searchEngine.searchWithDetails(prediction.placeId);
+    _addPlace(place);
+    Navigator.pop(context);
+    _tabController.animateTo(0);
+  }
+
+  Future _addPlace(Place place) async {
     route.addPlace(place);
     List<Path> paths = [];
-    for (var transport in route.transports) {
+    for (var transport in transports) {
       paths.add(await directionsEngine.makePath(
           route.start, route.places, transport));
     }
     route.paths = paths;
-    Navigator.pop(context);
-    _tabController.animateTo(0);
     setState(() {});
   }
 
   Future _onPressedAdd() async {
     if (route.places.length < 8)
       await PlacesAutocomplete.show(
-        context: context,
-        onTapPrediction: _onTapPrediction,
-        onSubmitted: (value) {},
-      );
-    else {
-      if (_snackBarController != null) _snackBarController.close();
-      _snackBarController = _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: Text('The route has at most 8 places'),
-        ),
-      );
-    }
+          context: context,
+          onTapPrediction: _onTapPrediction,
+          onSubmitted: (value) {},
+          placeholder: ListView.separated(
+            itemCount: recommendations.length,
+            padding: EdgeInsets.only(top:8),
+            separatorBuilder: (context, index) => SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              Place place = recommendations[index];
+              Widget placeWidget = PlaceWidget(
+                place: place,
+                onTap: () {
+                  _addPlace(place);
+                  Navigator.pop(context);
+                  _tabController.animateTo(0);
+                },
+              );
+              if (index == 0)
+                return Column(
+                  children: [
+                    Text(
+                      'Maybe...',
+                      style: Theme.of(context).textTheme.headline2,
+                    ),
+                    SizedBox(height: 8),
+                    placeWidget
+                  ],
+                );
+              return placeWidget;
+            },
+          ));
+    else
+      Toast.show('The route has at most 8 places', context, duration: 3);
   }
 
   void nextTransport() {
@@ -147,14 +166,12 @@ class _RoutePageState extends State<RoutePage>
 class MapView extends StatefulWidget {
   MapView({
     @required this.places,
-    this.scaffoldKey,
     this.selectedPath,
     this.nextTransport,
     @required TabController tabController,
   }) : tabController = tabController;
 
   List<Place> places;
-  GlobalKey<ScaffoldState> scaffoldKey;
   TabController tabController;
   r.Path selectedPath;
   Function nextTransport;
@@ -245,25 +262,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           polylineId: PolylineId(stretch.id),
           points: stretch.points,
           color: Colors.blue,
-          onTap: () {
-            widget.scaffoldKey.currentState.showBottomSheet(
-              (context) => Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  height: 100,
-                  child: Text(stretch.duration.inMinutes.toString()),
-                ),
-              ),
-              elevation: 20,
-              backgroundColor: Theme.of(context).backgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ),
-              ),
-            );
-          },
+          onTap: () => Toast.show(
+              stretch.duration.inMinutes.toString(), context,
+              duration: 3),
           consumeTapEvents: true,
           width: 4);
       mapController.drawPolyline(polyline);

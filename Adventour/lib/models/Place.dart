@@ -21,7 +21,7 @@ const RESTAURANT = "restaurant"; // 60
 const SHOPPING_MALL = "shopping_mall"; // 60
 const NATURAL = "natural_feature";
 
-List places = [
+List placeTypes = [
   RESTAURANT,
   PLACE_OF_WORSHIP,
   MOVIE_THEATER,

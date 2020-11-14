@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/src/core.dart';
+import 'package:toast/toast.dart';
 
 class CustomRoutePage extends StatefulWidget {
   @override
@@ -18,9 +19,7 @@ class CustomRoutePage extends StatefulWidget {
 }
 
 class _CustomRoutePageState extends State<CustomRoutePage> {
-  bool _shortRoute = true;
-  List<String> _places = [PARK, TOURIST_ATTRACTION, RESTAURANT, MUSEUM];
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<String> _placeTypes = [PARK, TOURIST_ATTRACTION, RESTAURANT, MUSEUM];
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBarController;
   String _location;
   String _locationId;
@@ -36,7 +35,6 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Creating your route'),
       ),
@@ -81,57 +79,43 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                       children: [
                         Align(
                             alignment: Alignment.topLeft,
-                            child: Text('Type places',
+                            child: Text('Place types',
                                 style: Theme.of(context).textTheme.headline2)),
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 20, right: 20),
                             child: ListView.separated(
-                              itemCount: places.length,
+                              itemCount: placeTypes.length,
                               scrollDirection: Axis.horizontal,
                               separatorBuilder: (context, index) =>
                                   SizedBox(width: 5),
                               itemBuilder: (context, index) {
                                 bool activated =
-                                    _places.contains(places[index]);
+                                    _placeTypes.contains(placeTypes[index]);
                                 return CircleIconButton(
                                     activated: activated,
-                                    type: places[index],
+                                    type: placeTypes[index],
                                     onPressed: () {
                                       if (activated) {
-                                        if (_places.length > 4) {
-                                          _places.remove(places[index]);
+                                        if (_placeTypes.length > 4) {
+                                          _placeTypes.remove(placeTypes[index]);
                                           sortPlaceTypes();
                                           setState(() {});
-                                        } else {
-                                          if (snackBarController != null)
-                                            snackBarController.close();
-                                          snackBarController = _scaffoldKey
-                                              .currentState
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'The route needs at least 4 type places'),
-                                            ),
-                                          );
-                                        }
+                                        } else
+                                          Toast.show(
+                                              'The route needs at least 4 type places',
+                                              context,
+                                              duration: 3);
                                       } else {
-                                        if (_places.length < 8) {
-                                          _places.add(places[index]);
+                                        if (_placeTypes.length < 8) {
+                                          _placeTypes.add(placeTypes[index]);
                                           sortPlaceTypes();
                                           setState(() {});
-                                        } else {
-                                          if (snackBarController != null)
-                                            snackBarController.close();
-                                          snackBarController = _scaffoldKey
-                                              .currentState
-                                              .showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                  'The route has at most 7 type places'),
-                                            ),
-                                          );
-                                        }
+                                        } else
+                                          Toast.show(
+                                              'The route has at most 7 type places',
+                                              context,
+                                              duration: 3);
                                       }
                                     });
                               },
@@ -151,9 +135,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      r.Route route = await _makeRoute();
+                      RouteEngineResponse routeEngineResponse = await _makeRoute();
                       Navigator.pushNamed(context, '/routePage',
-                          arguments: {'route': route});
+                          arguments: {'routeEngineResponse': routeEngineResponse});
                     },
                     icon: Icons.edit,
                     style: ButtonType.Normal,
@@ -167,7 +151,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
     );
   }
 
-  Future<r.Route> _makeRoute() async {
+  Future<RouteEngineResponse> _makeRoute() async {
     Location location;
     if (_locationId == null) {
       Position position = await Geolocator.getCurrentPosition();
@@ -176,18 +160,17 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
       location = await geocoding.searchByPlaceId(_locationId);
     }
 
-    return await routeEngine.makeRoute(location, _places);
+    return await routeEngine.makeRoute(location, _placeTypes);
   }
 
   void sortPlaceTypes() {
     List sorted = [];
-    sorted.addAll(_places);
-    for (var placeType in places) {
+    sorted.addAll(_placeTypes);
+    for (var placeType in placeTypes) {
       if (!sorted.contains(placeType)) sorted.add(placeType);
     }
-    places = sorted;
+    placeTypes = sorted;
   }
-
 }
 
 // Expanded(

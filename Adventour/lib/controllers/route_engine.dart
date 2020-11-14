@@ -12,7 +12,7 @@ const MAX_DISTANCE_BICYCLE = 10000;
 const MAX_DISTANCE_PUBLIC = 15000;
 
 class RouteEngine {
-  Future<Route> makeRoute(
+  Future<RouteEngineResponse> makeRoute(
       Location location, List<String> types) async {
     var maxDistance = transports.contains('car')
         ? MAX_DISTANCE_CAR
@@ -68,8 +68,22 @@ class RouteEngine {
     }
     Route route = Route(start, places, paths,transports);
 
-    return route;
+    return RouteEngineResponse(route,placesWithoutDuplicates);
   }
 }
 
 RouteEngine routeEngine = RouteEngine();
+
+class RouteEngineResponse {
+  Route _route;
+  List<Place> _recommendations;
+
+  RouteEngineResponse(route,recommendations){
+    _route = route;
+    _recommendations = recommendations;
+  }
+
+  Route get route => _route;
+
+  List<Place> get recommendations => _recommendations;
+}
