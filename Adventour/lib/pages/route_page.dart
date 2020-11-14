@@ -128,85 +128,112 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    getSomePoints();
   }
 
   bool _listVisible = true;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomRight,
-      children: [
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: LatLng(widget.route.places.first.latitude,
-                widget.route.places.first.longitude),
-            zoom: 12.5,
-          ),
-          //markers: Set<Marker>.of(mapController.markers.values),
-          markers: markers.toSet(),
-          polylines: polyline,
-          onMapCreated: (googleMapController) {
-            for (var place in widget.route.places) {
-              markers.add(Marker(
-                  markerId: MarkerId(cont),
-                  position: LatLng(place.latitude, place.longitude),
-                  infoWindow: InfoWindow(title: place.name)));
-              setState(() {
-                cont += "0";
-              });
-            }
-            setState(() {
-              mapController = googleMapController;
-              polyline.add(
-                Polyline(
-                  polylineId: PolylineId('route1'),
-                  visible: true,
-                  points: routeCoords,
-                  width: 8,
-                  color: Theme.of(context).primaryColor,
-                  startCap: Cap.roundCap,
-                  endCap: Cap.buttCap,
-                ),
-              );
-            });
-          }
-          /*
-            mapController.onMapCreated(googleMapController, () async {
-            drawRoute(widget.route);
-            
-          })
-          */
-          ,
-          onCameraMoveStarted: () {
-            _listVisible = false;
-            setState(() {});
-          },
-          onCameraIdle: () {
-            _listVisible = true;
-            setState(() {});
-          },
-          myLocationEnabled: true,
-          myLocationButtonEnabled: false,
-          zoomControlsEnabled: false,
-        ),
-        AnimatedOpacity(
-          // If the widget is visible, animate to 0.0 (invisible).
-          // If the widget is hidden, animate to 1.0 (fully visible).
-          opacity: _listVisible ? 1.0 : 0.0,
-          duration: Duration(milliseconds: 600),
-          curve: Curves.fastOutSlowIn,
-          // The green box must be a child of the AnimatedOpacity widget.
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SquareIconButton(
-              icon: Icons.list,
-              onPressed: () => widget.tabController.animateTo(1),
+    return Scaffold(
+      body: Stack(
+        alignment: Alignment.bottomRight,
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: LatLng(widget.route.places.first.latitude,
+                  widget.route.places.first.longitude),
+              zoom: 12.5,
             ),
+            onMapCreated: (googleMapController) {
+              getSomePoints();
+              for (var place in widget.route.places) {
+                markers.add(Marker(
+                    markerId: MarkerId(cont),
+                    position: LatLng(place.latitude, place.longitude),
+                    infoWindow: InfoWindow(title: place.name)));
+                setState(() {
+                  cont += "0";
+                });
+              }
+              setState(() {
+                mapController = googleMapController;
+                polyline.add(
+                  Polyline(
+                    polylineId: PolylineId('route1'),
+                    visible: true,
+                    points: routeCoords,
+                    width: 8,
+                    color: Theme.of(context).primaryColor,
+                    startCap: Cap.roundCap,
+                    endCap: Cap.buttCap,
+                  ),
+                );
+              });
+            },
+            //markers: Set<Marker>.of(mapController.markers.values),
+            markers: markers.toSet(),
+            polylines: polyline,
+
+            /*
+              mapController.onMapCreated(googleMapController, () async {
+              drawRoute(widget.route);
+              
+            })
+            */
+
+            onCameraMoveStarted: () {
+              _listVisible = false;
+              setState(() {});
+            },
+            onCameraIdle: () {
+              _listVisible = true;
+              setState(() {});
+            },
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            zoomControlsEnabled: false,
+          ),
+        ],
+      ),
+      floatingActionButton: AnimatedOpacity(
+        // If the widget is visible, animate to 0.0 (invisible).
+        // If the widget is hidden, animate to 1.0 (fully visible).
+        opacity: _listVisible ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 600),
+        curve: Curves.fastOutSlowIn,
+        // The green box must be a child of the AnimatedOpacity widget.
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: 'edit',
+                backgroundColor: Theme.of(context).primaryColor,
+                onPressed: () => widget.tabController.animateTo(1),
+                child: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).buttonColor,
+                ),
+              ),
+              SizedBox(height: 8),
+              FloatingActionButton(
+                heroTag: 'navigation',
+                backgroundColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/navigationPage', arguments: {
+                    'route': widget.route,
+                  });
+                },
+                child: Icon(
+                  Icons.navigation,
+                  color: Theme.of(context).buttonColor,
+                ),
+              )
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
