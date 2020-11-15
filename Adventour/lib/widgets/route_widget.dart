@@ -5,12 +5,19 @@ class RouteWidget extends StatelessWidget {
   r.Route route;
   RouteWidget(this.route);
 
-  // _duration = path.duration(places
-  //       .map((place) => place.duration)
-  //       .reduce((value, element) => value + element));
+  Duration _duration = Duration();
 
   @override
   Widget build(BuildContext context) {
+    for (var place in route.places) {
+      _duration += place.duration;
+    }
+    for (var path in route.paths) {
+      for (var stretch in path.stretchs) {
+        _duration += stretch.duration;
+      }
+    }
+
     print('hola9');
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -48,11 +55,9 @@ class RouteWidget extends StatelessWidget {
                   SizedBox(
                     width: 5,
                   ),
-                  // Text(route.duration(0).inHours.toString() +
-                  //     ' h' +
-                  //     ' ' +
-                  //     route.duration(0).toString().substring(2, 4) +
-                  //     ' min'),
+                  Text(
+                    formatDuration(),
+                  ),
                   SizedBox(
                     width: 5,
                   ),
@@ -87,6 +92,6 @@ class RouteWidget extends StatelessWidget {
       minutes = '0' + _duration.inMinutes.remainder(60).toString();
     else
       minutes = _duration.inMinutes.remainder(60).toString();
-    return hours + ':' + minutes;
+    return hours + ' h ' + minutes + ' min';
   }
 }
