@@ -23,22 +23,16 @@ class RouteWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
         onTap: () {},
-        leading: Container(
-          width: 60,
-          decoration: BoxDecoration(
-              color: Colors.teal[100],
-              shape: BoxShape.circle,
-              image: route.image != null
-                  ? DecorationImage(
-                      image: NetworkImage(route.image), fit: BoxFit.fill)
-                  : DecorationImage(
-                      image: AssetImage('assets/interrogation.png'),
-                      fit: BoxFit.fill)),
+        leading: CircleAvatar(
+          radius: 25,
+          backgroundImage: route.image != null
+              ? NetworkImage(route.image)
+              : AssetImage('assets/interrogation.png'),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Nombre de la ruta'),
+            Text(route.name ?? 'Nombre de la ruta'),
           ],
         ),
         subtitle: Column(
