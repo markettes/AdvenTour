@@ -1,5 +1,6 @@
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 
@@ -8,7 +9,6 @@ class Route {
   List<Place> _places;
   List<Path> _paths;
   String _name;
-
   String _image;
 
   Route(start, places, paths, transports, [name, image]) {
@@ -27,6 +27,15 @@ class Route {
         'name': _name,
         'image': _image,
       };
+
+  Route.fromJson(DocumentSnapshot snapshot) {
+    Map data = snapshot.data();
+    _start = LatLng(data['latitude'], data['longitude']);
+    // _places = //todo
+    // _paths = //todo
+    _name = data['name'];
+    _image = data['image'];
+  }
 
   LatLng get start => _start;
 

@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
@@ -55,6 +56,10 @@ class _RoutePageState extends State<RoutePage>
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Custom route'),
+        actions: [
+          IconButton(
+              icon: Icon(Icons.save), onPressed: () => db.addRoute(route))
+        ],
       ),
       body: route.paths.isEmpty
           ? NotRouteAvailable()
@@ -96,7 +101,10 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future _onTapPrediction(Prediction prediction) async {
-    if (!route.places.map((place) => place.id).toList().contains(prediction.placeId)) {
+    if (!route.places
+        .map((place) => place.id)
+        .toList()
+        .contains(prediction.placeId)) {
       Place place = await searchEngine.searchWithDetails(prediction.placeId);
       await _addPlace(place);
     } else {

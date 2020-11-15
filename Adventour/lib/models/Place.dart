@@ -1,4 +1,5 @@
 import 'package:Adventour/libraries/place.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -120,6 +121,15 @@ class Place {
         'duration': _duration.inMinutes,
       };
 
+  Place.fromJson(DocumentSnapshot snapshot) {
+    Map data = snapshot.data();
+    _latitude = data['latitude'];
+    _longitude = data['longitude'];
+    _name = data['name'];
+    _icon = data['icon'];
+    _duration = Duration(minutes: data['duration']);
+  }
+
   get detailed => _detailed;
 
   get id => _id;
@@ -179,14 +189,14 @@ Place getFurthestPlace(LatLng location, List<Place> places) {
   return furthestPlace;
 }
 
-  void sortPlaceTypes(List<String> selectedTypes) {
-    List sorted = [];
-    sorted.addAll(selectedTypes);
-    for (var placeType in placeTypes) {
-      if (!sorted.contains(placeType)) sorted.add(placeType);
-    }
-    placeTypes = sorted;
+void sortPlaceTypes(List<String> selectedTypes) {
+  List sorted = [];
+  sorted.addAll(selectedTypes);
+  for (var placeType in placeTypes) {
+    if (!sorted.contains(placeType)) sorted.add(placeType);
   }
+  placeTypes = sorted;
+}
 
 // icon = $_icon
 // adress = $_adress
