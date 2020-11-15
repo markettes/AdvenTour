@@ -72,6 +72,8 @@ class Route {
 
   set name(String name) => _name = name;
 
+  set image(String image) => _image = image;
+
   String get image => _image;
 
   void addPlace(Place place) => _places.add(place);

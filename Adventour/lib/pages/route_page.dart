@@ -102,6 +102,13 @@ class _RoutePageState extends State<RoutePage>
                                   onPressed: () {
                                     if (_formKey.currentState.validate()) {
                                       route.name = _routeNameController.text;
+                                      route.image = searchEngine.searchPhoto(
+                                          route.places
+                                              .firstWhere((place) =>
+                                                  place.photos.first != null)
+                                              .photos
+                                              .first
+                                              .photoReference);
                                       db.addRoute(route);
                                       Navigator.pop(context);
                                       Navigator.pop(context);

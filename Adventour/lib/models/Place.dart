@@ -88,6 +88,7 @@ class Place {
     _userRatingsTotal = result.userRatingsTotal;
     _adress = result.vicinity;
     _duration = Duration(minutes: 30);
+    _photos = result.photos;
   }
 
   Place.fromDetails(PlaceDetails details) {
@@ -169,6 +170,7 @@ class Place {
 id = $_id
 name = $_name
 type = $_types
+photos = $_photos
     """;
   }
 }
