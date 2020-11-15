@@ -2,11 +2,16 @@ import 'package:Adventour/models/Route.dart' as r;
 import 'package:flutter/material.dart';
 
 class RouteWidget extends StatelessWidget {
-  final r.Route route;
-  const RouteWidget(this.route);
+  r.Route route;
+  RouteWidget(this.route);
+
+  // _duration = path.duration(places
+  //       .map((place) => place.duration)
+  //       .reduce((value, element) => value + element));
 
   @override
   Widget build(BuildContext context) {
+    print('hola9');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
@@ -14,16 +19,19 @@ class RouteWidget extends StatelessWidget {
         leading: Container(
           width: 60,
           decoration: BoxDecoration(
-            color: Colors.teal[100],
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                image: NetworkImage(route.image), fit: BoxFit.fill),
-          ),
+              color: Colors.teal[100],
+              shape: BoxShape.circle,
+              image: route.image != null
+                  ? DecorationImage(
+                      image: NetworkImage(route.image), fit: BoxFit.fill)
+                  : DecorationImage(
+                      image: AssetImage('assets/interrogation.png'),
+                      fit: BoxFit.fill)),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(route.name),
+            Text('Nombre de la ruta'),
           ],
         ),
         subtitle: Column(
@@ -67,5 +75,18 @@ class RouteWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String formatDuration() {
+    String hours, minutes;
+    if (_duration.inHours < 10)
+      hours = '0' + _duration.inHours.toString();
+    else
+      hours = _duration.inHours.toString();
+    if (_duration.inMinutes.remainder(60) < 10)
+      minutes = '0' + _duration.inMinutes.remainder(60).toString();
+    else
+      minutes = _duration.inMinutes.remainder(60).toString();
+    return hours + ':' + minutes;
   }
 }
