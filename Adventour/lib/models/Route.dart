@@ -28,11 +28,14 @@ class Route {
         'image': _image,
       };
 
-  Route.fromJson(DocumentSnapshot snapshot) {
-    Map data = snapshot.data();
+  Route.fromJson(Map<dynamic, dynamic> data) {
     _start = LatLng(data['latitude'], data['longitude']);
-    // _places = //todo
-    // _paths = //todo
+    _places = data['places'].map((place) {
+      return Place.fromJson(place);
+    }).toList();
+    _paths = data['paths'].map((path) {
+      return Path.fromJson(path);
+    }).toList();
     _name = data['name'];
     _image = data['image'];
   }
@@ -128,6 +131,13 @@ class Path {
         'transport': _transport
       };
 
+  Path.fromJson(Map<dynamic, dynamic> data) {
+    _stretchs = data['stretchs'].map((stretch) {
+      return Stretch.fromJson(stretch);
+    }).toList();
+    _transport = data['transport'];
+  }
+
   List<Stretch> get stretchs => _stretchs;
 
   get transport => _transport;
@@ -167,6 +177,15 @@ class Stretch {
         'duration': _duration.inMinutes,
         'destinationId': _destinationId
       };
+
+  Stretch.fromJson(Map<dynamic, dynamic> data) {
+    _id = data['id'];
+    _points = data['points'].map((point) {
+      return LatLng(point.latitude, point.longitude);
+    }).toList();
+    _duration = Duration(minutes: data['duration']);
+    _destinationId = data['destinationId'];
+  }
 
   String get id => _id;
 

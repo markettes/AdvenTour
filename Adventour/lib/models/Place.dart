@@ -121,8 +121,7 @@ class Place {
         'duration': _duration.inMinutes,
       };
 
-  Place.fromJson(DocumentSnapshot snapshot) {
-    Map data = snapshot.data();
+  Place.fromJson(Map<dynamic, dynamic> data) {
     _latitude = data['latitude'];
     _longitude = data['longitude'];
     _name = data['name'];
