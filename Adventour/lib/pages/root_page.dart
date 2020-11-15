@@ -68,15 +68,18 @@ class RootPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        InputText(
-                          icon: Icons.person,
-                          labelText: 'Username',
-                          controller: _userNameController,
-                          validator: (value) {
-                            if (value.isEmpty)
-                              return 'Username can\'t be empty';
-                            return null;
-                          },
+                        SizedBox(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.person,
+                            labelText: 'Username',
+                            controller: _userNameController,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'Username can\'t be empty';
+                              return null;
+                            },
+                          ),
                         ),
                         PrimaryButton(
                           text: 'OK',

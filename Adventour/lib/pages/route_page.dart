@@ -10,6 +10,7 @@ import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
+import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
@@ -58,7 +59,71 @@ class _RoutePageState extends State<RoutePage>
         title: Text('Custom route'),
         actions: [
           IconButton(
-              icon: Icon(Icons.save), onPressed: () => db.addRoute(route))
+            icon: Icon(Icons.save),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) {
+                TextEditingController _routeNameController =
+                    TextEditingController();
+                final _formKey = GlobalKey<FormState>();
+                return Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 200,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Put a name to your route',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline2
+                                .copyWith(fontSize: 20),
+                          ),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.flag,
+                                    labelText: 'Route name',
+                                    controller: _routeNameController,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'Route name can\'t be empty';
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                                PrimaryButton(
+                                  text: 'SAVE',
+                                  onPressed: () {
+                                    if (_formKey.currentState.validate()) {
+                                      route.name = _routeNameController.text;
+                                      db.addRoute(route);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                          // PrimaryButton(
+                          //   text: 'SAVE',
+                          //   onPressed: () => Navigator.pop(context),
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
         ],
       ),
       body: route.paths.isEmpty
@@ -228,12 +293,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         Align(
           alignment: Alignment.bottomRight,
           child: AnimatedOpacity(
-            // If the widget is visible, animate to 0.0 (invisible).
-            // If the widget is hidden, animate to 1.0 (fully visible).
             opacity: _listVisible ? 1.0 : 0.0,
             duration: Duration(milliseconds: 600),
             curve: Curves.fastOutSlowIn,
-            // The green box must be a child of the AnimatedOpacity widget.
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SquareIconButton(
@@ -246,12 +308,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         Align(
           alignment: Alignment.bottomLeft,
           child: AnimatedOpacity(
-            // If the widget is visible, animate to 0.0 (invisible).
-            // If the widget is hidden, animate to 1.0 (fully visible).
             opacity: _listVisible ? 1.0 : 0.0,
             duration: Duration(milliseconds: 600),
             curve: Curves.fastOutSlowIn,
-            // The green box must be a child of the AnimatedOpacity widget.
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleIconButton(
@@ -369,7 +428,7 @@ class MapListView extends StatelessWidget {
                           size: 70,
                         ),
                         Text(
-                          formatDuration(),
+                          _formatDuration(),
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ],
@@ -481,7 +540,7 @@ class MapListView extends StatelessWidget {
     );
   }
 
-  String formatDuration() {
+  String _formatDuration() {
     String hours, minutes;
     if (_duration.inHours < 10)
       hours = '0' + _duration.inHours.toString();
