@@ -114,19 +114,11 @@ class _NavigationPageState extends State<NavigationPage> {
             icon: Icon(Icons.cancel),
             color: Theme.of(context).buttonColor,
             onPressed: () {
-              return AlertDialog(
-                title: Text("¿Deseas cancelar la ruta?"),
-                content: Text(
-                    "Si cancelas la ruta perderás todo el progreso realizado hasta ahora. ¿Seguro que quieres cancelarla?"),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        return Navigator.of(context).pop();
-                      },
-                      child: Text("Volver a la ruta")),
-                  TextButton(onPressed: null, child: Text("Sí")) //Cancelar ruta
-                ],
-              );
+              return showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return cancelar_ruta_alert();
+                  });
             },
           ),
           title: Text("Título de la ruta?"),
@@ -165,5 +157,28 @@ class _NavigationPageState extends State<NavigationPage> {
 
   void setInitialLocation() async {
     currentLocation = await location.getLocation();
+  }
+}
+
+class cancelar_ruta_alert extends StatelessWidget {
+  const cancelar_ruta_alert({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("¿Deseas cancelar la ruta?"),
+      content: Text(
+          "Si cancelas la ruta perderás todo el progreso realizado hasta ahora. ¿Seguro que quieres cancelarla?"),
+      actions: [
+        TextButton(
+            onPressed: () {
+              return Navigator.of(context).pop();
+            },
+            child: Text("Volver a la ruta")),
+        TextButton(onPressed: null, child: Text("Sí")) //Cancelar ruta
+      ],
+    );
   }
 }
