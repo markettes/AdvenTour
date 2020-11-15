@@ -29,13 +29,31 @@ class Route {
       };
 
   Route.fromJson(Map<dynamic, dynamic> data) {
+    print('hola4');
     _start = LatLng(data['latitude'], data['longitude']);
-    _places = data['places'].map((place) {
-      return Place.fromJson(place);
-    }).toList();
-    _paths = data['paths'].map((path) {
-      return Path.fromJson(path);
-    }).toList();
+    print(_start.latitude);
+    print(_start.longitude);
+    print('hola5');
+    // _places = data['places'].map((place) {
+    //   return Place.fromJson(place);
+    // }).toList();
+    _places = new List<Place>();
+    for (var place in data['places']) {
+      _places.add(Place.fromJson(place));
+    }
+    print('hola6');
+    print(_places.length);
+    print(_places.first.name);
+    _paths = new List<Path>();
+    for (var path in data['paths']) {
+      print('hola7');
+      _paths.add(Path.fromJson(path));
+    }
+    // _paths = data['paths'].map((path) {
+    //   print('hola7');
+    //   return Path.fromJson(path);
+    // }).toList();
+
     _name = data['name'];
     _image = data['image'];
   }
@@ -132,9 +150,16 @@ class Path {
       };
 
   Path.fromJson(Map<dynamic, dynamic> data) {
-    _stretchs = data['stretchs'].map((stretch) {
-      return Stretch.fromJson(stretch);
-    }).toList();
+    print('hola8');
+    _stretchs = new List<Stretch>();
+    for (var stretch in data['stretchs']) {
+      print('hola9');
+      _stretchs.add(Stretch.fromJson(stretch));
+    }
+    // _stretchs = data['stretchs'].map((stretch) {
+    //   print('hola9');
+    //   return Stretch.fromJson(stretch);
+    // }).toList();
     _transport = data['transport'];
   }
 
@@ -179,10 +204,16 @@ class Stretch {
       };
 
   Stretch.fromJson(Map<dynamic, dynamic> data) {
+    print('hola10');
     _id = data['id'];
-    _points = data['points'].map((point) {
-      return LatLng(point.latitude, point.longitude);
-    }).toList();
+    _points = new List<LatLng>();
+    for (var point in data['points']) {
+      _points.add(LatLng(point.latitude, point.longitude));
+    }
+    // _points = data['points'].map((point) {
+    //   return LatLng(point.latitude, point.longitude);
+    // }).toList();
+    print('hola11');
     _duration = Duration(minutes: data['duration']);
     _destinationId = data['destinationId'];
   }
