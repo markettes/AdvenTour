@@ -121,6 +121,7 @@ class Place {
         'name': _name,
         'icon': _icon,
         'duration': _duration.inMinutes,
+        'types': _types
       };
 
   Place.fromJson(Map<dynamic, dynamic> data) {
@@ -130,6 +131,10 @@ class Place {
     _name = data['name'];
     _icon = data['icon'];
     _duration = Duration(minutes: data['duration']);
+    _types = new List<String>();
+    for (var type in data['types']) {
+      _types.add(type);
+    }
   }
 
   get detailed => _detailed;

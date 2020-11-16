@@ -1,5 +1,8 @@
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:flutter/material.dart';
+
+import 'place_types_list.dart';
 
 class RouteWidget extends StatelessWidget {
   r.Route route;
@@ -18,26 +21,53 @@ class RouteWidget extends StatelessWidget {
       }
     }
 
-    return ListTile(
-      onTap: () {},
-      leading: CircleAvatar(
-        radius: 25,
-        backgroundImage: route.image != null
-            ? NetworkImage(route.image)
-            : AssetImage('assets/interrogation.png'),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(route.name ?? 'Nombre de la ruta'),
-        ],
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 5, bottom: 5),
-            child: Row(
+    List<String> defTypes = new List<String>();
+    for (var place in route.places) {
+      defTypes.add(place.types.first.toUpperCase());
+    }
+
+    print(defTypes);
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ListTile(
+        onTap: () {},
+        leading: CircleAvatar(
+          radius: 25,
+          backgroundImage: route.image != null
+              ? NetworkImage(route.image)
+              : AssetImage('assets/interrogation.png'),
+        ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(route.name ?? 'Nombre de la ruta'),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 5, bottom: 5),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.alarm,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    formatDuration(),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
+            ),
+            Row(
               children: [
                 Icon(
                   Icons.alarm,
