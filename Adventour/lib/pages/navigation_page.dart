@@ -25,30 +25,10 @@ class NavigationPage extends StatefulWidget {
 }
 
 class _NavigationPageState extends State<NavigationPage> {
-  final Set<Polyline> polyline = {};
-
-  r.Route route1 = r.exampleRoute;
+  Set<Polyline> polylines = {};
 
   r.Route route;
   GoogleMapController mapController;
-  List<LatLng> routeCoords = List();
-  GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(
-    apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
-  );
-
-  getSomePoints() async {
-    for (var i = 0; i < route1.places.length - 1; i++) {
-      Place start = route1.places[i];
-      Place end = route1.places[i + 1];
-
-      routeCoords.addAll(await googleMapPolyline.getCoordinatesWithLocation(
-          origin: LatLng(start.latitude, start.longitude),
-          destination: LatLng(end.latitude, end.longitude),
-          mode: RouteMode.driving));
-    }
-
-    print(routeCoords);
-  }
 
   Location location;
   LocationData currentLocation;
@@ -57,7 +37,6 @@ class _NavigationPageState extends State<NavigationPage> {
   @override
   void initState() {
     super.initState();
-    getSomePoints();
 
     location = Location();
 
@@ -89,8 +68,9 @@ class _NavigationPageState extends State<NavigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    //Map arguments = ModalRoute.of(context).settings.arguments;
-    //route = arguments['route'];
+    Map arguments = ModalRoute.of(context).settings.arguments;
+    route = arguments['route'];
+    polylines = arguments['polylines'];
 
     CameraPosition initialCameraPosition = CameraPosition(
       zoom: 22,
@@ -190,18 +170,9 @@ class _NavigationPageState extends State<NavigationPage> {
             onMapCreated: (GoogleMapController controller) {
               setState(() {
                 mapController = controller;
-                polyline.add(Polyline(
-                  polylineId: PolylineId('route1'),
-                  visible: true,
-                  points: routeCoords,
-                  width: 8,
-                  color: Theme.of(context).primaryColor,
-                  startCap: Cap.roundCap,
-                  endCap: Cap.buttCap,
-                ));
               });
             },
-            polylines: polyline,
+            polylines: polylines,
             initialCameraPosition: initialCameraPosition,
             myLocationEnabled: true,
           ),
@@ -212,6 +183,34 @@ class _NavigationPageState extends State<NavigationPage> {
 
   void setInitialLocation() async {
     currentLocation = await location.getLocation();
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Approve'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
