@@ -8,19 +8,8 @@ class RouteWidget extends StatelessWidget {
   r.Route route;
   RouteWidget(this.route);
 
-  Duration _duration = Duration();
-
   @override
   Widget build(BuildContext context) {
-    for (var place in route.places) {
-      _duration += place.duration;
-    }
-    for (var path in route.paths) {
-      for (var stretch in path.stretchs) {
-        _duration += stretch.duration;
-      }
-    }
-
     List<String> defTypes = new List<String>();
     for (var place in route.places) {
       defTypes.add(place.types.first.toUpperCase());
@@ -86,6 +75,17 @@ class RouteWidget extends StatelessWidget {
   }
 
   String formatDuration() {
+    Duration _duration = Duration();
+
+    for (var place in route.places) {
+      _duration += place.duration;
+    }
+    for (var path in route.paths) {
+      for (var stretch in path.stretchs) {
+        _duration += stretch.duration;
+      }
+    }
+
     String hours, minutes;
     if (_duration.inHours < 10)
       hours = '0' + _duration.inHours.toString();
