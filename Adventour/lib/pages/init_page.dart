@@ -18,7 +18,7 @@ class InitPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Image.asset(
-                    'assets/logo_adventour+titulo.png',
+                    '../assets/logo_adventour+titulo.png',
                     height: 180,
                   ),
                   PrimaryButton(
@@ -28,22 +28,22 @@ class InitPage extends StatelessWidget {
                     },
                     style: ButtonType.Normal,
                   ),
-                  if(allowSignUp)
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Don't you have account?",
-                      style: Theme.of(context).textTheme.bodyText1,
+                  if (allowSignUp)
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Don't you have account?",
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     ),
-                  ),
-                  if(allowSignUp)
-                  PrimaryButton(
-                    text: 'SIGN UP',
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/signUpPage');
-                    },
-                    style: ButtonType.Void,
-                  ),
+                  if (allowSignUp)
+                    PrimaryButton(
+                      text: 'SIGN UP',
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/signUpPage');
+                      },
+                      style: ButtonType.Void,
+                    ),
                 ],
               ),
             ),

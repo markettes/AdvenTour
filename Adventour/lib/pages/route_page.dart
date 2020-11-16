@@ -366,7 +366,7 @@ class NotRouteAvailable extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(25),
             child: Image.asset(
-              'assets/logo_adventour.png',
+              '../assets/logo_adventour.png',
             ),
           ),
         ),

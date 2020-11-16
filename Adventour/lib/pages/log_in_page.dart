@@ -43,7 +43,7 @@ class _LogInFormState extends State<LogInForm> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Image.asset(
-            'assets/logo_adventour+titulo.png',
+            '../assets/logo_adventour+titulo.png',
             height: 180,
           ),
           InputText(

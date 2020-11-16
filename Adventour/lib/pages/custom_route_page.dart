@@ -47,7 +47,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
               child: Padding(
                 padding: const EdgeInsets.all(25),
                 child: Image.asset(
-                  'assets/logo_adventour.png',
+                  '../assets/logo_adventour.png',
                 ),
               ),
             ),
@@ -151,8 +151,6 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
         Toast.show('The route has at most 7 type places', context, duration: 3);
     }
   }
-
-
 }
 
 // Expanded(

@@ -13,9 +13,6 @@ class AdventourAdminApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: themeData,
-      home: RootPage()
-    );
+        debugShowCheckedModeBanner: false, theme: themeData, home: RootPage());
   }
 }

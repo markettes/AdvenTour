@@ -31,7 +31,7 @@ class GoogleButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: SizedBox(
-                child: Image.asset('assets/google_icon_button.png'),
+                child: Image.asset('../assets/google_icon_button.png'),
                 height: 35,
                 width: 35,
               ),

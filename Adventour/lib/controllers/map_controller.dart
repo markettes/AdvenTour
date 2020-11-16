@@ -14,14 +14,13 @@ class MapController {
 
   Map<MarkerId, Marker> get markers => _markers;
 
-  void onMapCreated(GoogleMapController controller,[Function then]) {
+  void onMapCreated(GoogleMapController controller, [Function then]) {
     _mapController = controller;
     _changeMapStyle(_mapController);
-    if(then!=null)then();
+    if (then != null) then();
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
-
     DateTime now;
     String formattedDate;
     String style;
@@ -30,13 +29,12 @@ class MapController {
     formattedDate = DateFormat('kk').format(now);
 
     if (int.parse(formattedDate) < 20) {
-      style = await rootBundle.loadString("assets/map_styles/light.json");
+      style = await rootBundle.loadString("../assets/map_styles/light.json");
     } else {
-      style = await rootBundle.loadString("assets/map_styles/dark.json");
+      style = await rootBundle.loadString("../assets/map_styles/dark.json");
     }
 
     controller.setMapStyle(style);
-
   }
 
   drawPolyline(Polyline polyline) {
@@ -58,7 +56,7 @@ class MapController {
                 '/placePage',
                 arguments: {
                   'place': place,
-                  'tapMap': (){
+                  'tapMap': () {
                     goToCoordinates(place.latitude, place.longitude, 18);
                   }
                 },

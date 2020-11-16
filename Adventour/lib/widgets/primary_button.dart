@@ -36,7 +36,7 @@ class PrimaryButton extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: SizedBox(
                 child: icon == null
-                    ? Image.asset('assets/logo_adventour.png')
+                    ? Image.asset('../assets/logo_adventour.png')
                     : Icon(
                         icon,
                         color: Theme.of(context).primaryColor,

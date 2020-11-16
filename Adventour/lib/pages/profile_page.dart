@@ -57,7 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     decoration: BoxDecoration(
                       color: Colors.deepOrange,
                       image: DecorationImage(
-                        image: AssetImage('assets/drawer_background.jpg'),
+                        image: AssetImage('../assets/drawer_background.jpg'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             image: DecorationImage(
                               image: user.image != ''
                                   ? NetworkImage(user.image)
-                                  : AssetImage("assets/empty_photo.jpg"),
+                                  : AssetImage("../assets/empty_photo.jpg"),
                               fit: BoxFit.contain,
                             ),
                             shape: BoxShape.circle),
