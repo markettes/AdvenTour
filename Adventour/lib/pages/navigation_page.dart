@@ -5,9 +5,11 @@ import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/models/Path.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/models/Stack.dart' as s;
 import 'package:Adventour/pages/search_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -30,7 +32,12 @@ class _NavigationPageState extends State<NavigationPage> {
   r.Route route1 = r.exampleRoute;
   r.Route route;
   GoogleMapController mapController;
-  List<Path> completedPaths;
+
+  //Time Logic
+  s.Stack<Stretch> streches;
+  s.Stack<Stretch> strechesPassed;
+  s.Stack<Place> places;
+  s.Stack<Place> placesPassed;
 
   Location location;
   LocationData currentLocation;
@@ -47,6 +54,8 @@ class _NavigationPageState extends State<NavigationPage> {
         currentLocation = cLoc;
         bearing = currentLocation.heading;
       });
+
+      checkStretch(cLoc);
 
       if (mapController != null) {
         mapController.animateCamera(
@@ -68,6 +77,22 @@ class _NavigationPageState extends State<NavigationPage> {
     setInitialLocation();
   }
 
+  bool checkStretch(LocationData loc) {
+    Stretch st = streches.pop();
+    LatLng dest = st.points.last;
+    if (Geolocator.distanceBetween(
+          loc.latitude,
+          loc.longitude,
+          dest.latitude,
+          dest.longitude,
+        ) <
+        20.0) {
+      strechesPassed.push(st);
+    } else {
+      streches.push(st);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
@@ -86,6 +111,14 @@ class _NavigationPageState extends State<NavigationPage> {
         tilt: 45,
         bearing: bearing,
       );
+    }
+
+    String tiempoRestante() {
+      int tiempoRestante = 0;
+      for (var st in streches.toList()) {
+        tiempoRestante += st.duration.inMinutes;
+      }
+      return tiempoRestante.toString();
     }
 
     return MaterialApp(
@@ -140,12 +173,12 @@ class _NavigationPageState extends State<NavigationPage> {
                       children: [
                         Icon(Icons.directions_walk,
                             color: Theme.of(context).primaryColor),
-                        Text("Tiempo restante ruta?"),
+                        Text('${tiempoRestante()} min'),
                         Icon(
                           Icons.location_pin,
                           color: Theme.of(context).primaryColor,
                         ),
-                        Text('${route1.places.length}')
+                        Text('${streches.toList().length}')
                       ],
                     ),
                     Row(
@@ -224,22 +257,22 @@ class Cancelar_ruta_alert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("¿Deseas cancelar la ruta?"),
+      title: Text("Would you like to cancel the route?"),
       content: Text(
-          "Si cancelas la ruta perderás todo el progreso realizado hasta ahora. ¿Seguro que quieres cancelarla?"),
+          "If you cancel the route you will loose all the progress. Are you sure?"),
       actions: [
         TextButton(
             onPressed: () {
               return Navigator.of(context).pop();
             },
-            child: Text("Volver a la ruta")),
+            child: Text("Return")),
         TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               //Borrar progreso ruta actual (?)
               Navigator.of(context).pop();
             },
-            child: Text("Sí")) //Cancelar ruta
+            child: Text("Yes")) //Cancelar ruta
       ],
     );
   }
