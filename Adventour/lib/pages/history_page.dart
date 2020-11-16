@@ -9,7 +9,8 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  DateTime newDateTime;
+  DateTime dateTimeStart;
+  DateTime dateTimeEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,17 @@ class _HistoryPageState extends State<HistoryPage> {
           children: [
             Expanded(
               child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      ''
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
@@ -32,17 +44,45 @@ class _HistoryPageState extends State<HistoryPage> {
                         mode: CupertinoDatePickerMode.date,
                         initialDateTime: DateTime(2000, 1, 1),
                         onDateTimeChanged: (DateTime newDateTime) {
-                          this.newDateTime = newDateTime;
+                          this.dateTimeStart = newDateTime;
                         },
                       ),
                     ),
                   ),
-                  //  Expanded(
-                  //    child: CircleIcon(image: )
-                  //  )
                 ],
               ),
             ),
+            Expanded(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      ''
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 75,
+                      child: CupertinoDatePicker(
+                        mode: CupertinoDatePickerMode.date,
+                        initialDateTime: DateTime(2000, 1, 1),
+                        onDateTimeChanged: (DateTime newDateTime) {
+                          this.dateTimeEnd = newDateTime;
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
           ],
         ),
       ),
