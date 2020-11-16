@@ -29,35 +29,17 @@ class Route {
       };
 
   Route.fromJson(Map<dynamic, dynamic> data) {
-    print('hola4');
     _start = LatLng(data['latitude'], data['longitude']);
-    print(_start.latitude);
-    print(_start.longitude);
-    print('hola5');
-    // _places = data['places'].map((place) {
-    //   return Place.fromJson(place);
-    // }).toList();
     _places = new List<Place>();
     for (var place in data['places']) {
       _places.add(Place.fromJson(place));
     }
-    print('hola6');
-    print(_places.length);
-    print(_places.first.name);
     _paths = new List<Path>();
     for (var path in data['paths']) {
       _paths.add(Path.fromJson(path));
     }
-    print('hola7');
-    print(_paths.length);
-    // _paths = data['paths'].map((path) {
-    //   print('hola7');
-    //   return Path.fromJson(path);
-    // }).toList();
-
     _name = data['name'];
     _image = data['image'];
-    print('hola8');
   }
 
   LatLng get start => _start;
@@ -160,10 +142,6 @@ class Path {
     for (var stretch in data['stretchs']) {
       _stretchs.add(Stretch.fromJson(stretch));
     }
-    // _stretchs = data['stretchs'].map((stretch) {
-    //   print('hola9');
-    //   return Stretch.fromJson(stretch);
-    // }).toList();
     _transport = data['transport'];
   }
 
@@ -213,9 +191,6 @@ class Stretch {
     for (var point in data['points']) {
       _points.add(LatLng(point['latitude'], point['longitude']));
     }
-    // _points = data['points'].map((point) {
-    //   return LatLng(point.latitude, point.longitude);
-    // }).toList();
     _duration = Duration(minutes: data['duration']);
     _destinationId = data['destinationId'];
   }

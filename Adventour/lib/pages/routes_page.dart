@@ -21,10 +21,8 @@ class RoutesPage extends StatelessWidget {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            print('hola1');
             return new Center(child: Text("There are no routes"));
           }
-          print('hola2');
           return new ListView(children: getRoutes(snapshot));
         },
       ),
@@ -32,7 +30,6 @@ class RoutesPage extends StatelessWidget {
   }
 
   getRoutes(AsyncSnapshot<QuerySnapshot> snapshot) {
-    print('hola3');
     return snapshot.data.docs
         .map((doc) => new RouteWidget(r.Route.fromJson(doc.data())))
         .toList();

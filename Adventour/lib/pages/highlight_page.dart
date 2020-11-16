@@ -15,11 +15,9 @@ class _HighlightPageState extends State<HighlightPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('hola1');
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
     photo = args['photo'];
-    print('hola2');
 
     return Scaffold(
       appBar: AppBar(
