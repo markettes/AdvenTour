@@ -14,19 +14,27 @@ class _ProfilePageState extends State<ProfilePage> {
   var _passwordController = TextEditingController();
   var _newPasswordController = TextEditingController();
   var _repeatPasswordController = TextEditingController();
+  var _usernameController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
   String _passwordError;
   bool checkCurrentPasswordValid = true;
-
+  bool googleAccount;
   String userName;
+  User actualUser;
 
   @override
   void initState() {
+    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
+    user.then((value) {
+      _usernameController.text = value.userName;
+      actualUser = value;
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _passwordController.dispose();
     _newPasswordController.dispose();
     _repeatPasswordController.dispose();
@@ -35,8 +43,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
-    user.then((value) => userName = value.userName);
+    var userController = auth.currentUser;
+    if (userController != null) {
+      userController.providerData.forEach((profile) {
+        googleAccount = profile.providerId == "google.com";
+      });
+    }
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -45,6 +57,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: Container(
@@ -81,7 +94,6 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
@@ -96,9 +108,20 @@ class _ProfilePageState extends State<ProfilePage> {
                               SizedBox(
                                 width: 5,
                               ),
-                              Text(
-                                userName,
-                                style: Theme.of(context).textTheme.bodyText1,
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 30, bottom: 15),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.only(
+                                        top: 14,
+                                      ),
+                                      hintText: "Username",
+                                    ),
+                                    controller: _usernameController,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -130,89 +153,117 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 10,
                     ),
-                    Flexible(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              "Manage Password",
-                              style: Theme.of(context).textTheme.headline2,
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 30, left: 30),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "Actual password",
-                                  errorText: checkCurrentPasswordValid
-                                      ? null
-                                      : "$_passwordError",
-                                ),
-                                controller: _passwordController,
-                                obscureText: false,
+                    !googleAccount
+                        ? Flexible(
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "Manage Password",
+                                    style:
+                                        Theme.of(context).textTheme.headline2,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 30, left: 30),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                        hintText: "Actual password",
+                                        errorText: checkCurrentPasswordValid
+                                            ? null
+                                            : "$_passwordError",
+                                      ),
+                                      controller: _passwordController,
+                                      obscureText: true,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 30, left: 30),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                          hintText: "New Password"),
+                                      controller: _newPasswordController,
+                                      obscureText: true,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Password can\'t be empty';
+                                        }
+                                        return _newPasswordController.text ==
+                                                value
+                                            ? null
+                                            : "Please validate your entered password";
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 30, left: 30),
+                                    child: TextFormField(
+                                      decoration: InputDecoration(
+                                        hintText: "Repeat Password",
+                                      ),
+                                      obscureText: true,
+                                      controller: _repeatPasswordController,
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'Password can\'t be empty';
+                                        }
+                                        return _newPasswordController.text ==
+                                                value
+                                            ? null
+                                            : "Please validate your entered password";
+                                      },
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 30, left: 30),
-                              child: TextFormField(
-                                decoration:
-                                    InputDecoration(hintText: "New Password"),
-                                controller: _newPasswordController,
-                                obscureText: true,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Password can\'t be empty';
-                                  }
-                                  return _newPasswordController.text == value
-                                      ? null
-                                      : "Please validate your entered password";
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(right: 30, left: 30),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "Repeat Password",
-                                ),
-                                obscureText: true,
-                                controller: _repeatPasswordController,
-                                validator: (value) {
-                                  if (value.isEmpty) {
-                                    return 'Password can\'t be empty';
-                                  }
-                                  return _newPasswordController.text == value
-                                      ? null
-                                      : "Please validate your entered password";
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    PrimaryButton(
-                      text: 'SAVE PROFILE',
-                      onPressed: () async {
-                        try {
-                           await auth.signIn(
-                              auth.currentUser.email, _passwordController.text);
-                          setState(() {checkCurrentPasswordValid = true;});
-                        } catch (e) {
-                          checkCurrentPasswordValid = false;
-                          _showError(e);
-                           setState(() {});
-                        }
-                        if (_formKey.currentState.validate() &&
-                            checkCurrentPasswordValid) {
-                          auth.currentUser.updatePassword(_newPasswordController.text);
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
+                          )
+                        : SizedBox(),
+                    !googleAccount
+                        ? PrimaryButton(
+                            text: 'SAVE PROFILE',
+                            onPressed: () async {
+                              if (_newPasswordController.text != "" ||
+                                  _passwordController.text != "" ||
+                                  _repeatPasswordController.text != "") {
+                                try {
+                                  await auth.signIn(auth.currentUser.email,
+                                      _passwordController.text);
+                                  setState(() {
+                                    checkCurrentPasswordValid = true;
+                                  });
+                                } catch (e) {
+                                  checkCurrentPasswordValid = false;
+                                  _showError(e);
+                                  setState(() {});
+                                }
+                                if (_formKey.currentState.validate() &&
+                                    checkCurrentPasswordValid) {
+                                  auth.currentUser.updatePassword(
+                                      _newPasswordController.text);
+                                  db.changeUserName(
+                                      actualUser, _usernameController.text);
+                                  Navigator.pop(context);
+                                }
+                                db.changeUserName(
+                                    actualUser, _usernameController.text);
+                              } else {
+                                db.changeUserName(
+                                    actualUser, _usernameController.text);
+                                Navigator.pop(context);
+                              }
+                            },
+                          )
+                        : PrimaryButton(
+                            text: 'SAVE PROFILE',
+                            onPressed: () async {
+                              db.changeUserName(
+                                  actualUser, _usernameController.text);
+                              Navigator.pop(context);
+                            })
                   ],
                 ),
               ),
@@ -225,7 +276,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   void _showError(e) {
     setState(() {
-      
       _passwordError = logInPasswordError(e);
     });
   }
