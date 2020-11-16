@@ -18,7 +18,6 @@ class RouteWidget extends StatelessWidget {
       }
     }
 
-    print('hola9');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListTile(
