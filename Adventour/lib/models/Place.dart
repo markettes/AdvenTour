@@ -115,6 +115,7 @@ class Place {
   }
 
   Map<String, dynamic> toJson() => {
+        'id': _id,
         'latitude': _latitude,
         'longitude': _longitude,
         'name': _name,
@@ -123,6 +124,7 @@ class Place {
       };
 
   Place.fromJson(Map<dynamic, dynamic> data) {
+    _id = data['id'];
     _latitude = data['latitude'];
     _longitude = data['longitude'];
     _name = data['name'];
@@ -171,6 +173,7 @@ id = $_id
 name = $_name
 type = $_types
 photos = $_photos
+types = $_types
     """;
   }
 }
