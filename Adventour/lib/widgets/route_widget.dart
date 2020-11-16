@@ -25,7 +25,7 @@ class RouteWidget extends StatelessWidget {
           radius: 25,
           backgroundImage: route.image != null
               ? NetworkImage(route.image)
-              : AssetImage('../assets/interrogation.png'),
+              : AssetImage('assets/interrogation.png'),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

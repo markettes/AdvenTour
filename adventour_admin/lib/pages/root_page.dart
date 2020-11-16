@@ -1,5 +1,6 @@
 import 'package:Adventour/controllers/auth.dart';
 import 'package:adventour_admin/controllers/db.dart';
+import 'package:adventour_admin/pages/log_in_page.dart';
 import 'package:adventour_admin/pages/route_request_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:Adventour/pages/init_page.dart';
@@ -19,7 +20,7 @@ class RootPage extends StatelessWidget {
             stream: auth.authStatusChanges,
             builder: (context, snapshot) {
               if (snapshot.hasError) print(snapshot.error);
-              if (!snapshot.hasData) return InitPage(allowSignUp: false,);
+              if (!snapshot.hasData) return LogInPage();
               var user = snapshot.data;
               return StreamBuilder(
                 stream: db.getRouteRequests(),
@@ -27,6 +28,7 @@ class RootPage extends StatelessWidget {
                   if (snapshot.hasError) print(snapshot.error);
                   if (!snapshot.hasData) return CircularProgressIndicator();
                   var requests = snapshot.data;
+                  print(requests);
                   return RouteRequestPage(requests: requests);
                 });
             },

@@ -18,7 +18,7 @@ class InitPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Image.asset(
-                    '../assets/logo_adventour+titulo.png',
+                    'assets/logo_adventour+titulo.png',
                     height: 180,
                   ),
                   PrimaryButton(

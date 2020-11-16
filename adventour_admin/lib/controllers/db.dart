@@ -7,7 +7,8 @@ class DB {
 
   Stream<List<Route>> getRouteRequests() => _firestore
       .collectionGroup('Routes')
-      .where('requested', isEqualTo: true)
+      .where('name', isEqualTo: 'a')
+      .orderBy('latitude')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
 

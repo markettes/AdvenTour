@@ -28,7 +28,7 @@ class Route {
         'paths': _paths.map((path) => path.toJson()).toList(),
         'name': _name,
         'image': _image,
-        'requested': _requested
+        'requested': false
       };
 
   Route.fromJson(DocumentSnapshot doc) {

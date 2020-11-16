@@ -51,10 +51,10 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - ../assets/
-    - ../assets/map_styles/
-    - ../assets/empty_photo.jpg
-    - ../assets/drawer_background.jpg
+    - assets/
+    - assets/map_styles/
+    - assets/empty_photo.jpg
+    - assets/drawer_background.jpg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

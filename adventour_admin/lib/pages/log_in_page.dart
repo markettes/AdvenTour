@@ -1,42 +1,38 @@
 import 'package:Adventour/controllers/auth.dart';
-import 'package:Adventour/models/User.dart';
+import 'package:Adventour/widgets/google_button.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
-class SignUpPage extends StatelessWidget {
+class LogInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Put your credentials'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: SignInForm(),
-      ),
+      body: Padding(padding: EdgeInsets.all(10), child: LogInForm()),
     );
   }
 }
 
-class SignInForm extends StatefulWidget {
+class LogInForm extends StatefulWidget {
   @override
-  _SignInFormState createState() => _SignInFormState();
+  _LogInFormState createState() => _LogInFormState();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class _LogInFormState extends State<LogInForm> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _userNameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   String _emailError;
   String _passwordError;
+
   @override
   void dispose() {
-    _userNameController.dispose();
-    _passwordController.dispose();
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -52,16 +48,7 @@ class _SignInFormState extends State<SignInForm> {
             height: 180,
           ),
           InputText(
-            icon: Icons.person,
-            labelText: 'Username',
-            controller: _userNameController,
-            validator: (value) {
-              if (value.isEmpty) return 'Username can\'t be empty';
-              return null;
-            },
-          ),
-          InputText(
-            keyboardType: TextInputType.emailAddress,
+            obscured: false,
             icon: Icons.email,
             labelText: 'Email',
             errorText: _emailError,
@@ -82,23 +69,26 @@ class _SignInFormState extends State<SignInForm> {
               return null;
             },
           ),
+          // Text(
+          //   'Forgot password?',
+          //   style: Theme.of(context).textTheme.bodyText1,
+          // ),
           PrimaryButton(
-            text: 'SIGN UP',
+            text: 'LOG IN',
+            style: ButtonType.Normal,
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                print(_userNameController.text);
-                User user =
-                    User(_userNameController.text, _emailController.text);
                 try {
-                  await auth.registerUser(user, _passwordController.text);
+                  await auth.signIn(
+                      _emailController.text, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {
-                  print(e.code);
                   _showError(e);
                 }
               }
             },
           ),
+          GoogleButton()
         ],
       ),
     );
@@ -106,8 +96,8 @@ class _SignInFormState extends State<SignInForm> {
 
   void _showError(e) {
     setState(() {
-      _emailError = signInEmailError(e);
-      _passwordError = signInPasswordError(e);
+      _emailError = logInEmailError(e);
+      _passwordError = logInPasswordError(e);
     });
   }
 }

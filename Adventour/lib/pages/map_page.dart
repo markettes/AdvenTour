@@ -44,11 +44,11 @@ class _MapPageState extends State<MapPage> {
     formattedDate = DateFormat('kk').format(now);
 
     if (int.parse(formattedDate) < 20) {
-      rootBundle.loadString('../assets/map_styles/light.json').then((string) {
+      rootBundle.loadString('assets/map_styles/light.json').then((string) {
         _mapStyle = string;
       });
     } else {
-      rootBundle.loadString('../assets/map_styles/dark.json').then((string) {
+      rootBundle.loadString('assets/map_styles/dark.json').then((string) {
         _mapStyle = string;
       });
     }
@@ -69,7 +69,7 @@ class _MapPageState extends State<MapPage> {
             decoration: BoxDecoration(
                 color: Colors.deepOrange,
                 image: DecorationImage(
-                  image: AssetImage('../assets/drawer_background.jpg'),
+                  image: AssetImage('assets/drawer_background.jpg'),
                   fit: BoxFit.cover,
                 )),
             child: StreamBuilder(
@@ -90,7 +90,7 @@ class _MapPageState extends State<MapPage> {
                               ? NetworkImage(
                                   user.image,
                                 )
-                              : AssetImage("../assets/empty_photo.jpg"),
+                              : AssetImage("assets/empty_photo.jpg"),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
