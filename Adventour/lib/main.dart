@@ -43,44 +43,44 @@ class Adventour extends StatelessWidget {
         '/routePage': (_) => RoutePage(),
         '/addPlacesPage': (_) => AddPlacesPage(),
         '/highlightPage': (_) => HighlightPage(),
-        '/routesPage':(_) => RoutesPage(),
-        '/profilePage':(_) => ProfilePage()
+        '/routesPage': (_) => RoutesPage(),
+        '/profilePage': (_) => ProfilePage()
       },
     );
   }
-
-  var themeData = ThemeData(
-    primaryColor: Colors.deepPurple[600],
-    accentColor: Colors.deepPurple[100],
-    backgroundColor: Colors.deepPurple[50],
-    scaffoldBackgroundColor: Colors.deepPurple[50],
-    hoverColor: Colors.deepPurple[100],
-    splashColor: Colors.deepPurple[100],
-    cursorColor: Colors.deepPurple[600],
-    buttonColor: Colors.white,
-    dividerColor: Colors.black,
-    disabledColor: Colors.deepPurple[200],
-    textTheme: TextTheme(
-        headline1: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 25,
-          color: Colors.white,
-        ),
-        headline2: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 25,
-          color: Colors.deepPurple[500],
-        ),
-        bodyText1: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: Colors.black,
-          fontSize: 17,
-          fontFamily: 'Roboto',
-        ),
-        bodyText2: TextStyle(
-          fontWeight: FontWeight.w400,
-          color: Colors.black54,
-        )),
-    iconTheme: IconThemeData(color: Colors.deepPurple[600]),
-  );
 }
+
+var themeData = ThemeData(
+  primaryColor: Colors.deepPurple[600],
+  accentColor: Colors.deepPurple[100],
+  backgroundColor: Colors.deepPurple[50],
+  scaffoldBackgroundColor: Colors.deepPurple[50],
+  hoverColor: Colors.deepPurple[100],
+  splashColor: Colors.deepPurple[100],
+  cursorColor: Colors.deepPurple[600],
+  buttonColor: Colors.white,
+  dividerColor: Colors.black,
+  disabledColor: Colors.deepPurple[200],
+  textTheme: TextTheme(
+      headline1: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 25,
+        color: Colors.white,
+      ),
+      headline2: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 25,
+        color: Colors.deepPurple[500],
+      ),
+      bodyText1: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+        fontSize: 17,
+        fontFamily: 'Roboto',
+      ),
+      bodyText2: TextStyle(
+        fontWeight: FontWeight.w400,
+        color: Colors.black54,
+      )),
+  iconTheme: IconThemeData(color: Colors.deepPurple[600]),
+);

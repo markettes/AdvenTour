@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 
 class InitPage extends StatelessWidget {
+  InitPage({this.allowSignUp = true});
+  bool allowSignUp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +28,7 @@ class InitPage extends StatelessWidget {
                     },
                     style: ButtonType.Normal,
                   ),
+                  if(allowSignUp)
                   Container(
                     alignment: Alignment.center,
                     child: Text(
@@ -33,6 +36,7 @@ class InitPage extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
+                  if(allowSignUp)
                   PrimaryButton(
                     text: 'SIGN UP',
                     onPressed: () {

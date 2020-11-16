@@ -18,59 +18,56 @@ class RouteWidget extends StatelessWidget {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListTile(
-        onTap: () {},
-        leading: CircleAvatar(
-          radius: 25,
-          backgroundImage: route.image != null
-              ? NetworkImage(route.image)
-              : AssetImage('assets/interrogation.png'),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(route.name ?? 'Nombre de la ruta'),
-          ],
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 5, bottom: 5),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.alarm,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    formatDuration(),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                ],
-              ),
-            ),
-            Row(
+    return ListTile(
+      onTap: () {},
+      leading: CircleAvatar(
+        radius: 25,
+        backgroundImage: route.image != null
+            ? NetworkImage(route.image)
+            : AssetImage('assets/interrogation.png'),
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(route.name ?? 'Nombre de la ruta'),
+        ],
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 5),
+            child: Row(
               children: [
                 Icon(
-                  Icons.location_on,
+                  Icons.alarm,
                   size: 20,
                 ),
-                Text(route.places.length.toString()),
+                SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  formatDuration(),
+                ),
                 SizedBox(
                   width: 5,
                 ),
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                size: 20,
+              ),
+              Text(route.places.length.toString()),
+              SizedBox(
+                width: 5,
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

@@ -10,6 +10,8 @@ class Route {
   List<Path> _paths;
   String _name;
   String _image;
+  String _id;
+  bool _requested;
 
   Route(start, places, paths, transports, [name, image]) {
     _start = start;
@@ -26,9 +28,12 @@ class Route {
         'paths': _paths.map((path) => path.toJson()).toList(),
         'name': _name,
         'image': _image,
+        'requested': _requested
       };
 
-  Route.fromJson(Map<dynamic, dynamic> data) {
+  Route.fromJson(DocumentSnapshot doc) {
+    _id = doc.id;
+    var data = doc.data();
     _start = LatLng(data['latitude'], data['longitude']);
     _places = new List<Place>();
     for (var place in data['places']) {
@@ -40,7 +45,10 @@ class Route {
     }
     _name = data['name'];
     _image = data['image'];
+    _requested = data['requested'];
   }
+
+  String get id => _id;
 
   LatLng get start => _start;
 
@@ -62,6 +70,8 @@ class Route {
 
   void removePlace(Place place) => _places.remove(place);
 }
+
+List<Route> toRoutes(List<QueryDocumentSnapshot> docs) => docs.map((doc) => Route.fromJson(doc)).toList();
 
 Route exampleRoute = Route(
   LatLng(39.47018449999999, -0.3705346),

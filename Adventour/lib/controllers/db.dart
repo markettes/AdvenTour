@@ -50,9 +50,19 @@ class DB {
   //   return User.fromFirestore(snapshot);
   // }
 
-  Future addRoute(Route route) {
-    _firestore.collection('Users/$_currentUserId/Routes').add(route.toJson());
-  }
+//----------------------------ROUTES-----------------------------------
+
+  Stream<List<Route>> getRoutes(String userId) => _firestore
+      .collection('Users/$userId/Routes')
+      .snapshots()
+      .map((snap) => toRoutes(snap.docs));
+
+  Future addRoute(Route route) =>
+      _firestore.collection('Users/$_currentUserId/Routes').add(route.toJson());
+
+  Future requestRoute(String userId, String routeId) => _firestore
+      .doc('Users/$userId/Routes/$routeId')
+      .update({'requested': true});
 }
 
 DB db;
