@@ -60,14 +60,7 @@ class _HighlightPageState extends State<HighlightPage> {
                           SizedBox(
                             width: 5,
                           ),
-                          Text('4h 31min'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_walk,
-                            size: 20,
-                          )
+                          Text('4 h 31 min'),
                         ],
                       ),
                     ),
@@ -149,21 +142,7 @@ class _HighlightPageState extends State<HighlightPage> {
                           SizedBox(
                             width: 5,
                           ),
-                          Text('5h 01min'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_car,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_walk,
-                            size: 20,
-                          )
+                          Text('5 h 01 min'),
                         ],
                       ),
                     ),
