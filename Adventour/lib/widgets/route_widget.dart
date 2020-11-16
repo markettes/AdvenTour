@@ -1,5 +1,8 @@
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:flutter/material.dart';
+
+import 'place_types_list.dart';
 
 class RouteWidget extends StatelessWidget {
   r.Route route;
@@ -17,6 +20,13 @@ class RouteWidget extends StatelessWidget {
         _duration += stretch.duration;
       }
     }
+
+    List<String> defTypes = new List<String>();
+    for (var place in route.places) {
+      defTypes.add(place.types.first.toUpperCase());
+    }
+
+    print(defTypes);
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
