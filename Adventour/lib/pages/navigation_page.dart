@@ -27,8 +27,10 @@ class NavigationPage extends StatefulWidget {
 class _NavigationPageState extends State<NavigationPage> {
   Set<Polyline> polylines = {};
 
+  r.Route route1 = r.exampleRoute;
   r.Route route;
   GoogleMapController mapController;
+  List<Path> completedPaths;
 
   Location location;
   LocationData currentLocation;
@@ -97,7 +99,7 @@ class _NavigationPageState extends State<NavigationPage> {
               return showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return cancelar_ruta_alert();
+                    return Cancelar_ruta_alert();
                   });
             },
           ),
@@ -143,7 +145,7 @@ class _NavigationPageState extends State<NavigationPage> {
                           Icons.location_pin,
                           color: Theme.of(context).primaryColor,
                         ),
-                        Text("Nº sitios restantes?")
+                        Text('${route1.places.length}')
                       ],
                     ),
                     Row(
@@ -152,7 +154,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         Icon(Icons.alarm,
                             color: Theme.of(context).primaryColor),
                         Text(
-                          "hoal",
+                          "hola",
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
@@ -214,8 +216,8 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 }
 
-class cancelar_ruta_alert extends StatelessWidget {
-  const cancelar_ruta_alert({
+class Cancelar_ruta_alert extends StatelessWidget {
+  const Cancelar_ruta_alert({
     Key key,
   }) : super(key: key);
 
@@ -231,7 +233,13 @@ class cancelar_ruta_alert extends StatelessWidget {
               return Navigator.of(context).pop();
             },
             child: Text("Volver a la ruta")),
-        TextButton(onPressed: null, child: Text("Sí")) //Cancelar ruta
+        TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              //Borrar progreso ruta actual (?)
+              Navigator.of(context).pop();
+            },
+            child: Text("Sí")) //Cancelar ruta
       ],
     );
   }
