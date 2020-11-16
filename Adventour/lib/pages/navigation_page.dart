@@ -129,7 +129,62 @@ class _NavigationPageState extends State<NavigationPage> {
             )
           ], //Menú de los tres puntitos.
         ),
-        bottomNavigationBar: null, //Falta esto
+        bottomNavigationBar: Container(
+          height: 100,
+          decoration: BoxDecoration(
+              color: Theme.of(context).backgroundColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+              boxShadow: [
+                BoxShadow(color: Colors.black, blurRadius: 5),
+              ]),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  Icons.info,
+                  color: Theme.of(context).primaryColor,
+                  size: 50,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(Icons.directions_walk,
+                            color: Theme.of(context).primaryColor),
+                        Text("Tiempo restante ruta?"),
+                        Icon(
+                          Icons.location_pin,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        Text("Nº sitios restantes?")
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(Icons.alarm,
+                            color: Theme.of(context).primaryColor),
+                        Text(
+                          "hoal",
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ), //Falta esto
         body: Container(
           child: GoogleMap(
             onMapCreated: (GoogleMapController controller) {
