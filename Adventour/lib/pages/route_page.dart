@@ -223,6 +223,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 onPressed: () {
                   Navigator.pushNamed(context, '/navigationPage', arguments: {
                     'route': widget.route,
+                    'polylines': polyline,
                   });
                 },
                 child: Icon(
