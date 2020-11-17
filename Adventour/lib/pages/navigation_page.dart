@@ -121,7 +121,7 @@ class _NavigationPageState extends State<NavigationPage> {
       for (var st in stretches.toList()) {
         tiempoRestante += st.duration.inMinutes;
       }
-      return tiempoRestante.toString();
+      return '${tiempoRestante ~/ 60}h ${tiempoRestante % 60}min';
     }
 
     return MaterialApp(
@@ -176,7 +176,7 @@ class _NavigationPageState extends State<NavigationPage> {
                       children: [
                         Icon(Icons.directions_walk,
                             color: Theme.of(context).primaryColor),
-                        Text('${tiempoRestante()} min'),
+                        Text('${tiempoRestante()}'),
                         Icon(
                           Icons.location_pin,
                           color: Theme.of(context).primaryColor,
