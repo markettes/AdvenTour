@@ -49,112 +49,118 @@ class _RoutePageState extends State<RoutePage>
     Map arguments = ModalRoute.of(context).settings.arguments;
     _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    routeEngineResponse = arguments['routeEngineResponse'];
-    route = routeEngineResponse.route;
-    recommendations = routeEngineResponse.recommendations;
+    if (arguments.length == 1) {
+      routeEngineResponse = arguments['routeEngineResponse'];
+      route = routeEngineResponse.route;
+      recommendations = routeEngineResponse.recommendations;
+    } else {
+      route = arguments['myRoute'];
+      routeEngineResponse = arguments['routeEngineResponse'];
+      recommendations = routeEngineResponse.recommendations;
+    }
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Custom route'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () => showDialog(
-              context: context,
-              builder: (context) {
-                TextEditingController _routeNameController =
-                    TextEditingController();
-                final _formKey = GlobalKey<FormState>();
-                return Dialog(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 200,
-                      child: Column(
-                        children: [
-                          Text(
-                            'Put a name to your route',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline2
-                                .copyWith(fontSize: 20),
-                          ),
-                          Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                SizedBox(
-                                  height: 100,
-                                  child: InputText(
-                                    icon: Icons.flag,
-                                    labelText: 'Route name',
-                                    controller: _routeNameController,
-                                    validator: (value) {
-                                      if (value.isEmpty)
-                                        return 'Route name can\'t be empty';
-                                      return null;
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('Custom route'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () => showDialog(
+                context: context,
+                builder: (context) {
+                  TextEditingController _routeNameController =
+                      TextEditingController();
+                  final _formKey = GlobalKey<FormState>();
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 200,
+                        child: Column(
+                          children: [
+                            Text(
+                              'Put a name to your route',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline2
+                                  .copyWith(fontSize: 20),
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 100,
+                                    child: InputText(
+                                      icon: Icons.flag,
+                                      labelText: 'Route name',
+                                      controller: _routeNameController,
+                                      validator: (value) {
+                                        if (value.isEmpty)
+                                          return 'Route name can\'t be empty';
+                                        return null;
+                                      },
+                                    ),
+                                  ),
+                                  PrimaryButton(
+                                    text: 'SAVE',
+                                    onPressed: () {
+                                      if (_formKey.currentState.validate()) {
+                                        route.name = _routeNameController.text;
+                                        route.image = searchEngine.searchPhoto(
+                                            route
+                                                .places
+                                                .firstWhere((place) =>
+                                                    place.photos.first != null)
+                                                .photos
+                                                .first
+                                                .photoReference);
+                                        db.addRoute(route);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      }
                                     },
                                   ),
-                                ),
-                                PrimaryButton(
-                                  text: 'SAVE',
-                                  onPressed: () {
-                                    if (_formKey.currentState.validate()) {
-                                      route.name = _routeNameController.text;
-                                      route.image = searchEngine.searchPhoto(
-                                          route.places
-                                              .firstWhere((place) =>
-                                                  place.photos.first != null)
-                                              .photos
-                                              .first
-                                              .photoReference);
-                                      db.addRoute(route);
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
-                          )
-                          // PrimaryButton(
-                          //   text: 'SAVE',
-                          //   onPressed: () => Navigator.pop(context),
-                          // ),
-                        ],
+                                ],
+                              ),
+                            )
+                            // PrimaryButton(
+                            //   text: 'SAVE',
+                            //   onPressed: () => Navigator.pop(context),
+                            // ),
+                          ],
+                        ),
                       ),
                     ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+        body: route.paths.isEmpty
+            ? NotRouteAvailable()
+            : TabBarView(
+                controller: _tabController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  MapView(
+                    places: route.places,
+                    tabController: _tabController,
+                    selectedPath: route.paths[_selectedPath],
+                    nextTransport: nextTransport,
                   ),
-                );
-              },
-            ),
-          )
-        ],
-      ),
-      body: route.paths.isEmpty
-          ? NotRouteAvailable()
-          : TabBarView(
-              controller: _tabController,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                MapView(
-                  places: route.places,
-                  tabController: _tabController,
-                  selectedPath: route.paths[_selectedPath],
-                  nextTransport: nextTransport,
-                ),
-                MapListView(
-                  path: route.paths[_selectedPath],
-                  places: route.places,
-                  tabController: _tabController,
-                  onPressedAdd: _onPressedAdd,
-                  removePlace: _removePlace,
-                )
-              ],
-            ),
-    );
+                  MapListView(
+                    path: route.paths[_selectedPath],
+                    places: route.places,
+                    tabController: _tabController,
+                    onPressedAdd: _onPressedAdd,
+                    removePlace: _removePlace,
+                  )
+                ],
+              ));
   }
 
   Future _removePlace(Place place) async {

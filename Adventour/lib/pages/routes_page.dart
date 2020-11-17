@@ -24,28 +24,31 @@ class RoutesPage extends StatelessWidget {
           List<r.Route> routes = snapshot.data;
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: routes.isNotEmpty? ListView.separated(
-              itemCount: routes.length,
-              separatorBuilder: (context, index) => SizedBox(height: 5),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                r.Route route = routes[index];
-                return Slidable(
-                  actionPane: SlidableDrawerActionPane(),
-                  actionExtentRatio: 0.25,
-                  actions: <Widget>[
-                    IconSlideAction(
-                      caption: 'Request',
-                      color: Colors.transparent,
-                      icon: Icons.file_upload,
-                      foregroundColor: Theme.of(context).primaryColor,
-                      onTap: () => db.requestRoute(db.currentUserId,route.id),
-                    ),
-                  ],
-                  child: RouteWidget(route),
-                );
-              },
-            ):Center(child: Text('Empty routes')),
+            child: routes.isNotEmpty
+                ? ListView.separated(
+                    itemCount: routes.length,
+                    separatorBuilder: (context, index) => SizedBox(height: 5),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      r.Route route = routes[index];
+                      return Slidable(
+                        actionPane: SlidableDrawerActionPane(),
+                        actionExtentRatio: 0.25,
+                        actions: <Widget>[
+                          IconSlideAction(
+                            caption: 'Request',
+                            color: Colors.transparent,
+                            icon: Icons.file_upload,
+                            foregroundColor: Theme.of(context).primaryColor,
+                            onTap: () =>
+                                db.requestRoute(db.currentUserId, route.id),
+                          ),
+                        ],
+                        child: RouteWidget(route),
+                      );
+                    },
+                  )
+                : Center(child: Text('Empty routes')),
           );
         },
         // builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
