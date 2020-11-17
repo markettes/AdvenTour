@@ -35,6 +35,7 @@ class _HistoryPageState extends State<HistoryPage> {
             children: [
               Expanded(
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
                     child: MaterialButton(
@@ -100,8 +101,8 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Expanded(
                       child: Container(
-                          width: 150.0,
-                          height: 850.0,
+                          width: 150,
+                          height: 600,
                           decoration: BoxDecoration(
                             color: Theme.of(context).accentColor,
                             shape: BoxShape.rectangle,
