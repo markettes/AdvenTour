@@ -5,7 +5,7 @@ class Path {
   List<Stretch> _stretchs;
   String _transport;
 
-  Path(stretchs,transport){
+  Path(stretchs, transport) {
     _stretchs = stretchs;
     _transport = transport;
   }
@@ -19,8 +19,8 @@ class Path {
       for (var step in leg.steps) {
         points.add(LatLng(step.startLocation.lat, step.startLocation.lng));
       }
-      Duration duration = Duration(minutes: leg.duration.value.toInt());
-      stretchs.add(Stretch(stretchId.toString(),points, duration));
+      Duration duration = Duration(seconds: leg.duration.value.toInt());
+      stretchs.add(Stretch(stretchId.toString(), points, duration));
     }
     _stretchs = stretchs;
     _transport = transport;
@@ -36,7 +36,7 @@ class Stretch {
   List<LatLng> _points;
   Duration _duration;
 
-  Stretch(id,points,duration){
+  Stretch(id, points, duration) {
     _id = id;
     _points = points;
     _duration = duration;

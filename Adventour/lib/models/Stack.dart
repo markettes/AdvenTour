@@ -9,8 +9,10 @@ class Stack<T> {
 
   T pop() {
     T lastElement = _stack.last;
-    _stack.removeLast();
-    return lastElement;
+    if (_stack.isNotEmpty) {
+      _stack.removeLast();
+      return lastElement;
+    }
   }
 
   List<T> toList() {

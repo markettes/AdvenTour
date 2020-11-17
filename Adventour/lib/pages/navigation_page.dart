@@ -34,10 +34,8 @@ class _NavigationPageState extends State<NavigationPage> {
   GoogleMapController mapController;
 
   //Time Logic
-  s.Stack<Stretch> streches;
-  s.Stack<Stretch> strechesPassed;
-  s.Stack<Place> places;
-  s.Stack<Place> placesPassed;
+  s.Stack<Stretch> stretches = s.Stack();
+  s.Stack<Stretch> stretchesPassed = s.Stack();
 
   Location location;
   LocationData currentLocation;
@@ -55,7 +53,9 @@ class _NavigationPageState extends State<NavigationPage> {
         bearing = currentLocation.heading;
       });
 
-      checkStretch(cLoc);
+      if (stretches.toList().isNotEmpty) {
+        checkStretch(cLoc);
+      }
 
       if (mapController != null) {
         mapController.animateCamera(
@@ -77,8 +77,8 @@ class _NavigationPageState extends State<NavigationPage> {
     setInitialLocation();
   }
 
-  bool checkStretch(LocationData loc) {
-    Stretch st = streches.pop();
+  void checkStretch(LocationData loc) {
+    Stretch st = stretches.pop();
     LatLng dest = st.points.last;
     if (Geolocator.distanceBetween(
           loc.latitude,
@@ -87,9 +87,9 @@ class _NavigationPageState extends State<NavigationPage> {
           dest.longitude,
         ) <
         20.0) {
-      strechesPassed.push(st);
+      stretchesPassed.push(st);
     } else {
-      streches.push(st);
+      stretches.push(st);
     }
   }
 
@@ -97,7 +97,10 @@ class _NavigationPageState extends State<NavigationPage> {
   Widget build(BuildContext context) {
     Map arguments = ModalRoute.of(context).settings.arguments;
     route = arguments['route'];
+    List listaStretches = route.paths.first.stretchs;
+
     polylines = arguments['polylines'];
+    Stopwatch stopwatch = Stopwatch();
 
     CameraPosition initialCameraPosition = CameraPosition(
       zoom: 22,
@@ -115,7 +118,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
     String tiempoRestante() {
       int tiempoRestante = 0;
-      for (var st in streches.toList()) {
+      for (var st in stretches.toList()) {
         tiempoRestante += st.duration.inMinutes;
       }
       return tiempoRestante.toString();
@@ -178,7 +181,7 @@ class _NavigationPageState extends State<NavigationPage> {
                           Icons.location_pin,
                           color: Theme.of(context).primaryColor,
                         ),
-                        Text('${streches.toList().length}')
+                        Text('${stretches.toList().length}')
                       ],
                     ),
                     Row(
@@ -187,7 +190,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         Icon(Icons.alarm,
                             color: Theme.of(context).primaryColor),
                         Text(
-                          "hola",
+                          '${stopwatch.elapsedTicks}',
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
@@ -199,13 +202,17 @@ class _NavigationPageState extends State<NavigationPage> {
               ],
             ),
           ),
-        ), //Falta esto
+        ),
         body: Container(
           child: GoogleMap(
             onMapCreated: (GoogleMapController controller) {
               setState(() {
                 mapController = controller;
               });
+              stopwatch.start();
+              for (var i = listaStretches.length - 1; i >= 0; i--) {
+                stretches.push(listaStretches[i]);
+              }
             },
             polylines: polylines,
             initialCameraPosition: initialCameraPosition,
