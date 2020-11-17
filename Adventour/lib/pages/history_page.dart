@@ -39,8 +39,8 @@ class _HistoryPageState extends State<HistoryPage> {
                   Expanded(
                     child: MaterialButton(
                         color: Theme.of(context).primaryColor,
-                        height: 100,
-                        minWidth: 50,
+                        height: 50,
+                        minWidth: 20,
                         onPressed: () async {
                           final List<DateTime> picked =
                               await DateRagePicker.showDatePicker(
@@ -54,9 +54,9 @@ class _HistoryPageState extends State<HistoryPage> {
                             print(picked);
                           }
                         },
-                        child: new Text(
-                          "Pick date range",
-                          style: TextStyle(color: Colors.white),
+                        child: new Icon(
+                          Icons.calendar_today_outlined,
+                          color: Colors.white,
                         )),
                   ),
                   Expanded(
