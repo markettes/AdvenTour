@@ -252,7 +252,7 @@ class InfoMiddle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        if (place.icon != null)
+        if (place.type != null)
           Container(
             width: 50,
             height: 50,
@@ -263,7 +263,7 @@ class InfoMiddle extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Image.network(
-                place.icon,
+                place.type,
                 color: Colors.white,
                 fit: BoxFit.contain,
               ),

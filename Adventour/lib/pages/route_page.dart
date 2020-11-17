@@ -480,7 +480,7 @@ class MapListView extends StatelessWidget {
                                 children: [
                                   SizedBox(
                                       height: 50,
-                                      child: CircleIcon(image: place.icon)),
+                                      child: CircleIcon(type: place.type)),
                                   SizedBox(width: 10),
                                   Expanded(
                                     child: Column(

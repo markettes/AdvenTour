@@ -1,5 +1,7 @@
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/libraries/place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -39,7 +41,7 @@ class Place {
   bool _detailed;
   String _id;
   String _name;
-  String _icon;
+  String _type;
   String _adress;
   String _telephone;
   double _latitude;
@@ -54,7 +56,7 @@ class Place {
   num _userRatingsTotal;
   Duration _duration;
 
-  Place(latitude, longitude, [name, id, types, rating, icon, duration]) {
+  Place(latitude, longitude, [name, id, types, rating, type, duration]) {
     _detailed = false;
     _latitude = latitude;
     _longitude = longitude;
@@ -62,7 +64,7 @@ class Place {
     _id = id;
     _types = types;
     _rating = rating;
-    _icon = icon;
+    _type = type;
     _duration = duration;
   }
 
@@ -80,7 +82,7 @@ class Place {
     _detailed = false;
     _id = result.placeId;
     _name = result.name;
-    _icon = result.icon;
+    _type = googleIconToType(result.icon);
     _latitude = result.geometry.location.lat;
     _longitude = result.geometry.location.lng;
     _types = result.types;
@@ -95,7 +97,7 @@ class Place {
     _detailed = true;
     _id = details.placeId;
     _name = details.name;
-    _icon = details.icon;
+    _type = googleIconToType(details.icon);
     _adress = details.vicinity;
     _latitude = details.geometry.location.lat;
     _longitude = details.geometry.location.lng;
@@ -119,7 +121,7 @@ class Place {
         'latitude': _latitude,
         'longitude': _longitude,
         'name': _name,
-        'icon': _icon,
+        'type': _type,
         'duration': _duration.inMinutes,
         'types': _types
       };
@@ -129,7 +131,7 @@ class Place {
     _latitude = data['latitude'];
     _longitude = data['longitude'];
     _name = data['name'];
-    _icon = data['icon'];
+    _type = data['type'];
     _duration = Duration(minutes: data['duration']);
     _types = new List<String>();
     for (var type in data['types']) {
@@ -153,7 +155,7 @@ class Place {
 
   num get rating => _rating;
 
-  get icon => _icon;
+  get type => _type;
 
   List<Photo> get photos => _photos;
 
@@ -176,7 +178,7 @@ class Place {
     return """
 id = $_id
 name = $_name
-type = $_types
+type = $_type
 photos = $_photos
 types = $_types
     """;
@@ -198,6 +200,31 @@ Place getFurthestPlace(LatLng location, List<Place> places) {
   return furthestPlace;
 }
 
+String googleIconToType(String icon) {
+  switch (icon) {
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png':
+      return PARK;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/worship_general-71.png':
+      return PLACE_OF_WORSHIP;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png':
+      return RESTAURANT;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/camping-71.png':
+      return NATURAL;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png':
+      return SHOPPING_MALL;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/school-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/museum-71.png':
+      return MUSEUM;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png':
+      return null;
+    default:
+      throw Exception('Icon $icon not implemented');
+  }
+}
+
 void sortPlaceTypes(List<String> selectedTypes) {
   List sorted = [];
   sorted.addAll(selectedTypes);
@@ -207,14 +234,35 @@ void sortPlaceTypes(List<String> selectedTypes) {
   placeTypes = sorted;
 }
 
-// icon = $_icon
-// adress = $_adress
-// latitude = $_latitude
-// longitude = $_longitude
-// telephone = $_telephone
-// rating = $_rating
-// photos = ${_photos}
-// reviews = ${_reviews}
-// openingHours = ${_openingHours}
-// weekdaytext = ${_weekdaytext}
-// openNow = ${_openNow}
+IconData typeToIcon(String type) {
+  switch (type) {
+    case CAR:
+      return Icons.directions_car;
+    case WALK:
+      return Icons.directions_walk;
+    case BICYCLE:
+      return Icons.directions_bike;
+    case PARK:
+      return Icons.fence;
+    case PLACE_OF_WORSHIP:
+      return Icons.history_edu;
+    case RESTAURANT:
+      return Icons.restaurant;
+    case TOURIST_ATTRACTION:
+      return Icons.camera_alt;
+    case MOVIE_THEATER:
+      return Icons.theater_comedy;
+    case STADIUM:
+      return Icons.sports;
+    case MUSEUM:
+      return Icons.museum;
+    case NIGHT_CLUB:
+      return Icons.nightlife;
+    case SHOPPING_MALL:
+      return Icons.local_mall;
+    case NATURAL:
+      return Icons.eco;
+    default:
+      throw Exception('Icon not available for $type');
+  }
+}

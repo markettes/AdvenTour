@@ -35,11 +35,11 @@ class Route {
     _id = doc.id;
     var data = doc.data();
     _start = LatLng(data['latitude'], data['longitude']);
-    _places = new List<Place>();
+    _places = List<Place>();
     for (var place in data['places']) {
       _places.add(Place.fromJson(place));
     }
-    _paths = new List<Path>();
+    _paths = List<Path>();
     for (var path in data['paths']) {
       _paths.add(Path.fromJson(path));
     }
@@ -71,7 +71,8 @@ class Route {
   void removePlace(Place place) => _places.remove(place);
 }
 
-List<Route> toRoutes(List<QueryDocumentSnapshot> docs) => docs.map((doc) => Route.fromJson(doc)).toList();
+List<Route> toRoutes(List docs) =>
+    docs.map((doc) => Route.fromJson(doc)).toList();
 
 Route exampleRoute = Route(
   LatLng(39.47018449999999, -0.3705346),

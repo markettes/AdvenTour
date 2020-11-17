@@ -6,6 +6,7 @@ import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +78,7 @@ class _MapPageState extends State<MapPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
                   if (!snapshot.hasData) return CircularProgressIndicator();
-                  var user = snapshot.data;
+                  User user = snapshot.data;
                   return Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Column(
@@ -95,11 +96,8 @@ class _MapPageState extends State<MapPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
-                            user.email,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2
-                                .copyWith(fontSize: 20),
+                            user.userName,
+                            style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 25),
                           ),
                         ),
                       ],

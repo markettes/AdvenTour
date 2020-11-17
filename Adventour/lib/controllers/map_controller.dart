@@ -29,9 +29,9 @@ class MapController {
     formattedDate = DateFormat('kk').format(now);
 
     if (int.parse(formattedDate) < 20) {
-      style = await rootBundle.loadString("../assets/map_styles/light.json");
+      style = await rootBundle.loadString("assets/map_styles/light.json");
     } else {
-      style = await rootBundle.loadString("../assets/map_styles/dark.json");
+      style = await rootBundle.loadString("assets/map_styles/dark.json");
     }
 
     controller.setMapStyle(style);

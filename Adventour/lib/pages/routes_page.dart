@@ -21,12 +21,13 @@ class RoutesPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData) return CircularProgressIndicator();
-          var routes = snapshot.data;
+          List<r.Route> routes = snapshot.data;
           return Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ListView.separated(
+            child: routes.isNotEmpty? ListView.separated(
               itemCount: routes.length,
               separatorBuilder: (context, index) => SizedBox(height: 5),
+              shrinkWrap: true,
               itemBuilder: (context, index) {
                 r.Route route = routes[index];
                 return Slidable(
@@ -44,7 +45,7 @@ class RoutesPage extends StatelessWidget {
                   child: RouteWidget(route),
                 );
               },
-            ),
+            ):Center(child: Text('Empty routes')),
           );
         },
         // builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
