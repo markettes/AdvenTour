@@ -29,7 +29,7 @@ class _HistoryPageState extends State<HistoryPage> {
         title: Text('Your route history'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.all(15),
         child: Expanded(
           child: Column(
             children: [
@@ -60,37 +60,58 @@ class _HistoryPageState extends State<HistoryPage> {
                         )),
                   ),
                   Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: const Text('Duration'),
-                          leading: Radio(
-                            value: SingingCharacter.duration,
-                            groupValue: _character,
-                            onChanged: (SingingCharacter value) {
-                              setState(() {
-                                _character = value;
-                              });
-                            },
+                    child: SizedBox(
+                      width: 50,
+                      height: 150,
+                      child: Column(
+                        children: <Widget>[
+                          ListTile(
+                            title: const Text('Duration'),
+                            leading: Radio(
+                              value: SingingCharacter.duration,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter value) {
+                                setState(() {
+                                  _character = value;
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                        ListTile(
-                          title: const Text('Time'),
-                          leading: Radio(
-                            value: SingingCharacter.time,
-                            groupValue: _character,
-                            onChanged: (SingingCharacter value) {
-                              setState(() {
-                                _character = value;
-                              });
-                            },
+                          ListTile(
+                            title: const Text('Time'),
+                            leading: Radio(
+                              value: SingingCharacter.time,
+                              groupValue: _character,
+                              onChanged: (SingingCharacter value) {
+                                setState(() {
+                                  _character = value;
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 ],
-              ))
+              )),
+              Expanded(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                          width: 150.0,
+                          height: 850.0,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).accentColor,
+                            shape: BoxShape.rectangle,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                          )),
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
