@@ -188,6 +188,12 @@ class _MapPageState extends State<MapPage> {
             heroTag: 'current_location',
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () async {
+              var userController = auth.currentUser;
+              if(userController != null){
+                          userController.providerData.forEach( (profile){
+                             print(profile.providerId);
+                          });
+                        }
               if (_position != null) {
                 _mapController.goToCoordinates(
                     _position.latitude, _position.longitude, 18);

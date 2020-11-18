@@ -7,6 +7,7 @@ class Achievment {
 
   Achievment(name, description, completed) {
     _name = name;
+    //hola
     _description = description;
     _completed = completed;
   }
