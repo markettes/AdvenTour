@@ -57,6 +57,10 @@ class Route {
 
   String get id => _id;
 
+  String get author => _author;
+
+  set author(String author) => _author = author;
+
   LatLng get start => _start;
 
   List<Path> get paths => _paths;
