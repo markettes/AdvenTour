@@ -109,17 +109,7 @@ class _RoutePageState extends State<RoutePage>
                                       if (_formKey.currentState.validate()) {
                                         route.name = _routeNameController.text;
                                         route.author = db.currentUserId;
-                                        if (route.image == null) {
-                                          route.image = searchEngine
-                                              .searchPhoto(route.places
-                                                  .firstWhere((place) =>
-                                                      place.photos.first !=
-                                                      null)
-                                                  .photos
-                                                  .first
-                                                  .photoReference);
-                                        }
-
+                                        route.images = route.places.map((place) => place.photos[0].photoReference).toList();
                                         db.addRoute(route);
                                         Navigator.pop(context);
                                         Navigator.pop(context);

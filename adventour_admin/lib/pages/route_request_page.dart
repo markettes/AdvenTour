@@ -40,9 +40,19 @@ class RouteRequestPage extends StatelessWidget {
                           icon: Icons.done,
                           foregroundColor: Theme.of(context).primaryColor,
                           onTap: () {
-                            db.addRouteHighlight(route, 'r8d5Ci8UFej32X8Ajksy');
-                            db.deleteRouteRequest('BltJPqjJKo3wuBVuM2Pd',route.id);
+                            db.addHighlight(route.author, route.id);
+                            db.deleteRouteRequest(route.author, route.id);
                           }, // AÑADIR CIUDAD
+                        ),
+                      ],
+                      secondaryActions: [
+                        IconSlideAction(
+                          caption: 'Decline',
+                          color: Colors.transparent,
+                          icon: Icons.clear,
+                          foregroundColor: Theme.of(context).primaryColor,
+                          onTap: () => db.deleteRouteRequest(
+                              route.author, route.id), // AÑADIR CIUDAD
                         ),
                       ],
                       child: RouteWidget(route),

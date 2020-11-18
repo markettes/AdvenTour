@@ -22,7 +22,7 @@ class CustomRoutePage extends StatefulWidget {
 class _CustomRoutePageState extends State<CustomRoutePage> {
   List<String> _placeTypes = [PARK, TOURIST_ATTRACTION, RESTAURANT, MUSEUM];
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBarController;
-  String _location;
+  String _locationName;
   String _locationId;
   TextEditingController _locationController =
       TextEditingController(text: 'Your location');
@@ -64,10 +64,10 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                         onTapPrediction: (prediction) {
                           Navigator.pop(context);
 
-                          _location = prediction.description;
+                          _locationName = prediction.description;
                           _locationId = prediction.placeId;
                           setState(() {
-                            _locationController.text = _location;
+                            _locationController.text = _locationName;
                           });
                         },
                         onSubmitted: (value) {},
@@ -104,7 +104,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                     text: 'CREATE',
                     onPressed: () async {
                       RouteEngineResponse routeEngineResponse =
-                          await _makeRoute();
+                          await routeEngine.makeRoute(_locationId,_locationName, _placeTypes);
                       Navigator.pushNamed(context, '/routePage', arguments: {
                         'routeEngineResponse': routeEngineResponse
                       });
@@ -119,18 +119,6 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
         ),
       ),
     );
-  }
-
-  Future<RouteEngineResponse> _makeRoute() async {
-    Location location;
-    if (_locationId == null) {
-      Position position = await Geolocator.getCurrentPosition();
-      location = Location(position.latitude, position.longitude);
-    } else {
-      location = await geocoding.searchByPlaceId(_locationId);
-    }
-
-    return await routeEngine.makeRoute(location, _placeTypes);
   }
 
   Future _onTapPlaceType(String placeType, bool activated) {

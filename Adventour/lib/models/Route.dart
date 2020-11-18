@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,19 +11,26 @@ class Route {
   List<Place> _places;
   List<Path> _paths;
   String _name;
-  String _image;
+  List<String> _images;
   String _id;
   String _author;
   DateTime _creationDate;
+  String _locationName;
+  String _locationId;
+  bool _requested;
+  bool _isHighlight;
+  List<String> _likes;
 
-  Route(start, places, paths, transports, author, [name, image]) {
+  Route(start, places, paths, transports, author, [locationName, locationId]) {
     _start = start;
     _places = places;
     _paths = paths;
-    _name = name;
-    _image = image;
     _author = author;
     _creationDate = DateTime.now();
+    _locationName = locationName;
+    _locationId = locationId;
+    _requested = false;
+    _likes = [];
   }
 
   Map<String, dynamic> toJson() => {
@@ -30,10 +39,13 @@ class Route {
         'places': _places.map((place) => place.toJson()).toList(),
         'paths': _paths.map((path) => path.toJson()).toList(),
         'name': _name,
-        'image': _image,
-        'requested': 'false',
+        'images': _images,
         'author': _author,
-        'creationDate': _creationDate
+        'creationDate': _creationDate,
+        'locationName': _locationName,
+        'locationId': _locationId,
+        'requested': _requested.toString(),
+        'likes': _likes
       };
 
   Route.fromJson(DocumentSnapshot doc) {
@@ -49,9 +61,14 @@ class Route {
       _paths.add(Path.fromJson(path));
     }
     _name = data['name'];
-    _image = data['image'];
+    _images = List<String>.from(data['images']);
     _author = data['author'];
     _creationDate = (data['creationDate'] as Timestamp).toDate();
+    _locationName = data['locationName'];
+    _locationId = data['locationId'];
+    _requested = data['requested'].toLowerCase() == 'true';
+    _isHighlight = data['isHighlight'].toLowerCase() == 'true';
+    _likes = List<String>.from(data['likes']);
   }
 
   String get id => _id;
@@ -72,13 +89,21 @@ class Route {
 
   set name(String name) => _name = name;
 
-  set image(String image) => _image = image;
+  set images(List<String> images) => _images = images;
 
-  String get image => _image;
+  List<String> get images => _images;
 
   void addPlace(Place place) => _places.add(place);
 
   void removePlace(Place place) => _places.remove(place);
+
+  String get locationName => _locationName;
+
+  String get locationId => _locationId;
+
+  String randomImage() => _images[Random().nextInt(_images.length)];
+
+  int get likes => _likes.length;
 }
 
 List<Route> toRoutes(List docs) =>

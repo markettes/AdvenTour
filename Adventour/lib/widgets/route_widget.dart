@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
@@ -20,94 +21,101 @@ class _RouteWidgetState extends State<RouteWidget> {
 
   @override
   Widget build(BuildContext context) {
-    for (var place in widget.route.places) {
-      print('?' + place.type.toString());
-    }
     routeEngineResponse =
-        new RouteEngineResponse(widget.route, widget.route.places);
+        RouteEngineResponse(widget.route, widget.route.places);
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/routePage', arguments: {
         'myRoute': widget.route,
         'routeEngineResponse': routeEngineResponse
       }),
       child: SizedBox(
-        height: 90,
+        height: 75,
         child: Row(
           children: [
             CircleAvatar(
-              radius: 25,
-              backgroundImage: widget.route.image != null
-                  ? NetworkImage(widget.route.image)
-                  : AssetImage('assets/interrogation.png'),
+              radius: 30,
+              backgroundImage: widget.route.images.isNotEmpty
+                  ? NetworkImage(
+                      searchEngine.searchPhoto(widget.route.randomImage()))
+                  : null,
             ),
-            SizedBox(width: 8),
+            SizedBox(
+              width: 8,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.route.name ?? 'Nombre de la ruta',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline2
-                        .copyWith(fontSize: 20),
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.alarm,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        formatDuration(widget.route.paths[_selectedPath]
-                            .duration(widget.route.places
-                                .map((place) => place.duration)
-                                .reduce((value, element) => value + element))),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      // CircleIconButton(type:widget.route.paths[_selectedPath].transport , onPressed: nextTransport)
-                    ],
+                  Expanded(
+                    child: RichText(
+                      text: TextSpan(
+                          text: widget.route.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2
+                              .copyWith(fontSize: 20),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: ' ' + widget.route.locationName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText2
+                                    .copyWith(fontSize: 15))
+                          ]),
+                    ),
                   ),
                   Expanded(
                     child: Row(
                       children: [
                         Icon(
-                          Icons.location_on,
+                          Icons.alarm,
                           size: 20,
                         ),
-                        Text(widget.route.places.length.toString()),
                         SizedBox(
                           width: 5,
                         ),
-                        ListView.separated(
-                          itemCount: widget.route.places.length,
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(width: 8),
-                          itemBuilder: (context, index) {
-                            String type = widget.route.places[index].type;
-                            return SizedBox(
-                              width: 30,
-                              child: CircleIcon(
-                                type: type,
-                                size: 18,
-                                padding: EdgeInsets.all(4),
-                              ),
-                            );
-                          },
+                        Text(
+                          formatDuration(widget.route.paths[_selectedPath]
+                              .duration(widget.route.places
+                                  .map((place) => place.duration)
+                                  .reduce(
+                                      (value, element) => value + element))),
                         ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        // CircleIconButton(type:widget.route.paths[_selectedPath].transport , onPressed: nextTransport)
                       ],
                     ),
-                  )
+                  ),
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: widget.route.places.length,
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) => SizedBox(width: 2),
+                      itemBuilder: (context, index) {
+                        String type = widget.route.places[index].type;
+                        return SizedBox(
+                            width: 28,
+                            child: CircleIcon(
+                              type: type,
+                              size: 16,
+                              padding: EdgeInsets.all(4),
+                            ));
+                      },
+                    ),
+                  ),
                 ],
               ),
-            )
+            ),
+            Row(
+              children: [
+                Text(widget.route.likes.toString()),
+                SizedBox(width: 5,),
+                Icon(Icons.favorite)
+              ],
+            ),
           ],
         ),
       ),

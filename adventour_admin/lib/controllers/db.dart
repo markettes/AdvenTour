@@ -8,17 +8,17 @@ class DB {
   Stream<List<Route>> getRouteRequests() => _firestore
       .collectionGroup('Routes')
       .where('requested', isEqualTo: 'true')
-      .orderBy('latitude')
+      .orderBy('creationDate')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
 
-  Future addRouteHighlight(Route route, String highlightId) => _firestore
-      .collection('Highlights/$highlightId/Routes')
-      .add(route.toJson());
+  Future addHighlight(String userId, String routeId) => _firestore
+      .doc('Users/$userId/Routes/$routeId')
+      .update({'_isHighlight': 'true'});
 
   Future deleteRouteRequest(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
-      .update({'requested': false});
+      .update({'requested': 'false'});
 }
 
 DB db;

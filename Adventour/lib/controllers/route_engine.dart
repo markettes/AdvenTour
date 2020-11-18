@@ -1,32 +1,31 @@
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
+import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
-const MAX_DISTANCE_WALK = 5000;
-const MAX_DISTANCE_CAR = 20000;
-const MAX_DISTANCE_BICYCLE = 10000;
-const MAX_DISTANCE_PUBLIC = 15000;
+const MAX_DISTANCE = 10000;
 
 class RouteEngine {
   Future<RouteEngineResponse> makeRoute(
-      Location location, List<String> types) async {
-    var maxDistance = transports.contains('car')
-        ? MAX_DISTANCE_CAR
-        : transports.contains('public')
-            ? MAX_DISTANCE_PUBLIC
-            : transports.contains('bicycle')
-                ? MAX_DISTANCE_BICYCLE
-                : MAX_DISTANCE_WALK;
+      String locationId, String locationName, List<String> types) async {
+    Location location;
+    if (locationId == null) {
+      Position position = await Geolocator.getCurrentPosition();
+      location = Location(position.latitude, position.longitude);
+    } else {
+      location = await geocoding.searchByPlaceId(locationId);
+    }
 
     List<Place> prePlaces = [];
 
     for (String type in types) {
       prePlaces.addAll(await searchEngine.searchByLocationWithType(
-          type, location, maxDistance));
+          type, location, MAX_DISTANCE));
     }
 
     List<Place> placesWithoutDuplicates = [];
@@ -64,7 +63,8 @@ class RouteEngine {
       Path path = await directionsEngine.makePath(start, places, transport);
       if (path != null) paths.add(path);
     }
-    Route route = Route(start, places, paths, transports, db.currentUserId);
+    Route route = Route(start, places, paths, transports, db.currentUserId,
+        locationName, locationId);
 
     return RouteEngineResponse(route, placesWithoutDuplicates);
   }

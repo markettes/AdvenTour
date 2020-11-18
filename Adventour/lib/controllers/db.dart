@@ -39,17 +39,6 @@ class DB {
     _firestore.doc('Users/$userId').update(user.toJson());
   }
 
-  // Future<User> getCurrentUserName(String email) async {
-  //   QueryDocumentSnapshot snapshot = (await _firestore
-  //           .collection('Users')
-  //           .where('email', isEqualTo: auth.currentUserEmail)
-  //           .get())
-  //       .docs
-  //       .first;
-  //   _currentUserId = snapshot.id;
-  //   return User.fromFirestore(snapshot);
-  // }
-
 //----------------------------ROUTES-----------------------------------
 
   Stream<List<Route>> getRoutes(String userId) => _firestore
@@ -62,7 +51,14 @@ class DB {
 
   Future requestRoute(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
-      .update({'requested': true});
+      .update({'requested': 'true'});
+
+  Stream<List<Route>> getHighlights(String locationId) => _firestore
+      .collection('Highlights')
+      .where('locationId', isEqualTo: locationId)
+      .orderBy('likes')
+      .snapshots()
+      .map((snap) => toRoutes(snap.docs));
 }
 
 DB db;
