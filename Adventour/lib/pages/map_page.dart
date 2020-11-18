@@ -137,33 +137,6 @@ class _MapPageState extends State<MapPage> {
                       ],
                     ),
                     Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/achievementsPage');
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.emoji_events,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Achievements',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Expanded(
