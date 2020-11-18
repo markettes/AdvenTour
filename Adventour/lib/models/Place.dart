@@ -124,7 +124,7 @@ class Place {
         'adress': _adress,
         'type': _type,
         'duration': _duration.inMinutes,
-        'types': _types
+        'types': _types,
       };
 
   Place.fromJson(Map<dynamic, dynamic> data) {
