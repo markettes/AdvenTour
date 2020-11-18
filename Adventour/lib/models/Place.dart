@@ -121,6 +121,7 @@ class Place {
         'latitude': _latitude,
         'longitude': _longitude,
         'name': _name,
+        'adress': _adress,
         'type': _type,
         'duration': _duration.inMinutes,
         'types': _types
@@ -131,6 +132,7 @@ class Place {
     _latitude = data['latitude'];
     _longitude = data['longitude'];
     _name = data['name'];
+    _adress = data['adress'];
     _type = data['type'];
     _duration = Duration(minutes: data['duration']);
     _types = new List<String>();
@@ -220,6 +222,16 @@ String googleIconToType(String icon) {
       return MUSEUM;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png':
       return null;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/library-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/bar-71.png':
+      return RESTAURANT;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/movies-71.png':
+      return MOVIE_THEATER;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/stadium-71.png':
+      return STADIUM;
     default:
       throw Exception('Icon $icon not implemented');
   }
@@ -235,6 +247,7 @@ void sortPlaceTypes(List<String> selectedTypes) {
 }
 
 IconData typeToIcon(String type) {
+  print(type);
   switch (type) {
     case CAR:
       return Icons.directions_car;
