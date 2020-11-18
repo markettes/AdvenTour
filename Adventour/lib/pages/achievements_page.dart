@@ -45,32 +45,32 @@ class AchievementsPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right:10, left: 10),
-                        child: Center(
-                                              child: Expanded(
-                            flex: 1,
-                            child: Container(
-                                width: 30,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1.5,
-                                    color: Theme.of(context).primaryColor,
+                      Expanded(
+                          flex: 1,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right:10, left: 10),
+                              child: Container(
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 1.5,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                    child: Text(
-                                  "X",
-                                  style: TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ))),
+                                  child: Center(
+                                      child: Text(
+                                    "X",
+                                    style: TextStyle(
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ))),
+                            ),
                           ),
-                        ),
-                      )
+                        )
                     ],
                   ),
                   Divider(
