@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Achievment {
+class Achievement {
   String _name;
   String _description;
   bool _completed;
 
-  Achievment(name, description, completed) {
+  Achievement(name, description, completed) {
     _name = name;
     _description = description;
     _completed = completed;
   }
 
-  Achievment.fromFirestore(QueryDocumentSnapshot snapshot){
+  Achievement.fromFirestore(QueryDocumentSnapshot snapshot){
     Map data = snapshot.data();
     _name = data['name'];
     _description = data['description'];
@@ -26,6 +26,5 @@ class Achievment {
 
   get name => _name;  
   get description => _description;
-
   get completed => _completed;
 }
