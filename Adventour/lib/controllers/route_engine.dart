@@ -1,4 +1,4 @@
-
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart';
@@ -50,9 +50,8 @@ class RouteEngine {
     List<Place> places = [];
 
     for (String type in types) {
-      Place routePlace = placesWithoutDuplicates.firstWhere((place) =>
-         place.types.contains(type)
-      , orElse: () {});
+      Place routePlace = placesWithoutDuplicates
+          .firstWhere((place) => place.types.contains(type), orElse: () {});
       if (routePlace != null) {
         places.add(routePlace);
         placesWithoutDuplicates.remove(routePlace);
@@ -63,12 +62,11 @@ class RouteEngine {
     List<Path> paths = [];
     for (var transport in transports) {
       Path path = await directionsEngine.makePath(start, places, transport);
-      if(path != null) paths.add(path);
-      
+      if (path != null) paths.add(path);
     }
-    Route route = Route(start, places, paths,transports);
+    Route route = Route(start, places, paths, transports, db.currentUserId);
 
-    return RouteEngineResponse(route,placesWithoutDuplicates);
+    return RouteEngineResponse(route, placesWithoutDuplicates);
   }
 }
 
@@ -78,7 +76,7 @@ class RouteEngineResponse {
   Route _route;
   List<Place> _recommendations;
 
-  RouteEngineResponse(route,recommendations){
+  RouteEngineResponse(route, recommendations) {
     _route = route;
     _recommendations = recommendations;
   }

@@ -11,13 +11,17 @@ class Route {
   String _name;
   String _image;
   String _id;
+  String _author;
+  DateTime _creationDate;
 
-  Route(start, places, paths, transports, [name, image]) {
+  Route(start, places, paths, transports, author, [name, image]) {
     _start = start;
     _places = places;
     _paths = paths;
     _name = name;
     _image = image;
+    _author = author;
+    _creationDate = DateTime.now();
   }
 
   Map<String, dynamic> toJson() => {
@@ -27,7 +31,9 @@ class Route {
         'paths': _paths.map((path) => path.toJson()).toList(),
         'name': _name,
         'image': _image,
-        'requested': 'false'
+        'requested': 'false',
+        'author': _author,
+        'creationDate': _creationDate
       };
 
   Route.fromJson(DocumentSnapshot doc) {
@@ -44,9 +50,15 @@ class Route {
     }
     _name = data['name'];
     _image = data['image'];
+    _author = data['author'];
+    _creationDate = (data['creationDate'] as Timestamp).toDate();
   }
 
   String get id => _id;
+
+  String get author => _author;
+
+  set author(String author) => _author = author;
 
   LatLng get start => _start;
 
