@@ -11,7 +11,6 @@ class Route {
   String _name;
   String _image;
   String _id;
-  bool _requested;
 
   Route(start, places, paths, transports, [name, image]) {
     _start = start;
@@ -28,7 +27,7 @@ class Route {
         'paths': _paths.map((path) => path.toJson()).toList(),
         'name': _name,
         'image': _image,
-        'requested': false
+        'requested': 'false'
       };
 
   Route.fromJson(DocumentSnapshot doc) {
@@ -45,7 +44,6 @@ class Route {
     }
     _name = data['name'];
     _image = data['image'];
-    _requested = data['requested'];
   }
 
   String get id => _id;

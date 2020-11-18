@@ -1,6 +1,9 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/route_widget.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:adventour_admin/controllers/db.dart';
 
 class RouteRequestPage extends StatelessWidget {
   RouteRequestPage({@required this.requests});
@@ -11,6 +14,12 @@ class RouteRequestPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Route requests'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: auth.signOut,
+          )
+        ],
       ),
       body: SafeArea(
         child: Padding(
@@ -21,7 +30,23 @@ class RouteRequestPage extends StatelessWidget {
                   separatorBuilder: (context, index) => SizedBox(height: 5),
                   itemBuilder: (context, index) {
                     r.Route route = requests[index];
-                    return RouteWidget(route);
+                    return Slidable(
+                      actionPane: SlidableDrawerActionPane(),
+                      actionExtentRatio: 0.25,
+                      actions: <Widget>[
+                        IconSlideAction(
+                          caption: 'Accept',
+                          color: Colors.transparent,
+                          icon: Icons.done,
+                          foregroundColor: Theme.of(context).primaryColor,
+                          onTap: () {
+                            db.addRouteHighlight(route, 'r8d5Ci8UFej32X8Ajksy');
+                            db.deleteRouteRequest('BltJPqjJKo3wuBVuM2Pd',route.id);
+                          }, // AÑADIR CIUDAD
+                        ),
+                      ],
+                      child: RouteWidget(route),
+                    );
                   },
                 )
               : Center(
