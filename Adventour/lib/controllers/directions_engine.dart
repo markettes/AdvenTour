@@ -8,11 +8,11 @@ const WALK = 'walk';
 const PUBLIC = 'public';
 const BICYCLE = 'bicycle';
 
-List<String> transports = [CAR,WALK,PUBLIC,BICYCLE];
+List<String> transports = [CAR, WALK, PUBLIC, BICYCLE];
 
 class DirectionsEngine {
   final _directions = GoogleMapsDirections(
-    apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+    apiKey: "AIzaSyD3tJNw9gvqyeBxcqAYbPEYMOBAfIprRds",
   );
 
   // Future<List<Trajectory>> makeTrajectories(Place originPlace, Place destinationPlace, String transport) async {
@@ -27,17 +27,26 @@ class DirectionsEngine {
   //   return trajectories;
   // }
 
-    Future<List<Path>> makePaths(List<Place> places, String transport) async {
-      if(places.length < 3) return [];
-    String origin = places.first.latitude.toString() +',' + places.first.longitude.toString();
-    String destination = places.last.latitude.toString() +',' + places.last.longitude.toString();
+  Future<List<Path>> makePaths(List<Place> places, String transport) async {
+    if (places.length < 3) return [];
+    String origin = places.first.latitude.toString() +
+        ',' +
+        places.first.longitude.toString();
+    String destination = places.last.latitude.toString() +
+        ',' +
+        places.last.longitude.toString();
     DirectionsResponse response = await _directions.directions(
       origin,
       destination,
-      waypoints: places.sublist(1,places.length - 1).map((place) => Waypoint.fromPlaceId(place.id)).toList(),
+      waypoints: places
+          .sublist(1, places.length - 1)
+          .map((place) => Waypoint.fromPlaceId(place.id))
+          .toList(),
       travelMode: toTravelMode(transport),
     );
-    List<Path> paths = response.routes.map((route) => Path.fromGoogleRoute(route,transport)).toList();
+    List<Path> paths = response.routes
+        .map((route) => Path.fromGoogleRoute(route, transport))
+        .toList();
     return paths;
   }
 }
