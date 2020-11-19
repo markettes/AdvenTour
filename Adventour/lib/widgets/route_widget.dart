@@ -1,4 +1,5 @@
 import 'package:Adventour/controllers/search_engine.dart';
+import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
@@ -22,10 +23,9 @@ class _RouteWidgetState extends State<RouteWidget> {
   @override
   Widget build(BuildContext context) {
     routeEngineResponse =
-        RouteEngineResponse(widget.route, widget.route.places);
+        RouteEngineResponse(widget.route, <Place>[]);
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/routePage', arguments: {
-        'myRoute': widget.route,
         'routeEngineResponse': routeEngineResponse
       }),
       child: SizedBox(
@@ -35,8 +35,7 @@ class _RouteWidgetState extends State<RouteWidget> {
             CircleAvatar(
               radius: 30,
               backgroundImage: widget.route.images.isNotEmpty
-                  ? NetworkImage(
-                      searchEngine.searchPhoto(widget.route.randomImage()))
+                  ? NetworkImage(searchEngine.searchPhoto(widget.route.image))
                   : null,
             ),
             SizedBox(
@@ -112,7 +111,9 @@ class _RouteWidgetState extends State<RouteWidget> {
             Row(
               children: [
                 Text(widget.route.likes.toString()),
-                SizedBox(width: 5,),
+                SizedBox(
+                  width: 5,
+                ),
                 Icon(Icons.favorite)
               ],
             ),

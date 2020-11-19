@@ -49,15 +49,11 @@ class _RoutePageState extends State<RoutePage>
     Map arguments = ModalRoute.of(context).settings.arguments;
     _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    if (arguments.length == 1) {
-      routeEngineResponse = arguments['routeEngineResponse'];
-      route = routeEngineResponse.route;
-      recommendations = routeEngineResponse.recommendations;
-    } else {
-      route = arguments['myRoute'];
-      routeEngineResponse = arguments['routeEngineResponse'];
-      recommendations = routeEngineResponse.recommendations;
-    }
+    routeEngineResponse = arguments['routeEngineResponse'];
+    route = routeEngineResponse.route;
+    recommendations = routeEngineResponse.recommendations;
+
+    print('?'+route.places.length.toString());
 
     return Scaffold(
         key: _scaffoldKey,
@@ -96,6 +92,7 @@ class _RoutePageState extends State<RoutePage>
                                       icon: Icons.flag,
                                       labelText: 'Route name',
                                       controller: _routeNameController,
+                                      maxLength: 20,
                                       validator: (value) {
                                         if (value.isEmpty)
                                           return 'Route name can\'t be empty';
@@ -109,7 +106,10 @@ class _RoutePageState extends State<RoutePage>
                                       if (_formKey.currentState.validate()) {
                                         route.name = _routeNameController.text;
                                         route.author = db.currentUserId;
-                                        route.images = route.places.map((place) => place.photos[0].photoReference).toList();
+                                        route.images = route.places
+                                            .map((place) =>
+                                                place.photos[0].photoReference)
+                                            .toList();
                                         db.addRoute(route);
                                         Navigator.pop(context);
                                         Navigator.pop(context);

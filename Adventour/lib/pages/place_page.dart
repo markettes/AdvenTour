@@ -1,10 +1,14 @@
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/search_engine.dart';
+import 'package:Adventour/pages/highlight_page.dart';
+import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/libraries/place.dart';
 import 'package:Adventour/pages/map_page.dart';
+import 'package:Adventour/models/Route.dart' as r;
 
 class PlacePage extends StatelessWidget {
   Place place;
@@ -15,26 +19,43 @@ class PlacePage extends StatelessWidget {
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
     tapMap = args['tapMap'];
+    print(place);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(place.name),
-        actions: [IconButton(icon: Icon(Icons.more_vert), onPressed: () {})],
-      ),
-      body: place.detailed
-          ? PlaceBodyInfo(place: place, tapMap: tapMap)
-          : FutureBuilder(
-              future: searchEngine.searchWithDetails(place.id),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) print('error');
-                if (!snapshot.hasData) return CircularProgressIndicator();
-                Place place = snapshot.data;
-                return PlaceBodyInfo(
-                  place: place,
-                  tapMap: tapMap,
-                );
-              },
-            ),
+      body: StreamBuilder(
+          stream: db.getHighlights(place.id),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) print('error');
+            if (!snapshot.hasData) return CircularProgressIndicator();
+            List<r.Route> routes = snapshot.data;
+            print(routes.length);
+            print(place.id);
+            if (routes.isEmpty)
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(place.name),
+                  actions: [
+                    IconButton(icon: Icon(Icons.more_vert), onPressed: () {})
+                  ],
+                ),
+                body: place.detailed
+                    ? PlaceBodyInfo(place: place, tapMap: tapMap)
+                    : FutureBuilder(
+                        future: searchEngine.searchWithDetails(place.id),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) print('error');
+                          if (!snapshot.hasData)
+                            return CircularProgressIndicator();
+                          Place place = snapshot.data;
+                          return PlaceBodyInfo(
+                            place: place,
+                            tapMap: tapMap,
+                          );
+                        },
+                      ),
+              );
+            return HighlightPage(place: place, routes: routes);
+          }),
     );
   }
 }
@@ -260,13 +281,8 @@ class InfoMiddle extends StatelessWidget {
               borderRadius: BorderRadius.circular(40),
               color: Theme.of(context).primaryColor,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Image.network(
-                place.type,
-                color: Colors.white,
-                fit: BoxFit.contain,
-              ),
+            child: CircleIcon(
+              type: place.type,
             ),
           ),
         if (place.rating != null)

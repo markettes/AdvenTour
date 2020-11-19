@@ -97,7 +97,10 @@ class _MapPageState extends State<MapPage> {
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
                             user.userName,
-                            style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 25),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontSize: 25),
                           ),
                         ),
                       ],
@@ -454,21 +457,10 @@ class _MapPageState extends State<MapPage> {
 
   Future _onTapPrediction(Prediction prediction) async {
     _mapController.clearMarkers();
-    var data = await _firestore.collection('Highlights').get();
 
     Place place = (await searchEngine.searchByText(prediction.description,
             Location(_position.latitude, _position.longitude), 1000))
         .first;
-
-    for (var i = 0; i < data.docs.length; i++) {
-      if (data.docs[i].get('id') == prediction.placeId) {
-        Navigator.pop(context);
-        return Navigator.of(context).pushNamed(
-          '/highlightPage',
-          arguments: {'place': place, 'photo': data.docs[i].get('photo')},
-        );
-      }
-    }
 
     _mapController.addMarker(place, context);
     setState(() {

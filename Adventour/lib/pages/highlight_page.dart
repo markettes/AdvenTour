@@ -1,24 +1,18 @@
 import 'package:Adventour/models/Place.dart';
-import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/route_widget.dart';
 import 'package:flutter/material.dart';
 
-class HighlightPage extends StatefulWidget {
-  @override
-  _HighlightPageState createState() => _HighlightPageState();
-}
-
-class _HighlightPageState extends State<HighlightPage> {
-  TextEditingController _locationController = TextEditingController();
+class HighlightPage extends StatelessWidget {
+  HighlightPage({
+    @required this.place,
+    @required this.routes,
+  });
   Place place;
-  String photo;
+  List<r.Route> routes;
 
   @override
   Widget build(BuildContext context) {
-    Map args = ModalRoute.of(context).settings.arguments;
-    place = args['place'];
-    photo = args['photo'];
-
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name + ' highlights'),
@@ -26,12 +20,6 @@ class _HighlightPageState extends State<HighlightPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              child: Image.network(
-                photo,
-              ),
-            ),
-            // RouteTile(exampleRoute),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListTile(

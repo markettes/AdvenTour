@@ -44,6 +44,16 @@ class RoutesPage extends StatelessWidget {
                                 db.requestRoute(db.currentUserId, route.id),
                           ),
                         ],
+                        secondaryActions: [
+                          IconSlideAction(
+                            caption: 'Delete',
+                            color: Colors.transparent,
+                            icon: Icons.delete,
+                            foregroundColor: Theme.of(context).primaryColor,
+                            onTap: () =>
+                                db.deleteRoute(route.author, route.id),
+                          ),
+                        ],
                         child: RouteWidget(route),
                       );
                     },

@@ -52,17 +52,15 @@ class Place {
   OpeningHoursDetail _openingHours;
   List<String> _weekdaytext;
   bool _openNow;
-  List<String> _types;
   num _userRatingsTotal;
   Duration _duration;
 
-  Place(latitude, longitude, [name, id, types, rating, type, duration]) {
+  Place(latitude, longitude, [name, id, rating, type, duration]) {
     _detailed = false;
     _latitude = latitude;
     _longitude = longitude;
     _name = name;
     _id = id;
-    _types = types;
     _rating = rating;
     _type = type;
     _duration = duration;
@@ -85,7 +83,6 @@ class Place {
     _type = googleIconToType(result.icon);
     _latitude = result.geometry.location.lat;
     _longitude = result.geometry.location.lng;
-    _types = result.types;
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
     _adress = result.vicinity;
@@ -124,7 +121,6 @@ class Place {
         'adress': _adress,
         'type': _type,
         'duration': _duration.inMinutes,
-        'types': _types,
       };
 
   Place.fromJson(Map<dynamic, dynamic> data) {
@@ -135,10 +131,6 @@ class Place {
     _adress = data['adress'];
     _type = data['type'];
     _duration = Duration(minutes: data['duration']);
-    _types = new List<String>();
-    for (var type in data['types']) {
-      _types.add(type);
-    }
   }
 
   get detailed => _detailed;
@@ -169,7 +161,6 @@ class Place {
 
   get openNow => _openNow;
 
-  List<String> get types => _types;
 
   num get userRatingsTotal => _userRatingsTotal;
 
@@ -182,7 +173,6 @@ id = $_id
 name = $_name
 type = $_type
 photos = $_photos
-types = $_types
     """;
   }
 }
@@ -232,6 +222,8 @@ String googleIconToType(String icon) {
       return MOVIE_THEATER;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/stadium-71.png':
       return STADIUM;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/parking-71.png':
+      return null;
     default:
       throw Exception('Icon $icon not implemented');
   }

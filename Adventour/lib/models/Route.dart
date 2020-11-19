@@ -21,7 +21,7 @@ class Route {
   bool _isHighlight;
   List<String> _likes;
 
-  Route(start, places, paths, transports, author, [locationName, locationId]) {
+  Route(start, places, paths, author, locationName, locationId) {
     _start = start;
     _places = places;
     _paths = paths;
@@ -66,8 +66,9 @@ class Route {
     _creationDate = (data['creationDate'] as Timestamp).toDate();
     _locationName = data['locationName'];
     _locationId = data['locationId'];
-    _requested = data['requested'].toLowerCase() == 'true';
-    _isHighlight = data['isHighlight'].toLowerCase() == 'true';
+    print(data['requested']);
+    _requested = data['requested'] == 'true';
+    _isHighlight = data['isHighlight'] == 'true';
     _likes = List<String>.from(data['likes']);
   }
 
@@ -101,56 +102,13 @@ class Route {
 
   String get locationId => _locationId;
 
-  String randomImage() => _images[Random().nextInt(_images.length)];
+  String get image => _images[0];
 
   int get likes => _likes.length;
 }
 
 List<Route> toRoutes(List docs) =>
     docs.map((doc) => Route.fromJson(doc)).toList();
-
-Route exampleRoute = Route(
-  LatLng(39.47018449999999, -0.3705346),
-  [
-    Place(
-        39.4753061,
-        -0.3764726,
-        'Catedral de Valencia',
-        'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
-        TOURIST_ATTRACTION,
-        5,
-        "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-        Duration(minutes: 20)),
-    Place(
-        39.4752113,
-        -0.3552065,
-        'Ciudad de las artes y de las ciencias',
-        'ChIJgUOb0elIYA0RlPjrpQdE62I',
-        [MUSEUM],
-        5,
-        "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
-        Duration(minutes: 35))
-  ],
-  [
-    Path([
-      Stretch(
-        '1',
-        [LatLng(39.47018449999999, -0.3705346), LatLng(39.4753061, -0.3764726)],
-        Duration(minutes: 20),
-        'ChIJb2UMoVJPYA0R2uk8Hly_1uU',
-      ),
-      Stretch(
-        '2',
-        [LatLng(39.4753061, -0.3764726), LatLng(39.4752113, -0.3552065)],
-        Duration(minutes: 25),
-        'ChIJgUOb0elIYA0RlPjrpQdE62I',
-      ),
-    ], WALK)
-  ],
-  WALK,
-  'Valencia Center',
-  'https://www.thetimes.co.uk/imageserver/image/methode%2Ftimes%2Fprod%2Fweb%2Fbin%2Fc139090c-acf0-11e7-88ab-06bb8ee1988e.jpg?crop=1478%2C831%2C8%2C138',
-);
 
 class Path {
   List<Stretch> _stretchs;

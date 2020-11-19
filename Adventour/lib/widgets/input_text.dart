@@ -10,7 +10,8 @@ class InputText extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.onTap,
-    this.readOnly = false
+    this.readOnly = false,
+    this.maxLength
   });
 
   IconData icon;
@@ -22,6 +23,7 @@ class InputText extends StatefulWidget {
   Function(String value) validator;
   Function() onTap;
   bool readOnly;
+  int maxLength;
 
   @override
   _InputTextState createState() => _InputTextState();
@@ -42,6 +44,7 @@ class _InputTextState extends State<InputText> {
         obscureText: widget.obscured,
         controller: widget.controller,
         readOnly: widget.readOnly,
+        maxLength: widget.maxLength,
         decoration: InputDecoration(
           icon: Icon(
             widget.icon,

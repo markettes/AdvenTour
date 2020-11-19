@@ -14,7 +14,7 @@ class DB {
 
   Future addHighlight(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
-      .update({'_isHighlight': 'true'});
+      .update({'isHighlight': 'true'});
 
   Future deleteRouteRequest(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
