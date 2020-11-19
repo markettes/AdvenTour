@@ -32,6 +32,7 @@ class _NavigationPageState extends State<NavigationPage> {
   r.Route route1 = r.exampleRoute;
   r.Route route;
   GoogleMapController mapController;
+  Stopwatch stopwatch = Stopwatch();
 
   //Time Logic
   s.Stack<Stretch> stretches = s.Stack();
@@ -100,7 +101,6 @@ class _NavigationPageState extends State<NavigationPage> {
     List listaStretches = route.paths.first.stretchs;
 
     polylines = arguments['polylines'];
-    Stopwatch stopwatch = Stopwatch();
 
     CameraPosition initialCameraPosition = CameraPosition(
       zoom: 22,
@@ -122,6 +122,15 @@ class _NavigationPageState extends State<NavigationPage> {
         tiempoRestante += st.duration.inMinutes;
       }
       return '${tiempoRestante ~/ 60}h ${tiempoRestante % 60}min';
+    }
+
+    String tiempoDurante() {
+      Duration time = stopwatch.elapsed;
+      if (time.inMinutes < 60) {
+        return '${time.inMinutes % 60}min';
+      } else {
+        return '${time.inMinutes ~/ 60}h ${time.inMinutes % 60}min';
+      }
     }
 
     return MaterialApp(
@@ -190,7 +199,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         Icon(Icons.alarm,
                             color: Theme.of(context).primaryColor),
                         Text(
-                          '${stopwatch.elapsedTicks}',
+                          '${tiempoDurante()}',
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold),
@@ -208,8 +217,13 @@ class _NavigationPageState extends State<NavigationPage> {
             onMapCreated: (GoogleMapController controller) {
               setState(() {
                 mapController = controller;
+                if (stopwatch.isRunning) {
+                  stopwatch.stop();
+                  stopwatch.reset();
+                }
+                stopwatch.start();
               });
-              stopwatch.start();
+
               for (var i = listaStretches.length - 1; i >= 0; i--) {
                 stretches.push(listaStretches[i]);
               }
