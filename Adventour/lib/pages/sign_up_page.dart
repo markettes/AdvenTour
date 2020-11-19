@@ -54,6 +54,7 @@ class _SignInFormState extends State<SignInForm> {
           InputText(
             icon: Icons.person,
             labelText: 'Username',
+            maxLength: 15,
             controller: _userNameController,
             validator: (value) {
               if (value.isEmpty) return 'Username can\'t be empty';

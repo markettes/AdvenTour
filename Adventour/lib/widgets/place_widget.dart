@@ -19,7 +19,7 @@ class PlaceWidget extends StatelessWidget {
     return GestureDetector(
       child: Row(
         children: [
-          SizedBox(height: 50, child: CircleIcon(image: place.type)),
+          SizedBox(height: 50, child: CircleIcon(type: place.type)),
           SizedBox(width: 10),
           Expanded(
             child: Column(
