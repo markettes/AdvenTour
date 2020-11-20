@@ -28,6 +28,7 @@ class NavigationPage extends StatefulWidget {
 
 class _NavigationPageState extends State<NavigationPage> {
   Set<Polyline> polylines = {};
+  List<Marker> markers = List();
 
   r.Route route1 = r.exampleRoute;
   r.Route route;
@@ -101,6 +102,7 @@ class _NavigationPageState extends State<NavigationPage> {
     List listaStretches = route.paths.first.stretchs;
 
     polylines = arguments['polylines'];
+    markers = arguments['markers'];
 
     CameraPosition initialCameraPosition = CameraPosition(
       zoom: 22,
@@ -148,7 +150,7 @@ class _NavigationPageState extends State<NavigationPage> {
                   });
             },
           ),
-          title: Text("Título de la ruta?"),
+          title: Text(''), //TO DO.
           actions: [
             IconButton(
               icon: Icon(Icons.more_vert),
@@ -228,6 +230,7 @@ class _NavigationPageState extends State<NavigationPage> {
                 stretches.push(listaStretches[i]);
               }
             },
+            markers: Set.from(markers),
             polylines: polylines,
             initialCameraPosition: initialCameraPosition,
             myLocationEnabled: true,
