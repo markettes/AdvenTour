@@ -12,17 +12,20 @@ const MAX_DISTANCE = 15000;
 
 class RouteEngine {
   Future<RouteEngineResponse> makeRoute(
-      String locationId, String locationName, List<String> types) async {
+      String locationId, List<String> types) async {
     Location location;
     if (locationId == null) {
       Position position = await Geolocator.getCurrentPosition();
       location = Location(position.latitude, position.longitude);
-      Place locationPlace = (await searchEngine.searchByLocationWithType('locality', location, 50000)).first;
-      locationId = locationPlace.id;
-      locationName = locationPlace.name;
     } else {
       location = await geocoding.searchByPlaceId(locationId);
     }
+
+    Place locationPlace =
+        (await searchEngine.searchByLocationWithType(LOCALITY, location, 50000))
+            .first;
+    locationId = locationPlace.id;
+    String locationName = locationPlace.name;
 
     List<Place> prePlaces = [];
 
@@ -66,8 +69,8 @@ class RouteEngine {
       Path path = await directionsEngine.makePath(start, places, transport);
       if (path != null) paths.add(path);
     }
-    Route route = Route(start, places, paths, db.currentUserId,
-        locationName, locationId);
+    Route route =
+        Route(start, places, paths, db.currentUserId, locationName, locationId);
 
     print('?' + route.places.length.toString());
 

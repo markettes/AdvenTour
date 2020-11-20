@@ -104,7 +104,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                     text: 'CREATE',
                     onPressed: () async {
                       RouteEngineResponse routeEngineResponse =
-                          await routeEngine.makeRoute(_locationId,_locationName, _placeTypes);
+                          await routeEngine.makeRoute(_locationId, _placeTypes);
                       Navigator.pushNamed(context, '/routePage', arguments: {
                         'routeEngineResponse': routeEngineResponse
                       });

@@ -19,7 +19,6 @@ class PlacePage extends StatelessWidget {
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
     tapMap = args['tapMap'];
-    print(place);
 
     return Scaffold(
       body: StreamBuilder(
@@ -54,7 +53,6 @@ class PlacePage extends StatelessWidget {
                         },
                       ),
               );
-            return HighlightPage(place: place, routes: routes);
           }),
     );
   }

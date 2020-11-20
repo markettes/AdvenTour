@@ -4,15 +4,12 @@ import 'package:Adventour/widgets/route_widget.dart';
 import 'package:flutter/material.dart';
 
 class HighlightPage extends StatelessWidget {
-  HighlightPage({
-    @required this.place,
-    @required this.routes,
-  });
   Place place;
-  List<r.Route> routes;
 
   @override
   Widget build(BuildContext context) {
+    Map args = ModalRoute.of(context).settings.arguments;
+    place = args['place'];
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name + ' highlights'),

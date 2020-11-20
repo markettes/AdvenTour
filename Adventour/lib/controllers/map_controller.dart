@@ -49,19 +49,22 @@ class MapController {
       infoWindow: InfoWindow(
           title: place.name ?? "Unknown",
           onTap: () {
-            if (place.id == 'start')
-              return;
-            else {
-              Navigator.of(context).pushNamed(
-                '/placePage',
-                arguments: {
-                  'place': place,
-                  'tapMap': () {
-                    goToCoordinates(place.latitude, place.longitude, 18);
-                  }
-                },
-              );
-            }
+            if(place.type != LOCALITY)
+            Navigator.of(context).pushNamed(
+              '/placePage',
+              arguments: {
+                'place': place,
+                'tapMap': () {
+                  goToCoordinates(place.latitude, place.longitude, 18);
+                }
+              },
+            );
+            else Navigator.of(context).pushNamed(
+              '/highlightPage',
+              arguments: {
+                'place': place,
+              },
+            );
           }),
     );
 

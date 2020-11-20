@@ -23,6 +23,7 @@ const NIGHT_CLUB = "night_club"; // + 60
 const RESTAURANT = "restaurant"; // 60
 const SHOPPING_MALL = "shopping_mall"; // 60
 const NATURAL = "natural_feature";
+const LOCALITY = "locality";
 
 List placeTypes = [
   RESTAURANT,
@@ -217,7 +218,7 @@ String googleIconToType(String icon) {
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/bar-71.png':
       return RESTAURANT;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png':
-      return TOURIST_ATTRACTION;
+      return LOCALITY;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/movies-71.png':
       return MOVIE_THEATER;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/stadium-71.png':
