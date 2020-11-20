@@ -246,13 +246,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _newPasswordController.text);
                                   db.changeUserName(
                                       actualUser, _usernameController.text);
+                                  //Achievement ChangeLook
+                                  db.changeLook(actualUser);
                                   Navigator.pop(context);
                                 }
                                 db.changeUserName(
                                     actualUser, _usernameController.text);
+                                //Achievement ChangeLook
+                                db.changeLook(actualUser);
                               } else {
                                 db.changeUserName(
                                     actualUser, _usernameController.text);
+                                //Achievement ChangeLook
+                                db.changeLook(actualUser);
                                 Navigator.pop(context);
                               }
                             },
@@ -262,6 +268,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             onPressed: () async {
                               db.changeUserName(
                                   actualUser, _usernameController.text);
+                              //Achievement ChangeLook
+                              db.changeLook(actualUser);
                               Navigator.pop(context);
                             })
                   ],

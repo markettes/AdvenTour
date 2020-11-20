@@ -57,6 +57,10 @@ class DB {
     
     return achievements;
   }
+
+  Future<void> changeLook(User user) {
+    _firestore.doc('Users/${user.id}').update({'changeLook': "true"});
+  }
 }
 
 DB db;

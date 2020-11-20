@@ -1,5 +1,7 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/models/Achievement.dart';
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +13,14 @@ class AchievementsPage extends StatefulWidget {
 
 class _AchievementsPageState extends State<AchievementsPage> {
   List<Achievement> _achievements = List<Achievement>();
+  User actualUser;
 
   @override
-  void initState()  {
+  void initState() {
+    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
+    user.then((value) {
+      actualUser = value;
+    });
     Future<List<Achievement>> achievementss = db.getAchievements();
     achievementss.then((value) => _achievements = value);
     super.initState();
@@ -29,7 +36,8 @@ class _AchievementsPageState extends State<AchievementsPage> {
       ),
       body: ScrollColumnExpandable(
         children: [
-          for(int i=0; i<_achievements.length; i++) InfAchievement(achievement: _achievements[i]),
+          for (int i = 0; i < _achievements.length; i++)
+            InfAchievement(achievement: _achievements[i], actualUser: actualUser,),
           PrimaryButton(
               text: 'RETURN',
               onPressed: () async {
@@ -44,8 +52,10 @@ class _AchievementsPageState extends State<AchievementsPage> {
 
 class InfAchievement extends StatelessWidget {
   Achievement achievement;
+  User actualUser;
   InfAchievement({
     this.achievement,
+    this.actualUser,
   });
 
   @override
@@ -97,7 +107,8 @@ class InfAchievement extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
-                        child: this.achievement.affected == this.achievement.objective
+                        child: actualUser.getAttribute(this.achievement.affected) == 
+                                this.achievement.objective
                             ? Center(
                                 child: Text(
                                   "X",

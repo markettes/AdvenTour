@@ -61,7 +61,7 @@ class Auth {
           await _firebaseAuth.signInWithCredential(credential);
 
           if(result.additionalUserInfo.isNewUser){
-            myuser.User user = myuser.User('',result.user.email);
+            myuser.User user = myuser.User('',result.user.email, "false");
             db.addUser(user);
           }
 
