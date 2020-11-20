@@ -21,48 +21,48 @@ class PlacePage extends StatelessWidget {
     tapMap = args['tapMap'];
 
     return Scaffold(
-      body: StreamBuilder(
-          stream: db.getHighlights(place.id),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print('error');
-            if (!snapshot.hasData) return CircularProgressIndicator();
-            List<r.Route> routes = snapshot.data;
-            print(routes.length);
-            print(place.id);
-            if (routes.isEmpty)
-              return Scaffold(
-                appBar: AppBar(
-                  title: Text(place.name),
-                  actions: [
-                    IconButton(icon: Icon(Icons.more_vert), onPressed: () {})
-                  ],
-                ),
-                body: place.detailed
-                    ? PlaceBodyInfo(place: place, tapMap: tapMap)
-                    : FutureBuilder(
-                        future: searchEngine.searchWithDetails(place.id),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasError) print('error');
-                          if (!snapshot.hasData)
-                            return CircularProgressIndicator();
-                          Place place = snapshot.data;
-                          return PlaceBodyInfo(
-                            place: place,
-                            tapMap: tapMap,
-                          );
-                        },
-                      ),
-              );
-          }),
+      appBar: AppBar(
+        title: Text(place.name),
+        actions: [IconButton(icon: Icon(Icons.more_vert), onPressed: () {})],
+      ),
+      body: place.detailed
+          ? PlaceBodyInfo(place: place, tapMap: tapMap)
+          : FutureBuilder(
+              future: searchEngine.searchWithDetails(place.id),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print('error');
+                if (!snapshot.hasData) return CircularProgressIndicator();
+                Place place = snapshot.data;
+                return PlaceBodyInfo(
+                  place: place,
+                  tapMap: tapMap,
+                );
+              },
+            ),
     );
   }
 }
 
-class PlaceBodyInfo extends StatelessWidget {
+class PlaceBodyInfo extends StatefulWidget {
   PlaceBodyInfo({@required this.place, @required this.tapMap});
+
+  
 
   Place place;
   Function tapMap;
+
+  @override
+  _PlaceBodyInfoState createState() => _PlaceBodyInfoState();
+}
+
+class _PlaceBodyInfoState extends State<PlaceBodyInfo> {
+  CarouselController _carouselController = CarouselController();
+
+  @override
+  void dispose() {
+    _carouselController = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,29 +74,30 @@ class PlaceBodyInfo extends StatelessWidget {
           SizedBox(height: 5),
           Container(
               height: 200,
-              child: place.photos == null || place.photos.isEmpty
+              child: widget.place.photos == null || widget.place.photos.isEmpty
                   ? Center(child: Text('No available photos'))
                   : CarouselSlider.builder(
-                      itemCount: place.photos.length,
+                    carouselController: _carouselController,
+                      itemCount: widget.place.photos.length,
                       options: CarouselOptions(
                         autoPlay: true,
                         pauseAutoPlayOnManualNavigate: true,
                         autoPlayInterval: Duration(seconds: 10),
-                        enableInfiniteScroll: place.photos.length > 1,
+                        enableInfiniteScroll: widget.place.photos.length > 1,
                         aspectRatio: size.width / 200,
                         enlargeCenterPage: true,
                       ),
                       itemBuilder: (BuildContext context, int index) =>
                           Image.network(
                         searchEngine
-                            .searchPhoto(place.photos[index].photoReference),
+                            .searchPhoto(widget.place.photos[index].photoReference),
                         fit: BoxFit.cover,
                       ),
                     )),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(children: [
-              InfoMiddle(place: place, tapMap: tapMap),
+              InfoMiddle(place: widget.place, tapMap: widget.tapMap),
               SizedBox(
                 height: 5,
               ),
@@ -104,22 +105,22 @@ class PlaceBodyInfo extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    if (place.adress != null)
+                    if (widget.place.adress != null)
                       InfoBut(
                         icon: Icons.gps_fixed,
-                        text: place.adress,
+                        text: widget.place.adress,
                       ),
-                    if (place.telephone != null) SizedBox(height: 5),
-                    if (place.telephone != null)
-                      InfoBut(icon: Icons.local_phone, text: place.telephone),
-                    if (place.openingHours != null) SizedBox(height: 5),
-                    if (place.openingHours != null)
+                    if (widget.place.telephone != null) SizedBox(height: 5),
+                    if (widget.place.telephone != null)
+                      InfoBut(icon: Icons.local_phone, text: widget.place.telephone),
+                    if (widget.place.openingHours != null) SizedBox(height: 5),
+                    if (widget.place.openingHours != null)
                       InfoBut(
                           icon: Icons.access_alarm_outlined,
                           text:
-                              place.openingHours.openNow ? 'Opened' : 'Closed'),
-                    if (place.openingHours != null) SizedBox(height: 5),
-                    if (place.openingHours != null)
+                              widget.place.openingHours.openNow ? 'Opened' : 'Closed'),
+                    if (widget.place.openingHours != null) SizedBox(height: 5),
+                    if (widget.place.openingHours != null)
                       InfoBut(
                         icon: Icons.calendar_today,
                         text: openAndClose(),
@@ -137,8 +138,8 @@ class PlaceBodyInfo extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Text(
-                    (place.reviews != null
-                            ? place.reviews.length.toString()
+                    (widget.place.reviews != null
+                            ? widget.place.reviews.length.toString()
                             : '0') +
                         " opinions",
                     style: Theme.of(context).textTheme.bodyText2,
@@ -161,17 +162,17 @@ class PlaceBodyInfo extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 5),
-              if (place.reviews != null) SizedBox(height: 5),
-              if (place.reviews != null)
+              if (widget.place.reviews != null) SizedBox(height: 5),
+              if (widget.place.reviews != null)
                 ListView.separated(
-                  itemCount: place.reviews.length,
+                  itemCount: widget.place.reviews.length,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   separatorBuilder: (context, index) => SizedBox(
                     height: 12,
                   ),
                   itemBuilder: (_, int index) {
-                    Review review = place.reviews[index];
+                    Review review = widget.place.reviews[index];
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -221,8 +222,8 @@ class PlaceBodyInfo extends StatelessWidget {
 
   String openAndClose() {
     String _schedule = '';
-    for (var i = 0; i < place.weekdaytext.length; i++) {
-      _schedule = _schedule + place.weekdaytext[i] + '\n';
+    for (var i = 0; i < widget.place.weekdaytext.length; i++) {
+      _schedule = _schedule + widget.place.weekdaytext[i] + '\n';
     }
     return _schedule;
   }
