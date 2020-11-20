@@ -10,6 +10,11 @@ const WALK = 'walk';
 const BICYCLE = 'bicycle';
 
 List<String> transports = [CAR, WALK, BICYCLE];
+const SHORT_DISTANCE = 5000;
+
+const MEDIUM_DISTANCE = 10000;
+
+const LONG_DISTANCE = 20000;
 
 class DirectionsEngine {
   final _directions = GoogleMapsDirections(
@@ -30,7 +35,7 @@ class DirectionsEngine {
 
   Future<r.Path> makePath(
       LatLng start, List<Place> places, String transport) async {
-    if (places.length < 3) return null;
+    
     String origin =
         start.latitude.toString() + ',' + start.longitude.toString();
     Place furthestPlace = getFurthestPlace(start, places);

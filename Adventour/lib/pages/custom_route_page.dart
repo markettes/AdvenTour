@@ -93,6 +93,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                       ],
                     ),
                   ),
+                  
                 ],
               ),
             ),
@@ -103,10 +104,10 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      RouteEngineResponse routeEngineResponse =
-                          await routeEngine.makeRoute(_locationId, _placeTypes);
+                      r.Route route =
+                          await routeEngine.makeRoute(_locationId, _placeTypes,MEDIUM_DISTANCE);
                       Navigator.pushNamed(context, '/routePage', arguments: {
-                        'routeEngineResponse': routeEngineResponse
+                        'route': route
                       });
                     },
                     icon: Icons.edit,

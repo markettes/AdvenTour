@@ -8,11 +8,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
-const MAX_DISTANCE = 15000;
-
 class RouteEngine {
-  Future<RouteEngineResponse> makeRoute(
-      String locationId, List<String> types) async {
+  Future<Route> makeRoute(String locationId, List<String> types,int radius) async {
     Location location;
     if (locationId == null) {
       Position position = await Geolocator.getCurrentPosition();
@@ -31,7 +28,7 @@ class RouteEngine {
 
     for (String type in types) {
       prePlaces.addAll(await searchEngine.searchByLocationWithType(
-          type, location, MAX_DISTANCE));
+          type, location, radius));
     }
 
     List<Place> placesWithoutDuplicates = [];
@@ -47,21 +44,25 @@ class RouteEngine {
     placesWithoutDuplicates.removeWhere((place) =>
         place.rating == null ||
         place.type == null ||
-        place.rating < 4.3 ||
         place.userRatingsTotal < 500);
 
     placesWithoutDuplicates.sort((a, b) => b.rating.compareTo(a.rating));
+
+    print(placesWithoutDuplicates.map((place) => place.id + place.type).toList());
 
     List<Place> places = [];
 
     for (String type in types) {
       Place routePlace = placesWithoutDuplicates
-          .firstWhere((place) => place.type == type, orElse: () {});
+          .firstWhere((place) => place.types.contains(type), orElse: () {});
       if (routePlace != null) {
         places.add(routePlace);
         placesWithoutDuplicates.remove(routePlace);
       }
     }
+
+    if (places.length < 3) return null;
+
     LatLng start = LatLng(location.lat, location.lng);
 
     List<Path> paths = [];
@@ -72,9 +73,7 @@ class RouteEngine {
     Route route =
         Route(start, places, paths, db.currentUserId, locationName, locationId);
 
-    print('?' + route.places.length.toString());
-
-    return RouteEngineResponse(route, placesWithoutDuplicates);
+    return route;
   }
 }
 

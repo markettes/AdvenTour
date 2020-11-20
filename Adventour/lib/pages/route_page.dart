@@ -11,6 +11,7 @@ import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/input_text.dart';
+import 'package:Adventour/widgets/place_types_list.dart';
 import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
@@ -31,9 +32,6 @@ class _RoutePageState extends State<RoutePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
 
-  RouteEngineResponse routeEngineResponse;
-  List<Place> recommendations;
-
   r.Route route;
   GlobalKey<ScaffoldState> _scaffoldKey;
   int _selectedPath = 0;
@@ -49,11 +47,7 @@ class _RoutePageState extends State<RoutePage>
     Map arguments = ModalRoute.of(context).settings.arguments;
     _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    routeEngineResponse = arguments['routeEngineResponse'];
-    route = routeEngineResponse.route;
-    recommendations = routeEngineResponse.recommendations;
-
-    print('?'+route.places.length.toString());
+    route = arguments['route'];
 
     return Scaffold(
         key: _scaffoldKey,
@@ -134,7 +128,7 @@ class _RoutePageState extends State<RoutePage>
             )
           ],
         ),
-        body: route.paths.isEmpty
+        body: route == null
             ? NotRouteAvailable()
             : TabBarView(
                 controller: _tabController,
@@ -201,20 +195,63 @@ class _RoutePageState extends State<RoutePage>
   Future _onPressedAdd() async {
     if (route.places.length < 8)
       await PlacesAutocomplete.show(
-          context: context,
-          onTapPrediction: _onTapPrediction,
-          onSubmitted: (value) {},
-          placeholder: ListView.separated(
-            itemCount: recommendations.length,
+        context: context,
+        onTapPrediction: _onTapPrediction,
+        onSubmitted: (value) {},
+        placeholder: RecommendationsWidget(
+          addPlace: _addPlace,
+        ),
+      );
+    else
+      Toast.show('The route has at most 8 places', context, duration: 3);
+  }
+
+  void nextTransport() {
+    if (_selectedPath == route.paths.length - 1)
+      _selectedPath = 0;
+    else
+      _selectedPath++;
+    setState(() {});
+  }
+}
+
+class RecommendationsWidget extends StatefulWidget {
+  RecommendationsWidget({@required this.addPlace});
+
+  Function addPlace;
+
+  @override
+  _RecommendationsWidgetState createState() => _RecommendationsWidgetState();
+}
+
+class _RecommendationsWidgetState extends State<RecommendationsWidget> {
+  List<String> _placeTypes = [];
+
+  List<Place> _recommendations = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 80,
+          child: PlaceTypesList(
+            onTap: _onTapPlaceType,
+            selectedTypes: _placeTypes,
+          ),
+        ),
+        Expanded(
+          child: ListView.separated(
+            itemCount: _recommendations.length,
             padding: EdgeInsets.only(top: 8),
             separatorBuilder: (context, index) => SizedBox(height: 8),
             itemBuilder: (context, index) {
-              Place place = recommendations[index];
+              Place place = _recommendations[index];
               Widget placeWidget = PlaceWidget(
                 place: place,
                 onTap: () async {
-                  recommendations.remove(place);
-                  _addPlace(place);
+                  _recommendations.remove(place);
+                  widget.addPlace(place);
                 },
               );
               if (index == 0)
@@ -230,17 +267,26 @@ class _RoutePageState extends State<RoutePage>
                 );
               return placeWidget;
             },
-          ));
-    else
-      Toast.show('The route has at most 8 places', context, duration: 3);
+          ),
+        ),
+      ],
+    );
   }
 
-  void nextTransport() {
-    if (_selectedPath == route.paths.length - 1)
-      _selectedPath = 0;
-    else
-      _selectedPath++;
-    setState(() {});
+  Future _onTapPlaceType(String placeType, bool activated) {
+    if (activated) {
+      if (_placeTypes.length > 1) {
+        _placeTypes.remove(placeType);
+        sortPlaceTypes(_placeTypes);
+        setState(() {});
+      } else
+        Toast.show('The search needs at least 1 type places', context,
+            duration: 3);
+    } else {
+      _placeTypes.add(placeType);
+      sortPlaceTypes(_placeTypes);
+      setState(() {});
+    }
   }
 }
 

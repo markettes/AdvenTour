@@ -43,6 +43,7 @@ class Place {
   String _id;
   String _name;
   String _type;
+  List<String> _types;
   String _adress;
   String _telephone;
   double _latitude;
@@ -82,6 +83,7 @@ class Place {
     _id = result.placeId;
     _name = result.name;
     _type = googleIconToType(result.icon);
+    _types = result.types;
     _latitude = result.geometry.location.lat;
     _longitude = result.geometry.location.lng;
     _rating = result.rating;
@@ -96,6 +98,7 @@ class Place {
     _id = details.placeId;
     _name = details.name;
     _type = googleIconToType(details.icon);
+    _types = details.types;
     _adress = details.vicinity;
     _latitude = details.geometry.location.lat;
     _longitude = details.geometry.location.lng;
@@ -151,6 +154,8 @@ class Place {
   num get rating => _rating;
 
   get type => _type;
+
+  List<String> get types => _types;
 
   List<Photo> get photos => _photos;
 
