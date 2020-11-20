@@ -162,7 +162,6 @@ class Place {
 
   get openNow => _openNow;
 
-
   num get userRatingsTotal => _userRatingsTotal;
 
   Duration get duration => _duration;
@@ -225,6 +224,8 @@ String googleIconToType(String icon) {
       return STADIUM;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/parking-71.png':
       return null;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/cafe-71.png':
+      return RESTAURANT;
     default:
       throw Exception('Icon $icon not implemented');
   }
