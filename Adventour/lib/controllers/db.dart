@@ -44,7 +44,7 @@ class DB {
   }
 
 //----------------------------------------Achievements-----------------------------
-  Future<List<Achievement>> toAchievements() async {
+  Future<List<Achievement>> getAchievements() async {
     List<Achievement> achievements = List<Achievement>();
     Achievement aux;
     QuerySnapshot querySnapshot =
