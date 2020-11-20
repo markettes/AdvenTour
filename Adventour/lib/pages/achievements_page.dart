@@ -10,16 +10,18 @@ class AchievementsPage extends StatefulWidget {
 }
 
 class _AchievementsPageState extends State<AchievementsPage> {
-  Achievement achievement;
-  List<Achievement> achievements;
+  List<Achievement> _achievements = List<Achievement>();
+
   @override
-  initState()  {
-    db.toAchievements().then((value) => achievements = value);
+  void initState()  {
+    Future<List<Achievement>> achievementss = db.getAchievements();
+    achievementss.then((value) => _achievements = value);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -27,12 +29,11 @@ class _AchievementsPageState extends State<AchievementsPage> {
       ),
       body: ScrollColumnExpandable(
         children: [
-          for(int i=0; i<achievements.length; i++) InfAchievement(achievement: achievements[i]),
+          for(int i=0; i<_achievements.length; i++) InfAchievement(achievement: _achievements[i]),
           PrimaryButton(
               text: 'RETURN',
               onPressed: () async {
-
-                print(achievements[0].name);
+                setState(() {});
                 //Navigator.pop(context);
               })
         ],
