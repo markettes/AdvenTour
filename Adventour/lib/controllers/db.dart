@@ -1,4 +1,5 @@
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/models/Achievement.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Adventour/models/User.dart';
 
@@ -40,6 +41,21 @@ class DB {
         .first;
     _currentUserId = snapshot.id;
     return User.fromFirestore(snapshot);
+  }
+
+//----------------------------------------Achievements-----------------------------
+  Future<List<Achievement>> toAchievements() async {
+    List<Achievement> achievements = List<Achievement>();
+    Achievement aux;
+    QuerySnapshot querySnapshot =
+        await _firestore.collection("Achievements").get();
+    for (var i = 0; i < querySnapshot.docs.length; i++) {
+      var data = querySnapshot.docs[i].data();
+      aux = new Achievement(data['name'], data['description'], data['affected'], data['objective']);
+      achievements.add(aux);
+    }
+    
+    return achievements;
   }
 }
 

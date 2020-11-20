@@ -1,13 +1,15 @@
+import 'package:Adventour/models/Achievement.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
   String _id;
   String _userName;
   String _email;
-
+ 
   User(userName, email) {
     _userName = userName;
     _email = email;
+
   }
 
   User.fromFirestore(QueryDocumentSnapshot snapshot){
@@ -19,7 +21,7 @@ class User {
 
   Map<String, dynamic> toFirestore() => {
         'userName': _userName,
-        'email': _email,
+        'email': _email,        
       };
 
   get id => _id;
