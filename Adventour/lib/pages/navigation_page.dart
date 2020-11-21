@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ffi';
 
 import 'package:Adventour/controllers/directions_engine.dart';
@@ -13,24 +14,16 @@ import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
-void main() {
-  //SdkContext.init(IsolateOrigin.main);
-  runApp(NavigationPage());
-}
-
 class NavigationPage extends StatefulWidget {
-  NavigationPage({Key key}) : super(key: key);
-
   @override
   _NavigationPageState createState() => _NavigationPageState();
 }
 
 class _NavigationPageState extends State<NavigationPage> {
-  Set<Polyline> polylines = {};
-  List<Marker> markers = List();
+  MapController _mapController = MapController();
 
   r.Route route;
-  GoogleMapController mapController;
+
   Stopwatch stopwatch = Stopwatch();
 
   //Time Logic
@@ -40,6 +33,7 @@ class _NavigationPageState extends State<NavigationPage> {
   Location location;
   LocationData currentLocation;
   double bearing;
+
 
   @override
   void initState() {
@@ -56,22 +50,6 @@ class _NavigationPageState extends State<NavigationPage> {
       if (stretches.toList().isNotEmpty) {
         checkStretch(cLoc);
       }
-
-      if (mapController != null) {
-        mapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: LatLng(
-                currentLocation.latitude,
-                currentLocation.longitude,
-              ),
-              tilt: 45,
-              bearing: bearing,
-              zoom: 22,
-            ),
-          ),
-        );
-      }
     });
 
     setInitialLocation();
@@ -79,7 +57,7 @@ class _NavigationPageState extends State<NavigationPage> {
 
   void checkStretch(LocationData loc) {
     r.Stretch st = stretches.pop();
-    LatLng dest = st.points.last;
+    LatLng dest = st.destination;
     if (Geolocator.distanceBetween(
           loc.latitude,
           loc.longitude,
@@ -99,8 +77,8 @@ class _NavigationPageState extends State<NavigationPage> {
     route = arguments['route'];
     List listaStretches = route.paths.first.stretchs;
 
-    polylines = arguments['polylines'];
-    markers = arguments['markers'];
+    Polyline polyline = arguments['polyline'];
+    print('?'+polyline.toString());
 
     CameraPosition initialCameraPosition = CameraPosition(
       zoom: 22,
@@ -133,106 +111,107 @@ class _NavigationPageState extends State<NavigationPage> {
       }
     }
 
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          leading: IconButton(
-            icon: Icon(Icons.cancel),
-            color: Theme.of(context).buttonColor,
-            onPressed: () {
-              return showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Cancelar_ruta_alert();
-                  });
-            },
-          ),
-          title: Text(''), //TO DO.
-          actions: [
-            IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {},
-            )
-          ], //Menú de los tres puntitos.
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        leading: IconButton(
+          icon: Icon(Icons.cancel),
+          color: Theme.of(context).buttonColor,
+          onPressed: () {
+            return showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CancelRouteAlert();
+                });
+          },
         ),
-        bottomNavigationBar: Container(
-          height: 100,
-          decoration: BoxDecoration(
-              color: Theme.of(context).backgroundColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-              boxShadow: [
-                BoxShadow(color: Colors.black, blurRadius: 5),
-              ]),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(
-                  Icons.info,
-                  color: Theme.of(context).primaryColor,
-                  size: 50,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(Icons.directions_walk,
-                            color: Theme.of(context).primaryColor),
-                        Text('${tiempoRestante()}'),
-                        Icon(
-                          Icons.location_pin,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        Text('${stretches.toList().length}')
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(Icons.alarm,
-                            color: Theme.of(context).primaryColor),
-                        Text(
-                          '${tiempoDurante()}',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
+        title: Text(''), //TO DO.
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            onPressed: () {},
+          )
+        ], //Menú de los tres puntitos.
+      ),
+      bottomNavigationBar: Container(
+        height: 100,
+        decoration: BoxDecoration(
+            color: Theme.of(context).backgroundColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
             ),
+            boxShadow: [
+              BoxShadow(color: Colors.black, blurRadius: 5),
+            ]),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Icon(
+                Icons.info,
+                color: Theme.of(context).primaryColor,
+                size: 50,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(Icons.directions_walk,
+                          color: Theme.of(context).primaryColor),
+                      Text('${tiempoRestante()}'),
+                      Icon(
+                        Icons.location_pin,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      Text('${stretches.toList().length}')
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(Icons.alarm, color: Theme.of(context).primaryColor),
+                      Text(
+                        '${tiempoDurante()}',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  )
+                ],
+              )
+            ],
           ),
         ),
-        body: Container(
-          child: GoogleMap(
-            onMapCreated: (GoogleMapController controller) {
-              setState(() {
-                mapController = controller;
-                if (stopwatch.isRunning) {
-                  stopwatch.stop();
-                  stopwatch.reset();
-                }
-                stopwatch.start();
-              });
-
-              for (var i = listaStretches.length - 1; i >= 0; i--) {
-                stretches.push(listaStretches[i]);
-              }
-            },
-            markers: Set.from(markers),
-            polylines: polylines,
-            initialCameraPosition: initialCameraPosition,
-            myLocationEnabled: true,
-          ),
+      ),
+      body: Container(
+        child: GoogleMap(
+          onMapCreated: (googleMapController) =>
+              _mapController.onMapCreated(googleMapController, () {
+            _mapController.goToCoordinates(
+                currentLocation.latitude, currentLocation.longitude, 22);
+            _mapController.drawPolyline(polyline);
+            for (var place in route.places) {
+              _mapController.addMarker(place, context);
+            }
+            if (stopwatch.isRunning) {
+              stopwatch.stop();
+              stopwatch.reset();
+            }
+            stopwatch.start();
+            for (var i = listaStretches.length - 1; i >= 0; i--) {
+              stretches.push(listaStretches[i]);
+            }
+            setState(() {});
+          }),
+          markers: Set<Marker>.of(_mapController.markers.values),
+          polylines: Set<Polyline>.of(_mapController.polylines.values),
+          initialCameraPosition: initialCameraPosition,
+          myLocationEnabled: true,
         ),
       ),
     );
@@ -271,11 +250,7 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 }
 
-class Cancelar_ruta_alert extends StatelessWidget {
-  const Cancelar_ruta_alert({
-    Key key,
-  }) : super(key: key);
-
+class CancelRouteAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

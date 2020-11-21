@@ -58,75 +58,8 @@ class _RoutePageState extends State<RoutePage>
           actions: [
             IconButton(
               icon: Icon(Icons.save),
-              onPressed: () => showDialog(
-                context: context,
-                builder: (context) {
-                  TextEditingController _routeNameController =
-                      TextEditingController();
-                  final _formKey = GlobalKey<FormState>();
-                  return Dialog(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        height: 200,
-                        child: Column(
-                          children: [
-                            Text(
-                              'Put a name to your route',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline2
-                                  .copyWith(fontSize: 20),
-                            ),
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 100,
-                                    child: InputText(
-                                      icon: Icons.flag,
-                                      labelText: 'Route name',
-                                      controller: _routeNameController,
-                                      maxLength: 20,
-                                      validator: (value) {
-                                        if (value.isEmpty)
-                                          return 'Route name can\'t be empty';
-                                        return null;
-                                      },
-                                    ),
-                                  ),
-                                  PrimaryButton(
-                                    text: 'SAVE',
-                                    onPressed: () {
-                                      if (_formKey.currentState.validate()) {
-                                        route.name = _routeNameController.text;
-                                        route.author = db.currentUserId;
-                                        route.images = route.places
-                                            .map((place) =>
-                                                place.photos[0].photoReference)
-                                            .toList();
-                                        db.addRoute(route);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            )
-                            // PrimaryButton(
-                            //   text: 'SAVE',
-                            //   onPressed: () => Navigator.pop(context),
-                            // ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+              onPressed: () => saveDialog(context),
+
             )
           ],
         ),
@@ -139,8 +72,10 @@ class _RoutePageState extends State<RoutePage>
                   MapView(
                     places: route.places,
                     tabController: _tabController,
-                    selectedPath: route.paths[_selectedPath],
+                    start: route.start,
                     nextTransport: nextTransport,
+                    selectedPath: route.paths[_selectedPath],
+                    route: route,
                   ),
                   MapListView(
                     path: route.paths[_selectedPath],
@@ -151,6 +86,77 @@ class _RoutePageState extends State<RoutePage>
                   )
                 ],
               ));
+  }
+
+  Future saveDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController _routeNameController = TextEditingController();
+        final _formKey = GlobalKey<FormState>();
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 200,
+              child: Column(
+                children: [
+                  Text(
+                    'Put a name to your route',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline2
+                        .copyWith(fontSize: 20),
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.flag,
+                            labelText: 'Route name',
+                            controller: _routeNameController,
+                            maxLength: 20,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'Route name can\'t be empty';
+                              return null;
+                            },
+                          ),
+                        ),
+                        PrimaryButton(
+                          text: 'SAVE',
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              route.name = _routeNameController.text;
+                              route.author = db.currentUserId;
+                              route.images = route.places
+                                  .map(
+                                      (place) => place.photos[0].photoReference)
+                                  .toList();
+                              db.addRoute(route);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                  // PrimaryButton(
+                  //   text: 'SAVE',
+                  //   onPressed: () => Navigator.pop(context),
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future _removePlace(Place place) async {
@@ -195,6 +201,10 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future _onPressedAdd() async {
+    List<String> preTypePlaces = [];
+    for (var place in route.places) {
+      if (!preTypePlaces.contains(place.type)) preTypePlaces.add(place.type);
+    }
     if (route.places.length < 8)
       await PlacesAutocomplete.show(
         context: context,
@@ -202,7 +212,7 @@ class _RoutePageState extends State<RoutePage>
         onSubmitted: (value) {},
         placeholder: RecommendationsWidget(
           addPlace: _addPlace,
-          preTypePlaces: route.places.map((place) => place.type).toList(),
+          preTypePlaces: preTypePlaces,
           location: Location(route.start.latitude, route.start.longitude),
           places: route.places,
         ),
@@ -221,12 +231,11 @@ class _RoutePageState extends State<RoutePage>
 }
 
 class RecommendationsWidget extends StatefulWidget {
-  RecommendationsWidget({
-    @required this.addPlace,
-    @required this.preTypePlaces,
-    @required this.location,
-    @required this.places
-  });
+  RecommendationsWidget(
+      {@required this.addPlace,
+      @required this.preTypePlaces,
+      @required this.location,
+      @required this.places});
 
   Function addPlace;
   List<String> preTypePlaces;
@@ -331,7 +340,8 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
     List<Place> recommendations = await searchEngine.searchByLocationWithType(
         placeType, widget.location, LONG_DISTANCE);
     for (var place in widget.places) {
-      recommendations.removeWhere((recommendation) => recommendation.id == place.id);
+      recommendations
+          .removeWhere((recommendation) => recommendation.id == place.id);
     }
     if (recommendations.length == 0) return [];
     recommendations = recommendations
@@ -339,7 +349,8 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
             place.rating != null &&
             place.rating > 4 &&
             place.type != null &&
-            place.type == placeType)
+            place.type == placeType &&
+            place.userRatingsTotal > 500)
         .toList();
     if (recommendations.length < 5) return recommendations;
     recommendations = recommendations.sublist(0, 5);
@@ -349,16 +360,20 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
 
 class MapView extends StatefulWidget {
   MapView({
+    @required this.selectedPath,
+    @required this.start,
     @required this.places,
-    this.selectedPath,
     this.nextTransport,
+    this.route,
     @required TabController tabController,
   }) : tabController = tabController;
 
   List<Place> places;
   TabController tabController;
   r.Path selectedPath;
+  LatLng start;
   Function nextTransport;
+  r.Route route;
 
   @override
   _MapViewState createState() => _MapViewState();
@@ -367,13 +382,23 @@ class MapView extends StatefulWidget {
 class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   MapController _mapController = MapController();
   List<LatLng> routeCoords = List();
-  GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(
+  Polyline _polyline;
+  GoogleMapPolyline googleMapPolyline = GoogleMapPolyline(
     apiKey: API_KEY,
   );
-  String cont = "0";
 
-  getSomePoints() async {
-    for (var i = 0; i < widget.places.length - 1; i++) {
+  drawPath() async {
+    routeCoords.addAll(
+      await googleMapPolyline.getCoordinatesWithLocation(
+        origin: widget.start,
+        destination:
+            LatLng(widget.places.first.latitude, widget.places.first.longitude),
+        mode: toRouteMode(
+          widget.selectedPath.transport,
+        ),
+      ),
+    );
+    for (var i = 1; i < widget.places.length - 1; i++) {
       Place start = widget.places[i];
       Place end = widget.places[i + 1];
       routeCoords.addAll(
@@ -386,11 +411,12 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         ),
       );
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
+    _polyline = Polyline(
+        polylineId: PolylineId('Route'),
+        points: routeCoords,
+        color: Colors.blue,
+        width: 4);
+    _mapController.drawPolyline(_polyline);
   }
 
   bool _listVisible = true;
@@ -409,37 +435,12 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           polylines: Set<Polyline>.of(_mapController.polylines.values),
           onMapCreated: (googleMapController) =>
               _mapController.onMapCreated(googleMapController, () async {
-            drawPath(widget.selectedPath);
+            await drawPath();
             for (var place in widget.places) {
               _mapController.addMarker(place, context);
             }
+            setState(() {});
           }),
-          // onMapCreated: (googleMapController) {
-          //   getSomePoints();
-          //   for (var place in widget.route.places) {
-          //     markers.add(Marker(
-          //         markerId: MarkerId(cont),
-          //         position: LatLng(place.latitude, place.longitude),
-          //         infoWindow: InfoWindow(title: place.name)));
-          //     setState(() {
-          //       cont += "0";
-          //     });
-          //   }
-          //   setState(() {
-          //     mapController = googleMapController;
-          //     polyline.add(
-          //       Polyline(
-          //         polylineId: PolylineId('route1'),
-          //         visible: true,
-          //         points: routeCoords,
-          //         width: 8,
-          //         color: Theme.of(context).primaryColor,
-          //         startCap: Cap.roundCap,
-          //         endCap: Cap.buttCap,
-          //       ),
-          //     );
-          //   });
-          // },
           onCameraMoveStarted: () {
             _listVisible = false;
             setState(() {});
@@ -460,9 +461,20 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             curve: Curves.fastOutSlowIn,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SquareIconButton(
-                icon: Icons.list,
-                onPressed: () => widget.tabController.animateTo(1),
+              child: Column(
+                children: [
+                  SquareIconButton(
+                    icon: Icons.play_arrow,
+                    onPressed: () => Navigator.pushNamed(context, '/navigationPage',arguments: {
+                      'route':widget.route,
+                      'polyline':_polyline
+                    }),
+                  ),
+                  SquareIconButton(
+                    icon: Icons.list,
+                    onPressed: () => widget.tabController.animateTo(1),
+                  ),
+                ],
               ),
             ),
           ),
@@ -526,22 +538,22 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  void drawPath(r.Path path) {
-    for (var stretch in path.stretchs) {
-      Polyline polyline = Polyline(
-          polylineId: PolylineId(stretch.id),
-          points: stretch.points,
-          color: Colors.blue,
-          onTap: () => Toast.show(
-              stretch.duration.inMinutes.toString(), context,
-              duration: 3),
-          consumeTapEvents: true,
-          width: 4);
-      _mapController.drawPolyline(polyline);
-    }
+  // void drawPath(r.Path path) {
+  //   for (var stretch in path.stretchs) {
+  //     Polyline polyline = Polyline(
+  //         polylineId: PolylineId(stretch.id),
+  //         points: stretch.points,
+  //         color: Colors.blue,
+  //         onTap: () => Toast.show(
+  //             stretch.duration.inMinutes.toString(), context,
+  //             duration: 3),
+  //         consumeTapEvents: true,
+  //         width: 4);
+  //     _mapController.drawPolyline(polyline);
+  //   }
 
-    setState(() {});
-  }
+  //   setState(() {});
+  // }
 
   @override
   bool get wantKeepAlive => true;

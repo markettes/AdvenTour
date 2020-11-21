@@ -123,12 +123,9 @@ class Path {
     List<Stretch> stretchs = [];
     for (var i = 0; i < route.legs.length; i++) {
       var leg = route.legs[i];
-      List<LatLng> points = [];
-      for (var step in leg.steps) {
-        points.add(LatLng(step.startLocation.lat, step.startLocation.lng));
-      }
       Duration duration = Duration(seconds: leg.duration.value);
-      stretchs.add(Stretch(transport + i.toString(), points, duration,
+      LatLng destination = LatLng(leg.endLocation.lat,leg.endLocation.lng);
+      stretchs.add(Stretch(transport + i.toString(),destination, duration,
           waypoints[i + 1].placeId));
     }
     _stretchs = stretchs;
@@ -167,42 +164,36 @@ class Path {
 
 class Stretch {
   String _id;
-  List<LatLng> _points;
   Duration _duration;
   String _destinationId;
+  LatLng _destination;
 
-  Stretch(id, points, duration, destionationId) {
+  Stretch(id,destination, duration, destionationId) {
     _id = id;
-    _points = points;
+    _destination = destination;
     _duration = duration;
     _destinationId = destionationId;
   }
 
   Map<String, dynamic> toJson() => {
         'id': _id,
-        'points': _points
-            .map((point) =>
-                {'latitude': point.latitude, 'longitude': point.longitude})
-            .toList(),
+        'destination':_destination,
         'duration': _duration.inMinutes,
         'destinationId': _destinationId
       };
 
   Stretch.fromJson(Map<dynamic, dynamic> data) {
     _id = data['id'];
-    _points = new List<LatLng>();
-    for (var point in data['points']) {
-      _points.add(LatLng(point['latitude'], point['longitude']));
-    }
+    _destination = data['destination'];
     _duration = Duration(minutes: data['duration']);
     _destinationId = data['destinationId'];
   }
 
   String get id => _id;
 
-  List<LatLng> get points => _points;
-
   Duration get duration => _duration;
+
+  LatLng get destination => _destination;
 
   String get destinationId => _destinationId;
 }
