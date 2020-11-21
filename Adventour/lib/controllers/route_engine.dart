@@ -1,4 +1,3 @@
-
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
@@ -10,7 +9,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
 class RouteEngine {
-  Future<Route> makeRoute(String locationId, List<String> types,int radius) async {
+  Future<Route> makeRoute(
+      String locationId, List<String> types, int radius) async {
     Location location;
     if (locationId == null) {
       Position position = await Geolocator.getCurrentPosition();
@@ -28,8 +28,8 @@ class RouteEngine {
     List<Place> prePlaces = [];
 
     for (String type in types) {
-      prePlaces.addAll(await searchEngine.searchByLocationWithType(
-          type, location, radius));
+      prePlaces.addAll(
+          await searchEngine.searchByLocationWithType(type, location, radius));
     }
 
     List<Place> placesWithoutDuplicates = [];
@@ -49,16 +49,30 @@ class RouteEngine {
 
     placesWithoutDuplicates.sort((a, b) => b.rating.compareTo(a.rating));
 
-    print(placesWithoutDuplicates.map((place) => place.id + place.type).toList());
-
     List<Place> places = [];
 
     for (String type in types) {
-      Place routePlace = placesWithoutDuplicates
-          .firstWhere((place) => place.types.contains(type), orElse: () {});
-      if (routePlace != null) {
-        places.add(routePlace);
-        placesWithoutDuplicates.remove(routePlace);
+      Place routePlace;
+      if (type == TOURIST_ATTRACTION) {
+        routePlace = placesWithoutDuplicates
+            .firstWhere((place) => place.types.contains(type), orElse: () {});
+        if (routePlace != null) {
+          places.add(routePlace);
+          placesWithoutDuplicates.remove(routePlace);
+        }
+        routePlace = placesWithoutDuplicates
+            .firstWhere((place) => place.types.contains(type), orElse: () {});
+        if (routePlace != null) {
+          places.add(routePlace);
+          placesWithoutDuplicates.remove(routePlace);
+        }
+      } else {
+        routePlace = placesWithoutDuplicates
+            .firstWhere((place) => place.types.contains(type), orElse: () {});
+        if (routePlace != null) {
+          places.add(routePlace);
+          placesWithoutDuplicates.remove(routePlace);
+        }
       }
     }
 

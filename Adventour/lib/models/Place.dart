@@ -12,8 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 //const CASINO = "casino";
 
 //SHORT
-const PLACE_OF_WORSHIP = "place_of_worship"; // + 30
-const MOVIE_THEATER = "movie_theater"; // 30
 const PARK = "park"; // + 20
 const STADIUM = "stadium"; // 20
 const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
@@ -22,20 +20,16 @@ const MUSEUM = "museum"; // + 45
 const NIGHT_CLUB = "night_club"; // + 60
 const RESTAURANT = "restaurant"; // 60
 const SHOPPING_MALL = "shopping_mall"; // 60
-const NATURAL = "natural_feature";
 const LOCALITY = "locality";
 
 List placeTypes = [
   RESTAURANT,
-  PLACE_OF_WORSHIP,
-  MOVIE_THEATER,
   PARK,
   STADIUM,
   TOURIST_ATTRACTION,
   MUSEUM,
   NIGHT_CLUB,
   SHOPPING_MALL,
-  NATURAL
 ];
 
 class Place {
@@ -89,7 +83,7 @@ class Place {
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
     _adress = result.vicinity;
-    _duration = Duration(minutes: 30);
+    _duration = durationByType(_type);
     _photos = result.photos;
   }
 
@@ -114,7 +108,18 @@ class Place {
       _weekdaytext = details.openingHours.weekdayText;
       _openNow = details.openingHours.openNow;
     }
-    _duration = Duration(minutes: 30);
+    _duration = durationByType(_type);
+  }
+
+  Duration durationByType(String type) {
+    switch (type) {
+      case TOURIST_ATTRACTION:
+        return Duration(minutes: 20);
+      case PARK:
+        return Duration(minutes: 20);
+      default:
+        return Duration(minutes: 30);
+    }
   }
 
   Map<String, dynamic> toJson() => {
@@ -153,7 +158,7 @@ class Place {
 
   num get rating => _rating;
 
-  get type => _type;
+  String get type => _type;
 
   List<String> get types => _types;
 
@@ -202,13 +207,13 @@ String googleIconToType(String icon) {
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png':
       return PARK;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/worship_general-71.png':
-      return PLACE_OF_WORSHIP;
+      return TOURIST_ATTRACTION;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png':
       return RESTAURANT;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png':
       return TOURIST_ATTRACTION;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/camping-71.png':
-      return NATURAL;
+      return PARK;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png':
       return SHOPPING_MALL;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/school-71.png':
@@ -224,7 +229,7 @@ String googleIconToType(String icon) {
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png':
       return LOCALITY;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/movies-71.png':
-      return MOVIE_THEATER;
+      return null;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/stadium-71.png':
       return STADIUM;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/parking-71.png':
@@ -246,7 +251,6 @@ void sortPlaceTypes(List<String> selectedTypes) {
 }
 
 IconData typeToIcon(String type) {
-  print(type);
   switch (type) {
     case CAR:
       return Icons.directions_car;
@@ -255,15 +259,11 @@ IconData typeToIcon(String type) {
     case BICYCLE:
       return Icons.directions_bike;
     case PARK:
-      return Icons.fence;
-    case PLACE_OF_WORSHIP:
-      return Icons.history_edu;
+      return Icons.eco;
     case RESTAURANT:
       return Icons.restaurant;
     case TOURIST_ATTRACTION:
       return Icons.camera_alt;
-    case MOVIE_THEATER:
-      return Icons.theater_comedy;
     case STADIUM:
       return Icons.sports;
     case MUSEUM:
@@ -272,8 +272,6 @@ IconData typeToIcon(String type) {
       return Icons.nightlife;
     case SHOPPING_MALL:
       return Icons.local_mall;
-    case NATURAL:
-      return Icons.eco;
     default:
       throw Exception('Icon not available for $type');
   }

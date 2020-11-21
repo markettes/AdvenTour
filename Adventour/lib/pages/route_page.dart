@@ -22,6 +22,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_maps_webservice/src/places.dart';
+import 'package:google_maps_webservice/src/core.dart';
 import 'package:toast/toast.dart';
 
 class RoutePage extends StatefulWidget {
@@ -201,6 +202,9 @@ class _RoutePageState extends State<RoutePage>
         onSubmitted: (value) {},
         placeholder: RecommendationsWidget(
           addPlace: _addPlace,
+          preTypePlaces: route.places.map((place) => place.type).toList(),
+          location: Location(route.start.latitude, route.start.longitude),
+          places: route.places,
         ),
       );
     else
@@ -217,18 +221,43 @@ class _RoutePageState extends State<RoutePage>
 }
 
 class RecommendationsWidget extends StatefulWidget {
-  RecommendationsWidget({@required this.addPlace});
+  RecommendationsWidget({
+    @required this.addPlace,
+    @required this.preTypePlaces,
+    @required this.location,
+    @required this.places
+  });
 
   Function addPlace;
+  List<String> preTypePlaces;
+  Location location;
+  List<Place> places;
 
   @override
   _RecommendationsWidgetState createState() => _RecommendationsWidgetState();
 }
 
 class _RecommendationsWidgetState extends State<RecommendationsWidget> {
-  List<String> _placeTypes = [];
+  List<String> _placeTypes;
 
   List<Place> _recommendations = [];
+
+  @override
+  void initState() {
+    _placeTypes = widget.preTypePlaces;
+    sortPlaceTypes(_placeTypes);
+    initRecommendations();
+
+    super.initState();
+  }
+
+  void initRecommendations() async {
+    for (var type in _placeTypes) {
+      _recommendations.addAll(await _getRecommendations(type));
+      _recommendations.sort((a, b) => b.rating.compareTo(a.rating));
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -241,44 +270,48 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
             selectedTypes: _placeTypes,
           ),
         ),
-        Expanded(
-          child: ListView.separated(
-            itemCount: _recommendations.length,
-            padding: EdgeInsets.only(top: 8),
-            separatorBuilder: (context, index) => SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              Place place = _recommendations[index];
-              Widget placeWidget = PlaceWidget(
-                place: place,
-                onTap: () async {
-                  _recommendations.remove(place);
-                  widget.addPlace(place);
-                },
-              );
-              if (index == 0)
-                return Column(
-                  children: [
-                    Text(
-                      'Maybe...',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    SizedBox(height: 8),
-                    placeWidget
-                  ],
-                );
-              return placeWidget;
-            },
-          ),
-        ),
+        _recommendations.isEmpty
+            ? CircularProgressIndicator()
+            : Expanded(
+                child: ListView.separated(
+                  itemCount: _recommendations.length,
+                  padding: EdgeInsets.only(top: 8),
+                  separatorBuilder: (context, index) => SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    Place place = _recommendations[index];
+                    Widget placeWidget = PlaceWidget(
+                      place: place,
+                      onTap: () async {
+                        _recommendations.remove(place);
+                        widget.addPlace(place);
+                      },
+                    );
+                    if (index == 0)
+                      return Column(
+                        children: [
+                          Text(
+                            'Maybe...',
+                            style: Theme.of(context).textTheme.headline2,
+                          ),
+                          SizedBox(height: 8),
+                          placeWidget
+                        ],
+                      );
+                    return placeWidget;
+                  },
+                ),
+              ),
       ],
     );
   }
 
-  Future _onTapPlaceType(String placeType, bool activated) {
+  Future _onTapPlaceType(String placeType, bool activated) async {
+    FocusScope.of(context).unfocus();
     if (activated) {
       if (_placeTypes.length > 1) {
         _placeTypes.remove(placeType);
         sortPlaceTypes(_placeTypes);
+        _recommendations.removeWhere((place) => place.type == placeType);
         setState(() {});
       } else
         Toast.show('The search needs at least 1 type places', context,
@@ -286,8 +319,31 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
     } else {
       _placeTypes.add(placeType);
       sortPlaceTypes(_placeTypes);
+
+      _recommendations.addAll(await _getRecommendations(placeType));
+      _recommendations.sort((a, b) => b.rating.compareTo(a.rating));
+
       setState(() {});
     }
+  }
+
+  Future<List<Place>> _getRecommendations(String placeType) async {
+    List<Place> recommendations = await searchEngine.searchByLocationWithType(
+        placeType, widget.location, LONG_DISTANCE);
+    for (var place in widget.places) {
+      recommendations.removeWhere((recommendation) => recommendation.id == place.id);
+    }
+    if (recommendations.length == 0) return [];
+    recommendations = recommendations
+        .where((place) =>
+            place.rating != null &&
+            place.rating > 4 &&
+            place.type != null &&
+            place.type == placeType)
+        .toList();
+    if (recommendations.length < 5) return recommendations;
+    recommendations = recommendations.sublist(0, 5);
+    return recommendations;
   }
 }
 
@@ -330,7 +386,6 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         ),
       );
     }
-    print(routeCoords);
   }
 
   @override
@@ -359,32 +414,32 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
               _mapController.addMarker(place, context);
             }
           }),
-                      // onMapCreated: (googleMapController) {
-            //   getSomePoints();
-            //   for (var place in widget.route.places) {
-            //     markers.add(Marker(
-            //         markerId: MarkerId(cont),
-            //         position: LatLng(place.latitude, place.longitude),
-            //         infoWindow: InfoWindow(title: place.name)));
-            //     setState(() {
-            //       cont += "0";
-            //     });
-            //   }
-            //   setState(() {
-            //     mapController = googleMapController;
-            //     polyline.add(
-            //       Polyline(
-            //         polylineId: PolylineId('route1'),
-            //         visible: true,
-            //         points: routeCoords,
-            //         width: 8,
-            //         color: Theme.of(context).primaryColor,
-            //         startCap: Cap.roundCap,
-            //         endCap: Cap.buttCap,
-            //       ),
-            //     );
-            //   });
-            // },
+          // onMapCreated: (googleMapController) {
+          //   getSomePoints();
+          //   for (var place in widget.route.places) {
+          //     markers.add(Marker(
+          //         markerId: MarkerId(cont),
+          //         position: LatLng(place.latitude, place.longitude),
+          //         infoWindow: InfoWindow(title: place.name)));
+          //     setState(() {
+          //       cont += "0";
+          //     });
+          //   }
+          //   setState(() {
+          //     mapController = googleMapController;
+          //     polyline.add(
+          //       Polyline(
+          //         polylineId: PolylineId('route1'),
+          //         visible: true,
+          //         points: routeCoords,
+          //         width: 8,
+          //         color: Theme.of(context).primaryColor,
+          //         startCap: Cap.roundCap,
+          //         endCap: Cap.buttCap,
+          //       ),
+          //     );
+          //   });
+          // },
           onCameraMoveStarted: () {
             _listVisible = false;
             setState(() {});
@@ -410,50 +465,48 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 onPressed: () => widget.tabController.animateTo(1),
               ),
             ),
-
-
-
-      ),),
-      // floatingActionButton: AnimatedOpacity(
-      //   // If the widget is visible, animate to 0.0 (invisible).
-      //   // If the widget is hidden, animate to 1.0 (fully visible).
-      //   opacity: _listVisible ? 1.0 : 0.0,
-      //   duration: Duration(milliseconds: 600),
-      //   curve: Curves.fastOutSlowIn,
-      //   // The green box must be a child of the AnimatedOpacity widget.
-      //   child: Padding(
-      //     padding: const EdgeInsets.all(8.0),
-      //     child: Column(
-      //       mainAxisAlignment: MainAxisAlignment.end,
-      //       children: [
-      //         FloatingActionButton(
-      //           heroTag: 'edit',
-      //           backgroundColor: Theme.of(context).primaryColor,
-      //           onPressed: () => widget.tabController.animateTo(1),
-      //           child: Icon(
-      //             Icons.edit,
-      //             color: Theme.of(context).buttonColor,
-      //           ),
-      //         ),
-      //         SizedBox(height: 8),
-      //         FloatingActionButton(
-      //           heroTag: 'navigation',
-      //           backgroundColor: Theme.of(context).primaryColor,
-      //           onPressed: () {
-      //             Navigator.pushNamed(context, '/navigationPage', arguments: {
-      //               'route': widget.route,
-      //               'polylines': polyline,
-      //               'markers': markers,
-      //             });
-      //           },
-      //           child: Icon(
-      //             Icons.navigation,
-      //             color: Theme.of(context).buttonColor,
-      //           ),
-      //         )
-      //       ],
-      //     ),
-      //   ),
+          ),
+        ),
+        // floatingActionButton: AnimatedOpacity(
+        //   // If the widget is visible, animate to 0.0 (invisible).
+        //   // If the widget is hidden, animate to 1.0 (fully visible).
+        //   opacity: _listVisible ? 1.0 : 0.0,
+        //   duration: Duration(milliseconds: 600),
+        //   curve: Curves.fastOutSlowIn,
+        //   // The green box must be a child of the AnimatedOpacity widget.
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.end,
+        //       children: [
+        //         FloatingActionButton(
+        //           heroTag: 'edit',
+        //           backgroundColor: Theme.of(context).primaryColor,
+        //           onPressed: () => widget.tabController.animateTo(1),
+        //           child: Icon(
+        //             Icons.edit,
+        //             color: Theme.of(context).buttonColor,
+        //           ),
+        //         ),
+        //         SizedBox(height: 8),
+        //         FloatingActionButton(
+        //           heroTag: 'navigation',
+        //           backgroundColor: Theme.of(context).primaryColor,
+        //           onPressed: () {
+        //             Navigator.pushNamed(context, '/navigationPage', arguments: {
+        //               'route': widget.route,
+        //               'polylines': polyline,
+        //               'markers': markers,
+        //             });
+        //           },
+        //           child: Icon(
+        //             Icons.navigation,
+        //             color: Theme.of(context).buttonColor,
+        //           ),
+        //         )
+        //       ],
+        //     ),
+        //   ),
         Align(
           alignment: Alignment.bottomLeft,
           child: AnimatedOpacity(
@@ -489,6 +542,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
 
     setState(() {});
   }
+
   @override
   bool get wantKeepAlive => true;
 
@@ -501,8 +555,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
       case BICYCLE:
         return RouteMode.bicycling;
       default:
-        return throw new Exception(
-            "$transport is a transport not available");
+        return throw new Exception("$transport is a transport not available");
     }
   }
 }
@@ -716,6 +769,6 @@ class MapListView extends StatelessWidget {
   }
 }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => throw UnimplementedError();
+@override
+// TODO: implement wantKeepAlive
+bool get wantKeepAlive => throw UnimplementedError();

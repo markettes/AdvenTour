@@ -26,7 +26,6 @@ class _HighlightPageState extends State<HighlightPage> {
   Widget build(BuildContext context) {
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
-    print('?' + place.id);
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

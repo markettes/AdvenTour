@@ -8,7 +8,6 @@ void main() {
 class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print("Hola");
     return MaterialApp(
       theme: Theme.of(context),
       home: Container(

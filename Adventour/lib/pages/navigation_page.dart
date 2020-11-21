@@ -2,7 +2,6 @@ import 'dart:ffi';
 
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
-import 'package:Adventour/models/Path.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Stack.dart' as s;
@@ -30,14 +29,13 @@ class _NavigationPageState extends State<NavigationPage> {
   Set<Polyline> polylines = {};
   List<Marker> markers = List();
 
-  r.Route route1 = r.exampleRoute;
   r.Route route;
   GoogleMapController mapController;
   Stopwatch stopwatch = Stopwatch();
 
   //Time Logic
-  s.Stack<Stretch> stretches = s.Stack();
-  s.Stack<Stretch> stretchesPassed = s.Stack();
+  s.Stack<r.Stretch> stretches = s.Stack();
+  s.Stack<r.Stretch> stretchesPassed = s.Stack();
 
   Location location;
   LocationData currentLocation;
@@ -80,7 +78,7 @@ class _NavigationPageState extends State<NavigationPage> {
   }
 
   void checkStretch(LocationData loc) {
-    Stretch st = stretches.pop();
+    r.Stretch st = stretches.pop();
     LatLng dest = st.points.last;
     if (Geolocator.distanceBetween(
           loc.latitude,

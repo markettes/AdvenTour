@@ -93,7 +93,6 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                       ],
                     ),
                   ),
-                  
                 ],
               ),
             ),
@@ -104,11 +103,10 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      r.Route route =
-                          await routeEngine.makeRoute(_locationId, _placeTypes,MEDIUM_DISTANCE);
-                      Navigator.pushNamed(context, '/routePage', arguments: {
-                        'route': route
-                      });
+                      r.Route route = await routeEngine.makeRoute(
+                          _locationId, _placeTypes, MEDIUM_DISTANCE);
+                      Navigator.pushNamed(context, '/routePage',
+                          arguments: {'route': route});
                     },
                     icon: Icons.edit,
                     style: ButtonType.Normal,
@@ -132,12 +130,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
         Toast.show('The route needs at least 4 type places', context,
             duration: 3);
     } else {
-      if (_placeTypes.length < 8) {
-        _placeTypes.add(placeType);
-        sortPlaceTypes(_placeTypes);
-        setState(() {});
-      } else
-        Toast.show('The route has at most 7 type places', context, duration: 3);
+      _placeTypes.add(placeType);
+      sortPlaceTypes(_placeTypes);
+      setState(() {});
     }
   }
 }

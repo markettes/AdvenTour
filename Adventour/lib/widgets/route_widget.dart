@@ -18,15 +18,12 @@ class RouteWidget extends StatefulWidget {
 
 class _RouteWidgetState extends State<RouteWidget> {
   int _selectedPath = 0;
-  RouteEngineResponse routeEngineResponse;
 
   @override
   Widget build(BuildContext context) {
-    routeEngineResponse =
-        RouteEngineResponse(widget.route, <Place>[]);
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/routePage', arguments: {
-        'routeEngineResponse': routeEngineResponse
+        'route': widget.route
       }),
       child: SizedBox(
         height: 75,

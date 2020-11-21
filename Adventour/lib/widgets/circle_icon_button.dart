@@ -52,14 +52,10 @@ class CircleIconButton extends StatelessWidget {
         return 'Transport: Bycicle';
       case PARK:
         return 'Place type: Park';
-      case PLACE_OF_WORSHIP:
-        return 'Place type: Place of worship';
       case RESTAURANT:
         return 'Place type: Restaurant';
       case TOURIST_ATTRACTION:
         return 'Place type: Tourist attraction';
-      case MOVIE_THEATER:
-        return 'Place type: Movie theatre';
       case STADIUM:
         return 'Place type: Stadium';
       case MUSEUM:
@@ -68,8 +64,6 @@ class CircleIconButton extends StatelessWidget {
         return 'Place type: Night club';
       case SHOPPING_MALL:
         return 'Place type: Shopping mall';
-      case NATURAL:
-        return 'Place type: Natural place';
       default:
         throw Exception('Icon not available for $type');
     }

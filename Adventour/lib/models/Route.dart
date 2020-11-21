@@ -66,7 +66,6 @@ class Route {
     _creationDate = (data['creationDate'] as Timestamp).toDate();
     _locationName = data['locationName'];
     _locationId = data['locationId'];
-    print(data['requested']);
     _requested = data['requested'] == 'true';
     _isHighlight = data['isHighlight'] == 'true';
     _likes = List<String>.from(data['likes']);

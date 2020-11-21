@@ -87,14 +87,12 @@ class _SignInFormState extends State<SignInForm> {
             text: 'SIGN UP',
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                print(_userNameController.text);
                 User user =
                     User(_userNameController.text, _emailController.text);
                 try {
                   await auth.registerUser(user, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {
-                  print(e.code);
                   _showError(e);
                 }
               }
