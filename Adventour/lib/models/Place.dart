@@ -225,7 +225,7 @@ String googleIconToType(String icon) {
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/library-71.png':
       return TOURIST_ATTRACTION;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/bar-71.png':
-      return RESTAURANT;
+      return NIGHT_CLUB;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png':
       return LOCALITY;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/movies-71.png':
