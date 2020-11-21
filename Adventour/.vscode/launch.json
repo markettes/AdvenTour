@@ -9,11 +9,5 @@
             "request": "launch",
             "type": "dart"
         },
-        {
-            "name": "here_sdk",
-            "cwd": "plugins\\here_sdk",
-            "request": "launch",
-            "type": "dart"
-        }
     ]
 }

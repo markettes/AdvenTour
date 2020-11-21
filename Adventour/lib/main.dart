@@ -3,6 +3,7 @@ import 'package:Adventour/pages/highlight_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/map_page.dart';
+import 'package:Adventour/pages/navigation_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/route_page.dart';
@@ -44,7 +45,8 @@ class Adventour extends StatelessWidget {
         '/addPlacesPage': (_) => AddPlacesPage(),
         '/highlightPage': (_) => HighlightPage(),
         '/routesPage': (_) => RoutesPage(),
-        '/profilePage': (_) => ProfilePage()
+        '/profilePage': (_) => ProfilePage(),
+        '/navigationPage': (_) => NavigationPage(),
       },
     );
   }

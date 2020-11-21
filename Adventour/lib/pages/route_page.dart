@@ -17,6 +17,7 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -308,7 +309,34 @@ class MapView extends StatefulWidget {
 }
 
 class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
-  MapController mapController = MapController();
+  MapController _mapController = MapController();
+  List<LatLng> routeCoords = List();
+  GoogleMapPolyline googleMapPolyline = new GoogleMapPolyline(
+    apiKey: API_KEY,
+  );
+  String cont = "0";
+
+  getSomePoints() async {
+    for (var i = 0; i < widget.places.length - 1; i++) {
+      Place start = widget.places[i];
+      Place end = widget.places[i + 1];
+      routeCoords.addAll(
+        await googleMapPolyline.getCoordinatesWithLocation(
+          origin: LatLng(start.latitude, start.longitude),
+          destination: LatLng(end.latitude, end.longitude),
+          mode: toRouteMode(
+            widget.selectedPath.transport,
+          ),
+        ),
+      );
+    }
+    print(routeCoords);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   bool _listVisible = true;
 
@@ -322,15 +350,41 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 widget.places.first.latitude, widget.places.first.longitude),
             zoom: 12.5,
           ),
-          markers: Set<Marker>.of(mapController.markers.values),
-          polylines: Set<Polyline>.of(mapController.polylines.values),
+          markers: Set<Marker>.of(_mapController.markers.values),
+          polylines: Set<Polyline>.of(_mapController.polylines.values),
           onMapCreated: (googleMapController) =>
-              mapController.onMapCreated(googleMapController, () async {
+              _mapController.onMapCreated(googleMapController, () async {
             drawPath(widget.selectedPath);
             for (var place in widget.places) {
-              mapController.addMarker(place, context);
+              _mapController.addMarker(place, context);
             }
           }),
+                      // onMapCreated: (googleMapController) {
+            //   getSomePoints();
+            //   for (var place in widget.route.places) {
+            //     markers.add(Marker(
+            //         markerId: MarkerId(cont),
+            //         position: LatLng(place.latitude, place.longitude),
+            //         infoWindow: InfoWindow(title: place.name)));
+            //     setState(() {
+            //       cont += "0";
+            //     });
+            //   }
+            //   setState(() {
+            //     mapController = googleMapController;
+            //     polyline.add(
+            //       Polyline(
+            //         polylineId: PolylineId('route1'),
+            //         visible: true,
+            //         points: routeCoords,
+            //         width: 8,
+            //         color: Theme.of(context).primaryColor,
+            //         startCap: Cap.roundCap,
+            //         endCap: Cap.buttCap,
+            //       ),
+            //     );
+            //   });
+            // },
           onCameraMoveStarted: () {
             _listVisible = false;
             setState(() {});
@@ -356,8 +410,50 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 onPressed: () => widget.tabController.animateTo(1),
               ),
             ),
-          ),
-        ),
+
+
+
+      ),),
+      // floatingActionButton: AnimatedOpacity(
+      //   // If the widget is visible, animate to 0.0 (invisible).
+      //   // If the widget is hidden, animate to 1.0 (fully visible).
+      //   opacity: _listVisible ? 1.0 : 0.0,
+      //   duration: Duration(milliseconds: 600),
+      //   curve: Curves.fastOutSlowIn,
+      //   // The green box must be a child of the AnimatedOpacity widget.
+      //   child: Padding(
+      //     padding: const EdgeInsets.all(8.0),
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.end,
+      //       children: [
+      //         FloatingActionButton(
+      //           heroTag: 'edit',
+      //           backgroundColor: Theme.of(context).primaryColor,
+      //           onPressed: () => widget.tabController.animateTo(1),
+      //           child: Icon(
+      //             Icons.edit,
+      //             color: Theme.of(context).buttonColor,
+      //           ),
+      //         ),
+      //         SizedBox(height: 8),
+      //         FloatingActionButton(
+      //           heroTag: 'navigation',
+      //           backgroundColor: Theme.of(context).primaryColor,
+      //           onPressed: () {
+      //             Navigator.pushNamed(context, '/navigationPage', arguments: {
+      //               'route': widget.route,
+      //               'polylines': polyline,
+      //               'markers': markers,
+      //             });
+      //           },
+      //           child: Icon(
+      //             Icons.navigation,
+      //             color: Theme.of(context).buttonColor,
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //   ),
         Align(
           alignment: Alignment.bottomLeft,
           child: AnimatedOpacity(
@@ -388,14 +484,27 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
               duration: 3),
           consumeTapEvents: true,
           width: 4);
-      mapController.drawPolyline(polyline);
+      _mapController.drawPolyline(polyline);
     }
 
     setState(() {});
   }
-
   @override
   bool get wantKeepAlive => true;
+
+  RouteMode toRouteMode(String transport) {
+    switch (transport) {
+      case CAR:
+        return RouteMode.driving;
+      case WALK:
+        return RouteMode.walking;
+      case BICYCLE:
+        return RouteMode.bicycling;
+      default:
+        return throw new Exception(
+            "$transport is a transport not available");
+    }
+  }
 }
 
 class NotRouteAvailable extends StatelessWidget {
@@ -606,3 +715,7 @@ class MapListView extends StatelessWidget {
     return hours + ':' + minutes;
   }
 }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => throw UnimplementedError();

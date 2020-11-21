@@ -48,7 +48,6 @@ class DirectionsEngine {
       origin,
       destination,
       waypoints: waypoints,
-      units: Unit.metric,
       travelMode: toTravelMode(transport),
     );
     if(response.hasNoResults) return null;

@@ -1,3 +1,4 @@
+
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
@@ -78,17 +79,3 @@ class RouteEngine {
 }
 
 RouteEngine routeEngine = RouteEngine();
-
-class RouteEngineResponse {
-  Route _route;
-  List<Place> _recommendations;
-
-  RouteEngineResponse(route, recommendations) {
-    _route = route;
-    _recommendations = recommendations;
-  }
-
-  Route get route => _route;
-
-  List<Place> get recommendations => _recommendations;
-}
