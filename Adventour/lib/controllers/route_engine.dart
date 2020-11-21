@@ -53,7 +53,7 @@ class RouteEngine {
 
     for (String type in types) {
       Place routePlace;
-      if (type == TOURIST_ATTRACTION) {
+      if (type == TOURIST_ATTRACTION || type == PARK) {
         routePlace = placesWithoutDuplicates
             .firstWhere((place) => place.types.contains(type), orElse: () {});
         if (routePlace != null) {
