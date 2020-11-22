@@ -105,7 +105,7 @@ class InfAchievement extends StatelessWidget {
                           ),
                         ),
                         child: actualUser
-                                    .getAttribute(this.achievement.affected) ==
+                                    .getAttribute(this.achievement.affected) >=
                                 this.achievement.objective
                             ? Center(
                                 child: Text(

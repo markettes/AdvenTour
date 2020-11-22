@@ -6,13 +6,15 @@ class User {
   String _userName;
   String _email;
   String _image;
-  String _changeLook;
+  int _changeLook;
+  int _completedRoutes;
 
-  User(userName, email, [image = '', changeLook]) {
+  User(userName, email, changeLook, completedRoutes, [image = '']) {
     _userName = userName;
     _email = email;
     _image = image;
     _changeLook = changeLook;
+    _completedRoutes = _completedRoutes;
   }
 
   User.fromFirestore(DocumentSnapshot snapshot) {
@@ -22,6 +24,7 @@ class User {
     _email = data['email'];
     _image = data['image'];
     _changeLook = data['changeLook'];
+    _completedRoutes = data['completedRoutes'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +32,7 @@ class User {
         'email': _email,
         'image': _image,
         'changeLook': _changeLook,
+        'completedRoutes' : _completedRoutes,
       };
 
   get id => _id;
@@ -43,10 +47,15 @@ class User {
 
   get changeLook => _changeLook;
 
-  String getAttribute(String affected) {
+  get completedRoutes => _completedRoutes;
+
+  int getAttribute(String affected) {
     if (affected == "changeLook") {
       return _changeLook;
-    } else
-      return "true";
+    } 
+    else if (affected == "completedRoutes"){
+      return _completedRoutes;
+    }
+    else return 0;
   }
 }

@@ -88,7 +88,7 @@ class _SignInFormState extends State<SignInForm> {
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                 User user =
-                    User(_userNameController.text, _emailController.text, "false");
+                    User(_userNameController.text, _emailController.text, 0, 0);
                 try {
                   await auth.registerUser(user, _passwordController.text);
                   Navigator.pop(context);
