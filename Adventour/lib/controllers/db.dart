@@ -65,7 +65,13 @@ class DB {
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
 
-  Future addFinishedRoute(FinishedRoute route) => _firestore.collection('RouteHistory').add(route.toJson());
+  Future addFinishedRoute(String userId,FinishedRoute route) =>
+      _firestore.collection('Users/$userId/RouteHistory').add(route.toJson());
+
+  Stream<List<FinishedRoute>> getUserHistory(String userId) => _firestore
+      .collection('Users/$userId/RouteHistory')
+      .snapshots()
+      .map((snap) => toFinisedRoutes(snap.docs));
 }
 
 DB db;

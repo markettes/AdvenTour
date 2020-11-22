@@ -106,6 +106,14 @@ class Route {
 
   int get likes => _likes.length;
 
+  List<String> types(){
+    List<String> types = [];
+    for (var place in _places) {
+      if (!types.contains(place.type)) types.add(place.type);
+    }
+    return types;
+  }
+
 
 }
 

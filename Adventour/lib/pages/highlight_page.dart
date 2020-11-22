@@ -85,7 +85,7 @@ class _HighlightPageState extends State<HighlightPage> {
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 r.Route route = routes[index];
-                                return RouteWidget(route);
+                                return RouteWidget(route:route,onTap: ()=>Navigator.pushNamed(context, '/navigationPage',arguments: {'route':route}),);
                               },
                             )
                           : Column(

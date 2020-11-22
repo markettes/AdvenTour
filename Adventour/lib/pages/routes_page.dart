@@ -36,25 +36,110 @@ class RoutesPage extends StatelessWidget {
                         actionExtentRatio: 0.25,
                         actions: <Widget>[
                           IconSlideAction(
-                            caption: 'Request',
                             color: Colors.transparent,
-                            icon: Icons.file_upload,
+                            iconWidget: Icon(
+                              Icons.more_vert,
+                              size: 30,
+                            ),
                             foregroundColor: Theme.of(context).primaryColor,
-                            onTap: () =>
-                                db.requestRoute(db.currentUserId, route.id),
+                            onTap: () => showDialog(
+                                context: context,
+                                builder: (context) => Dialog(
+                                      child: Container(
+                                        height: 180,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            FlatButton.icon(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Navigator.pushNamed(
+                                                    context, '/navigationPage',
+                                                    arguments: {
+                                                      'route': route
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.edit,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 30,
+                                              ),
+                                              label: Text(
+                                                'Edit',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline2,
+                                              ),
+                                            ),
+                                            FlatButton.icon(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                Navigator.pushNamed(
+                                                    context, '/routePage',
+                                                    arguments: {
+                                                      'route': route
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.delete,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 30,
+                                              ),
+                                              label: Text(
+                                                'Delete',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline2,
+                                              ),
+                                            ),
+                                            FlatButton.icon(
+                                              onPressed: () => db.requestRoute(
+                                                  db.currentUserId, route.id),
+                                              icon: Icon(
+                                                Icons.upload_file,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                                size: 30,
+                                              ),
+                                              label: Text(
+                                                'Request',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline2,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )),
                           ),
+                          // IconSlideAction(
+                          //   caption: 'Request',
+                          //   color: Colors.transparent,
+                          //   icon: Icons.file_upload,
+                          //   foregroundColor: Theme.of(context).primaryColor,
+                          //   onTap: () =>
+                          //       db.requestRoute(db.currentUserId, route.id),
+                          // ),
                         ],
-                        secondaryActions: [
-                          IconSlideAction(
-                            caption: 'Delete',
-                            color: Colors.transparent,
-                            icon: Icons.delete,
-                            foregroundColor: Theme.of(context).primaryColor,
-                            onTap: () =>
-                                db.deleteRoute(route.author, route.id),
-                          ),
-                        ],
-                        child: RouteWidget(route),
+                        // secondaryActions: [
+                        //   IconSlideAction(
+                        //     caption: 'Delete',
+                        //     color: Colors.transparent,
+                        //     icon: Icons.delete,
+                        //     foregroundColor: Theme.of(context).primaryColor,
+                        //     onTap: () =>
+                        //         db.deleteRoute(route.author, route.id),
+                        //   ),
+                        // ],
+                        child: RouteWidget(
+                          route: route,
+                          onTap: () => Navigator.pushNamed(
+                              context, '/navigationPage',
+                              arguments: {'route': route}),
+                        ),
                       );
                     },
                   )

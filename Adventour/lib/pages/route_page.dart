@@ -448,21 +448,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             curve: Curves.fastOutSlowIn,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  SquareIconButton(
-                    icon: Icons.play_arrow,
-                    onPressed: () => Navigator.pushNamed(
-                        context, '/navigationPage', arguments: {
-                      'route': widget.route,
-                      'polyline': _polyline
-                    }),
-                  ),
-                  SquareIconButton(
-                    icon: Icons.list,
-                    onPressed: () => widget.tabController.animateTo(1),
-                  ),
-                ],
+              child: SquareIconButton(
+                icon: Icons.list,
+                onPressed: () => widget.tabController.animateTo(1),
               ),
             ),
           ),

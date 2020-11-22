@@ -10,7 +10,11 @@ import 'place_types_list.dart';
 
 class RouteWidget extends StatefulWidget {
   r.Route route;
-  RouteWidget(this.route);
+  Function onTap;
+  RouteWidget({
+    this.route,
+    this.onTap,
+  });
 
   @override
   _RouteWidgetState createState() => _RouteWidgetState();
@@ -22,17 +26,14 @@ class _RouteWidgetState extends State<RouteWidget> {
 
   @override
   void initState() {
-    for (var place in widget.route.places) {
-      if (!_types.contains(place.type)) _types.add(place.type);
-    }
+    _types = widget.route.types();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/routePage',
-          arguments: {'route': widget.route}),
+      onTap: widget.onTap,
       child: SizedBox(
         height: 75,
         child: Row(

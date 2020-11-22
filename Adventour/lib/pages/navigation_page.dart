@@ -1,13 +1,16 @@
 import 'dart:async';
 
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/polyline_engine.dart';
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/FinishedRoute.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/pages/search_page.dart';
+import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:toast/toast.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -37,8 +41,8 @@ class _NavigationPageState extends State<NavigationPage> {
   bool _listVisible = true;
   List<LatLng> routeCoords = List();
   bool _fixedPosition = true;
-  bool _finished = false;
   FinishedRoute _finishedRoute;
+  Place _nearestPlace;
   // double bearing;
 
   // @override
@@ -91,19 +95,21 @@ class _NavigationPageState extends State<NavigationPage> {
         _showCancelAlert();
       },
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
-          title: Text(route.name),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {},
-            )
-          ],
-        ),
-        bottomNavigationBar: !_finished
+        appBar: _finishedRoute == null
+            ? AppBar(
+                backgroundColor: Theme.of(context).primaryColor,
+                title: Text(route.name),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.more_vert),
+                    onPressed: () {},
+                  )
+                ],
+              )
+            : null,
+        bottomNavigationBar: _finishedRoute == null
             ? Container(
-                height: 100,
+                height: 90,
                 decoration: BoxDecoration(
                     color: Theme.of(context).backgroundColor,
                     borderRadius: BorderRadius.only(
@@ -115,52 +121,48 @@ class _NavigationPageState extends State<NavigationPage> {
                     ]),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
                     children: [
-                      Icon(
-                        Icons.info,
-                        color: Theme.of(context).primaryColor,
-                        size: 50,
-                      ),
-                      Column(
+                      if (_nearestPlace != null) Text(_nearestPlace.name),
+                      if (_nearestPlace != null) SizedBox(height: 5),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(Icons.directions_walk,
-                                  color: Theme.of(context).primaryColor),
-                              Text('${tiempoRestante()}'),
-                              Icon(
-                                Icons.location_pin,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              Text(
-                                  '${route.paths[_selectedPath].stretchs.length}')
-                            ],
+                          Icon(
+                            _nearestPlace != null
+                                ? typeToIcon(_nearestPlace.type)
+                                : Icons.info,
+                            color: Theme.of(context).primaryColor,
+                            size: 40,
                           ),
-                          Row(
+                          Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Icon(Icons.alarm,
-                                  color: Theme.of(context).primaryColor),
-                              Text(
-                                '${tiempoDurante()}',
-                                style: TextStyle(
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Icon(Icons.directions_walk,
+                                      color: Theme.of(context).primaryColor),
+                                  Text('${tiempoRestante()}'),
+                                  Icon(
+                                    Icons.location_pin,
                                     color: Theme.of(context).primaryColor,
-                                    fontWeight: FontWeight.bold),
-                              )
+                                  ),
+                                  Text(
+                                      '${route.paths[_selectedPath].stretchs.length}')
+                                ],
+                              ),
                             ],
                           )
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
               )
             : null,
-        body: !_finished
+        body: _finishedRoute == null
             ? StreamBuilder(
                 stream: Geolocator.getPositionStream(),
                 builder: (context, snapshot) {
@@ -276,43 +278,40 @@ class _NavigationPageState extends State<NavigationPage> {
                           ),
                         ),
                       ),
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        '${tiempoDurante()}',
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
                     )
                   ]);
                 })
-            : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Text('Route finished',style: Theme.of(context).textTheme.headline2,),
-                  Text(tiempoDurante()),
-                  PrimaryButton(
-                    text: 'OK',
-                    onPressed: ()=>Navigator.pop(context),
-                  ),
-                ],
-              ),
-            ),
+            : FinishedRouteWidget(finishedRoute: _finishedRoute),
       ),
     );
   }
 
   void _checkStretch(Position position) {
-    Place nearestPlace = r.nearestPlace(position, _places);
+    _nearestPlace = r.nearestPlace(position, _places);
 
     if (Geolocator.distanceBetween(
           position.latitude,
           position.longitude,
-          nearestPlace.latitude,
-          nearestPlace.longitude,
+          _nearestPlace.latitude,
+          _nearestPlace.longitude,
         ) <
         20.0) {
-      _places.remove(nearestPlace);
-      _mapController.clearMarker(nearestPlace.id);
-      _places.clear();
+      _places.remove(_nearestPlace);
+      _mapController.clearMarker(_nearestPlace.id);
       if (_places.isEmpty) {
+        print('?' + route.name);
         _finishedRoute =
             FinishedRoute(route, DateTime.now(), stopwatch.elapsed);
-        _finished = true;
+        stopwatch.stop();
       }
     }
   }
@@ -333,34 +332,6 @@ class _NavigationPageState extends State<NavigationPage> {
         color: Colors.blue,
         width: 4);
     _mapController.drawPolyline(_polyline);
-  }
-
-  Future<void> _showEndDialog() async {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Approve'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void nextTransport() {
@@ -409,10 +380,103 @@ class _NavigationPageState extends State<NavigationPage> {
 
   String tiempoDurante() {
     Duration time = stopwatch.elapsed;
-    if (time.inMinutes < 60) {
-      return '${time.inMinutes % 60}min';
-    } else {
-      return '${time.inMinutes ~/ 60}h ${time.inMinutes % 60}min';
-    }
+    String min,hours;
+    if(time.inMinutes.remainder(60) < 10) min = '0' + time.inMinutes.remainder(60).toString();
+    else min = time.inMinutes.remainder(60).toString();
+    hours = time.inHours.toString();
+    return '$hours:$min';
+  }
+}
+
+class FinishedRouteWidget extends StatefulWidget {
+  FinishedRouteWidget({
+    @required this.finishedRoute,
+  });
+
+  FinishedRoute finishedRoute;
+
+  @override
+  _FinishedRouteWidgetState createState() => _FinishedRouteWidgetState();
+}
+
+class _FinishedRouteWidgetState extends State<FinishedRouteWidget> {
+  bool delete = false;
+  List<String> _types;
+
+  @override
+  void initState() {
+    _types = widget.finishedRoute.types();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircleAvatar(
+            radius: 120,
+            backgroundImage: NetworkImage(
+              searchEngine.searchPhoto(widget.finishedRoute.image),
+            ),
+          ),
+          SizedBox(height: 10),
+          SizedBox(
+            height: 30,
+            child: ListView.separated(
+              itemCount: _types.length,
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              separatorBuilder: (context, index) => SizedBox(width: 2),
+              itemBuilder: (context, index) {
+                String type = _types[index];
+                return SizedBox(
+                    width: 28,
+                    child: CircleIcon(
+                      type: type,
+                      size: 16,
+                      padding: EdgeInsets.all(4),
+                    ));
+              },
+            ),
+          ),
+          Text(
+            widget.finishedRoute.name + ' finished',
+            style: Theme.of(context).textTheme.headline2,
+          ),
+          Text('in ' + widget.finishedRoute.durationText,
+              style:
+                  Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 15)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Switch(
+                  value: delete,
+                  activeColor: Theme.of(context).primaryColor,
+                  onChanged: (value) {
+                    delete = value;
+                    setState(() {});
+                  }),
+              GestureDetector(
+                child: Icon(Icons.delete),
+                onLongPress: () =>
+                    Toast.show('Delete route from your routes', context),
+              )
+            ],
+          ),
+          PrimaryButton(
+              text: 'OK',
+              onPressed: () {
+                if (delete)
+                  db.deleteRoute(
+                      db.currentUserId, widget.finishedRoute.routeId);
+                db.addFinishedRoute(db.currentUserId, widget.finishedRoute);
+                Navigator.pop(context);
+              }),
+        ],
+      ),
+    );
   }
 }
