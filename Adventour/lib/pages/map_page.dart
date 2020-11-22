@@ -176,6 +176,56 @@ class _MapPageState extends State<MapPage> {
                               Icons.star,
                               size: 35,
                               color: Theme.of(context).primaryColor,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MaterialButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/achievementsPage');
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.emoji_events,
+                                  size: 35,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Achievements',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: MaterialButton(
+                            onPressed: () {
+                              auth.signOut();
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  size: 35,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Logout',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                )
+                              ],
                             ),
                             SizedBox(
                               width: 10,
