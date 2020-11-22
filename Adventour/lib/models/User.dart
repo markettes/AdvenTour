@@ -28,7 +28,7 @@ class User {
         'userName': _userName,
         'email': _email,
         'image': _image,
-        '_changeLook': changeLook,
+        'changeLook': _changeLook,
       };
 
   get id => _id;

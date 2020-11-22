@@ -37,13 +37,10 @@ class _AchievementsPageState extends State<AchievementsPage> {
       body: ScrollColumnExpandable(
         children: [
           for (int i = 0; i < _achievements.length; i++)
-            InfAchievement(achievement: _achievements[i], actualUser: actualUser,),
-          PrimaryButton(
-              text: 'RETURN',
-              onPressed: () async {
-                setState(() {});
-                //Navigator.pop(context);
-              })
+            InfAchievement(
+              achievement: _achievements[i],
+              actualUser: actualUser,
+            ),
         ],
       ),
     );
@@ -107,7 +104,8 @@ class InfAchievement extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                           ),
                         ),
-                        child: actualUser.getAttribute(this.achievement.affected) == 
+                        child: actualUser
+                                    .getAttribute(this.achievement.affected) ==
                                 this.achievement.objective
                             ? Center(
                                 child: Text(
