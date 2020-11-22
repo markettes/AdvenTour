@@ -37,9 +37,6 @@ class _MapPageState extends State<MapPage> {
   DateTime now;
   String formattedDate;
 
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isHL = false;
-
   @override
   void initState() {
     now = DateTime.now();
@@ -57,15 +54,6 @@ class _MapPageState extends State<MapPage> {
 
     super.initState();
   }
-
-  List<CategoryCheckbox> buttons = [
-    CategoryCheckbox("Restaurant", Icons.restaurant),
-    CategoryCheckbox("Park", Icons.park),
-    CategoryCheckbox("Museum", Icons.museum),
-    CategoryCheckbox("Beach Access", Icons.beach_access),
-    CategoryCheckbox("Restaurant", Icons.restaurant),
-    CategoryCheckbox("Restaurant", Icons.restaurant),
-  ];
 
   @override
   Widget build(BuildContext context) {

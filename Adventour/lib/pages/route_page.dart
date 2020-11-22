@@ -2,6 +2,7 @@ import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
+import 'package:Adventour/controllers/polyline_engine.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
@@ -17,7 +18,7 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_map_polyline/google_map_polyline.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -59,7 +60,6 @@ class _RoutePageState extends State<RoutePage>
             IconButton(
               icon: Icon(Icons.save),
               onPressed: () => saveDialog(context),
-
             )
           ],
         ),
@@ -383,33 +383,20 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
   MapController _mapController = MapController();
   List<LatLng> routeCoords = List();
   Polyline _polyline;
-  GoogleMapPolyline googleMapPolyline = GoogleMapPolyline(
-    apiKey: API_KEY,
-  );
 
   drawPath() async {
-    routeCoords.addAll(
-      await googleMapPolyline.getCoordinatesWithLocation(
-        origin: widget.start,
-        destination:
-            LatLng(widget.places.first.latitude, widget.places.first.longitude),
-        mode: toRouteMode(
-          widget.selectedPath.transport,
-        ),
-      ),
-    );
+    String transport = widget.selectedPath.transport;
+    routeCoords.addAll(await polylineEngine.getPoints(
+        widget.start,
+        LatLng(widget.places.first.latitude, widget.places.first.longitude),
+        transport));
     for (var i = 1; i < widget.places.length - 1; i++) {
       Place start = widget.places[i];
       Place end = widget.places[i + 1];
-      routeCoords.addAll(
-        await googleMapPolyline.getCoordinatesWithLocation(
-          origin: LatLng(start.latitude, start.longitude),
-          destination: LatLng(end.latitude, end.longitude),
-          mode: toRouteMode(
-            widget.selectedPath.transport,
-          ),
-        ),
-      );
+      routeCoords.addAll(await polylineEngine.getPoints(
+          LatLng(start.latitude, start.longitude),
+          LatLng(end.latitude, end.longitude),
+          transport));
     }
     _polyline = Polyline(
         polylineId: PolylineId('Route'),
@@ -465,9 +452,10 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 children: [
                   SquareIconButton(
                     icon: Icons.play_arrow,
-                    onPressed: () => Navigator.pushNamed(context, '/navigationPage',arguments: {
-                      'route':widget.route,
-                      'polyline':_polyline
+                    onPressed: () => Navigator.pushNamed(
+                        context, '/navigationPage', arguments: {
+                      'route': widget.route,
+                      'polyline': _polyline
                     }),
                   ),
                   SquareIconButton(
@@ -557,19 +545,6 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
-
-  RouteMode toRouteMode(String transport) {
-    switch (transport) {
-      case CAR:
-        return RouteMode.driving;
-      case WALK:
-        return RouteMode.walking;
-      case BICYCLE:
-        return RouteMode.bicycling;
-      default:
-        return throw new Exception("$transport is a transport not available");
-    }
-  }
 }
 
 class NotRouteAvailable extends StatelessWidget {

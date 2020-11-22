@@ -40,8 +40,7 @@ class Place {
   List<String> _types;
   String _adress;
   String _telephone;
-  double _latitude;
-  double _longitude;
+  LatLng _coordinates;
   num _rating;
   List<Photo> _photos;
   List<Review> _reviews;
@@ -53,8 +52,7 @@ class Place {
 
   Place(latitude, longitude, [name, id, rating, type, duration]) {
     _detailed = false;
-    _latitude = latitude;
-    _longitude = longitude;
+    _coordinates = LatLng(latitude, longitude);
     _name = name;
     _id = id;
     _rating = rating;
@@ -78,8 +76,7 @@ class Place {
     _name = result.name;
     _type = googleIconToType(result.icon);
     _types = result.types;
-    _latitude = result.geometry.location.lat;
-    _longitude = result.geometry.location.lng;
+    _coordinates = LatLng(result.geometry.location.lat,result.geometry.location.lng);
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
     _adress = result.vicinity;
@@ -94,8 +91,7 @@ class Place {
     _type = googleIconToType(details.icon);
     _types = details.types;
     _adress = details.vicinity;
-    _latitude = details.geometry.location.lat;
-    _longitude = details.geometry.location.lng;
+    _coordinates = LatLng(details.geometry.location.lat,details.geometry.location.lng);
     _rating = details.rating;
     _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
@@ -124,8 +120,8 @@ class Place {
 
   Map<String, dynamic> toJson() => {
         'id': _id,
-        'latitude': _latitude,
-        'longitude': _longitude,
+        'latitude': _coordinates.latitude,
+        'longitude': _coordinates.longitude,
         'name': _name,
         'adress': _adress,
         'type': _type,
@@ -134,8 +130,7 @@ class Place {
 
   Place.fromJson(Map<dynamic, dynamic> data) {
     _id = data['id'];
-    _latitude = data['latitude'];
-    _longitude = data['longitude'];
+    _coordinates = LatLng(data['latitude'],data['longitude']);
     _name = data['name'];
     _adress = data['adress'];
     _type = data['type'];
@@ -148,9 +143,11 @@ class Place {
 
   get name => _name;
 
-  get latitude => _latitude;
+  get coordinates => _coordinates;
 
-  get longitude => _longitude;
+  get latitude => _coordinates.latitude;
+
+  get longitude => _coordinates.longitude;
 
   get adress => _adress;
 

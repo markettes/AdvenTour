@@ -5,45 +5,46 @@ import 'package:toast/toast.dart';
 
 class CircleIconButton extends StatelessWidget {
   CircleIconButton({
-    @required this.type,
+    this.type,
     @required this.onPressed,
     this.activated = true,
-    this.icon = true,
+    this.icon,
     this.size = 25,
   });
 
   String type;
   Function onPressed;
   bool activated;
-  bool icon;
   double size;
+  Icon icon;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       onPressed: onPressed,
-      onLongPress: (){
-        Toast.show(_placeTypeToString(), context, duration: 3, gravity:  Toast.BOTTOM);
+      onLongPress: () {
+        Toast.show(_placeTypeToString(), context,
+            duration: 3, gravity: Toast.BOTTOM);
       },
       elevation: 2.0,
       fillColor: activated
           ? Theme.of(context).primaryColor
           : Theme.of(context).disabledColor,
       constraints: BoxConstraints(minWidth: 0),
-      child: Icon(
-        typeToIcon(type),
-        size: size,
-        color: Colors.white,
-      ),
+      child: type != null
+          ? Icon(
+              typeToIcon(type),
+              size: size,
+              color: Colors.white,
+            )
+          : icon,
       padding: EdgeInsets.all(10),
       shape: CircleBorder(),
     );
   }
 
-
-
   String _placeTypeToString() {
-  switch (type) {
+    switch (type) {
       case CAR:
         return 'Transport: Car';
       case WALK:
@@ -67,7 +68,5 @@ class CircleIconButton extends StatelessWidget {
       default:
         throw Exception('Icon not available for $type');
     }
-}
-
-
+  }
 }
