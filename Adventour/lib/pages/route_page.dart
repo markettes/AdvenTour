@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
@@ -8,6 +9,7 @@ import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
@@ -270,6 +272,10 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    User currentUser;
+    db.getCurrentUserName(auth.currentUserEmail).then((value) {
+      currentUser = value;
+    });
     return Column(
       children: [
         SizedBox(
@@ -293,6 +299,7 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
                       onTap: () async {
                         _recommendations.remove(place);
                         widget.addPlace(place);
+                        db.editedRoutes(currentUser);
                       },
                     );
                     if (index == 0)

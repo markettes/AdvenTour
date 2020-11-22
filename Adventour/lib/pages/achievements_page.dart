@@ -120,7 +120,9 @@ class InfAchievement extends StatelessWidget {
                                 )
                               : SizedBox(),
                         ),
-                        Text("${actualUser.getAttribute(this.achievement.affected)}" + "/" + "${this.achievement.objective}"),
+                        actualUser.getAttribute(this.achievement.affected) < this.achievement.objective
+                        ? Text("${actualUser.getAttribute(this.achievement.affected)}" + "/" + "${this.achievement.objective}")
+                        : SizedBox(),
                                               ],
                       ),
                     ),
