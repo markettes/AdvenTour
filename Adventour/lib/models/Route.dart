@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 
@@ -104,7 +105,29 @@ class Route {
   String get image => _images[0];
 
   int get likes => _likes.length;
+
+
 }
+
+  Place nearestPlace(Position position,List<Place> places) {
+    if (places.isEmpty) return null;
+    Place nearestPlace = places.first;
+    for (var i = 1; i < places.length; i++) {
+      if (Geolocator.distanceBetween(
+            position.latitude,
+            position.longitude,
+            places[i].latitude,
+            places[i].longitude,
+          ) <
+          Geolocator.distanceBetween(
+            position.latitude,
+            position.longitude,
+            nearestPlace.latitude,
+            nearestPlace.longitude,
+          )) nearestPlace = places[i];
+    }
+    return nearestPlace;
+  }
 
 List<Route> toRoutes(List docs) =>
     docs.map((doc) => Route.fromJson(doc)).toList();
@@ -124,8 +147,8 @@ class Path {
     for (var i = 0; i < route.legs.length; i++) {
       var leg = route.legs[i];
       Duration duration = Duration(seconds: leg.duration.value);
-      LatLng destination = LatLng(leg.endLocation.lat,leg.endLocation.lng);
-      stretchs.add(Stretch(transport + i.toString(),destination, duration,
+      LatLng destination = LatLng(leg.endLocation.lat, leg.endLocation.lng);
+      stretchs.add(Stretch(transport + i.toString(), destination, duration,
           waypoints[i + 1].placeId));
     }
     _stretchs = stretchs;
@@ -168,7 +191,7 @@ class Stretch {
   String _destinationId;
   LatLng _destination;
 
-  Stretch(id,destination, duration, destionationId) {
+  Stretch(id, destination, duration, destionationId) {
     _id = id;
     _destination = destination;
     _duration = duration;
@@ -177,14 +200,15 @@ class Stretch {
 
   Map<String, dynamic> toJson() => {
         'id': _id,
-        'destination':_destination,
+        'latitude': _destination.latitude,
+        'longitude': _destination.longitude,
         'duration': _duration.inMinutes,
         'destinationId': _destinationId
       };
 
   Stretch.fromJson(Map<dynamic, dynamic> data) {
     _id = data['id'];
-    _destination = data['destination'];
+    _destination = LatLng(data['latitude'], data['longitude']);
     _duration = Duration(minutes: data['duration']);
     _destinationId = data['destinationId'];
   }

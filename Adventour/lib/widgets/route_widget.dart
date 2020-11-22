@@ -18,13 +18,21 @@ class RouteWidget extends StatefulWidget {
 
 class _RouteWidgetState extends State<RouteWidget> {
   int _selectedPath = 0;
+  List<String> _types = [];
+
+  @override
+  void initState() {
+    for (var place in widget.route.places) {
+      if (!_types.contains(place.type)) _types.add(place.type);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/routePage', arguments: {
-        'route': widget.route
-      }),
+      onTap: () => Navigator.pushNamed(context, '/routePage',
+          arguments: {'route': widget.route}),
       child: SizedBox(
         height: 75,
         child: Row(
@@ -86,12 +94,12 @@ class _RouteWidgetState extends State<RouteWidget> {
                   ),
                   Expanded(
                     child: ListView.separated(
-                      itemCount: widget.route.places.length,
+                      itemCount: _types.length,
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       separatorBuilder: (context, index) => SizedBox(width: 2),
                       itemBuilder: (context, index) {
-                        String type = widget.route.places[index].type;
+                        String type = _types[index];
                         return SizedBox(
                             width: 28,
                             child: CircleIcon(

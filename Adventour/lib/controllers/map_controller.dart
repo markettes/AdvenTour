@@ -14,6 +14,8 @@ class MapController {
 
   Map<MarkerId, Marker> get markers => _markers;
 
+  bool get mapCreated => _mapController != null;
+
   void onMapCreated(GoogleMapController controller, [Function then]) {
     _mapController = controller;
     _changeMapStyle(_mapController);
@@ -41,9 +43,13 @@ class MapController {
     _polylines[polyline.polylineId] = polyline;
   }
 
+  clearPolyline(){
+    _polylines = {};
+  }
+
   void addMarker(Place place, BuildContext context) {
     Marker marker = Marker(
-      markerId: MarkerId(place.name),
+      markerId: MarkerId(place.id),
       position: LatLng(place.latitude, place.longitude),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
       infoWindow: InfoWindow(
@@ -69,6 +75,10 @@ class MapController {
     );
 
     _markers[marker.markerId] = marker;
+  }
+
+  void clearMarker(String id) {
+    _markers.remove(MarkerId(id));
   }
 
   void clearMarkers() {

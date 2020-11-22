@@ -1,4 +1,5 @@
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/models/FinishedRoute.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Adventour/models/User.dart';
@@ -63,6 +64,8 @@ class DB {
       .orderBy('likes')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
+
+  Future addFinishedRoute(FinishedRoute route) => _firestore.collection('RouteHistory').add(route.toJson());
 }
 
 DB db;
