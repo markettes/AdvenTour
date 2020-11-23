@@ -4,7 +4,7 @@ class Achievement {
   String _name;
   String _description;
   String _affected;
-  String _objective;
+  int _objective;
 
   String _id;
 

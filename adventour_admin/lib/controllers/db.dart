@@ -19,6 +19,13 @@ class DB {
   Future deleteRouteRequest(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
       .update({'requested': 'false'});
+
+    Future<void> routesHighlight(String id) async {
+          DocumentSnapshot querySnapshot = await _firestore.doc('Users/$id').get();
+          var data = querySnapshot.data();
+          var data2 = data['routesHighlight'];
+          _firestore.doc('Users/$id').update({'routesHighlight': data2 +1});
+  }
 }
 
 DB db;
