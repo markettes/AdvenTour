@@ -57,7 +57,9 @@ class RouteRequestPage extends StatelessWidget {
                               route.author, route.id), // AÑADIR CIUDAD
                         ),
                       ],
-                      child: SizedBox(),//RouteWidget(route),
+                      child: RouteWidget(
+                        route: route,
+                      ),
                     );
                   },
                 )
