@@ -163,6 +163,33 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ],
                 ),
+                 Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/historyPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.update,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'My history',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Row(
                   children: [
                     Expanded(

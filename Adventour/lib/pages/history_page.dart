@@ -1,3 +1,5 @@
+import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/widgets/route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -11,7 +13,7 @@ enum SingingCharacter { duration, time }
 
 class _HistoryPageState extends State<HistoryPage> {
   SingingCharacter _character = SingingCharacter.duration;
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,11 +93,22 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Expanded(
                       child: Container(
-                          child: ListView(
-                            children: [
-                              
-                            ],
-                          ),
+                          child: StreamBuilder(
+                              stream: db.getRoutes(db.currentUserId),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) print('error');
+                                if (!snapshot.hasData)
+                                  return CircularProgressIndicator();
+                                List<Route> routes = snapshot.data;
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListView(
+                                    children: [
+                                      RouteWidget()
+                                      ],
+                                  ),
+                                );
+                              }),
                           width: 150,
                           height: 600,
                           decoration: BoxDecoration(
