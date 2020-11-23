@@ -1,6 +1,9 @@
+import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
-import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/route_widget.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class HighlightPage extends StatefulWidget {
@@ -9,230 +12,94 @@ class HighlightPage extends StatefulWidget {
 }
 
 class _HighlightPageState extends State<HighlightPage> {
-  TextEditingController _locationController = TextEditingController();
   Place place;
-  String photo;
+
+  CarouselController _carouselController = CarouselController();
+
+  @override
+  void dispose() {
+    _carouselController = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('hola1');
     Map args = ModalRoute.of(context).settings.arguments;
     place = args['place'];
-    photo = args['photo'];
-    print('hola2');
-
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text(place.name + ' highlights'),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              child: Image.network(
-                photo,
-              ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                SizedBox(height: 5),
+                FutureBuilder(
+                    future: searchEngine.searchWithDetails(place.id),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print('error');
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+                      Place place = snapshot.data;
+                      return Container(
+                        height: 200,
+                        child: place.photos == null || place.photos.isEmpty
+                            ? Center(child: Text('No available photos'))
+                            : CarouselSlider.builder(
+                                itemCount: place.photos.length,
+                                carouselController: _carouselController,
+                                options: CarouselOptions(
+                                  autoPlay: true,
+                                  pauseAutoPlayOnManualNavigate: true,
+                                  autoPlayInterval: Duration(seconds: 10),
+                                  enableInfiniteScroll: place.photos.length > 1,
+                                  aspectRatio: size.width / 200,
+                                  enlargeCenterPage: true,
+                                ),
+                                itemBuilder:
+                                    (BuildContext context, int index) =>
+                                        Image.network(
+                                  searchEngine.searchPhoto(
+                                      place.photos[index].photoReference),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                      );
+                    }),
+                SizedBox(height: 5),
+                StreamBuilder(
+                  stream: db.getHighlights(place.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) print('error');
+                    if (!snapshot.hasData) return CircularProgressIndicator();
+                    List<r.Route> routes = snapshot.data;
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: routes.isNotEmpty
+                          ? ListView.separated(
+                              itemCount: routes.length,
+                              separatorBuilder: (context, index) =>
+                                  SizedBox(height: 5),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                r.Route route = routes[index];
+                                return RouteWidget(route:route,onTap: ()=>Navigator.pushNamed(context, '/navigationPage',arguments: {'route':route}),);
+                              },
+                            )
+                          : Column(
+                              children: [
+                                Text('Empty highlights'),
+                              ],
+                            ),
+                    );
+                  },
+                ),
+              ],
             ),
-            // RouteTile(exampleRoute),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                onTap: () {},
-                leading: Container(
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.teal[100],
-                      shape: BoxShape.circle,
-                    )),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Barrio del Carmen')],
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.alarm,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text('4h 31min'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_walk,
-                            size: 20,
-                          )
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 20,
-                        ),
-                        Text('5'),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.house_outlined,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.sports_bar,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.camera_alt,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.local_cafe,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.gavel,
-                          size: 20,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListTile(
-                onTap: () {},
-                leading: Container(
-                    width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.teal[100],
-                      shape: BoxShape.circle,
-                    )),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Valencia beach'),
-                  ],
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5, bottom: 5),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.alarm,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text('5h 01min'),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_car,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.directions_walk,
-                            size: 20,
-                          )
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          size: 20,
-                        ),
-                        Text('7'),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.local_library,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.location_city,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.theater_comedy,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.sports,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.museum,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.nightlife,
-                          size: 20,
-                        ),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Icon(
-                          Icons.local_mall,
-                          size: 20,
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

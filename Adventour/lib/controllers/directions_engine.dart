@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -9,10 +10,15 @@ const WALK = 'walk';
 const BICYCLE = 'bicycle';
 
 List<String> transports = [CAR, WALK, BICYCLE];
+const SHORT_DISTANCE = 5000;
+
+const MEDIUM_DISTANCE = 10000;
+
+const LONG_DISTANCE = 20000;
 
 class DirectionsEngine {
   final _directions = GoogleMapsDirections(
-    apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+    apiKey: API_KEY,
   );
 
   // Future<List<Trajectory>> makeTrajectories(Place originPlace, Place destinationPlace, String transport) async {
@@ -29,7 +35,7 @@ class DirectionsEngine {
 
   Future<r.Path> makePath(
       LatLng start, List<Place> places, String transport) async {
-    if (places.length < 3) return null;
+    
     String origin =
         start.latitude.toString() + ',' + start.longitude.toString();
     Place furthestPlace = getFurthestPlace(start, places);
@@ -42,7 +48,6 @@ class DirectionsEngine {
       origin,
       destination,
       waypoints: waypoints,
-      units: Unit.metric,
       travelMode: toTravelMode(transport),
     );
     if(response.hasNoResults) return null;

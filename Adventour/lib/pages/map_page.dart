@@ -6,6 +6,8 @@ import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/models/User.dart';
+import 'package:Adventour/widgets/category_checkbox.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +36,6 @@ class _MapPageState extends State<MapPage> {
 
   DateTime now;
   String formattedDate;
-
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool _isHL = false;
 
   @override
   void initState() {
@@ -77,7 +76,7 @@ class _MapPageState extends State<MapPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
                   if (!snapshot.hasData) return CircularProgressIndicator();
-                  var user = snapshot.data;
+                  User user = snapshot.data;
                   return Padding(
                     padding: const EdgeInsets.only(left: 20),
                     child: Column(
@@ -95,11 +94,11 @@ class _MapPageState extends State<MapPage> {
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Text(
-                            user.email,
+                            user.userName,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText2
-                                .copyWith(fontSize: 20),
+                                .copyWith(fontSize: 25),
                           ),
                         ),
                       ],
@@ -169,12 +168,12 @@ class _MapPageState extends State<MapPage> {
                     Expanded(
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/historyPage');
+                          Navigator.pushNamed(context, '/achievementsPage');
                         },
                         child: Row(
                           children: [
                             Icon(
-                              Icons.update,
+                              Icons.emoji_events,
                               size: 35,
                               color: Theme.of(context).primaryColor,
                             ),
@@ -182,7 +181,7 @@ class _MapPageState extends State<MapPage> {
                               width: 10,
                             ),
                             Text(
-                              'My history',
+                              'Achievements',
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
@@ -245,7 +244,6 @@ class _MapPageState extends State<MapPage> {
                     ),
                   ],
                 ),
-                
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -484,21 +482,10 @@ class _MapPageState extends State<MapPage> {
 
   Future _onTapPrediction(Prediction prediction) async {
     _mapController.clearMarkers();
-    var data = await _firestore.collection('Highlights').get();
 
     Place place = (await searchEngine.searchByText(prediction.description,
             Location(_position.latitude, _position.longitude), 1000))
         .first;
-
-    for (var i = 0; i < data.docs.length; i++) {
-      if (data.docs[i].get('id') == prediction.placeId) {
-        Navigator.pop(context);
-        return Navigator.of(context).pushNamed(
-          '/highlightPage',
-          arguments: {'place': place, 'photo': data.docs[i].get('photo')},
-        );
-      }
-    }
 
     _mapController.addMarker(place, context);
     setState(() {

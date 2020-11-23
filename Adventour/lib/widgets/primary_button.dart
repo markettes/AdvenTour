@@ -4,7 +4,7 @@ enum ButtonType { Normal, Void }
 
 class PrimaryButton extends StatelessWidget {
   PrimaryButton({
-    @required this.text,
+    this.text,
     this.onPressed,
     this.style = ButtonType.Normal,
     this.padding =
@@ -48,7 +48,7 @@ class PrimaryButton extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                text,
+                text ?? '',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

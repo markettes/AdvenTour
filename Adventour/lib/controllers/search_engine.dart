@@ -2,9 +2,11 @@ import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:Adventour/libraries/place.dart';
 
+String API_KEY = "AIzaSyD3tJNw9gvqyeBxcqAYbPEYMOBAfIprRds";
+
 class SearchEngine {
   GoogleMapsPlaces _googleMapsPlaces =
-      GoogleMapsPlaces(apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho");
+      GoogleMapsPlaces(apiKey: API_KEY);
 
   Future<List<Place>> searchByLocation(Location location, int radius) async {
     PlacesSearchResponse response =
@@ -26,7 +28,7 @@ class SearchEngine {
     return places;
   }
 
-    Future<List<Place>> searchByLocationByRank(
+  Future<List<Place>> searchByLocationByRank(
       String type, Location location, int radius) async {
     PlacesSearchResponse response = await _googleMapsPlaces
         .searchNearbyWithRankBy(location, 'prominence', type: type);
@@ -35,7 +37,6 @@ class SearchEngine {
 
     return places;
   }
-
 
   Future<List<Place>> searchByText(
       String text, Location location, int radius) async {
@@ -48,9 +49,9 @@ class SearchEngine {
     return places;
   }
 
-  Future<Place> searchWithDetails(
-      String id) async {
-    PlacesDetailsResponse response = await _googleMapsPlaces.getDetailsByPlaceId(id);
+  Future<Place> searchWithDetails(String id) async {
+    PlacesDetailsResponse response =
+        await _googleMapsPlaces.getDetailsByPlaceId(id);
 
     Place place = Place.fromDetails(response.result);
 
@@ -58,7 +59,8 @@ class SearchEngine {
   }
 
   String searchPhoto(String photoReference) {
-    return _googleMapsPlaces.buildPhotoUrl(photoReference: photoReference,maxHeight: 1000,maxWidth: 1000);
+    return _googleMapsPlaces.buildPhotoUrl(
+        photoReference: photoReference, maxHeight: 1000, maxWidth: 1000);
   }
 }
 

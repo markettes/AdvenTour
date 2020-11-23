@@ -1,6 +1,8 @@
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/map_controller.dart';
+import 'package:Adventour/controllers/polyline_engine.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
@@ -9,15 +11,19 @@ import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
+import 'package:Adventour/widgets/input_text.dart';
+import 'package:Adventour/widgets/place_types_list.dart';
 import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:google_maps_webservice/src/places.dart';
+import 'package:google_maps_webservice/src/core.dart';
 import 'package:toast/toast.dart';
 
 class RoutePage extends StatefulWidget {
@@ -28,9 +34,6 @@ class RoutePage extends StatefulWidget {
 class _RoutePageState extends State<RoutePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-
-  RouteEngineResponse routeEngineResponse;
-  List<Place> recommendations;
 
   r.Route route;
   GlobalKey<ScaffoldState> _scaffoldKey;
@@ -47,36 +50,112 @@ class _RoutePageState extends State<RoutePage>
     Map arguments = ModalRoute.of(context).settings.arguments;
     _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    routeEngineResponse = arguments['routeEngineResponse'];
-    route = routeEngineResponse.route;
-    recommendations = routeEngineResponse.recommendations;
+    route = arguments['route'];
 
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text('Custom route'),
-      ),
-      body: route.paths.isEmpty
-          ? NotRouteAvailable()
-          : TabBarView(
-              controller: _tabController,
-              physics: NeverScrollableScrollPhysics(),
-              children: [
-                MapView(
-                  places: route.places,
-                  tabController: _tabController,
-                  selectedPath: route.paths[_selectedPath],
-                  nextTransport: nextTransport,
-                ),
-                MapListView(
-                  path: route.paths[_selectedPath],
-                  places: route.places,
-                  tabController: _tabController,
-                  onPressedAdd: _onPressedAdd,
-                  removePlace: _removePlace,
-                )
-              ],
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('Custom route'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () => saveDialog(context),
+            )
+          ],
+        ),
+        body: route == null
+            ? NotRouteAvailable()
+            : TabBarView(
+                controller: _tabController,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  MapView(
+                    places: route.places,
+                    tabController: _tabController,
+                    start: route.start,
+                    nextTransport: nextTransport,
+                    selectedPath: route.paths[_selectedPath],
+                    route: route,
+                  ),
+                  MapListView(
+                    path: route.paths[_selectedPath],
+                    places: route.places,
+                    tabController: _tabController,
+                    onPressedAdd: _onPressedAdd,
+                    removePlace: _removePlace,
+                  )
+                ],
+              ));
+  }
+
+  Future saveDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        TextEditingController _routeNameController = TextEditingController();
+        final _formKey = GlobalKey<FormState>();
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 200,
+              child: Column(
+                children: [
+                  Text(
+                    'Put a name to your route',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline2
+                        .copyWith(fontSize: 20),
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.flag,
+                            labelText: 'Route name',
+                            controller: _routeNameController,
+                            maxLength: 20,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'Route name can\'t be empty';
+                              return null;
+                            },
+                          ),
+                        ),
+                        PrimaryButton(
+                          text: 'SAVE',
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              route.name = _routeNameController.text;
+                              route.author = db.currentUserId;
+                              route.images = route.places
+                                  .map(
+                                      (place) => place.photos[0].photoReference)
+                                  .toList();
+                              db.addRoute(route);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  )
+                  // PrimaryButton(
+                  //   text: 'SAVE',
+                  //   onPressed: () => Navigator.pop(context),
+                  // ),
+                ],
+              ),
             ),
+          ),
+        );
+      },
     );
   }
 
@@ -96,7 +175,10 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future _onTapPrediction(Prediction prediction) async {
-    if (!route.places.map((place) => place.id).toList().contains(prediction.placeId)) {
+    if (!route.places
+        .map((place) => place.id)
+        .toList()
+        .contains(prediction.placeId)) {
       Place place = await searchEngine.searchWithDetails(prediction.placeId);
       await _addPlace(place);
     } else {
@@ -119,38 +201,22 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future _onPressedAdd() async {
+    List<String> preTypePlaces = [];
+    for (var place in route.places) {
+      if (!preTypePlaces.contains(place.type)) preTypePlaces.add(place.type);
+    }
     if (route.places.length < 8)
       await PlacesAutocomplete.show(
-          context: context,
-          onTapPrediction: _onTapPrediction,
-          onSubmitted: (value) {},
-          placeholder: ListView.separated(
-            itemCount: recommendations.length,
-            padding: EdgeInsets.only(top: 8),
-            separatorBuilder: (context, index) => SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              Place place = recommendations[index];
-              Widget placeWidget = PlaceWidget(
-                place: place,
-                onTap: () async {
-                  recommendations.remove(place);
-                  _addPlace(place);
-                },
-              );
-              if (index == 0)
-                return Column(
-                  children: [
-                    Text(
-                      'Maybe...',
-                      style: Theme.of(context).textTheme.headline2,
-                    ),
-                    SizedBox(height: 8),
-                    placeWidget
-                  ],
-                );
-              return placeWidget;
-            },
-          ));
+        context: context,
+        onTapPrediction: _onTapPrediction,
+        onSubmitted: (value) {},
+        placeholder: RecommendationsWidget(
+          addPlace: _addPlace,
+          preTypePlaces: preTypePlaces,
+          location: Location(route.start.latitude, route.start.longitude),
+          places: route.places,
+        ),
+      );
     else
       Toast.show('The route has at most 8 places', context, duration: 3);
   }
@@ -164,25 +230,181 @@ class _RoutePageState extends State<RoutePage>
   }
 }
 
+class RecommendationsWidget extends StatefulWidget {
+  RecommendationsWidget(
+      {@required this.addPlace,
+      @required this.preTypePlaces,
+      @required this.location,
+      @required this.places});
+
+  Function addPlace;
+  List<String> preTypePlaces;
+  Location location;
+  List<Place> places;
+
+  @override
+  _RecommendationsWidgetState createState() => _RecommendationsWidgetState();
+}
+
+class _RecommendationsWidgetState extends State<RecommendationsWidget> {
+  List<String> _placeTypes;
+
+  List<Place> _recommendations = [];
+
+  @override
+  void initState() {
+    _placeTypes = widget.preTypePlaces;
+    sortPlaceTypes(_placeTypes);
+    initRecommendations();
+
+    super.initState();
+  }
+
+  void initRecommendations() async {
+    for (var type in _placeTypes) {
+      _recommendations.addAll(await _getRecommendations(type));
+      _recommendations.sort((a, b) => b.rating.compareTo(a.rating));
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 80,
+          child: PlaceTypesList(
+            onTap: _onTapPlaceType,
+            selectedTypes: _placeTypes,
+          ),
+        ),
+        _recommendations.isEmpty
+            ? CircularProgressIndicator()
+            : Expanded(
+                child: ListView.separated(
+                  itemCount: _recommendations.length,
+                  padding: EdgeInsets.only(top: 8),
+                  separatorBuilder: (context, index) => SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    Place place = _recommendations[index];
+                    Widget placeWidget = PlaceWidget(
+                      place: place,
+                      onTap: () async {
+                        _recommendations.remove(place);
+                        widget.addPlace(place);
+                      },
+                    );
+                    if (index == 0)
+                      return Column(
+                        children: [
+                          Text(
+                            'Maybe...',
+                            style: Theme.of(context).textTheme.headline2,
+                          ),
+                          SizedBox(height: 8),
+                          placeWidget
+                        ],
+                      );
+                    return placeWidget;
+                  },
+                ),
+              ),
+      ],
+    );
+  }
+
+  Future _onTapPlaceType(String placeType, bool activated) async {
+    FocusScope.of(context).unfocus();
+    if (activated) {
+      if (_placeTypes.length > 1) {
+        _placeTypes.remove(placeType);
+        sortPlaceTypes(_placeTypes);
+        _recommendations.removeWhere((place) => place.type == placeType);
+        setState(() {});
+      } else
+        Toast.show('The search needs at least 1 type places', context,
+            duration: 3);
+    } else {
+      _placeTypes.add(placeType);
+      sortPlaceTypes(_placeTypes);
+
+      _recommendations.addAll(await _getRecommendations(placeType));
+      _recommendations.sort((a, b) => b.rating.compareTo(a.rating));
+
+      setState(() {});
+    }
+  }
+
+  Future<List<Place>> _getRecommendations(String placeType) async {
+    List<Place> recommendations = await searchEngine.searchByLocationWithType(
+        placeType, widget.location, LONG_DISTANCE);
+    for (var place in widget.places) {
+      recommendations
+          .removeWhere((recommendation) => recommendation.id == place.id);
+    }
+    if (recommendations.length == 0) return [];
+    recommendations = recommendations
+        .where((place) =>
+            place.rating != null &&
+            place.rating > 4 &&
+            place.type != null &&
+            place.type == placeType &&
+            place.userRatingsTotal > 500)
+        .toList();
+    if (recommendations.length < 5) return recommendations;
+    recommendations = recommendations.sublist(0, 5);
+    return recommendations;
+  }
+}
+
 class MapView extends StatefulWidget {
   MapView({
+    @required this.selectedPath,
+    @required this.start,
     @required this.places,
-    this.selectedPath,
     this.nextTransport,
+    this.route,
     @required TabController tabController,
   }) : tabController = tabController;
 
   List<Place> places;
   TabController tabController;
   r.Path selectedPath;
+  LatLng start;
   Function nextTransport;
+  r.Route route;
 
   @override
   _MapViewState createState() => _MapViewState();
 }
 
 class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
-  MapController mapController = MapController();
+  MapController _mapController = MapController();
+  List<LatLng> routeCoords = List();
+  Polyline _polyline;
+
+  drawPath() async {
+    String transport = widget.selectedPath.transport;
+    routeCoords.addAll(await polylineEngine.getPoints(
+        widget.start,
+        LatLng(widget.places.first.latitude, widget.places.first.longitude),
+        transport));
+    for (var i = 1; i < widget.places.length - 1; i++) {
+      Place start = widget.places[i];
+      Place end = widget.places[i + 1];
+      routeCoords.addAll(await polylineEngine.getPoints(
+          LatLng(start.latitude, start.longitude),
+          LatLng(end.latitude, end.longitude),
+          transport));
+    }
+    _polyline = Polyline(
+        polylineId: PolylineId('Route'),
+        points: routeCoords,
+        color: Colors.blue,
+        width: 4);
+    _mapController.drawPolyline(_polyline);
+  }
 
   bool _listVisible = true;
 
@@ -196,14 +418,15 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 widget.places.first.latitude, widget.places.first.longitude),
             zoom: 12.5,
           ),
-          markers: Set<Marker>.of(mapController.markers.values),
-          polylines: Set<Polyline>.of(mapController.polylines.values),
+          markers: Set<Marker>.of(_mapController.markers.values),
+          polylines: Set<Polyline>.of(_mapController.polylines.values),
           onMapCreated: (googleMapController) =>
-              mapController.onMapCreated(googleMapController, () async {
-            drawPath(widget.selectedPath);
+              _mapController.onMapCreated(googleMapController, () async {
+            await drawPath();
             for (var place in widget.places) {
-              mapController.addMarker(place, context);
+              _mapController.addMarker(place, context);
             }
+            setState(() {});
           }),
           onCameraMoveStarted: () {
             _listVisible = false;
@@ -220,12 +443,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         Align(
           alignment: Alignment.bottomRight,
           child: AnimatedOpacity(
-            // If the widget is visible, animate to 0.0 (invisible).
-            // If the widget is hidden, animate to 1.0 (fully visible).
             opacity: _listVisible ? 1.0 : 0.0,
             duration: Duration(milliseconds: 600),
             curve: Curves.fastOutSlowIn,
-            // The green box must be a child of the AnimatedOpacity widget.
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SquareIconButton(
@@ -235,15 +455,52 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             ),
           ),
         ),
+        // floatingActionButton: AnimatedOpacity(
+        //   // If the widget is visible, animate to 0.0 (invisible).
+        //   // If the widget is hidden, animate to 1.0 (fully visible).
+        //   opacity: _listVisible ? 1.0 : 0.0,
+        //   duration: Duration(milliseconds: 600),
+        //   curve: Curves.fastOutSlowIn,
+        //   // The green box must be a child of the AnimatedOpacity widget.
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.end,
+        //       children: [
+        //         FloatingActionButton(
+        //           heroTag: 'edit',
+        //           backgroundColor: Theme.of(context).primaryColor,
+        //           onPressed: () => widget.tabController.animateTo(1),
+        //           child: Icon(
+        //             Icons.edit,
+        //             color: Theme.of(context).buttonColor,
+        //           ),
+        //         ),
+        //         SizedBox(height: 8),
+        //         FloatingActionButton(
+        //           heroTag: 'navigation',
+        //           backgroundColor: Theme.of(context).primaryColor,
+        //           onPressed: () {
+        //             Navigator.pushNamed(context, '/navigationPage', arguments: {
+        //               'route': widget.route,
+        //               'polylines': polyline,
+        //               'markers': markers,
+        //             });
+        //           },
+        //           child: Icon(
+        //             Icons.navigation,
+        //             color: Theme.of(context).buttonColor,
+        //           ),
+        //         )
+        //       ],
+        //     ),
+        //   ),
         Align(
           alignment: Alignment.bottomLeft,
           child: AnimatedOpacity(
-            // If the widget is visible, animate to 0.0 (invisible).
-            // If the widget is hidden, animate to 1.0 (fully visible).
             opacity: _listVisible ? 1.0 : 0.0,
             duration: Duration(milliseconds: 600),
             curve: Curves.fastOutSlowIn,
-            // The green box must be a child of the AnimatedOpacity widget.
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleIconButton(
@@ -257,22 +514,22 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  void drawPath(r.Path path) {
-    for (var stretch in path.stretchs) {
-      Polyline polyline = Polyline(
-          polylineId: PolylineId(stretch.id),
-          points: stretch.points,
-          color: Colors.blue,
-          onTap: () => Toast.show(
-              stretch.duration.inMinutes.toString(), context,
-              duration: 3),
-          consumeTapEvents: true,
-          width: 4);
-      mapController.drawPolyline(polyline);
-    }
+  // void drawPath(r.Path path) {
+  //   for (var stretch in path.stretchs) {
+  //     Polyline polyline = Polyline(
+  //         polylineId: PolylineId(stretch.id),
+  //         points: stretch.points,
+  //         color: Colors.blue,
+  //         onTap: () => Toast.show(
+  //             stretch.duration.inMinutes.toString(), context,
+  //             duration: 3),
+  //         consumeTapEvents: true,
+  //         width: 4);
+  //     _mapController.drawPolyline(polyline);
+  //   }
 
-    setState(() {});
-  }
+  //   setState(() {});
+  // }
 
   @override
   bool get wantKeepAlive => true;
@@ -361,7 +618,7 @@ class MapListView extends StatelessWidget {
                           size: 70,
                         ),
                         Text(
-                          formatDuration(),
+                          _formatDuration(),
                           style: Theme.of(context).textTheme.headline2,
                         ),
                       ],
@@ -406,7 +663,7 @@ class MapListView extends StatelessWidget {
                                 children: [
                                   SizedBox(
                                       height: 50,
-                                      child: CircleIcon(image: place.icon)),
+                                      child: CircleIcon(type: place.type)),
                                   SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
@@ -473,7 +730,7 @@ class MapListView extends StatelessWidget {
     );
   }
 
-  String formatDuration() {
+  String _formatDuration() {
     String hours, minutes;
     if (_duration.inHours < 10)
       hours = '0' + _duration.inHours.toString();
@@ -486,3 +743,7 @@ class MapListView extends StatelessWidget {
     return hours + ':' + minutes;
   }
 }
+
+@override
+// TODO: implement wantKeepAlive
+bool get wantKeepAlive => throw UnimplementedError();

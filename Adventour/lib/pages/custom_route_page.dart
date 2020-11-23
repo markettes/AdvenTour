@@ -22,7 +22,7 @@ class CustomRoutePage extends StatefulWidget {
 class _CustomRoutePageState extends State<CustomRoutePage> {
   List<String> _placeTypes = [PARK, TOURIST_ATTRACTION, RESTAURANT, MUSEUM];
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason> snackBarController;
-  String _location;
+  String _locationName;
   String _locationId;
   TextEditingController _locationController =
       TextEditingController(text: 'Your location');
@@ -64,10 +64,10 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                         onTapPrediction: (prediction) {
                           Navigator.pop(context);
 
-                          _location = prediction.description;
+                          _locationName = prediction.description;
                           _locationId = prediction.placeId;
                           setState(() {
-                            _locationController.text = _location;
+                            _locationController.text = _locationName;
                           });
                         },
                         onSubmitted: (value) {},
@@ -103,11 +103,10 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   PrimaryButton(
                     text: 'CREATE',
                     onPressed: () async {
-                      RouteEngineResponse routeEngineResponse =
-                          await _makeRoute();
-                      Navigator.pushNamed(context, '/routePage', arguments: {
-                        'routeEngineResponse': routeEngineResponse
-                      });
+                      r.Route route = await routeEngine.makeRoute(
+                          _locationId, _placeTypes, MEDIUM_DISTANCE);
+                      Navigator.pushNamed(context, '/routePage',
+                          arguments: {'route': route});
                     },
                     icon: Icons.edit,
                     style: ButtonType.Normal,
@@ -121,18 +120,6 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
     );
   }
 
-  Future<RouteEngineResponse> _makeRoute() async {
-    Location location;
-    if (_locationId == null) {
-      Position position = await Geolocator.getCurrentPosition();
-      location = Location(position.latitude, position.longitude);
-    } else {
-      location = await geocoding.searchByPlaceId(_locationId);
-    }
-
-    return await routeEngine.makeRoute(location, _placeTypes);
-  }
-
   Future _onTapPlaceType(String placeType, bool activated) {
     if (activated) {
       if (_placeTypes.length > 4) {
@@ -143,16 +130,11 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
         Toast.show('The route needs at least 4 type places', context,
             duration: 3);
     } else {
-      if (_placeTypes.length < 8) {
-        _placeTypes.add(placeType);
-        sortPlaceTypes(_placeTypes);
-        setState(() {});
-      } else
-        Toast.show('The route has at most 7 type places', context, duration: 3);
+      _placeTypes.add(placeType);
+      sortPlaceTypes(_placeTypes);
+      setState(() {});
     }
   }
-
-
 }
 
 // Expanded(

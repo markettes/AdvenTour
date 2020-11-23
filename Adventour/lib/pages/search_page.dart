@@ -11,8 +11,6 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 
-String apiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
-
 class PlacesAutocompleteWidget extends StatefulWidget {
   final String startText;
   final String hint;
@@ -265,7 +263,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
     _queryTextController = TextEditingController(text: widget.startText);
 
     _places = GoogleMapsPlaces(
-        apiKey: apiKey,
+        apiKey: API_KEY,
         baseUrl: widget.proxyBaseUrl,
         httpClient: widget.httpClient);
     _searching = false;

@@ -18,8 +18,20 @@ class _ProfilePageState extends State<ProfilePage> {
   var _emailController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
   String _emailError;
+  User actualUser;
 
   bool _isAdventureAccount = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
+    user.then((value) {
+      _userNameController.text = value.userName;
+      actualUser = value;
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -115,6 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 if (_formKey.currentState.validate()) {
                                   user.userName = _userNameController.text;
                                   db.updateUser(user.id, user);
+                                  db.changeLook(actualUser);
                                 }
                               },
                             ),

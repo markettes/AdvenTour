@@ -54,6 +54,7 @@ class _SignInFormState extends State<SignInForm> {
           InputText(
             icon: Icons.person,
             labelText: 'Username',
+            maxLength: 15,
             controller: _userNameController,
             validator: (value) {
               if (value.isEmpty) return 'Username can\'t be empty';
@@ -86,14 +87,12 @@ class _SignInFormState extends State<SignInForm> {
             text: 'SIGN UP',
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                print(_userNameController.text);
                 User user =
-                    User(_userNameController.text, _emailController.text);
+                    User(_userNameController.text, _emailController.text, "false");
                 try {
                   await auth.registerUser(user, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {
-                  print(e.code);
                   _showError(e);
                 }
               }
