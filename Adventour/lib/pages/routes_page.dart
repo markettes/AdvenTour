@@ -54,7 +54,7 @@ class RoutesPage extends StatelessWidget {
                                               onPressed: () {
                                                 Navigator.pop(context);
                                                 Navigator.pushNamed(
-                                                    context, '/navigationPage',
+                                                    context, '/routePage',
                                                     arguments: {
                                                       'route': route
                                                     });

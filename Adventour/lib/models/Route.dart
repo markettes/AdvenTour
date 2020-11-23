@@ -46,9 +46,9 @@ class Route {
         'creationDate': _creationDate,
         'locationName': _locationName,
         'locationId': _locationId,
-        'requested': _requested.toString(),
+        'requested': 'false',
         'likes': _likes,
-        'isHighlight':_isHighlight
+        'isHighlight': 'false'
       };
 
   Route.fromJson(DocumentSnapshot doc) {

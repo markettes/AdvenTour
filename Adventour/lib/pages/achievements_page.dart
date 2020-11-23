@@ -43,40 +43,35 @@ class _AchievementsPageState extends State<AchievementsPage> {
       //       ),
       //   ],
       // ),
-      body: Column(
-        children: [
-          Icon(Icons.emoji_events,size: 100,),
-          SizedBox(height: 5),
-          Expanded(
-                      child: StreamBuilder(
-                stream: db.getUser(db.currentUserId),
+      body: StreamBuilder(
+          stream: db.getUser(db.currentUserId),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            if (!snapshot.hasData)
+              Center(child: CircularProgressIndicator());
+            User user = snapshot.data;
+            return StreamBuilder(
+                stream: db.getAchievements(),
                 builder: (context, snapshot) {
                   if (snapshot.hasError) print(snapshot.error);
-                  if (!snapshot.hasData) Center(child: CircularProgressIndicator());
-                  User user = snapshot.data;
-                  return StreamBuilder(
-                      stream: db.getAchievements(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError) print(snapshot.error);
-                        if (!snapshot.hasData)
-                          return Center(child: CircularProgressIndicator());
-                        List<Achievement> achievements =
-                            sortByCompleted(user, snapshot.data);
-                        return ListView.separated(
-                          itemCount: achievements.length,
-                          separatorBuilder: (context, index) => SizedBox(height: 5),
-                          itemBuilder: (context, index) {
-                            Achievement achievement = achievements[index];
+                  if (!snapshot.hasData)
+                    return Center(child: CircularProgressIndicator());
+                  List<Achievement> achievements =
+                      sortByCompleted(user, snapshot.data);
+                  return ListView.separated(
+                    itemCount: achievements.length,
+                    shrinkWrap: true,
+                    separatorBuilder: (context, index) =>
+                        SizedBox(height: 5),
+                    itemBuilder: (context, index) {
+                      Achievement achievement = achievements[index];
 
-                            return AchievementWidget(
-                                achievement: achievement, user: user);
-                          },
-                        );
-                      });
-                }),
-          ),
-        ],
-      ),
+                      return AchievementWidget(
+                          achievement: achievement, user: user);
+                    },
+                  );
+                });
+          }),
     );
   }
 }
@@ -91,84 +86,71 @@ class AchievementWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int attribute = user.getAttribute(achievement.affected);
+    int attribute = user.getAttribute(achievement.affected) ?? 0;
     bool isCompleted = attribute >= achievement.objective;
-    print('?' + attribute.toString());
+    print('?' + isCompleted.toString());
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
-      child: Container(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Icon(
-                    Icons.emoji_events,
-                    size: 50,
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        this.achievement.name,
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        this.achievement.description,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10, left: 10),
-                      child: Column(
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 1.5,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            child: attribute >= achievement.objective
-                                ? Center(
-                                    child: Text(
-                                      "X",
-                                      style: TextStyle(
-                                        fontSize: 26,
-                                        fontWeight: FontWeight.bold,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
-                                    ),
-                                  )
-                                : SizedBox(),
-                          ),
-                          attribute < achievement.objective
-                              ? Text("$attribute" +
-                                  "/" +
-                                  "${achievement.objective}")
-                              : SizedBox(),
-                        ],
-                      ),
+      child: Opacity(
+        opacity: isCompleted ? 1 : 0.75,
+        child: Container(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Icon(
+                      achievement.icon,
+                      size: 50,
                     ),
                   ),
-                )
-              ],
-            ),
-          ],
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          this.achievement.name,
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          this.achievement.description,
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10, left: 10),
+                        child: Column(
+                          children: [
+                            isCompleted?Icon(Icons.emoji_events,size: 40,): CircularProgressIndicator(
+                              value: attribute / achievement.objective,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  Theme.of(context).primaryColor),
+                              backgroundColor: Theme.of(context).accentColor,
+                            ),
+                            attribute < achievement.objective
+                                ? Text("$attribute" +
+                                    "/" +
+                                    "${achievement.objective}")
+                                : SizedBox(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
