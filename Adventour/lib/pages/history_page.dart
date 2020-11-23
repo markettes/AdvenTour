@@ -97,8 +97,9 @@ class _HistoryPageState extends State<HistoryPage> {
                               stream: db.getRoutes(db.currentUserId),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) print('error');
-                                if (!snapshot.hasData)
+                                if (!snapshot.hasData){
                                   return CircularProgressIndicator();
+                                }
                                 List<Route> routes = snapshot.data;
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
