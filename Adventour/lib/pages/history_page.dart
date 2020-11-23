@@ -129,7 +129,6 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
   bool betweenDates(DateTime fromDate, DateTime toDate, DateTime evaluate) {
-    return fromDate.compareTo(evaluate) <= 0 &&
-    toDate.compareTo(evaluate) >= 0;
+    return fromDate.compareTo(evaluate) <= 0 && toDate.compareTo(evaluate) >= 0;
   }
 }
