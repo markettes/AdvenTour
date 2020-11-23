@@ -31,6 +31,7 @@ class Route {
     _locationName = locationName;
     _locationId = locationId;
     _requested = false;
+    _isHighlight = false;
     _likes = [];
   }
 
@@ -46,7 +47,8 @@ class Route {
         'locationName': _locationName,
         'locationId': _locationId,
         'requested': _requested.toString(),
-        'likes': _likes
+        'likes': _likes,
+        'isHighlight':_isHighlight
       };
 
   Route.fromJson(DocumentSnapshot doc) {
