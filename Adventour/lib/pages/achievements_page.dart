@@ -12,51 +12,88 @@ class AchievementsPage extends StatefulWidget {
 }
 
 class _AchievementsPageState extends State<AchievementsPage> {
-  List<Achievement> _achievements = List<Achievement>();
-  User actualUser;
+  // List<Achievement> _achievements = List<Achievement>();
+  // User actualUser;
 
-  @override
-  void initState() {
-    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
-    user.then((value) {
-      actualUser = value;
-    });
-    Future<List<Achievement>> achievementss = db.getAchievements();
-    achievementss.then((value) => _achievements = value);
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
+  //   user.then((value) {
+  //     actualUser = value;
+  //   });
+  //   Future<List<Achievement>> achievementss = db.getAchievements();
+  //   achievementss.then((value) => _achievements = value);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+    // WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text("Achievements"),
       ),
-      body: ScrollColumnExpandable(
+      // body: ScrollColumnExpandable(
+      //   children: [
+      //     for (int i = 0; i < _achievements.length; i++)
+      //       InfAchievement(
+      //         achievement: _achievements[i],
+      //         actualUser: actualUser,
+      //       ),
+      //   ],
+      // ),
+      body: Column(
         children: [
-          for (int i = 0; i < _achievements.length; i++)
-            InfAchievement(
-              achievement: _achievements[i],
-              actualUser: actualUser,
-            ),
+          Icon(Icons.emoji_events,size: 100,),
+          SizedBox(height: 5),
+          Expanded(
+                      child: StreamBuilder(
+                stream: db.getUser(db.currentUserId),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) print(snapshot.error);
+                  if (!snapshot.hasData) Center(child: CircularProgressIndicator());
+                  User user = snapshot.data;
+                  return StreamBuilder(
+                      stream: db.getAchievements(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) print(snapshot.error);
+                        if (!snapshot.hasData)
+                          return Center(child: CircularProgressIndicator());
+                        List<Achievement> achievements =
+                            sortByCompleted(user, snapshot.data);
+                        return ListView.separated(
+                          itemCount: achievements.length,
+                          separatorBuilder: (context, index) => SizedBox(height: 5),
+                          itemBuilder: (context, index) {
+                            Achievement achievement = achievements[index];
+
+                            return AchievementWidget(
+                                achievement: achievement, user: user);
+                          },
+                        );
+                      });
+                }),
+          ),
         ],
       ),
     );
   }
 }
 
-class InfAchievement extends StatelessWidget {
+class AchievementWidget extends StatelessWidget {
   Achievement achievement;
-  User actualUser;
-  InfAchievement({
-    this.achievement,
-    this.actualUser,
+  User user;
+  AchievementWidget({
+    @required this.achievement,
+    @required this.user,
   });
 
   @override
   Widget build(BuildContext context) {
+    int attribute = user.getAttribute(achievement.affected);
+    bool isCompleted = attribute >= achievement.objective;
+    print('?' + attribute.toString());
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Container(
@@ -106,9 +143,7 @@ class InfAchievement extends StatelessWidget {
                                 color: Theme.of(context).primaryColor,
                               ),
                             ),
-                            child: actualUser.getAttribute(
-                                        this.achievement.affected) >=
-                                    this.achievement.objective
+                            child: attribute >= achievement.objective
                                 ? Center(
                                     child: Text(
                                       "X",
@@ -121,12 +156,10 @@ class InfAchievement extends StatelessWidget {
                                   )
                                 : SizedBox(),
                           ),
-                          actualUser.getAttribute(this.achievement.affected) <
-                                  this.achievement.objective
-                              ? Text(
-                                  "${actualUser.getAttribute(this.achievement.affected)}" +
-                                      "/" +
-                                      "${this.achievement.objective}")
+                          attribute < achievement.objective
+                              ? Text("$attribute" +
+                                  "/" +
+                                  "${achievement.objective}")
                               : SizedBox(),
                         ],
                       ),
@@ -134,13 +167,6 @@ class InfAchievement extends StatelessWidget {
                   ),
                 )
               ],
-            ),
-            Divider(
-              thickness: 2,
-              color: Theme.of(context).primaryColor,
-              indent: 10,
-              endIndent: 10,
-              height: 30,
             ),
           ],
         ),

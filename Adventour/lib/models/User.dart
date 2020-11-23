@@ -11,14 +11,14 @@ class User {
   int _editedRoutes;
   int _routesHighlight;
 
-  User(userName, email, changeLook, completedRoutes, editedRoutes, routesHighlight, [image = '']) {
+  User(userName, email, [image = '']) {
     _userName = userName;
     _email = email;
     _image = image;
-    _changeLook = changeLook;
-    _completedRoutes = completedRoutes;
-    _editedRoutes = editedRoutes;
-    _routesHighlight = routesHighlight;
+    _changeLook = 0;
+    _completedRoutes = 0;
+    _editedRoutes = 0;
+    _routesHighlight = 0;
   }
 
   User.fromFirestore(DocumentSnapshot snapshot) {
@@ -38,9 +38,9 @@ class User {
         'email': _email,
         'image': _image,
         'changeLook': _changeLook,
-        'completedRoutes' : _completedRoutes,
-        'editedRoutes' : _editedRoutes,
-        "routesHighlight" : _routesHighlight,
+        'completedRoutes': _completedRoutes,
+        'editedRoutes': _editedRoutes,
+        "routesHighlight": _routesHighlight,
       };
 
   get id => _id;
@@ -62,10 +62,24 @@ class User {
   get routesHighlight => _routesHighlight;
 
   int getAttribute(String affected) {
-    if (affected == "changeLook") return _changeLook;
-    else if (affected == "completedRoutes") return _completedRoutes;
-    else if (affected == "editedRoutes") return _editedRoutes;
-    else if (affected == "routesHighlight") return _routesHighlight;
-    else return 0;
+    switch (affected) {
+      case "changeLook":
+        return _changeLook;
+      case "completedRoutes":
+        return _completedRoutes;
+      case "editedRoutes":
+        return _editedRoutes;
+      case "routesHighlight":
+        return _routesHighlight;
+      default:
+        return null;
+    }
+  }
+
+  @override
+  String toString() {
+    return """
+completedRoutes = $_completedRoutes
+    """;
   }
 }

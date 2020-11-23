@@ -85,20 +85,25 @@ class DB {
   }
 
 //----------------------------------------Achievements-----------------------------
-  Future<List<Achievement>> getAchievements() async {
-    List<Achievement> achievements = List<Achievement>();
-    Achievement aux;
-    QuerySnapshot querySnapshot =
-        await _firestore.collection("Achievements").get();
-    for (var i = 0; i < querySnapshot.docs.length; i++) {
-      var data = querySnapshot.docs[i].data();
-      aux = new Achievement(data['name'], data['description'], data['affected'],
-          data['objective']);
-      achievements.add(aux);
-    }
+  // Future<List<Achievement>> getAchievements() async {
+  //   List<Achievement> achievements = List<Achievement>();
+  //   Achievement aux;
+  //   QuerySnapshot querySnapshot =
+  //       await _firestore.collection("Achievements").get();
+  //   for (var i = 0; i < querySnapshot.docs.length; i++) {
+  //     var data = querySnapshot.docs[i].data();
+  //     aux = new Achievement(data['name'], data['description'], data['affected'],
+  //         data['objective']);
+  //     achievements.add(aux);
+  //   }
 
-    return achievements;
-  }
+  //   return achievements;
+  // }
+
+  Stream<List<Achievement>> getAchievements() => _firestore
+      .collection('Achievements')
+      .snapshots()
+      .map((snap) => toAchievements(snap.docs));
 
   Future<void> changeLook(User user) {
     _firestore.doc('Users/${user.id}').update({'changeLook': 1});
@@ -106,7 +111,9 @@ class DB {
 
   Future<void> completedRoutes(User user) {
     var completedRoutes = user.completedRoutes + 1;
-    _firestore.doc('Users/${user.id}').update({'completedRoutes': completedRoutes});
+    _firestore
+        .doc('Users/${user.id}')
+        .update({'completedRoutes': completedRoutes});
   }
 
   Future<void> editedRoutes(User user) {
