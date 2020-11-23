@@ -40,6 +40,8 @@ class RouteRequestPage extends StatelessWidget {
                           icon: Icons.done,
                           foregroundColor: Theme.of(context).primaryColor,
                           onTap: () {
+                            //Logro highlight
+                            db.routesHighlight(route.author);
                             db.addHighlight(route.author, route.id);
                             db.deleteRouteRequest(route.author, route.id);
                           }, // AÑADIR CIUDAD
@@ -55,7 +57,7 @@ class RouteRequestPage extends StatelessWidget {
                               route.author, route.id), // AÑADIR CIUDAD
                         ),
                       ],
-                      child: RouteWidget(route),
+                      child: SizedBox(),//RouteWidget(route),
                     );
                   },
                 )

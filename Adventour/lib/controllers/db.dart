@@ -104,12 +104,12 @@ class DB {
     _firestore.doc('Users/${user.id}').update({'changeLook': 1});
   }
 
-    Future<void> completedRoutes(User user) {
+  Future<void> completedRoutes(User user) {
     var completedRoutes = user.completedRoutes + 1;
     _firestore.doc('Users/${user.id}').update({'completedRoutes': completedRoutes});
   }
 
-      Future<void> editedRoutes(User user) {
+  Future<void> editedRoutes(User user) {
     var editedRoutes = user.editedRoutes + 1;
     _firestore.doc('Users/${user.id}').update({'editedRoutes': editedRoutes});
   }
