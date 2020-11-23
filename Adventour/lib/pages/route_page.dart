@@ -606,6 +606,10 @@ class MapListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User currentUser;
+    db.getCurrentUserName(auth.currentUserEmail).then((value) {
+      currentUser = value;
+    });
     _duration = path.duration(places
         .map((place) => place.duration)
         .reduce((value, element) => value + element));
@@ -699,7 +703,10 @@ class MapListView extends StatelessWidget {
                                   icon: Icons.delete,
                                   foregroundColor:
                                       Theme.of(context).primaryColor,
-                                  onTap: () => removePlace(place),
+                                  onTap: () async {
+                                    removePlace(place);
+                                    db.editedRoutes(currentUser);
+                                  },
                                 ),
                               ],
                             )

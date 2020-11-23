@@ -96,34 +96,39 @@ class InfAchievement extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10, left: 10),
                       child: Column(
-                                              children: [Container(
-                          width: 30,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1.5,
-                              color: Theme.of(context).primaryColor,
+                        children: [
+                          Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 1.5,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                          ),
-                          child: actualUser
-                                      .getAttribute(this.achievement.affected) >=
-                                  this.achievement.objective
-                              ? Center(
-                                  child: Text(
-                                    "X",
-                                    style: TextStyle(
-                                      fontSize: 26,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColor,
+                            child: actualUser.getAttribute(
+                                        this.achievement.affected) >=
+                                    this.achievement.objective
+                                ? Center(
+                                    child: Text(
+                                      "X",
+                                      style: TextStyle(
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
-                                  ),
-                                )
+                                  )
+                                : SizedBox(),
+                          ),
+                          actualUser.getAttribute(this.achievement.affected) <
+                                  this.achievement.objective
+                              ? Text(
+                                  "${actualUser.getAttribute(this.achievement.affected)}" +
+                                      "/" +
+                                      "${this.achievement.objective}")
                               : SizedBox(),
-                        ),
-                        actualUser.getAttribute(this.achievement.affected) < this.achievement.objective
-                        ? Text("${actualUser.getAttribute(this.achievement.affected)}" + "/" + "${this.achievement.objective}")
-                        : SizedBox(),
-                                              ],
+                        ],
                       ),
                     ),
                   ),
