@@ -1,5 +1,3 @@
-import 'package:Adventour/widgets/circle_icon.dart';
-import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -12,14 +10,6 @@ class HistoryPage extends StatefulWidget {
 enum SingingCharacter { duration, time }
 
 class _HistoryPageState extends State<HistoryPage> {
-//   Widget _myRadioButton({String title, int value, Function onChanged}) {
-//   return RadioListTile(
-//     value: value,
-//     groupValue: _groupValue,
-//     onChanged: onChanged,
-//     title: Text(title),
-//   );
-// }
   SingingCharacter _character = SingingCharacter.duration;
 
   @override
@@ -35,7 +25,7 @@ class _HistoryPageState extends State<HistoryPage> {
             children: [
               Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Expanded(
                     child: MaterialButton(
@@ -101,6 +91,11 @@ class _HistoryPageState extends State<HistoryPage> {
                   children: [
                     Expanded(
                       child: Container(
+                          child: ListView(
+                            children: [
+                              
+                            ],
+                          ),
                           width: 150,
                           height: 600,
                           decoration: BoxDecoration(
