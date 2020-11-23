@@ -1,4 +1,7 @@
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/models/FinishedRoute.dart';
+import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/widgets/finished_widget.dart';
 import 'package:Adventour/widgets/route_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +16,9 @@ enum SingingCharacter { duration, time }
 
 class _HistoryPageState extends State<HistoryPage> {
   SingingCharacter _character = SingingCharacter.duration;
-  
+  // r.Route ro = new r.Route(90, ["PARK", "PARK", "PARK"], null, "Diego", "Valencia", "Valencia");
+  // FinishedRoute fr = new FinishedRoute(new r.Route(null, ["PARK", "PARK", "PARK"], null, "Diego", "Valencia", "Valencia"),
+  //  DateTime.now(), null);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,21 +99,27 @@ class _HistoryPageState extends State<HistoryPage> {
                     Expanded(
                       child: Container(
                           child: StreamBuilder(
-                              stream: db.getRoutes(db.currentUserId),
+                              stream: db.getUserHistory(db.currentUserId),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) print('error');
-                                if (!snapshot.hasData){
+                                if (!snapshot.hasData) {
                                   return CircularProgressIndicator();
                                 }
-                                List<Route> routes = snapshot.data;
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListView(
-                                    children: [
-                                      RouteWidget()
+                                if (snapshot.data.length != 0) {
+                                  List<FinishedRoute> routes = snapshot.data;
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ListView(
+                                      children: [
+                                        FinishedWidget(
+                                          route: null,
+                                        )
                                       ],
-                                  ),
-                                );
+                                    ),
+                                  );
+                                } else {
+                                  return Container(height: 0.0, width: 0.0);
+                                }
                               }),
                           width: 150,
                           height: 600,
@@ -128,6 +139,7 @@ class _HistoryPageState extends State<HistoryPage> {
       ),
     );
   }
+
   bool betweenDates(DateTime fromDate, DateTime toDate, DateTime evaluate) {
     return fromDate.compareTo(evaluate) <= 0 && toDate.compareTo(evaluate) >= 0;
   }
