@@ -15,6 +15,7 @@ import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -407,10 +408,8 @@ class _FinishedRouteWidgetState extends State<FinishedRouteWidget> {
 
   @override
   void initState() {
-    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
-    user.then((value) {
-      db.completedRoutes(value);
-    });
+
+    db.completeRoute(db.currentUserId);
     
     _types = widget.finishedRoute.types();
     super.initState();

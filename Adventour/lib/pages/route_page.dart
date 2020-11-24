@@ -113,13 +113,17 @@ class _RoutePageState extends State<RoutePage>
                           .headline2
                           .copyWith(fontSize: 20),
                     ),
-                    Text('If your route is a highlight, it lose this',style: Theme.of(context).textTheme.bodyText2,),
+                    Text(
+                      'If your route is a highlight, it lose this',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
                     PrimaryButton(
                       text: 'SAVE',
                       onPressed: () {
-                        if (oldAuthor)
+                        if (oldAuthor) {
                           db.updateRoute(route);
-                        else {
+                          db.editeRoute(db.currentUserId);
+                        } else {
                           route.author = db.currentUserId;
                           db.addRoute(route);
                         }
@@ -319,10 +323,6 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    User currentUser;
-    db.getCurrentUserName(auth.currentUserEmail).then((value) {
-      currentUser = value;
-    });
     return Column(
       children: [
         SizedBox(
@@ -346,7 +346,6 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
                       onTap: () async {
                         _recommendations.remove(place);
                         widget.addPlace(place);
-                        db.editedRoutes(currentUser);
                       },
                     );
                     if (index == 0)
@@ -752,7 +751,6 @@ class MapListView extends StatelessWidget {
                                       Theme.of(context).primaryColor,
                                   onTap: () async {
                                     removePlace(place);
-                                    db.editedRoutes(currentUser);
                                   },
                                 ),
                               ],

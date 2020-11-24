@@ -35,9 +35,20 @@ class DB {
     return snapshot.id;
   }
 
-  Future<void> updateUser(User user) {
-    _firestore.doc('Users/${user.id}').update(user.toJson());
+  Future updateUser (User user) => _firestore.doc('Users/${user.id}').update(user.toJson());
+  
+  Future<void> changeLook(String userId) {
+    _firestore.doc('Users/$userId').update({'changeLook':FieldValue.increment(1)});
   }
+
+    Future<void> completeRoute(String userId) {
+    _firestore.doc('Users/$userId').update({'completedRoutes':FieldValue.increment(1)});
+  }
+
+    Future<void> editeRoute(String userId) {
+    _firestore.doc('Users/$userId').update({'editedRoutes':FieldValue.increment(1)});
+  }
+
 
 //----------------------------ROUTES-----------------------------------
 
@@ -88,41 +99,27 @@ class DB {
   }
 
 //----------------------------------------Achievements-----------------------------
-  // Future<List<Achievement>> getAchievements() async {
-  //   List<Achievement> achievements = List<Achievement>();
-  //   Achievement aux;
-  //   QuerySnapshot querySnapshot =
-  //       await _firestore.collection("Achievements").get();
-  //   for (var i = 0; i < querySnapshot.docs.length; i++) {
-  //     var data = querySnapshot.docs[i].data();
-  //     aux = new Achievement(data['name'], data['description'], data['affected'],
-  //         data['objective']);
-  //     achievements.add(aux);
-  //   }
-
-  //   return achievements;
-  // }
 
   Stream<List<Achievement>> getAchievements() => _firestore
       .collection('Achievements')
       .snapshots()
       .map((snap) => toAchievements(snap.docs));
 
-  Future<void> changeLook(String userId) {
-    _firestore.doc('Users/$userId').update({'changeLook': 1});
-  }
+  // Future<void> changeLook(String userId) {
+  //   _firestore.doc('Users/$userId').update({'changeLook': 1});
+  // }
 
-  Future<void> completedRoutes(User user) {
-    var completedRoutes = user.completedRoutes + 1;
-    _firestore
-        .doc('Users/${user.id}')
-        .update({'completedRoutes': completedRoutes});
-  }
+  // Future<void> completedRoutes(User user) {
+  //   var completedRoutes = user.completedRoutes + 1;
+  //   _firestore
+  //       .doc('Users/${user.id}')
+  //       .update({'completedRoutes': completedRoutes});
+  // }
 
-  Future<void> editedRoutes(User user) {
-    var editedRoutes = user.editedRoutes + 1;
-    _firestore.doc('Users/${user.id}').update({'editedRoutes': editedRoutes});
-  }
+  // Future<void> editedRoutes(User user) {
+  //   var editedRoutes = user.editedRoutes + 1;
+  //   _firestore.doc('Users/${user.id}').update({'editedRoutes': editedRoutes});
+  // }
 }
 
 DB db;
