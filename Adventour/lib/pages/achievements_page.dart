@@ -116,7 +116,7 @@ class AchievementWidget extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          this.achievement.description,
+                          achievement.description,
                           style: TextStyle(
                             fontSize: 16,
                           ),
@@ -138,9 +138,9 @@ class AchievementWidget extends StatelessWidget {
                               backgroundColor: Theme.of(context).accentColor,
                             ),
                             attribute < achievement.objective
-                                ? Text("$attribute" +
+                                ? Text(attribute.toString() +
                                     "/" +
-                                    "${achievement.objective}")
+                                    achievement.objective.toString())
                                 : SizedBox(),
                           ],
                         ),

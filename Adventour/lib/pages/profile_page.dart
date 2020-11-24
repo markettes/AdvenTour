@@ -84,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               db.currentUserId, await pickedFile.readAsBytes());
                           _user.image = url;
                           db.updateUser(_user);
+                          db.changeLook(_user.id);
                         },
                       ),
                     ),
@@ -121,7 +122,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                 if (_formKey.currentState.validate()) {
                                   _user.userName = _userNameController.text;
                                   db.updateUser(_user);
-                                  db.changeLook(_user.id);
                                 }
                               },
                             ),

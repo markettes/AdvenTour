@@ -63,6 +63,7 @@ class Auth {
       if (result.additionalUserInfo.isNewUser) {
         myuser.User user =
             myuser.User('', result.user.email, result.user.photoURL);
+            print('?'+ user.image);
         db.addUser(user);
       }
 
