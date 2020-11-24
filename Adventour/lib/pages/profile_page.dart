@@ -117,7 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             PrimaryButton(
                               text: 'EDIT',
                               icon: Icons.edit,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   _user.userName = _userNameController.text;
                                   db.updateUser(_user);
