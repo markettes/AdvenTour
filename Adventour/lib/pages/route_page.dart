@@ -489,7 +489,6 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                 infoWindow: InfoWindow(title: "Start"));
             _mapController.markers[mStart.markerId] = mStart;
             for (var place in widget.places) {
-              print(place.adress);
               _mapController.addMarker(place, context);
             }
             setState(() {});

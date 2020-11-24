@@ -46,6 +46,7 @@ class _NavigationPageState extends State<NavigationPage> {
   bool _fixedPosition = true;
   FinishedRoute _finishedRoute;
   Place _nearestPlace;
+  double totalDistance;
   // double bearing;
 
   // @override
@@ -188,6 +189,9 @@ class _NavigationPageState extends State<NavigationPage> {
                       child: GoogleMap(
                         onMapCreated: (googleMapController) => _mapController
                             .onMapCreated(googleMapController, () async {
+                          var polylineCoordinates = _mapController.polylines;
+                          print("queqeu ${polylineCoordinates}");
+
                           _mapController.goToCoordinates(
                               _position.latitude, _position.longitude, 20);
                           // _mapController.drawPolyline(polyline);
@@ -383,9 +387,11 @@ class _NavigationPageState extends State<NavigationPage> {
 
   String tiempoDurante() {
     Duration time = stopwatch.elapsed;
-    String min,hours;
-    if(time.inMinutes.remainder(60) < 10) min = '0' + time.inMinutes.remainder(60).toString();
-    else min = time.inMinutes.remainder(60).toString();
+    String min, hours;
+    if (time.inMinutes.remainder(60) < 10)
+      min = '0' + time.inMinutes.remainder(60).toString();
+    else
+      min = time.inMinutes.remainder(60).toString();
     hours = time.inHours.toString();
     return '$hours:$min';
   }
@@ -408,9 +414,8 @@ class _FinishedRouteWidgetState extends State<FinishedRouteWidget> {
 
   @override
   void initState() {
-
     db.completeRoute(db.currentUserId);
-    
+
     _types = widget.finishedRoute.types();
     super.initState();
   }

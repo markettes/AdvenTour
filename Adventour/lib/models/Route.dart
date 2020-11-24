@@ -10,7 +10,7 @@ import 'package:google_maps_webservice/directions.dart' as directions;
 class Route {
   LatLng _start;
   List<Place> _places;
-  List<Path> _paths;
+  Path _paths;
   String _name;
   List<String> _images;
   String _id;
@@ -74,7 +74,6 @@ class Route {
     _likes = List<String>.from(data['likes']);
   }
 
-
   String get id => _id;
 
   String get author => _author;
@@ -113,7 +112,7 @@ class Route {
 
   bool get isRequested => _requested;
 
-  List<String> types(){
+  List<String> types() {
     List<String> types = [];
     for (var place in _places) {
       if (!types.contains(place.type)) types.add(place.type);
@@ -127,29 +126,27 @@ class Route {
 name = $_name
     """;
   }
-
-
 }
 
-  Place nearestPlace(Position position,List<Place> places) {
-    if (places.isEmpty) return null;
-    Place nearestPlace = places.first;
-    for (var i = 1; i < places.length; i++) {
-      if (Geolocator.distanceBetween(
-            position.latitude,
-            position.longitude,
-            places[i].latitude,
-            places[i].longitude,
-          ) <
-          Geolocator.distanceBetween(
-            position.latitude,
-            position.longitude,
-            nearestPlace.latitude,
-            nearestPlace.longitude,
-          )) nearestPlace = places[i];
-    }
-    return nearestPlace;
+Place nearestPlace(Position position, List<Place> places) {
+  if (places.isEmpty) return null;
+  Place nearestPlace = places.first;
+  for (var i = 1; i < places.length; i++) {
+    if (Geolocator.distanceBetween(
+          position.latitude,
+          position.longitude,
+          places[i].latitude,
+          places[i].longitude,
+        ) <
+        Geolocator.distanceBetween(
+          position.latitude,
+          position.longitude,
+          nearestPlace.latitude,
+          nearestPlace.longitude,
+        )) nearestPlace = places[i];
   }
+  return nearestPlace;
+}
 
 List<Route> toRoutes(List docs) =>
     docs.map((doc) => Route.fromJson(doc)).toList();
