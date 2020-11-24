@@ -109,12 +109,14 @@ class _HistoryPageState extends State<HistoryPage> {
                                   List<FinishedRoute> routes = snapshot.data;
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: ListView(
-                                      children: [
-                                        FinishedWidget(
+                                    child: ListView.separated(
+                                      itemCount: routes.length,
+                                      itemBuilder: (context, index) {
+                                        return FinishedWidget(
                                           route: null,
-                                        )
-                                      ],
+                                        );
+                                      }, separatorBuilder: (context, index) =>
+                                         SizedBox(height: 5),
                                     ),
                                   );
                                 } else {
