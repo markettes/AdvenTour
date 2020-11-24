@@ -26,7 +26,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapController _mapController = MapController();
-  String _mapStyle;
+  
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
@@ -34,26 +34,7 @@ class _MapPageState extends State<MapPage> {
 
   TextEditingController _locationController = TextEditingController();
 
-  DateTime now;
-  String formattedDate;
 
-  @override
-  void initState() {
-    now = DateTime.now();
-    formattedDate = DateFormat('kk').format(now);
-
-    if (int.parse(formattedDate) < 20) {
-      rootBundle.loadString('assets/map_styles/light.json').then((string) {
-        _mapStyle = string;
-      });
-    } else {
-      rootBundle.loadString('assets/map_styles/dark.json').then((string) {
-        _mapStyle = string;
-      });
-    }
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +123,7 @@ class _MapPageState extends State<MapPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Container(
-                      decoration: int.parse(formattedDate) < 20
+                      decoration: !_mapController.isNight
                           ? BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
                               color: Colors.white,
@@ -276,9 +257,6 @@ class _MapPageState extends State<MapPage> {
 }
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({
-    Key key,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -414,60 +392,60 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
-                          //Navigator
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.star,
-                              size: 35,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Favourites',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
-                          //Navigator
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.settings,
-                              size: 35,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'Settings',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: MaterialButton(
+                //         onPressed: () {
+                //           //Navigator
+                //         },
+                //         child: Row(
+                //           children: [
+                //             Icon(
+                //               Icons.star,
+                //               size: 35,
+                //               color: Theme.of(context).primaryColor,
+                //             ),
+                //             SizedBox(
+                //               width: 10,
+                //             ),
+                //             Text(
+                //               'Favourites',
+                //               style: Theme.of(context).textTheme.bodyText1,
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: MaterialButton(
+                //         onPressed: () {
+                //           //Navigator
+                //         },
+                //         child: Row(
+                //           children: [
+                //             Icon(
+                //               Icons.settings,
+                //               size: 35,
+                //               color: Theme.of(context).primaryColor,
+                //             ),
+                //             SizedBox(
+                //               width: 10,
+                //             ),
+                //             Text(
+                //               'Settings',
+                //               style: Theme.of(context).textTheme.bodyText1,
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Expanded(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.end,

@@ -6,6 +6,7 @@ import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:toast/toast.dart';
 
 class RoutesPage extends StatelessWidget {
   const RoutesPage({Key key}) : super(key: key);
@@ -48,7 +49,8 @@ class RoutesPage extends StatelessWidget {
                                       child: Container(
                                         height: 180,
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             FlatButton.icon(
                                               onPressed: () {
@@ -95,8 +97,14 @@ class RoutesPage extends StatelessWidget {
                                               ),
                                             ),
                                             FlatButton.icon(
-                                              onPressed: () => db.requestRoute(
-                                                  db.currentUserId, route.id),
+                                              onPressed: () {
+                    
+                                                Navigator.pop(context);
+                                                if(route.isRequested)
+                                                Toast.show('This route ', context);
+                                                else db.requestRoute(
+                                                    db.currentUserId, route.id);
+                                              },
                                               icon: Icon(
                                                 Icons.upload_file,
                                                 color: Theme.of(context)

@@ -114,6 +114,7 @@ class _RouteWidgetState extends State<RouteWidget> {
                 ],
               ),
             ),
+            if(widget.route.isHighlight)
             Row(
               children: [
                 Text(widget.route.likes.toString()),

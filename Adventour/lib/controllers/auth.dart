@@ -74,18 +74,14 @@ class Auth {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future changePassword(String password, String newPassword) async {
-    await reauthCurrentUser(password);
-    await _firebaseAuth.currentUser.updatePassword(newPassword);
-  }
+  Future changePassword(String newPassword) =>
+      _firebaseAuth.currentUser.updatePassword(newPassword);
 
-  Future changeEmail(String password, String newEmail) async {
-    await reauthCurrentUser(password);
-    _firebaseAuth.currentUser.updateEmail(newEmail);
-  }
+  Future changeEmail(String newEmail) =>
+      _firebaseAuth.currentUser.updateEmail(newEmail);
 }
 
-String authError(FirebaseAuthException exception) {
+String emailError(FirebaseAuthException exception) {
   switch (exception.code) {
     case 'invalid-email':
       return 'Email address is not valid';
@@ -95,14 +91,31 @@ String authError(FirebaseAuthException exception) {
       return 'User disabled';
     case 'operation-not-allowed':
       return 'Signing in with Email and Password is not enabled';
-    case 'wrong-password':
-      return 'Your password is wrong';
     case 'email-already-in-use':
       return 'Email already exists';
+    case 'requires-recent-login':
+      return 'Try it later';
+    case 'user-mismatch':
+      return 'the credential not correspond to the user';
+    case 'invalid-credential':
+      return 'invalid credentials';
+    default:
+      return null;
+  }
+}
+
+String passwordError(FirebaseAuthException exception) {
+  switch (exception.code) {
+    case 'wrong-password':
+      return 'Your password is wrong';
     case 'weak-password':
       return 'It should have at least 6 characters';
     case 'requires-recent-login':
       return 'Try it later';
+    case 'user-mismatch':
+      return 'the credential not correspond to the user';
+    case 'invalid-credential':
+      return 'invalid credentials';
     default:
       return null;
   }

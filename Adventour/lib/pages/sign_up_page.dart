@@ -51,37 +51,46 @@ class _SignInFormState extends State<SignInForm> {
             'assets/logo_adventour+titulo.png',
             height: 180,
           ),
-          InputText(
-            icon: Icons.person,
-            labelText: 'Username',
-            maxLength: 15,
-            controller: _userNameController,
-            validator: (value) {
-              if (value.isEmpty) return 'Username can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: InputText(
+              icon: Icons.person,
+              labelText: 'Username',
+              maxLength: 15,
+              controller: _userNameController,
+              validator: (value) {
+                if (value.isEmpty) return 'Username can\'t be empty';
+                return null;
+              },
+            ),
           ),
-          InputText(
-            keyboardType: TextInputType.emailAddress,
-            icon: Icons.email,
-            labelText: 'Email',
-            errorText: _emailError,
-            controller: _emailController,
-            validator: (value) {
-              if (value.isEmpty) return 'Email can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: InputText(
+              keyboardType: TextInputType.emailAddress,
+              icon: Icons.email,
+              labelText: 'Email',
+              errorText: _emailError,
+              controller: _emailController,
+              validator: (value) {
+                if (value.isEmpty) return 'Email can\'t be empty';
+                return null;
+              },
+            ),
           ),
-          InputText(
-            obscured: true,
-            icon: Icons.lock,
-            labelText: 'Password',
-            errorText: _passwordError,
-            controller: _passwordController,
-            validator: (value) {
-              if (value.isEmpty) return 'Password can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: InputText(
+              obscured: true,
+              icon: Icons.lock,
+              labelText: 'Password',
+              errorText: _passwordError,
+              controller: _passwordController,
+              validator: (value) {
+                if (value.isEmpty) return 'Password can\'t be empty';
+                return null;
+              },
+            ),
           ),
           PrimaryButton(
             text: 'SIGN UP',
@@ -105,8 +114,8 @@ class _SignInFormState extends State<SignInForm> {
 
   void _showError(e) {
     setState(() {
-      _emailError = authError(e);
-      _passwordError = authError(e);
+      _emailError = emailError(e);
+      _passwordError = passwordError(e);
     });
   }
 }

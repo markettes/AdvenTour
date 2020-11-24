@@ -50,6 +50,7 @@ class User {
   set userName(userName) => _userName = userName;
 
   get email => _email;
+  set email(String email)=>_email = email;
 
   get image => _image;
 

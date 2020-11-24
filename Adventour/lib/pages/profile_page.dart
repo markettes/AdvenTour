@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var _userNameController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
   String _email;
+  User _user;
 
   bool _isAdventureAccount = false;
 
@@ -48,9 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
             if (snapshot.hasError) print(snapshot.error);
             if (!snapshot.hasData)
               return Center(child: CircularProgressIndicator());
-            User user = snapshot.data;
-            _userNameController.text = user.userName;
-            _email = user.email;
+            _user = snapshot.data;
+            _userNameController.text = _user.userName;
+            _email = _user.email;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -69,18 +70,20 @@ class _ProfilePageState extends State<ProfilePage> {
                         child: Container(
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: user.image != ''
-                                    ? NetworkImage(user.image)
+                                image: _user.image != ''
+                                    ? NetworkImage(_user.image)
                                     : AssetImage("assets/empty_photo.jpg"),
                                 fit: BoxFit.contain,
                               ),
                               shape: BoxShape.circle),
                         ),
                         onTap: () async {
-                          PickedFile pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
-                          String url = await storage.uploadAvatar(db.currentUserId, await pickedFile.readAsBytes());
-                          user.image = url;
-                          db.updateUser(user);
+                          PickedFile pickedFile = await ImagePicker()
+                              .getImage(source: ImageSource.gallery);
+                          String url = await storage.uploadAvatar(
+                              db.currentUserId, await pickedFile.readAsBytes());
+                          _user.image = url;
+                          db.updateUser(_user);
                         },
                       ),
                     ),
@@ -116,9 +119,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               icon: Icons.edit,
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
-                                  user.userName = _userNameController.text;
-                                  db.updateUser(user);
-                                  db.changeLook(user.id);
+                                  _user.userName = _userNameController.text;
+                                  db.updateUser(_user);
+                                  db.changeLook(_user.id);
                                 }
                               },
                             ),
@@ -194,51 +197,67 @@ class _ProfilePageState extends State<ProfilePage> {
                           key: _formKey,
                           child: Column(
                             children: [
-                              Container(
-                                height: 100,
-                                child: InputText(
-                                  icon: Icons.lock,
-                                  labelText: 'Password',
-                                  errorText: _passwordError,
-                                  controller: _passwordController,
-                                  obscured: true,
-                                  validator: (value) {
-                                    if (value.isEmpty)
-                                      return 'Password can\'t be empty';
-                                    return null;
-                                  },
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.lock,
+                                    labelText: 'Password',
+                                    errorText: _passwordError,
+                                    controller: _passwordController,
+                                    obscured: true,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'Password can\'t be empty';
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
-                              Container(
-                                height: 100,
-                                child: InputText(
-                                  icon: Icons.lock,
-                                  labelText: 'New password',
-                                  errorText: _newPasswordError,
-                                  controller: _newPasswordController,
-                                  obscured: true,
-                                  validator: (value) {
-                                    if (value.isEmpty)
-                                      return 'New password can\'t be empty';
-                                    return null;
-                                  },
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.lock,
+                                    labelText: 'New password',
+                                    errorText: _newPasswordError,
+                                    controller: _newPasswordController,
+                                    obscured: true,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'New password can\'t be empty';
+                                      print('?' +
+                                          value +
+                                          ' ' +
+                                          _passwordController.text);
+                                      if (value == _passwordController.text)
+                                        return 'New password can\'t be the same password';
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
                               PrimaryButton(
                                 text: 'OK',
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     try {
-                                      auth.changePassword(
-                                          _passwordController.text,
+                                      await auth.reauthCurrentUser(
+                                          _passwordController.text);
+                                      await auth.changePassword(
                                           _newPasswordController.text);
                                       Navigator.pop(context);
                                       Toast.show('Password changed', context,
                                           duration: 3);
                                     } catch (e) {
+                                      print('?error');
                                       print('?' + e.code);
                                       setState(() {
-                                        _passwordError = authError(e);
+                                        _passwordError = passwordError(e);
                                       });
                                     }
                                   }
@@ -320,6 +339,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                     validator: (value) {
                                       if (value.isEmpty)
                                         return 'New email can\'t be empty';
+                                      if (value == _email)
+                                        return 'New email can\'t be the same email';
                                       return null;
                                     },
                                   ),
@@ -327,18 +348,23 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               PrimaryButton(
                                 text: 'OK',
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     try {
-                                      auth.changeEmail(_passwordController.text,
-                                          _emailController.text);
+                                      await auth.reauthCurrentUser(
+                                          _passwordController.text);
+                                      await auth.changeEmail(
+                                        _emailController.text,
+                                      );
+                                      _user.email = _emailController.text;
                                       Navigator.pop(context);
                                       Toast.show('Email changed', context,
                                           duration: 3);
                                     } catch (e) {
                                       print('?' + e.code);
                                       setState(() {
-                                        _passwordError = authError(e);
+                                        _emailError = emailError(e);
+                                        _passwordError = passwordError(e);
                                       });
                                     }
                                   }

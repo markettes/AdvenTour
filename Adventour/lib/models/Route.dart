@@ -108,6 +108,10 @@ class Route {
 
   int get likes => _likes.length;
 
+  bool get isHighlight => _isHighlight;
+
+  bool get isRequested => _requested;
+
   List<String> types(){
     List<String> types = [];
     for (var place in _places) {
