@@ -26,15 +26,12 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapController _mapController = MapController();
-  
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
 
   TextEditingController _locationController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +254,6 @@ class _MapPageState extends State<MapPage> {
 }
 
 class MyDrawer extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -268,9 +264,9 @@ class MyDrawer extends StatelessWidget {
             height: 180,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/drawer_background.jpg'),
-                  fit: BoxFit.cover,
-                )),
+              image: AssetImage('assets/drawer_background.jpg'),
+              fit: BoxFit.cover,
+            )),
             child: StreamBuilder(
                 stream: db.getUser(db.currentUserId),
                 builder: (context, snapshot) {
@@ -467,8 +463,7 @@ class MyDrawer extends StatelessWidget {
                               ),
                               Text(
                                 'Logout',
-                                style:
-                                    Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyText1,
                               )
                             ],
                           ),

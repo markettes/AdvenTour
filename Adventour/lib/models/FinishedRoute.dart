@@ -11,6 +11,7 @@ class FinishedRoute {
   List<String> _images;
   String _id;
   String _routeId;
+  String _locationName;
 
   FinishedRoute(Route route, this._dateTime, this._duration) {
     _author = route.author;
@@ -32,6 +33,7 @@ class FinishedRoute {
     _images = List<String>.from(data['images']);
     _duration = Duration(minutes: data['duration']);
     _dateTime = (data['dateTime'] as Timestamp).toDate();
+    _locationName = data['locationName'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -40,6 +42,7 @@ class FinishedRoute {
         'images': _images,
         'author': _author,
         'dateTime': _dateTime,
+        'locationName': _locationName,
         'duration': _duration.inMinutes
       };
 
@@ -49,9 +52,13 @@ class FinishedRoute {
 
   Duration get duration => _duration;
 
+  List<String> get images => _images;
+
   String get image => _images[0];
 
   String get routeId => _routeId;
+  
+  String get locationName => _locationName;
 
   String get durationText =>
       _duration.inHours.remainder(60).toString() +

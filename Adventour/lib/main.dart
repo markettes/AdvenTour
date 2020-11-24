@@ -1,6 +1,7 @@
 import 'package:Adventour/pages/achievements_page.dart';
 import 'package:Adventour/pages/add_places_page.dart';
 import 'package:Adventour/pages/highlight_page.dart';
+import 'package:Adventour/pages/history_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
 import 'package:Adventour/pages/map_page.dart';
@@ -36,6 +37,7 @@ class Adventour extends StatelessWidget {
       routes: {
         '/initPage': (_) => InitPage(),
         '/profile': (_) => ProfilePage(),
+        '/historyPage': (_) => HistoryPage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
         '/': (_) => RootPage(),
