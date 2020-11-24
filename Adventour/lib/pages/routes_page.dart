@@ -101,7 +101,7 @@ class RoutesPage extends StatelessWidget {
                     
                                                 Navigator.pop(context);
                                                 if(route.isRequested)
-                                                Toast.show('This route ', context);
+                                                Toast.show('This route has already been requested', context);
                                                 else db.requestRoute(
                                                     db.currentUserId, route.id);
                                               },

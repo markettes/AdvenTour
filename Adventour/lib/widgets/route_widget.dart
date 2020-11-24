@@ -5,6 +5,7 @@ import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/route_engine.dart';
+import 'package:toast/toast.dart';
 
 import 'place_types_list.dart';
 
@@ -114,7 +115,7 @@ class _RouteWidgetState extends State<RouteWidget> {
                 ],
               ),
             ),
-            if(widget.route.isRequested) Icon(Icons.file_upload),
+            if(widget.route.isRequested) IconButton(icon: Icon(Icons.upload_file),onPressed: () => Toast.show('Waiting for acceptance', context),),
             if(widget.route.isHighlight)
             Row(
               children: [
