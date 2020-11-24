@@ -1,10 +1,12 @@
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/controllers/storage.dart';
 import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -13,22 +15,17 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  var _passwordController = TextEditingController();
   var _userNameController = TextEditingController();
-  var _emailController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
-  String _emailError;
-  User actualUser;
+  String _email;
+  User _user;
 
   bool _isAdventureAccount = false;
 
   @override
   void initState() {
-    // TODO: implement initState
-    Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
-    user.then((value) {
-      _userNameController.text = value.userName;
-      actualUser = value;
+    auth.currentUser.providerData.forEach((profile) {
+      if (profile.providerId == 'password') _isAdventureAccount = true;
     });
     super.initState();
   }
@@ -36,16 +33,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void dispose() {
     _userNameController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    auth.currentUser.providerData.forEach((profile) {
-      if (profile.providerId == 'password') _isAdventureAccount = true;
-    });
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -57,9 +49,9 @@ class _ProfilePageState extends State<ProfilePage> {
             if (snapshot.hasError) print(snapshot.error);
             if (!snapshot.hasData)
               return Center(child: CircularProgressIndicator());
-            User user = snapshot.data;
-            _userNameController.text = user.userName;
-            _emailController.text = user.email;
+            _user = snapshot.data;
+            _userNameController.text = _user.userName;
+            _email = _user.email;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -67,7 +59,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 Expanded(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.deepOrange,
                       image: DecorationImage(
                         image: AssetImage('assets/drawer_background.jpg'),
                         fit: BoxFit.cover,
@@ -75,15 +66,26 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(25),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: user.image != ''
-                                  ? NetworkImage(user.image)
-                                  : AssetImage("assets/empty_photo.jpg"),
-                              fit: BoxFit.contain,
-                            ),
-                            shape: BoxShape.circle),
+                      child: GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: _user.image != ''
+                                    ? NetworkImage(_user.image)
+                                    : AssetImage("assets/empty_photo.jpg"),
+                                fit: BoxFit.contain,
+                              ),
+                              shape: BoxShape.circle),
+                        ),
+                        onTap: () async {
+                          PickedFile pickedFile = await ImagePicker()
+                              .getImage(source: ImageSource.gallery);
+                          String url = await storage.uploadAvatar(
+                              db.currentUserId, await pickedFile.readAsBytes());
+                          _user.image = url;
+                          db.updateUser(_user);
+                          db.changeLook(_user.id);
+                        },
                       ),
                     ),
                   ),
@@ -98,36 +100,28 @@ class _ProfilePageState extends State<ProfilePage> {
                         key: _formKey,
                         child: Column(
                           children: [
-                            InputText(
-                              controller: _userNameController,
-                              icon: Icons.person,
-                              labelText: 'Username',
-                              validator: (value) {
-                                if (value.isEmpty)
-                                  return 'Username can\'t be empty';
-                                return null;
-                              },
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              child: InputText(
+                                controller: _userNameController,
+                                icon: Icons.person,
+                                labelText: 'Username',
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return 'Username can\'t be empty';
+                                  return null;
+                                },
+                              ),
                             ),
-                            InputText(
-                              controller: _emailController,
-                              icon: Icons.email,
-                              labelText: 'Email',
-                              errorText: _emailError,
-                              validator: (value) {
-                                if (value.isEmpty)
-                                  return 'Email can\'t be empty';
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 10),
                             PrimaryButton(
                               text: 'EDIT',
                               icon: Icons.edit,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  user.userName = _userNameController.text;
-                                  db.updateUser(user.id, user);
-                                  db.changeLook(actualUser);
+                                  _user.userName = _userNameController.text;
+                                  db.updateUser(_user);
                                 }
                               },
                             ),
@@ -138,6 +132,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 indent: 50,
                                 endIndent: 50,
                                 height: 30,
+                              ),
+                            if (_isAdventureAccount)
+                              FlatButton(
+                                onPressed: showEmailDialog,
+                                child: Text(
+                                  'Change email',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 20),
+                                ),
                               ),
                             if (_isAdventureAccount)
                               FlatButton(
@@ -192,51 +197,175 @@ class _ProfilePageState extends State<ProfilePage> {
                           key: _formKey,
                           child: Column(
                             children: [
-                              Container(
-                                height: 100,
-                                child: InputText(
-                                  icon: Icons.lock,
-                                  labelText: 'Password',
-                                  errorText: _passwordError,
-                                  controller: _passwordController,
-                                  obscured: true,
-                                  validator: (value) {
-                                    if (value.isEmpty)
-                                      return 'Password can\'t be empty';
-                                    return null;
-                                  },
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.lock,
+                                    labelText: 'Password',
+                                    errorText: _passwordError,
+                                    controller: _passwordController,
+                                    obscured: true,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'Password can\'t be empty';
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
-                              Container(
-                                height: 100,
-                                child: InputText(
-                                  icon: Icons.lock,
-                                  labelText: 'New password',
-                                  errorText: _newPasswordError,
-                                  controller: _newPasswordController,
-                                  obscured: true,
-                                  validator: (value) {
-                                    if (value.isEmpty)
-                                      return 'New password can\'t be empty';
-                                    return null;
-                                  },
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.lock,
+                                    labelText: 'New password',
+                                    errorText: _newPasswordError,
+                                    controller: _newPasswordController,
+                                    obscured: true,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'New password can\'t be empty';
+                                      print('?' +
+                                          value +
+                                          ' ' +
+                                          _passwordController.text);
+                                      if (value == _passwordController.text)
+                                        return 'New password can\'t be the same password';
+                                      return null;
+                                    },
+                                  ),
                                 ),
                               ),
                               PrimaryButton(
                                 text: 'OK',
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     try {
-                                      auth.changePassword(
-                                          _passwordController.text,
+                                      await auth.reauthCurrentUser(
+                                          _passwordController.text);
+                                      await auth.changePassword(
                                           _newPasswordController.text);
                                       Navigator.pop(context);
                                       Toast.show('Password changed', context,
                                           duration: 3);
                                     } catch (e) {
+                                      print('?error');
                                       print('?' + e.code);
                                       setState(() {
-                                        _passwordError = changePasswordError(e);
+                                        _passwordError = passwordError(e);
+                                      });
+                                    }
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      );
+
+  Future showEmailDialog() => showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController _passwordController = TextEditingController();
+          TextEditingController _emailController =
+              TextEditingController(text: _email);
+          final _formKey = GlobalKey<FormState>();
+          String _passwordError;
+          String _emailError;
+
+          return StatefulBuilder(
+            builder: (BuildContext context, setState) {
+              return Dialog(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 300,
+                    child: Column(
+                      children: [
+                        Text(
+                          'Put a new email',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline2
+                              .copyWith(fontSize: 20),
+                        ),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.lock,
+                                    labelText: 'Password',
+                                    errorText: _passwordError,
+                                    controller: _passwordController,
+                                    obscured: true,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'Password can\'t be empty';
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Container(
+                                  height: 100,
+                                  child: InputText(
+                                    icon: Icons.email,
+                                    labelText: 'New email',
+                                    errorText: _emailError,
+                                    controller: _emailController,
+                                    obscured: false,
+                                    validator: (value) {
+                                      if (value.isEmpty)
+                                        return 'New email can\'t be empty';
+                                      if (value == _email)
+                                        return 'New email can\'t be the same email';
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                              PrimaryButton(
+                                text: 'OK',
+                                onPressed: () async {
+                                  if (_formKey.currentState.validate()) {
+                                    try {
+                                      await auth.reauthCurrentUser(
+                                          _passwordController.text);
+                                      await auth.changeEmail(
+                                        _emailController.text,
+                                      );
+                                      _user.email = _emailController.text;
+                                      db.updateUser(_user);
+                                      Navigator.pop(context);
+                                      Toast.show('Email changed', context,
+                                          duration: 3);
+                                    } catch (e) {
+                                      print('?' + e.code);
+                                      setState(() {
+                                        _emailError = emailError(e);
+                                        _passwordError = passwordError(e);
                                       });
                                     }
                                   }

@@ -47,27 +47,33 @@ class _LogInFormState extends State<LogInForm> {
             'assets/logo_adventour+titulo.png',
             height: 180,
           ),
-          InputText(
-            obscured: false,
-            icon: Icons.email,
-            labelText: 'Email',
-            errorText: _emailError,
-            controller: _emailController,
-            validator: (value) {
-              if (value.isEmpty) return 'Email can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left:10,right:10),
+            child: InputText(
+              obscured: false,
+              icon: Icons.email,
+              labelText: 'Email',
+              errorText: _emailError,
+              controller: _emailController,
+              validator: (value) {
+                if (value.isEmpty) return 'Email can\'t be empty';
+                return null;
+              },
+            ),
           ),
-          InputText(
-            obscured: true,
-            icon: Icons.lock,
-            labelText: 'Password',
-            errorText: _passwordError,
-            controller: _passwordController,
-            validator: (value) {
-              if (value.isEmpty) return 'Password can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left:10,right:10),
+            child: InputText(
+              obscured: true,
+              icon: Icons.lock,
+              labelText: 'Password',
+              errorText: _passwordError,
+              controller: _passwordController,
+              validator: (value) {
+                if (value.isEmpty) return 'Password can\'t be empty';
+                return null;
+              },
+            ),
           ),
           // Text(
           //   'Forgot password?',
@@ -96,8 +102,8 @@ class _LogInFormState extends State<LogInForm> {
 
   void _showError(e) {
     setState(() {
-      _emailError = logInEmailError(e);
-      _passwordError = logInPasswordError(e);
+      _emailError = emailError(e);
+      _passwordError = passwordError(e);
     });
   }
 }

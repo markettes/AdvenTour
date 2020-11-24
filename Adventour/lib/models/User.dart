@@ -6,13 +6,19 @@ class User {
   String _userName;
   String _email;
   String _image;
-  String _changeLook;
+  int _changeLook;
+  int _completedRoutes;
+  int _editedRoutes;
+  int _routesHighlight;
 
-  User(userName, email, [image = '', changeLook]) {
+  User(userName, email, [image = '']) {
     _userName = userName;
     _email = email;
     _image = image;
-    _changeLook = changeLook;
+    _changeLook = 0;
+    _completedRoutes = 0;
+    _editedRoutes = 0;
+    _routesHighlight = 0;
   }
 
   User.fromFirestore(DocumentSnapshot snapshot) {
@@ -22,6 +28,9 @@ class User {
     _email = data['email'];
     _image = data['image'];
     _changeLook = data['changeLook'];
+    _completedRoutes = data['completedRoutes'];
+    _editedRoutes = data['editedRoutes'];
+    _routesHighlight = data['routesHighlight'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +38,9 @@ class User {
         'email': _email,
         'image': _image,
         'changeLook': _changeLook,
+        'completedRoutes': _completedRoutes,
+        'editedRoutes': _editedRoutes,
+        "routesHighlight": _routesHighlight,
       };
 
   get id => _id;
@@ -38,15 +50,40 @@ class User {
   set userName(userName) => _userName = userName;
 
   get email => _email;
+  
+  set email(String email)=>_email = email;
 
   get image => _image;
 
+  set image(String image) => _image = image;
+
   get changeLook => _changeLook;
 
-  String getAttribute(String affected) {
-    if (affected == "changeLook") {
-      return _changeLook;
-    } else
-      return "true";
+  get completedRoutes => _completedRoutes;
+
+  get editedRoutes => _editedRoutes;
+
+  get routesHighlight => _routesHighlight;
+
+  int getAttribute(String affected) {
+    switch (affected) {
+      case "changeLook":
+        return _changeLook;
+      case "completedRoutes":
+        return _completedRoutes;
+      case "editedRoutes":
+        return _editedRoutes;
+      case "routesHighlight":
+        return _routesHighlight;
+      default:
+        return null;
+    }
+  }
+
+  @override
+  String toString() {
+    return """
+completedRoutes = $_completedRoutes
+    """;
   }
 }

@@ -9,12 +9,15 @@ class MapController {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> _polylines = {};
+  String _style;
 
   Map<PolylineId, Polyline> get polylines => _polylines;
 
   Map<MarkerId, Marker> get markers => _markers;
 
   bool get mapCreated => _mapController != null;
+
+  bool get isNight => _style == "assets/map_styles/dark.json";
 
   void onMapCreated(GoogleMapController controller, [Function then]) {
     _mapController = controller;
@@ -25,25 +28,25 @@ class MapController {
   Future _changeMapStyle(GoogleMapController controller) async {
     DateTime now;
     String formattedDate;
-    String style;
+    
 
     now = DateTime.now();
     formattedDate = DateFormat('kk').format(now);
 
     if (int.parse(formattedDate) < 20) {
-      style = await rootBundle.loadString("assets/map_styles/light.json");
+      _style = "assets/map_styles/light.json";
     } else {
-      style = await rootBundle.loadString("assets/map_styles/dark.json");
+      _style = "assets/map_styles/dark.json";
     }
 
-    controller.setMapStyle(style);
+    controller.setMapStyle(await rootBundle.loadString(_style));
   }
 
   drawPolyline(Polyline polyline) {
     _polylines[polyline.polylineId] = polyline;
   }
 
-  clearPolyline(){
+  clearPolyline() {
     _polylines = {};
   }
 
@@ -55,22 +58,23 @@ class MapController {
       infoWindow: InfoWindow(
           title: place.name ?? "Unknown",
           onTap: () {
-            if(place.type != LOCALITY)
-            Navigator.of(context).pushNamed(
-              '/placePage',
-              arguments: {
-                'place': place,
-                'tapMap': () {
-                  goToCoordinates(place.latitude, place.longitude, 18);
-                }
-              },
-            );
-            else Navigator.of(context).pushNamed(
-              '/highlightPage',
-              arguments: {
-                'place': place,
-              },
-            );
+            if (place.type != LOCALITY)
+              Navigator.of(context).pushNamed(
+                '/placePage',
+                arguments: {
+                  'place': place,
+                  'tapMap': () {
+                    goToCoordinates(place.latitude, place.longitude, 18);
+                  }
+                },
+              );
+            else
+              Navigator.of(context).pushNamed(
+                '/highlightPage',
+                arguments: {
+                  'place': place,
+                },
+              );
           }),
     );
 

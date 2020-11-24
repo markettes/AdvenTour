@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
@@ -9,10 +10,12 @@ import 'package:Adventour/models/FinishedRoute.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -405,6 +408,9 @@ class _FinishedRouteWidgetState extends State<FinishedRouteWidget> {
 
   @override
   void initState() {
+
+    db.completeRoute(db.currentUserId);
+    
     _types = widget.finishedRoute.types();
     super.initState();
   }

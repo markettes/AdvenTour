@@ -31,6 +31,7 @@ class Route {
     _locationName = locationName;
     _locationId = locationId;
     _requested = false;
+    _isHighlight = false;
     _likes = [];
   }
 
@@ -45,8 +46,9 @@ class Route {
         'creationDate': _creationDate,
         'locationName': _locationName,
         'locationId': _locationId,
-        'requested': _requested.toString(),
-        'likes': _likes
+        'requested': 'false',
+        'likes': _likes,
+        'isHighlight': 'false'
       };
 
   Route.fromJson(DocumentSnapshot doc) {
@@ -71,6 +73,7 @@ class Route {
     _isHighlight = data['isHighlight'] == 'true';
     _likes = List<String>.from(data['likes']);
   }
+
 
   String get id => _id;
 
@@ -106,12 +109,23 @@ class Route {
 
   int get likes => _likes.length;
 
+  bool get isHighlight => _isHighlight;
+
+  bool get isRequested => _requested;
+
   List<String> types(){
     List<String> types = [];
     for (var place in _places) {
       if (!types.contains(place.type)) types.add(place.type);
     }
     return types;
+  }
+
+  @override
+  String toString() {
+    return """
+name = $_name
+    """;
   }
 
 

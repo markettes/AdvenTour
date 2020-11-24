@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/geocoding.dart';
@@ -8,6 +9,7 @@ import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Route.dart';
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
@@ -55,7 +57,9 @@ class _RoutePageState extends State<RoutePage>
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text('Custom route'),
+          title: Text(route == null || route.name == null
+              ? 'Custom route'
+              : route.name),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -89,74 +93,127 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future saveDialog(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        TextEditingController _routeNameController = TextEditingController();
-        final _formKey = GlobalKey<FormState>();
-        return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+    if (route.name != null) {
+      bool oldAuthor = route.author == db.currentUserId;
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
             child: Container(
-              height: 200,
-              child: Column(
-                children: [
-                  Text(
-                    'Put a name to your route',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline2
-                        .copyWith(fontSize: 20),
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 100,
-                          child: InputText(
-                            icon: Icons.flag,
-                            labelText: 'Route name',
-                            controller: _routeNameController,
-                            maxLength: 20,
-                            validator: (value) {
-                              if (value.isEmpty)
-                                return 'Route name can\'t be empty';
-                              return null;
-                            },
-                          ),
-                        ),
-                        PrimaryButton(
-                          text: 'SAVE',
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              route.name = _routeNameController.text;
-                              route.author = db.currentUserId;
-                              route.images = route.places
-                                  .map(
-                                      (place) => place.photos[0].photoReference)
-                                  .toList();
-                              db.addRoute(route);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            }
-                          },
-                        ),
-                      ],
+              height: 150,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      oldAuthor
+                          ? 'Are you sure you want to edit your route?'
+                          : 'Would you like save this route?',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2
+                          .copyWith(fontSize: 20),
                     ),
-                  )
-                  // PrimaryButton(
-                  //   text: 'SAVE',
-                  //   onPressed: () => Navigator.pop(context),
-                  // ),
-                ],
+                    Text(
+                      'If your route is a highlight, it lose this',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    PrimaryButton(
+                      text: 'SAVE',
+                      onPressed: () {
+                        if (oldAuthor) {
+                          print(route == null);
+                          db.updateRoute(route);
+                          db.editeRoute(db.currentUserId);
+                        } else {
+                          route.author = db.currentUserId;
+                          db.addRoute(route);
+                        }
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    } else
+      return showDialog(
+        context: context,
+        builder: (context) {
+          TextEditingController _routeNameController = TextEditingController();
+          final _formKey = GlobalKey<FormState>();
+          return Dialog(
+            child: Container(
+              height: 230,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Put a name to your route',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2
+                          .copyWith(fontSize: 20),
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            child: InputText(
+                              icon: Icons.flag,
+                              labelText: 'Route name',
+                              controller: _routeNameController,
+                              maxLength: 20,
+                              validator: (value) {
+                                if (value.isEmpty)
+                                  return 'Route name can\'t be empty';
+                                return null;
+                              },
+                            ),
+                          ),
+                          PrimaryButton(
+                            text: 'SAVE',
+                            onPressed: () {
+                              if (_formKey.currentState.validate()) {
+                                
+                                route.name = _routeNameController.text;
+                                route.author = db.currentUserId;
+                                route.images = route.places
+                                    .map((place) =>
+                                        place.photos[0].photoReference)
+                                    .toList();
+
+                                db.addRoute(route);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                    // PrimaryButton(
+                    //   text: 'SAVE',
+                    //   onPressed: () => Navigator.pop(context),
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
   }
 
   Future _removePlace(Place place) async {
@@ -390,7 +447,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         widget.start,
         LatLng(widget.places.first.latitude, widget.places.first.longitude),
         transport));
-    for (var i = 1; i < widget.places.length - 1; i++) {
+    for (var i = 0; i < widget.places.length - 1; i++) {
       Place start = widget.places[i];
       Place end = widget.places[i + 1];
       routeCoords.addAll(await polylineEngine.getPoints(
@@ -692,7 +749,9 @@ class MapListView extends StatelessWidget {
                                   icon: Icons.delete,
                                   foregroundColor:
                                       Theme.of(context).primaryColor,
-                                  onTap: () => removePlace(place),
+                                  onTap: () async {
+                                    removePlace(place);
+                                  },
                                 ),
                               ],
                             )
@@ -743,7 +802,3 @@ class MapListView extends StatelessWidget {
     return hours + ':' + minutes;
   }
 }
-
-@override
-// TODO: implement wantKeepAlive
-bool get wantKeepAlive => throw UnimplementedError();

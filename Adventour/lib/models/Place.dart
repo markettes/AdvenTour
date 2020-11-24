@@ -76,7 +76,8 @@ class Place {
     _name = result.name;
     _type = googleIconToType(result.icon);
     _types = result.types;
-    _coordinates = LatLng(result.geometry.location.lat,result.geometry.location.lng);
+    _coordinates =
+        LatLng(result.geometry.location.lat, result.geometry.location.lng);
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
     _adress = result.vicinity;
@@ -91,7 +92,8 @@ class Place {
     _type = googleIconToType(details.icon);
     _types = details.types;
     _adress = details.vicinity;
-    _coordinates = LatLng(details.geometry.location.lat,details.geometry.location.lng);
+    _coordinates =
+        LatLng(details.geometry.location.lat, details.geometry.location.lng);
     _rating = details.rating;
     _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
@@ -130,7 +132,7 @@ class Place {
 
   Place.fromJson(Map<dynamic, dynamic> data) {
     _id = data['id'];
-    _coordinates = LatLng(data['latitude'],data['longitude']);
+    _coordinates = LatLng(data['latitude'], data['longitude']);
     _name = data['name'];
     _adress = data['adress'];
     _type = data['type'];
@@ -233,6 +235,10 @@ String googleIconToType(String icon) {
       return null;
     case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/cafe-71.png':
       return RESTAURANT;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/civic_building-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/cemetery_grave-71.png':
+      return null;
     default:
       throw Exception('Icon $icon not implemented');
   }
