@@ -19,11 +19,13 @@ class RouteEngine {
       location = await geocoding.searchByPlaceId(locationId);
     }
 
-    Place locationPlace =
-        (await searchEngine.searchByLocationWithType(LOCALITY, location, 50000))
-            .first;
-    locationId = locationPlace.id;
-    String locationName = locationPlace.name;
+    List<Place> locationPlaces = (await searchEngine.searchByLocationWithType(
+        LOCALITY, location, 50000));
+
+    if (locationPlaces.isEmpty) return null;
+
+    locationId = locationPlaces.first.id;
+    String locationName = locationPlaces.first.name;
 
     List<Place> prePlaces = [];
 
@@ -31,6 +33,8 @@ class RouteEngine {
       prePlaces.addAll(
           await searchEngine.searchByLocationWithType(type, location, radius));
     }
+
+    if (prePlaces.length < 3) return null;
 
     List<Place> placesWithoutDuplicates = [];
 
@@ -46,6 +50,7 @@ class RouteEngine {
         place.rating == null ||
         place.type == null ||
         place.userRatingsTotal < 500);
+    if (placesWithoutDuplicates.length < 3) return null;
 
     placesWithoutDuplicates.sort((a, b) => b.rating.compareTo(a.rating));
 

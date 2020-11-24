@@ -57,7 +57,7 @@ class _RoutePageState extends State<RoutePage>
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(route.name ?? 'Custom route'),
+          title: Text(route == null || route.name == null ? 'Custom route' : route.name),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
