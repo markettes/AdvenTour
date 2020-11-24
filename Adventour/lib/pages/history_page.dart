@@ -111,8 +111,9 @@ class _HistoryPageState extends State<HistoryPage> {
                                     child: ListView.separated(
                                       itemCount: routes.length,
                                       itemBuilder: (context, index) {
+                                        FinishedRoute route = routes[index];
                                         return FinishedWidget(
-                                          route: null,
+                                          route: route,
                                         );
                                       }, separatorBuilder: (context, index) =>
                                          SizedBox(height: 5),
