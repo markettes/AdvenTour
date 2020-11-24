@@ -105,8 +105,8 @@ class _SignInFormState extends State<SignInForm> {
 
   void _showError(e) {
     setState(() {
-      _emailError = signInEmailError(e);
-      _passwordError = signInPasswordError(e);
+      _emailError = authError(e);
+      _passwordError = authError(e);
     });
   }
 }

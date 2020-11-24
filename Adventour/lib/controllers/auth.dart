@@ -79,12 +79,13 @@ class Auth {
     await _firebaseAuth.currentUser.updatePassword(newPassword);
   }
 
-  Future changeEmail(String newEmail) async {
+  Future changeEmail(String password, String newEmail) async {
+    await reauthCurrentUser(password);
     _firebaseAuth.currentUser.updateEmail(newEmail);
   }
 }
 
-String logInEmailError(FirebaseAuthException exception) {
+String authError(FirebaseAuthException exception) {
   switch (exception.code) {
     case 'invalid-email':
       return 'Email address is not valid';
@@ -94,42 +95,17 @@ String logInEmailError(FirebaseAuthException exception) {
       return 'User disabled';
     case 'operation-not-allowed':
       return 'Signing in with Email and Password is not enabled';
-  }
-  return null;
-}
-
-String logInPasswordError(FirebaseAuthException exception) {
-  if (exception.code == 'wrong-password') {
-    return 'Your password is wrong';
-  }
-  return null;
-}
-
-String signInEmailError(FirebaseAuthException exception) {
-  switch (exception.code) {
-    case 'invalid-email':
-      return 'Email address is not valid';
-      break;
+    case 'wrong-password':
+      return 'Your password is wrong';
     case 'email-already-in-use':
       return 'Email already exists';
-      break;
+    case 'weak-password':
+      return 'It should have at least 6 characters';
+    case 'requires-recent-login':
+      return 'Try it later';
+    default:
+      return null;
   }
-  return null;
-}
-
-String signInPasswordError(FirebaseAuthException exception) {
-  if (exception.code == 'weak-password') {
-    return 'It should have at least 6 characters';
-  }
-  return null;
-}
-
-String changePasswordError(FirebaseAuthException exception) {
-  if (exception.code == 'weak-password')
-    return 'It should have at least 6 characters';
-  if (exception.code == 'wrong-password') return 'Your password is wrong';
-  if (exception.code == 'requires-recent-login') return 'Try it later';
-  return null;
 }
 
 Auth auth;
