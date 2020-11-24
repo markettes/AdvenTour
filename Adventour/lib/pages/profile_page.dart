@@ -18,7 +18,6 @@ class _ProfilePageState extends State<ProfilePage> {
   var _emailController = TextEditingController();
   var _formKey = GlobalKey<FormState>();
   String _emailError;
-  User actualUser;
 
   bool _isAdventureAccount = false;
 
@@ -28,7 +27,6 @@ class _ProfilePageState extends State<ProfilePage> {
     Future<User> user = db.getCurrentUserName(auth.currentUserEmail);
     user.then((value) {
       _userNameController.text = value.userName;
-      actualUser = value;
     });
     super.initState();
   }
@@ -123,11 +121,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             PrimaryButton(
                               text: 'EDIT',
                               icon: Icons.edit,
-                              onPressed: () {
+                              onPressed: () async {
                                 if (_formKey.currentState.validate()) {
                                   user.userName = _userNameController.text;
-                                  db.updateUser(user.id, user);
-                                  db.changeLook(actualUser);
+                                  await db.updateUser(user.id, user);
+                                  db.changeLook(user);
                                 }
                               },
                             ),

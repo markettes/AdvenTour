@@ -54,7 +54,9 @@ class DB {
   Future deleteRoute(String userId, String routeId) =>
       _firestore.doc('Users/$userId/Routes/$routeId').delete();
 
-  Future updateRoute(Route route) => _firestore.doc('Users/${route.author}/Routes/${route.id}').update(route.toJson());
+  Future updateRoute(Route route) => _firestore
+      .doc('Users/${route.author}/Routes/${route.id}')
+      .update(route.toJson());
 
   Future requestRoute(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
