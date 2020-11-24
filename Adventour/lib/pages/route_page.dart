@@ -185,7 +185,6 @@ class _RoutePageState extends State<RoutePage>
                             text: 'SAVE',
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                
                                 route.name = _routeNameController.text;
                                 route.author = db.currentUserId;
                                 route.images = route.places
@@ -480,7 +479,17 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           onMapCreated: (googleMapController) =>
               _mapController.onMapCreated(googleMapController, () async {
             await drawPath();
+            Marker mStart = Marker(
+                markerId: MarkerId("Start"),
+                position: LatLng(widget.start.latitude, widget.start.longitude),
+                icon: await BitmapDescriptor.fromAssetImage(
+                  ImageConfiguration(devicePixelRatio: 2.5),
+                  'assets/marker.png',
+                ),
+                infoWindow: InfoWindow(title: "Start"));
+            _mapController.markers[mStart.markerId] = mStart;
             for (var place in widget.places) {
+              print(place.adress);
               _mapController.addMarker(place, context);
             }
             setState(() {});
