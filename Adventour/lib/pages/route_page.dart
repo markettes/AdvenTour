@@ -57,7 +57,9 @@ class _RoutePageState extends State<RoutePage>
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(route == null || route.name == null ? 'Custom route' : route.name),
+          title: Text(route == null || route.name == null
+              ? 'Custom route'
+              : route.name),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -443,7 +445,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         widget.start,
         LatLng(widget.places.first.latitude, widget.places.first.longitude),
         transport));
-    for (var i = 1; i < widget.places.length - 1; i++) {
+    for (var i = 0; i < widget.places.length - 1; i++) {
       Place start = widget.places[i];
       Place end = widget.places[i + 1];
       routeCoords.addAll(await polylineEngine.getPoints(
