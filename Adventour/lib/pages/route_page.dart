@@ -57,7 +57,9 @@ class _RoutePageState extends State<RoutePage>
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(route == null || route.name == null ? 'Custom route' : route.name),
+          title: Text(route == null || route.name == null
+              ? 'Custom route'
+              : route.name),
           actions: [
             IconButton(
               icon: Icon(Icons.save),
@@ -183,12 +185,14 @@ class _RoutePageState extends State<RoutePage>
                             text: 'SAVE',
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
+                                print(route.toString());
                                 route.name = _routeNameController.text;
                                 route.author = db.currentUserId;
                                 route.images = route.places
                                     .map((place) =>
                                         place.photos[0].photoReference)
                                     .toList();
+                                
                                 db.addRoute(route);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
