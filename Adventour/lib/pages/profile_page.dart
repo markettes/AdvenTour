@@ -357,6 +357,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         _emailController.text,
                                       );
                                       _user.email = _emailController.text;
+                                      db.updateUser(_user);
                                       Navigator.pop(context);
                                       Toast.show('Email changed', context,
                                           duration: 3);

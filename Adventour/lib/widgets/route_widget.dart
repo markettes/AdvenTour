@@ -114,6 +114,7 @@ class _RouteWidgetState extends State<RouteWidget> {
                 ],
               ),
             ),
+            if(widget.route.isRequested) Icon(Icons.file_upload),
             if(widget.route.isHighlight)
             Row(
               children: [

@@ -144,10 +144,11 @@ class _RoutePageState extends State<RoutePage>
           final _formKey = GlobalKey<FormState>();
           return Dialog(
             child: Container(
-              height: 200,
+              height: 230,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       'Put a name to your route',
