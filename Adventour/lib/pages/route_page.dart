@@ -447,7 +447,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         widget.start,
         LatLng(widget.places.first.latitude, widget.places.first.longitude),
         transport));
-    for (var i = 1; i < widget.places.length - 1; i++) {
+    for (var i = 0; i < widget.places.length - 1; i++) {
       Place start = widget.places[i];
       Place end = widget.places[i + 1];
       routeCoords.addAll(await polylineEngine.getPoints(
