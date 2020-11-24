@@ -53,6 +53,8 @@ class User {
 
   get image => _image;
 
+  set image(String image) => _image = image;
+
   get changeLook => _changeLook;
 
   get completedRoutes => _completedRoutes;

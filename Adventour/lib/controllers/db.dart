@@ -20,12 +20,10 @@ class DB {
     _firestore.collection('Users').add(user.toJson());
   }
 
-  Stream<User> getUser(String userId) {
-    return _firestore
-        .doc('Users/$userId')
-        .snapshots()
-        .map((doc) => User.fromFirestore(doc));
-  }
+  Stream<User> getUser(String userId) => _firestore
+      .doc('Users/$userId')
+      .snapshots()
+      .map((doc) => User.fromFirestore(doc));
 
   Future<String> signIn(String email) async {
     QueryDocumentSnapshot snapshot = (await _firestore
@@ -37,8 +35,8 @@ class DB {
     return snapshot.id;
   }
 
-  Future<void> updateUser(String userId, User user) {
-    _firestore.doc('Users/$userId').update(user.toJson());
+  Future<void> updateUser(User user) {
+    _firestore.doc('Users/${user.id}').update(user.toJson());
   }
 
 //----------------------------ROUTES-----------------------------------
@@ -54,7 +52,9 @@ class DB {
   Future deleteRoute(String userId, String routeId) =>
       _firestore.doc('Users/$userId/Routes/$routeId').delete();
 
-  Future updateRoute(Route route) => _firestore.doc('Users/${route.author}/Routes/${route.id}').update(route.toJson());
+  Future updateRoute(Route route) => _firestore
+      .doc('Users/${route.author}/Routes/${route.id}')
+      .update(route.toJson());
 
   Future requestRoute(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
@@ -108,8 +108,8 @@ class DB {
       .snapshots()
       .map((snap) => toAchievements(snap.docs));
 
-  Future<void> changeLook(User user) {
-    _firestore.doc('Users/${user.id}').update({'changeLook': 1});
+  Future<void> changeLook(String userId) {
+    _firestore.doc('Users/$userId').update({'changeLook': 1});
   }
 
   Future<void> completedRoutes(User user) {

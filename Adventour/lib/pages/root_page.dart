@@ -37,10 +37,10 @@ class RootPage extends StatelessWidget {
     String id = await db.signIn(email);
     db.currentUserId = id;
     User user = await db.getUser(id).first;
-      if (user.userName == '') {
-        user.userName = await _showUserNameDialog(context);
-        db.updateUser(user.id, user);
-      }
+    if (user.userName == '') {
+      user.userName = await _showUserNameDialog(context);
+      db.updateUser(user);
+    }
   }
 
   Future<String> _showUserNameDialog(BuildContext context) {

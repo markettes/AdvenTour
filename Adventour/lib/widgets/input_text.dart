@@ -32,42 +32,34 @@ class InputText extends StatefulWidget {
 class _InputTextState extends State<InputText> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 40,
-        right: 40,
-        top: 8,
-        bottom: 8,
-      ),
-      child: TextFormField(
-        keyboardType: widget.keyboardType,
-        obscureText: widget.obscured,
-        controller: widget.controller,
-        readOnly: widget.readOnly,
-        maxLength: widget.maxLength,
-        decoration: InputDecoration(
-          icon: Icon(
-            widget.icon,
-            size: 30,
-          ),
-          labelText: widget.labelText,
-          errorText: widget.errorText,
-          suffixIcon: widget.controller.text.length > 0 && !widget.readOnly
-              ? IconButton(
-                  icon: Icon(Icons.clear),
-                  onPressed: () {
-                    setState(() {
-                      widget.controller.clear();
-                    });
-                  })
-              : null,
+    return TextFormField(
+      keyboardType: widget.keyboardType,
+      obscureText: widget.obscured,
+      controller: widget.controller,
+      readOnly: widget.readOnly,
+      maxLength: widget.maxLength,
+      decoration: InputDecoration(
+        icon: Icon(
+          widget.icon,
+          size: 30,
         ),
-        onChanged: (value) {
-          setState(() {});
-        },
-        onTap: widget.onTap,
-        validator: widget.validator,
+        labelText: widget.labelText,
+        errorText: widget.errorText,
+        suffixIcon: widget.controller.text.length > 0 && !widget.readOnly
+            ? IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  setState(() {
+                    widget.controller.clear();
+                  });
+                })
+            : null,
       ),
+      onChanged: (value) {
+        setState(() {});
+      },
+      onTap: widget.onTap,
+      validator: widget.validator,
     );
   }
 }
