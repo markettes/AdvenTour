@@ -10,7 +10,7 @@ import 'package:google_maps_webservice/directions.dart' as directions;
 class Route {
   LatLng _start;
   List<Place> _places;
-  Path _paths;
+  List<Path> _paths;
   String _name;
   List<String> _images;
   String _id;
