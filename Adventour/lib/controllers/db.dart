@@ -35,20 +35,26 @@ class DB {
     return snapshot.id;
   }
 
-  Future updateUser (User user) => _firestore.doc('Users/${user.id}').update(user.toJson());
-  
+  Future updateUser(User user) =>
+      _firestore.doc('Users/${user.id}').update(user.toJson());
+
   Future<void> changeLook(String userId) {
-    _firestore.doc('Users/$userId').update({'changeLook':FieldValue.increment(1)});
+    _firestore
+        .doc('Users/$userId')
+        .update({'changeLook': FieldValue.increment(1)});
   }
 
-    Future<void> completeRoute(String userId) {
-    _firestore.doc('Users/$userId').update({'completedRoutes':FieldValue.increment(1)});
+  Future<void> completeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'completedRoutes': FieldValue.increment(1)});
   }
 
-    Future<void> editeRoute(String userId) {
-    _firestore.doc('Users/$userId').update({'editedRoutes':FieldValue.increment(1)});
+  Future<void> editeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'editedRoutes': FieldValue.increment(1)});
   }
-
 
 //----------------------------ROUTES-----------------------------------
 
@@ -82,10 +88,15 @@ class DB {
   Future addFinishedRoute(String userId, FinishedRoute route) =>
       _firestore.collection('Users/$userId/RouteHistory').add(route.toJson());
 
-  Stream<List<FinishedRoute>> getUserHistory(String userId) => _firestore
-      .collection('Users/$userId/RouteHistory')
-      .snapshots()
-      .map((snap) => toFinisedRoutes(snap.docs));
+  Stream<List<FinishedRoute>> getUserHistory(
+          String userId, DateTime initialDateTime, DateTime finishDateTime) =>
+      _firestore
+          .collection('Users/$userId/RouteHistory')
+          .orderBy('dateTime')
+          .where('dateTime', isGreaterThanOrEqualTo: initialDateTime)
+          .where('dateTime', isLessThanOrEqualTo: finishDateTime)
+          .snapshots()
+          .map((snap) => toFinisedRoutes(snap.docs));
 
   Future<User> getCurrentUserName(String email) async {
     QueryDocumentSnapshot snapshot = (await _firestore

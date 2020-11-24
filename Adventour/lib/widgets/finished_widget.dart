@@ -1,10 +1,10 @@
 import 'package:Adventour/controllers/search_engine.dart';
-import 'package:Adventour/models/FinishedRoute.dart' as r;
+import 'package:Adventour/models/FinishedRoute.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:flutter/material.dart';
 
 class FinishedWidget extends StatefulWidget {
-  r.FinishedRoute route;
+  FinishedRoute route;
   Function onTap;
   FinishedWidget({
     this.route,
@@ -16,7 +16,6 @@ class FinishedWidget extends StatefulWidget {
 }
 
 class _FinishedWidgetState extends State<FinishedWidget> {
-  int _selectedPath = 0;
   List<String> _types = [];
 
   @override
@@ -64,30 +63,31 @@ class _FinishedWidgetState extends State<FinishedWidget> {
                           ]),
                     ),
                   ),
-                  // Expanded(
-                  //   child: Row(
-                  //     children: [
-                  //       Icon(
-                  //         Icons.alarm,
-                  //         size: 20,
-                  //       ),
-                  //       SizedBox(
-                  //         width: 5,
-                  //       ),
-                  //       Text(
-                  //         formatDuration(widget.route.paths[_selectedPath]
-                  //             .duration(widget.route.places
-                  //                 .map((place) => place.duration)
-                  //                 .reduce(
-                  //                     (value, element) => value + element))),
-                  //       ),
-                  //       SizedBox(
-                  //         width: 5,
-                  //       ),
-                  //       // CircleIconButton(type:widget.route.paths[_selectedPath].transport , onPressed: nextTransport)
-                  //     ],
-                  //   ),
-                  // ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.alarm,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(formatDuration(widget.route.duration)),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Icon(
+                          Icons.today,
+                          size: 20,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(formatDate(widget.route.dateTime)),
+                      ],
+                    ),
+                  ),
                   Expanded(
                     child: ListView.separated(
                       itemCount: _types.length,
@@ -109,39 +109,27 @@ class _FinishedWidgetState extends State<FinishedWidget> {
                 ],
               ),
             ),
-            // Row(
-            //   children: [
-            //     Text(widget.route.likes.toString()),
-            //     SizedBox(
-            //       width: 5,
-            //     ),
-            //     Icon(Icons.favorite)
-            //   ],
-            // ),
           ],
         ),
       ),
     );
   }
 
-  // void nextTransport() {
-  //   if (_selectedPath == widget.route.paths.length - 1)
-  //     _selectedPath = 0;
-  //   else
-  //     _selectedPath++;
-  //   setState(() {});
-  // }
-
   String formatDuration(Duration duration) {
     String hours, minutes;
-    if (duration.inHours < 10)
-      hours = '0' + duration.inHours.toString();
-    else
-      hours = duration.inHours.toString();
+    hours = duration.inHours.toString();
     if (duration.inMinutes.remainder(60) < 10)
       minutes = '0' + duration.inMinutes.remainder(60).toString();
     else
       minutes = duration.inMinutes.remainder(60).toString();
     return hours + ' h ' + minutes + ' min';
+  }
+
+  String formatDate(DateTime dateTime) {
+    String day, month, year;
+    day = dateTime.day.toString();
+    month = dateTime.month.toString();
+    year = dateTime.year.toString();
+    return day + '/' + month + '/' + year.substring(2);
   }
 }
