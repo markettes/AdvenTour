@@ -96,28 +96,28 @@ class RoutesPage extends StatelessWidget {
                                                     .headline2,
                                               ),
                                             ),
-                                            FlatButton.icon(
-                                              onPressed: () {
-                    
-                                                Navigator.pop(context);
-                                                if(route.isRequested)
-                                                Toast.show('This route has already been requested', context);
-                                                else db.requestRoute(
-                                                    db.currentUserId, route.id);
-                                              },
-                                              icon: Icon(
-                                                Icons.upload_file,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 30,
+                                            if (route.isRequested ||
+                                                route.isHighlight)
+                                              FlatButton.icon(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                  db.requestRoute(
+                                                      db.currentUserId,
+                                                      route.id);
+                                                },
+                                                icon: Icon(
+                                                  Icons.upload_file,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  size: 30,
+                                                ),
+                                                label: Text(
+                                                  'Request',
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline2,
+                                                ),
                                               ),
-                                              label: Text(
-                                                'Request',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline2,
-                                              ),
-                                            ),
                                           ],
                                         ),
                                       ),

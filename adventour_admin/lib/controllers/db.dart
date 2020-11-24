@@ -12,9 +12,12 @@ class DB {
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
 
-  Future addHighlight(String userId, String routeId) => _firestore
+  Future addHighlight(String userId, String routeId) {
+    _firestore.doc('Users/$userId').update({'routesHighlight': FieldValue.increment(1)});
+    _firestore
       .doc('Users/$userId/Routes/$routeId')
       .update({'isHighlight': 'true'});
+  } 
 
   Future deleteRouteRequest(String userId, String routeId) => _firestore
       .doc('Users/$userId/Routes/$routeId')
@@ -26,6 +29,7 @@ class DB {
           var data2 = data['routesHighlight'];
           _firestore.doc('Users/$id').update({'routesHighlight': data2 +1});
   }
+
 }
 
 DB db;
