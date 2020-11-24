@@ -62,8 +62,11 @@ List<Achievement> sortByCompleted(User user, List<Achievement> achievements) {
   List<Achievement> completed = [];
   List<Achievement> notCompleted = [];
   for (var achievement in achievements) {
-    if (user.getAttribute(achievement.affected) != null) {
-      if (user.getAttribute(achievement.affected) >= achievement.objective)
+    int attribute = user.getAttribute(achievement.affected);
+    print('?' + attribute.toString());
+    print('?' + achievement.objective.toString());
+    if (attribute != null) {
+      if (attribute >= achievement.objective)
         completed.add(achievement);
       else
         notCompleted.add(achievement);

@@ -56,7 +56,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
                   if (snapshot.hasError) print(snapshot.error);
                   if (!snapshot.hasData)
                     return Center(child: CircularProgressIndicator());
-                  List<Achievement> achievements =
+                  List<Achievement> achievements = 
                       sortByCompleted(user, snapshot.data);
                   return ListView.separated(
                     itemCount: achievements.length,

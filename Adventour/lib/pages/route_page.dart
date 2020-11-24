@@ -652,10 +652,6 @@ class MapListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User currentUser;
-    db.getCurrentUserName(auth.currentUserEmail).then((value) {
-      currentUser = value;
-    });
     _duration = path.duration(places
         .map((place) => place.duration)
         .reduce((value, element) => value + element));
@@ -802,7 +798,3 @@ class MapListView extends StatelessWidget {
     return hours + ':' + minutes;
   }
 }
-
-@override
-// TODO: implement wantKeepAlive
-bool get wantKeepAlive => throw UnimplementedError();
