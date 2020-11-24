@@ -16,8 +16,7 @@ enum SingingCharacter { duration, time }
 
 class _HistoryPageState extends State<HistoryPage> {
   SingingCharacter _character = SingingCharacter.duration;
-  // r.Route ro = new r.Route(90, ["PARK", "PARK", "PARK"], null, "Diego", "Valencia", "Valencia");
-  // FinishedRoute fr = new FinishedRoute(new r.Route(null, ["PARK", "PARK", "PARK"], null, "Diego", "Valencia", "Valencia"),
+  // FinishedRoute fr = new FinishedRoute(new r.Route(null, null, null, "Diego", "Valencia", "Valencia"),
   //  DateTime.now(), null);
   @override
   Widget build(BuildContext context) {
