@@ -267,7 +267,6 @@ class MyDrawer extends StatelessWidget {
           Container(
             height: 180,
             decoration: BoxDecoration(
-                color: Colors.deepOrange,
                 image: DecorationImage(
                   image: AssetImage('assets/drawer_background.jpg'),
                   fit: BoxFit.cover,
@@ -287,6 +286,7 @@ class MyDrawer extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 50,
+                          backgroundColor: Colors.transparent,
                           backgroundImage: user.image != ''
                               ? NetworkImage(
                                   user.image,
