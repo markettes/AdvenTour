@@ -123,6 +123,7 @@ class _RoutePageState extends State<RoutePage>
                       text: 'SAVE',
                       onPressed: () {
                         if (oldAuthor) {
+                          print(route == null);
                           db.updateRoute(route);
                           db.editeRoute(db.currentUserId);
                         } else {
@@ -130,7 +131,6 @@ class _RoutePageState extends State<RoutePage>
                           db.addRoute(route);
                         }
 
-                        Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
@@ -185,14 +185,14 @@ class _RoutePageState extends State<RoutePage>
                             text: 'SAVE',
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                print(route.toString());
+                                
                                 route.name = _routeNameController.text;
                                 route.author = db.currentUserId;
                                 route.images = route.places
                                     .map((place) =>
                                         place.photos[0].photoReference)
                                     .toList();
-                                
+
                                 db.addRoute(route);
                                 Navigator.pop(context);
                                 Navigator.pop(context);

@@ -77,11 +77,7 @@ class RoutesPage extends StatelessWidget {
                                             FlatButton.icon(
                                               onPressed: () {
                                                 Navigator.pop(context);
-                                                Navigator.pushNamed(
-                                                    context, '/routePage',
-                                                    arguments: {
-                                                      'route': route
-                                                    });
+                                                db.deleteRoute(db.currentUserId, route.id);
                                               },
                                               icon: Icon(
                                                 Icons.delete,
@@ -96,8 +92,8 @@ class RoutesPage extends StatelessWidget {
                                                     .headline2,
                                               ),
                                             ),
-                                            if (route.isRequested ||
-                                                route.isHighlight)
+                                            if (!route.isRequested &&
+                                                !route.isHighlight)
                                               FlatButton.icon(
                                                 onPressed: () {
                                                   Navigator.pop(context);

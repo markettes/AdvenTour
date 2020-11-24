@@ -74,6 +74,7 @@ class Route {
     _likes = List<String>.from(data['likes']);
   }
 
+
   String get id => _id;
 
   String get author => _author;
@@ -118,6 +119,13 @@ class Route {
       if (!types.contains(place.type)) types.add(place.type);
     }
     return types;
+  }
+
+  @override
+  String toString() {
+    return """
+name = $_name
+    """;
   }
 
 
