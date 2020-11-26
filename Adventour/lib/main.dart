@@ -20,7 +20,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localizations.dart';
 
 void main() {
-  //SdkContext.init(IsolateOrigin.main);
   runApp(Adventour());
 }
 
@@ -37,8 +36,8 @@ class Adventour extends StatelessWidget {
       darkTheme: themeData,
       initialRoute: '/',
       supportedLocales: [
-        const Locale('en', 'US'),
-        const Locale('es', 'ES'),
+        const Locale('en', ''),
+        const Locale('es', ''),
       ],
       localizationsDelegates: [
         AppLocalizations.delegate,
@@ -49,8 +48,7 @@ class Adventour extends StatelessWidget {
       localeResolutionCallback: (locale, supportedLocales) { //Test if locale is supported
         var supportedLocale;
          for (supportedLocale in supportedLocales) {
-           if(supportedLocale.languageCode == locale.languageCode && 
-           supportedLocale.contryCode == locale.countryCode){
+           if(supportedLocale.languageCode == locale.languageCode){
              return supportedLocale;
            }
          }
