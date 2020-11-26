@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 
+import '../app_localizations.dart';
+
 class HistoryPage extends StatefulWidget {
   @override
   _HistoryPageState createState() => _HistoryPageState();
@@ -22,7 +24,7 @@ class _HistoryPageState extends State<HistoryPage> {
     String _formatedFinishDateTime = formatDate(_finishDateTime);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Route history'),
+        title: Text(AppLocalizations.of(context).translate('h_route')),
       ),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -81,7 +83,7 @@ class _HistoryPageState extends State<HistoryPage> {
               if (!snapshot.hasData) return CircularProgressIndicator();
               List<FinishedRoute> routes = snapshot.data;
               if (routes.isEmpty)
-                return Center(child: Text('There are not routes'));
+                return Center(child: Text(AppLocalizations.of(context).translate('no_route')));
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView.separated(

@@ -1,14 +1,12 @@
-import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/search_engine.dart';
-import 'package:Adventour/pages/highlight_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/libraries/place.dart';
-import 'package:Adventour/pages/map_page.dart';
-import 'package:Adventour/models/Route.dart' as r;
+
+import '../app_localizations.dart';
 
 class PlacePage extends StatelessWidget {
   Place place;
@@ -75,7 +73,7 @@ class _PlaceBodyInfoState extends State<PlaceBodyInfo> {
           Container(
               height: 200,
               child: widget.place.photos == null || widget.place.photos.isEmpty
-                  ? Center(child: Text('No available photos'))
+                  ? Center(child: Text(AppLocalizations.of(context).translate('no_available')))
                   : CarouselSlider.builder(
                     carouselController: _carouselController,
                       itemCount: widget.place.photos.length,
@@ -118,7 +116,8 @@ class _PlaceBodyInfoState extends State<PlaceBodyInfo> {
                       InfoBut(
                           icon: Icons.access_alarm_outlined,
                           text:
-                              widget.place.openingHours.openNow ? 'Opened' : 'Closed'),
+                              widget.place.openingHours.openNow ? AppLocalizations.of(context).translate('opened') 
+                              : AppLocalizations.of(context).translate('closed')),
                     if (widget.place.openingHours != null) SizedBox(height: 5),
                     if (widget.place.openingHours != null)
                       InfoBut(
@@ -141,7 +140,7 @@ class _PlaceBodyInfoState extends State<PlaceBodyInfo> {
                     (widget.place.reviews != null
                             ? widget.place.reviews.length.toString()
                             : '0') +
-                        " opinions",
+                        AppLocalizations.of(context).translate('opinions'),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
 
