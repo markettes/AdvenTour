@@ -11,11 +11,13 @@ import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/routes_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
-import 'package:Adventour/engine_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:Adventour/pages/profile_page.dart';
 import 'package:Adventour/pages/custom_route_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'app_localizations.dart';
 
 void main() {
   //SdkContext.init(IsolateOrigin.main);
@@ -34,6 +36,26 @@ class Adventour extends StatelessWidget {
       theme: themeData,
       darkTheme: themeData,
       initialRoute: '/',
+      supportedLocales: [
+        const Locale('en', 'US'),
+        const Locale('es', 'ES'),
+      ],
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (locale, supportedLocales) { //Test if locale is supported
+        var supportedLocale;
+         for (supportedLocale in supportedLocales) {
+           if(supportedLocale.languageCode == locale.languageCode && 
+           supportedLocale.contryCode == locale.countryCode){
+             return supportedLocale;
+           }
+         }
+         return supportedLocales.first; //If is not supported, in english
+      },
       routes: {
         '/initPage': (_) => InitPage(),
         '/profile': (_) => ProfilePage(),

@@ -1,0 +1,6 @@
+{
+    "credentials": "Introduce tus credenciales",
+    "email_cannot": "El email no puede estar vacío",
+    "password": "Contraseña",
+    "password_cannot": "La constraseña no puede estar vacía"
+}

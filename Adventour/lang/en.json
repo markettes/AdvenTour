@@ -1,0 +1,6 @@
+{
+    "credentials": "Put your credentials",
+    "email_cannot": "Email cannot be empty",
+    "password": "Password",
+    "password_cannot": "Password cannot be empty"
+}
