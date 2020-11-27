@@ -28,6 +28,8 @@ import 'package:google_maps_webservice/src/places.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:toast/toast.dart';
 
+import '../app_localizations.dart';
+
 class RoutePage extends StatefulWidget {
   @override
   _RoutePageState createState() => _RoutePageState();
@@ -58,7 +60,7 @@ class _RoutePageState extends State<RoutePage>
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text(route == null || route.name == null
-              ? 'Custom route'
+              ? AppLocalizations.of(context).translate('custom_route') 
               : route.name),
           actions: [
             IconButton(
@@ -108,19 +110,19 @@ class _RoutePageState extends State<RoutePage>
                   children: [
                     Text(
                       oldAuthor
-                          ? 'Are you sure you want to edit your route?'
-                          : 'Would you like save this route?',
+                          ? AppLocalizations.of(context).translate('sure_edit') 
+                          : AppLocalizations.of(context).translate('like_save') ,
                       style: Theme.of(context)
                           .textTheme
                           .headline2
                           .copyWith(fontSize: 20),
                     ),
                     Text(
-                      'If your route is a highlight, it lose this',
+                      AppLocalizations.of(context).translate('lose_this') ,
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                     PrimaryButton(
-                      text: 'SAVE',
+                      text: AppLocalizations.of(context).translate('save') ,
                       onPressed: () {
                         if (oldAuthor) {
                           print(route == null);
@@ -157,7 +159,7 @@ class _RoutePageState extends State<RoutePage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Put a name to your route',
+                      AppLocalizations.of(context).translate('put_name') ,
                       style: Theme.of(context)
                           .textTheme
                           .headline2
@@ -171,18 +173,18 @@ class _RoutePageState extends State<RoutePage>
                             height: 100,
                             child: InputText(
                               icon: Icons.flag,
-                              labelText: 'Route name',
+                              labelText: AppLocalizations.of(context).translate('route_name') ,
                               controller: _routeNameController,
                               maxLength: 20,
                               validator: (value) {
                                 if (value.isEmpty)
-                                  return 'Route name can\'t be empty';
+                                  return AppLocalizations.of(context).translate('route_name_empty') ;
                                 return null;
                               },
                             ),
                           ),
                           PrimaryButton(
-                            text: 'SAVE',
+                            text: AppLocalizations.of(context).translate('save'),
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 route.name = _routeNameController.text;
@@ -227,7 +229,7 @@ class _RoutePageState extends State<RoutePage>
       _tabController.animateTo(0);
       setState(() {});
     } else
-      Toast.show('The route needs at least 3 places', context, duration: 3);
+      Toast.show(AppLocalizations.of(context).translate('3_places') , context, duration: 3);
   }
 
   Future _onTapPrediction(Prediction prediction) async {
@@ -239,7 +241,7 @@ class _RoutePageState extends State<RoutePage>
       await _addPlace(place);
     } else {
       FocusScope.of(context).requestFocus(FocusNode());
-      Toast.show('This place is already on the route', context, duration: 3);
+      Toast.show(AppLocalizations.of(context).translate('already_route') , context, duration: 3);
     }
   }
 

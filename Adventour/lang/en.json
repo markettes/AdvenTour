@@ -47,6 +47,15 @@
     "new_email_cannot": "New email cannot be empty",
     "new_email_same": "New email cannot be the same email",
     "mail_changed": "Email changed",
-    "put_username": "Put a username"
-
+    "put_username": "Put a username",
+    "custom_route": "Custom route",
+    "sure_edit": "Are you sure you want to edit your route?",
+    "like_save": "Would you like save this route?",
+    "lose_this": "If your route is a highlight, it lose this",
+    "save": "SAVE",
+    "put_name": "Put a name to your route",
+    "route_name": "Route name",
+    "route_name_empty": "Route name cannot be empty",
+    "3_places": "The route needs at least 3 places",
+    "already_route": "This place is already on the route"
 }
