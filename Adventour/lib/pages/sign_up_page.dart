@@ -5,12 +5,14 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
+
 class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Put your credentials'),
+        title: Text(AppLocalizations.of(context).translate('credentials')),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -55,11 +57,11 @@ class _SignInFormState extends State<SignInForm> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: InputText(
               icon: Icons.person,
-              labelText: 'Username',
+              labelText: AppLocalizations.of(context).translate('username') ,
               maxLength: 15,
               controller: _userNameController,
               validator: (value) {
-                if (value.isEmpty) return 'Username can\'t be empty';
+                if (value.isEmpty) return AppLocalizations.of(context).translate('username_cannot') ;
                 return null;
               },
             ),
@@ -73,7 +75,7 @@ class _SignInFormState extends State<SignInForm> {
               errorText: _emailError,
               controller: _emailController,
               validator: (value) {
-                if (value.isEmpty) return 'Email can\'t be empty';
+                if (value.isEmpty) return AppLocalizations.of(context).translate('email_cannot') ;
                 return null;
               },
             ),
@@ -83,11 +85,11 @@ class _SignInFormState extends State<SignInForm> {
             child: InputText(
               obscured: true,
               icon: Icons.lock,
-              labelText: 'Password',
+              labelText: AppLocalizations.of(context).translate('password') ,
               errorText: _passwordError,
               controller: _passwordController,
               validator: (value) {
-                if (value.isEmpty) return 'Password can\'t be empty';
+                if (value.isEmpty) return AppLocalizations.of(context).translate('password_cannot') ;
                 return null;
               },
             ),

@@ -57,5 +57,17 @@
     "route_name": "Nombre de la ruta",
     "route_name_empty": "El nombre de la ruta no puede estar vacío",
     "3_places": "La ruta necesita, al menos, 3 sitios",
-    "already_route": "Este sitio se encuentra ya en la ruta"
+    "already_route": "Este sitio se encuentra ya en la ruta",
+    "route_most": "La ruta tiene como mucho 8 sitios",
+    "maybe": "Tal vez...",
+    "search_needs": "La búsqueda necesita al menos 1 tipo de sitio",
+    "no_route_available": "No hay ruta disponible",
+    "edit_location": "EDITAR UBICACIÓN",
+    "start": "Empezar",
+    "Delete": "Eliminar",
+    "edit_": "Editar",
+    "empty_routes": "Rutas vacías",
+    "Search": "Search",
+    "HIGHLIGHTS": "DESTACADOS",
+    "CUSTOM": "PERSONALIZAR"
 }

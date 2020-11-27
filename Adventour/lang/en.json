@@ -57,5 +57,17 @@
     "route_name": "Route name",
     "route_name_empty": "Route name cannot be empty",
     "3_places": "The route needs at least 3 places",
-    "already_route": "This place is already on the route"
+    "already_route": "This place is already on the route",
+    "route_most": "The route has at most 8 places",
+    "maybe": "Maybe...",
+    "search_needs": "The search needs at least 1 type place",
+    "no_route_available": "There is no route available",
+    "edit_location": "EDIT LOCATION",
+    "start": "Start",
+    "Delete": "Delete",
+    "edit_": "Edit",
+    "empty_routes": "Empty routes",
+    "Search": "Search",
+    "HIGHLIGHTS": "HIGHLIGHTS",
+    "CUSTOM": "CUSTOM"
 }
