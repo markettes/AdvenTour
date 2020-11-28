@@ -50,8 +50,8 @@ class User {
   set userName(userName) => _userName = userName;
 
   get email => _email;
-  
-  set email(String email)=>_email = email;
+
+  set email(String email) => _email = email;
 
   get image => _image;
 
@@ -87,3 +87,6 @@ completedRoutes = $_completedRoutes
     """;
   }
 }
+
+List<User> toUsers(List docs) =>
+    docs.map((doc) => User.fromFirestore(doc)).toList();

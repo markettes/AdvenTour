@@ -25,6 +25,11 @@ class DB {
       .snapshots()
       .map((doc) => User.fromFirestore(doc));
 
+  Stream<List<User>> getUsers() => _firestore
+      .collectionGroup('Users')
+      .snapshots()
+      .map((snap) => toUsers(snap.docs));
+
   Future<String> signIn(String email) async {
     QueryDocumentSnapshot snapshot = (await _firestore
             .collection('Users')
@@ -35,20 +40,26 @@ class DB {
     return snapshot.id;
   }
 
-  Future updateUser (User user) => _firestore.doc('Users/${user.id}').update(user.toJson());
-  
+  Future updateUser(User user) =>
+      _firestore.doc('Users/${user.id}').update(user.toJson());
+
   Future<void> changeLook(String userId) {
-    _firestore.doc('Users/$userId').update({'changeLook':FieldValue.increment(1)});
+    _firestore
+        .doc('Users/$userId')
+        .update({'changeLook': FieldValue.increment(1)});
   }
 
-    Future<void> completeRoute(String userId) {
-    _firestore.doc('Users/$userId').update({'completedRoutes':FieldValue.increment(1)});
+  Future<void> completeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'completedRoutes': FieldValue.increment(1)});
   }
 
-    Future<void> editeRoute(String userId) {
-    _firestore.doc('Users/$userId').update({'editedRoutes':FieldValue.increment(1)});
+  Future<void> editeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'editedRoutes': FieldValue.increment(1)});
   }
-
 
 //----------------------------ROUTES-----------------------------------
 
