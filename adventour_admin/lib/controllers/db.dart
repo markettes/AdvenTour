@@ -1,7 +1,5 @@
-import 'package:Adventour/models/User.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Adventour/models/Route.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 class DB {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
