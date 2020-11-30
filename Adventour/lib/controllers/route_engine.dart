@@ -90,7 +90,8 @@ class RouteEngine {
       Path path = await directionsEngine.makePath(start, places, transport);
       if (path != null) paths.add(path);
     }
-    Route route = Route(start, places, paths, locationName, locationId);
+    Route route =
+        Route(start, places, paths, db.currentUserId, locationName, locationId);
 
     return route;
   }

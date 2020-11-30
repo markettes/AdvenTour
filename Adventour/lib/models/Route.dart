@@ -22,7 +22,7 @@ class Route {
   bool _isHighlight;
   List<String> _likes;
 
-  Route(start, places, paths, locationName, locationId) {
+  Route(start, places, paths, author, locationName, locationId) {
     _start = start;
     _places = places;
     _paths = paths;
