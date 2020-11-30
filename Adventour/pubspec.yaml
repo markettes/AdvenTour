@@ -46,6 +46,7 @@ dependencies:
   image_picker: ^0.6.7+14
   firebase_storage: ^5.0.1
   date_range_picker: ^1.0.5
+  weather: ^1.2.4
 
 dev_dependencies:
   flutter_test:

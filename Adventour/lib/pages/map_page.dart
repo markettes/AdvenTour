@@ -21,6 +21,9 @@ import 'package:intl/intl.dart';
 
 import '../app_localizations.dart';
 
+DateTime today = DateTime.now();
+
+
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -154,7 +157,8 @@ class _MapPageState extends State<MapPage> {
                             child: TextField(
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: AppLocalizations.of(context).translate('search'),
+                                hintText: AppLocalizations.of(context)
+                                    .translate('search'),
                               ),
                               controller: _locationController,
                               onTap: () async {
@@ -189,6 +193,16 @@ class _MapPageState extends State<MapPage> {
                                           },
                                   ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.wb_sunny,
+                                size: 30,
+                              ),
+                              onPressed: showWeatherDialog,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -216,6 +230,139 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
+
+   String fiveNextDays(int day) {
+     if(day > 7){day = day - 7;}
+    if(day == 1){return "Monday";}
+    else if(day == 2){return "Tuesday";}
+    else if(day == 3){return "Wednesday";}
+    else if(day == 4){return "Thursday";}
+    else if(day == 5){return "Friday";}
+    else if(day == 6){return "Saturday";}
+    else if(day == 7){return "Sunday";}
+
+  }
+
+  Future showWeatherDialog() => showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            title: Center(
+                child: Text(
+              "TODAY",
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 30),
+            )),
+            content: Builder(
+              builder: (context) {
+                return Container(
+                  height: 200,
+                  width: 400,
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.wb_sunny,
+                        size: 100,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: Theme.of(context).primaryColor,
+                        indent: 8,
+                        endIndent: 8,
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+1),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  Icons.email,
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  Icons.email,
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+3),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  Icons.email,
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+4),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  Icons.email,
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+5),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  Icons.email,
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ));
 
   Future _onSubmitted(String value) async {
     List<Place> places = await searchEngine.searchByText(
@@ -381,7 +528,8 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              AppLocalizations.of(context).translate('achievements'),
+                              AppLocalizations.of(context)
+                                  .translate('achievements'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
@@ -493,6 +641,7 @@ class MyDrawer extends StatelessWidget {
                               Text(
                                 'Logout',
                                 style: Theme.of(context).textTheme.bodyText1,
+                                
                               )
                             ],
                           ),
