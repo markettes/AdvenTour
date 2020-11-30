@@ -55,6 +55,7 @@ Future<void> main() async {
       ],
       'Marcos Gálvez',
       'Valencia con niños',
+      'asdasd',
     );
 
     routePage.route = r;
@@ -109,6 +110,7 @@ Future<void> main() async {
       ],
       'Marcos Gálvez',
       'Valencia con niños',
+      'asdasd',
     );
     routePage.route = r;
     await routePage.removePlace(routePage.route.places[3]);
