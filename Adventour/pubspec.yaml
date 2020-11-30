@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   carousel_slider: ^2.3.1
   cloud_firestore: ^0.14.1+3
   cupertino_icons: ^1.0.0
@@ -48,6 +50,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.8.1
+
+flutter_icons:
+  image_path: "assets/icono.png"
+  ios: true
+  android: true
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -63,7 +72,9 @@ flutter:
     - assets/map_styles/
     - assets/empty_photo.jpg
     - assets/drawer_background.jpg
-  #   - images/a_dot_ham.jpeg
+    - lang/en.json
+    - lang/es.json
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

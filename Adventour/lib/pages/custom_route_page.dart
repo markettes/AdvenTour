@@ -14,6 +14,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:toast/toast.dart';
 
+import '../app_localizations.dart';
+
 class CustomRoutePage extends StatefulWidget {
   @override
   _CustomRoutePageState createState() => _CustomRoutePageState();
@@ -25,7 +27,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
   String _locationName;
   String _locationId;
   TextEditingController _locationController =
-      TextEditingController(text: 'Your location');
+      TextEditingController(text: "Your location");
 
   @override
   void initState() {
@@ -37,7 +39,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Creating your route'),
+        title: Text(AppLocalizations.of(context).translate('creating')),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -57,7 +59,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   Expanded(
                     child: InputText(
                       controller: _locationController,
-                      labelText: 'Route zone',
+                      labelText: AppLocalizations.of(context).translate('route_zone'),
                       icon: Icons.location_on,
                       onTap: () => PlacesAutocomplete.show(
                         context: context,
@@ -80,7 +82,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                       children: [
                         Align(
                             alignment: Alignment.topLeft,
-                            child: Text('Place types',
+                            child: Text(AppLocalizations.of(context).translate('place_types'),
                                 style: Theme.of(context).textTheme.headline2)),
                         Expanded(
                           child: Padding(
@@ -101,7 +103,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   PrimaryButton(
-                    text: 'CREATE',
+                    text: AppLocalizations.of(context).translate('create'),
                     onPressed: () async {
                       r.Route route = await routeEngine.makeRoute(
                           _locationId, _placeTypes, MEDIUM_DISTANCE);
@@ -127,7 +129,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
         sortPlaceTypes(_placeTypes);
         setState(() {});
       } else
-        Toast.show('The route needs at least 4 type places', context,
+        Toast.show(AppLocalizations.of(context).translate('types'), context,
             duration: 3);
     } else {
       _placeTypes.add(placeType);

@@ -2,6 +2,8 @@ import 'package:Adventour/widgets/google_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 
+import '../app_localizations.dart';
+
 class InitPage extends StatelessWidget {
   InitPage({this.allowSignUp = true});
   bool allowSignUp;
@@ -32,7 +34,7 @@ class InitPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: Text(
-                        "Don't you have account?",
+                        AppLocalizations.of(context).translate('account'),
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),

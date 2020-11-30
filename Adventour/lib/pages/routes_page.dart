@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:toast/toast.dart';
 
+import '../app_localizations.dart';
+
 class RoutesPage extends StatelessWidget {
   const RoutesPage({Key key}) : super(key: key);
 
@@ -15,7 +17,7 @@ class RoutesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My routes'),
+        title: Text(AppLocalizations.of(context).translate('routes') ),
       ),
       body: StreamBuilder(
         stream: db.getRoutes(db.currentUserId),
@@ -68,7 +70,7 @@ class RoutesPage extends StatelessWidget {
                                                 size: 30,
                                               ),
                                               label: Text(
-                                                'Edit',
+                                                AppLocalizations.of(context).translate('edit_') ,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline2,
@@ -86,7 +88,7 @@ class RoutesPage extends StatelessWidget {
                                                 size: 30,
                                               ),
                                               label: Text(
-                                                'Delete',
+                                                AppLocalizations.of(context).translate('Delete'),
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headline2,
@@ -147,7 +149,7 @@ class RoutesPage extends StatelessWidget {
                       );
                     },
                   )
-                : Center(child: Text('Empty routes')),
+                : Center(child: Text(AppLocalizations.of(context).translate('empty_routes') )),
           );
         },
         // builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {

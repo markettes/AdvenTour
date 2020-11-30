@@ -28,6 +28,8 @@ import 'package:google_maps_webservice/src/places.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:toast/toast.dart';
 
+import '../app_localizations.dart';
+
 class RoutePage extends StatefulWidget {
   @override
   _RoutePageState createState() => _RoutePageState();
@@ -58,7 +60,7 @@ class _RoutePageState extends State<RoutePage>
         key: _scaffoldKey,
         appBar: AppBar(
           title: Text(route == null || route.name == null
-              ? 'Custom route'
+              ? AppLocalizations.of(context).translate('custom_route') 
               : route.name),
           actions: [
             IconButton(
@@ -108,19 +110,19 @@ class _RoutePageState extends State<RoutePage>
                   children: [
                     Text(
                       oldAuthor
-                          ? 'Are you sure you want to edit your route?'
-                          : 'Would you like save this route?',
+                          ? AppLocalizations.of(context).translate('sure_edit') 
+                          : AppLocalizations.of(context).translate('like_save') ,
                       style: Theme.of(context)
                           .textTheme
                           .headline2
                           .copyWith(fontSize: 20),
                     ),
                     Text(
-                      'If your route is a highlight, it lose this',
+                      AppLocalizations.of(context).translate('lose_this') ,
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
                     PrimaryButton(
-                      text: 'SAVE',
+                      text: AppLocalizations.of(context).translate('save') ,
                       onPressed: () {
                         if (oldAuthor) {
                           print(route == null);
@@ -157,7 +159,7 @@ class _RoutePageState extends State<RoutePage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Put a name to your route',
+                      AppLocalizations.of(context).translate('put_name') ,
                       style: Theme.of(context)
                           .textTheme
                           .headline2
@@ -171,18 +173,18 @@ class _RoutePageState extends State<RoutePage>
                             height: 100,
                             child: InputText(
                               icon: Icons.flag,
-                              labelText: 'Route name',
+                              labelText: AppLocalizations.of(context).translate('route_name') ,
                               controller: _routeNameController,
                               maxLength: 20,
                               validator: (value) {
                                 if (value.isEmpty)
-                                  return 'Route name can\'t be empty';
+                                  return AppLocalizations.of(context).translate('route_name_empty') ;
                                 return null;
                               },
                             ),
                           ),
                           PrimaryButton(
-                            text: 'SAVE',
+                            text: AppLocalizations.of(context).translate('save'),
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 route.name = _routeNameController.text;
@@ -227,7 +229,7 @@ class _RoutePageState extends State<RoutePage>
       _tabController.animateTo(0);
       setState(() {});
     } else
-      Toast.show('The route needs at least 3 places', context, duration: 3);
+      Toast.show(AppLocalizations.of(context).translate('3_places') , context, duration: 3);
   }
 
   Future _onTapPrediction(Prediction prediction) async {
@@ -239,7 +241,7 @@ class _RoutePageState extends State<RoutePage>
       await _addPlace(place);
     } else {
       FocusScope.of(context).requestFocus(FocusNode());
-      Toast.show('This place is already on the route', context, duration: 3);
+      Toast.show(AppLocalizations.of(context).translate('already_route') , context, duration: 3);
     }
   }
 
@@ -274,7 +276,7 @@ class _RoutePageState extends State<RoutePage>
         ),
       );
     else
-      Toast.show('The route has at most 8 places', context, duration: 3);
+      Toast.show(AppLocalizations.of(context).translate('route_most') , context, duration: 3);
   }
 
   void nextTransport() {
@@ -355,7 +357,7 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
                       return Column(
                         children: [
                           Text(
-                            'Maybe...',
+                            AppLocalizations.of(context).translate('maybe') ,
                             style: Theme.of(context).textTheme.headline2,
                           ),
                           SizedBox(height: 8),
@@ -379,7 +381,7 @@ class _RecommendationsWidgetState extends State<RecommendationsWidget> {
         _recommendations.removeWhere((place) => place.type == placeType);
         setState(() {});
       } else
-        Toast.show('The search needs at least 1 type places', context,
+        Toast.show(AppLocalizations.of(context).translate('search_needs') , context,
             duration: 3);
     } else {
       _placeTypes.add(placeType);
@@ -624,13 +626,13 @@ class NotRouteAvailable extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'There is not route available',
+                AppLocalizations.of(context).translate('no_route_available') ,
                 style: Theme.of(context).textTheme.headline2,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 5),
               PrimaryButton(
-                text: 'EDIT LOCATION',
+                text: AppLocalizations.of(context).translate('edit_location') ,
                 icon: Icons.edit,
                 style: ButtonType.Normal,
                 onPressed: () {
@@ -697,7 +699,7 @@ class MapListView extends StatelessWidget {
                           size: 50,
                         ),
                         Text(
-                          'Start',
+                          AppLocalizations.of(context).translate('start') ,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ],
@@ -752,7 +754,7 @@ class MapListView extends StatelessWidget {
                               ),
                               actions: <Widget>[
                                 IconSlideAction(
-                                  caption: 'Delete',
+                                  caption: AppLocalizations.of(context).translate('Delete') ,
                                   color: Colors.transparent,
                                   icon: Icons.delete,
                                   foregroundColor:

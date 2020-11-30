@@ -8,6 +8,7 @@ import 'package:Adventour/pages/init_page.dart';
 
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
 import 'map_page.dart';
 
 class RootPage extends StatelessWidget {
@@ -58,7 +59,7 @@ class RootPage extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'Put a username',
+                    AppLocalizations.of(context).translate('put_username') ,
                     style: Theme.of(context)
                         .textTheme
                         .headline2
@@ -72,11 +73,11 @@ class RootPage extends StatelessWidget {
                           height: 100,
                           child: InputText(
                             icon: Icons.person,
-                            labelText: 'Username',
+                            labelText: AppLocalizations.of(context).translate('username') ,
                             controller: _userNameController,
                             validator: (value) {
                               if (value.isEmpty)
-                                return 'Username can\'t be empty';
+                                return AppLocalizations.of(context).translate('username_cannot') ;
                               return null;
                             },
                           ),

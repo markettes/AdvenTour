@@ -4,6 +4,8 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
+
 class StylePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,12 +35,12 @@ class StylePage extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
                 PrimaryButton(
-                  text: 'HIGHLIGHTS',
+                  text: AppLocalizations.of(context).translate('HIGHLIGHTS') ,
                   onPressed: () {},
                   icon: Icons.star,
                 ),
                 PrimaryButton(
-                  text: 'CUSTOM',
+                  text: AppLocalizations.of(context).translate('CUSTOM') ,
                   onPressed: () {},
                   style: ButtonType.Void,
                   icon: Icons.edit,

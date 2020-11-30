@@ -3,11 +3,12 @@ import 'package:Adventour/controllers/storage.dart';
 import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
+
+import '../app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -41,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text(AppLocalizations.of(context).translate('Profile')),
       ),
       body: StreamBuilder(
           stream: db.getUser(db.currentUserId),
@@ -106,17 +107,17 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: InputText(
                                 controller: _userNameController,
                                 icon: Icons.person,
-                                labelText: 'Username',
+                                labelText: AppLocalizations.of(context).translate('username') ,
                                 validator: (value) {
                                   if (value.isEmpty)
-                                    return 'Username can\'t be empty';
+                                    return AppLocalizations.of(context).translate('username_cannot') ;
                                   return null;
                                 },
                               ),
                             ),
                             SizedBox(height: 10),
                             PrimaryButton(
-                              text: 'EDIT',
+                              text: AppLocalizations.of(context).translate('edit') ,
                               icon: Icons.edit,
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
@@ -137,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               FlatButton(
                                 onPressed: showEmailDialog,
                                 child: Text(
-                                  'Change email',
+                                  AppLocalizations.of(context).translate('change_email') ,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2
@@ -148,7 +149,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               FlatButton(
                                 onPressed: showPasswordDialog,
                                 child: Text(
-                                  'Change password',
+                                  AppLocalizations.of(context).translate('change_password') ,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2
@@ -187,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       children: [
                         Text(
-                          'Put a new password',
+                          AppLocalizations.of(context).translate('put_password') ,
                           style: Theme.of(context)
                               .textTheme
                               .headline2
@@ -204,13 +205,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   height: 100,
                                   child: InputText(
                                     icon: Icons.lock,
-                                    labelText: 'Password',
+                                    labelText: AppLocalizations.of(context).translate('password') ,
                                     errorText: _passwordError,
                                     controller: _passwordController,
                                     obscured: true,
                                     validator: (value) {
                                       if (value.isEmpty)
-                                        return 'Password can\'t be empty';
+                                        return AppLocalizations.of(context).translate('password_cannot') ;
                                       return null;
                                     },
                                   ),
@@ -223,19 +224,19 @@ class _ProfilePageState extends State<ProfilePage> {
                                   height: 100,
                                   child: InputText(
                                     icon: Icons.lock,
-                                    labelText: 'New password',
+                                    labelText: AppLocalizations.of(context).translate('new_password') ,
                                     errorText: _newPasswordError,
                                     controller: _newPasswordController,
                                     obscured: true,
                                     validator: (value) {
                                       if (value.isEmpty)
-                                        return 'New password can\'t be empty';
+                                        return AppLocalizations.of(context).translate('new_password_cannot') ;
                                       print('?' +
                                           value +
                                           ' ' +
                                           _passwordController.text);
                                       if (value == _passwordController.text)
-                                        return 'New password can\'t be the same password';
+                                        return AppLocalizations.of(context).translate('new_password_same') ;
                                       return null;
                                     },
                                   ),
@@ -251,7 +252,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       await auth.changePassword(
                                           _newPasswordController.text);
                                       Navigator.pop(context);
-                                      Toast.show('Password changed', context,
+                                      Toast.show(AppLocalizations.of(context).translate('password_change') , context,
                                           duration: 3);
                                     } catch (e) {
                                       print('?error');
@@ -296,7 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       children: [
                         Text(
-                          'Put a new email',
+                          AppLocalizations.of(context).translate('new_email') ,
                           style: Theme.of(context)
                               .textTheme
                               .headline2
@@ -313,13 +314,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   height: 100,
                                   child: InputText(
                                     icon: Icons.lock,
-                                    labelText: 'Password',
+                                    labelText: AppLocalizations.of(context).translate('password') ,
                                     errorText: _passwordError,
                                     controller: _passwordController,
                                     obscured: true,
                                     validator: (value) {
                                       if (value.isEmpty)
-                                        return 'Password can\'t be empty';
+                                        return AppLocalizations.of(context).translate('password_cannot') ;
                                       return null;
                                     },
                                   ),
@@ -332,15 +333,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                   height: 100,
                                   child: InputText(
                                     icon: Icons.email,
-                                    labelText: 'New email',
+                                    labelText: AppLocalizations.of(context).translate('new_email') ,
                                     errorText: _emailError,
                                     controller: _emailController,
                                     obscured: false,
                                     validator: (value) {
                                       if (value.isEmpty)
-                                        return 'New email can\'t be empty';
+                                        return AppLocalizations.of(context).translate('new_email_cannot') ;
                                       if (value == _email)
-                                        return 'New email can\'t be the same email';
+                                        return AppLocalizations.of(context).translate('new_email_same') ;
                                       return null;
                                     },
                                   ),
@@ -359,7 +360,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       _user.email = _emailController.text;
                                       db.updateUser(_user);
                                       Navigator.pop(context);
-                                      Toast.show('Email changed', context,
+                                      Toast.show(AppLocalizations.of(context).translate('mail_changed') , context,
                                           duration: 3);
                                     } catch (e) {
                                       print('?' + e.code);
