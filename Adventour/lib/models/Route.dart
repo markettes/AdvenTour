@@ -188,8 +188,7 @@ class Path {
   }
 
   List<Stretch> get stretchs => _stretchs;
-
-  get transport => _transport;
+  String get transport => _transport;
 
   Duration duration(Duration placesDuration) {
     List<Duration> stretchsDurations =
@@ -201,6 +200,13 @@ class Path {
     // Duration placesDuration =
     //     placesDurations.reduce((value, element) => value + element);
     return pathDuration + placesDuration;
+  }
+
+  @override
+  bool operator ==(other) {
+    return (other is Path) &&
+        _transport == other.transport &&
+        _stretchs == other.stretchs;
   }
 }
 
@@ -232,6 +238,16 @@ class Stretch {
     _destinationId = data['destinationId'];
   }
 
+  @override
+  bool operator ==(other) {
+    return (other is Stretch) &&
+        _duration == other.duration &&
+        roundDouble(_destination.latitude, 4) ==
+            roundDouble(other.destination.latitude, 4) &&
+        roundDouble(_destination.longitude, 4) ==
+            roundDouble(other.destination.longitude, 4);
+  }
+
   String get id => _id;
 
   Duration get duration => _duration;
@@ -239,4 +255,9 @@ class Stretch {
   LatLng get destination => _destination;
 
   String get destinationId => _destinationId;
+
+  double roundDouble(double value, int places) {
+    double mod = pow(10.0, places);
+    return ((value * mod).round().toDouble() / mod);
+  }
 }
