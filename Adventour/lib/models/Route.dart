@@ -22,11 +22,10 @@ class Route {
   bool _isHighlight;
   List<String> _likes;
 
-  Route(start, places, paths, author, locationName, locationId) {
+  Route(start, places, paths, locationName, locationId) {
     _start = start;
     _places = places;
     _paths = paths;
-    _author = author;
     _creationDate = DateTime.now();
     _locationName = locationName;
     _locationId = locationId;

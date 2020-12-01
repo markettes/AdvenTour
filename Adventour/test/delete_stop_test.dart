@@ -10,6 +10,35 @@ import 'dart:math';
 
 Future<void> main() async {
   var routePage;
+
+  test('delete stop', () async {
+    routePage = RoutePage().createState();
+    List<String> _placeTypes = [PARK, TOURIST_ATTRACTION, RESTAURANT, MUSEUM];
+    Route route = await routeEngine.makeRoute(
+        'ChIJb7Dv8ExPYA0ROR1_HwFRo7Q', _placeTypes, MEDIUM_DISTANCE);
+    routePage.route = route;
+    expect(route.places.length, 6);
+    routePage.removePlace(route.places[5]);
+    expect(route.places.length, 5);
+  });
+  test('delete stretch', () async {
+    routePage = RoutePage().createState();
+    List<String> _placeTypes = [PARK, TOURIST_ATTRACTION, RESTAURANT, MUSEUM];
+    Route route = await routeEngine.makeRoute(
+        'ChIJb7Dv8ExPYA0ROR1_HwFRo7Q', _placeTypes, MEDIUM_DISTANCE);
+    routePage.route = route;
+    expect(routePage.route.paths[0].stretchs.length, 6);
+    for (var st in routePage.route.paths[0].stretchs) {
+      print(st.duration.inMinutes);
+      print(st.destination);
+    }
+    await routePage.removePlace(route.places[5]);
+    for (var st in routePage.route.paths[0].stretchs) {
+      print(st.duration.inMinutes);
+      print(st.destination);
+    }
+    expect(routePage.route.paths[0].stretchs.length, 5);
+  });
   test('is deleting the stop', () async {
     routePage = RoutePage().createState();
 
@@ -53,7 +82,6 @@ Future<void> main() async {
               Duration(minutes: 25), '4th stretch')
         ], BICYCLE),
       ],
-      'Marcos Gálvez',
       'Valencia con niños',
       'asdasd',
     );
@@ -108,7 +136,6 @@ Future<void> main() async {
               Duration(minutes: 25), '4th stretch')
         ], BICYCLE),
       ],
-      'Marcos Gálvez',
       'Valencia con niños',
       'asdasd',
     );
