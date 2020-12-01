@@ -10,6 +10,7 @@ class User {
   int _completedRoutes;
   int _editedRoutes;
   int _routesHighlight;
+  String _countryCode;
 
   User(userName, email, [image = '']) {
     _userName = userName;
@@ -31,6 +32,7 @@ class User {
     _completedRoutes = data['completedRoutes'];
     _editedRoutes = data['editedRoutes'];
     _routesHighlight = data['routesHighlight'];
+    _countryCode = data['countryCode'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +43,7 @@ class User {
         'completedRoutes': _completedRoutes,
         'editedRoutes': _editedRoutes,
         "routesHighlight": _routesHighlight,
+        'countryCode':_countryCode
       };
 
   get id => _id;
@@ -64,6 +67,10 @@ class User {
   get editedRoutes => _editedRoutes;
 
   get routesHighlight => _routesHighlight;
+
+  get countryCode => _countryCode;
+
+  set countryCode(String countryCode) => _countryCode = countryCode;
 
   int getAttribute(String affected) {
     switch (affected) {

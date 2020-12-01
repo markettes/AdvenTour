@@ -19,6 +19,7 @@ import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -82,12 +83,14 @@ class _RoutePageState extends State<RoutePage>
                     route: route,
                   ),
                   MapListView(
-                    path: route.paths[_selectedPath],
-                    places: route.places,
-                    tabController: _tabController,
-                    onPressedAdd: _onPressedAdd,
-                    removePlace: _removePlace,
-                  )
+                      path: route.paths[_selectedPath],
+                      places: route.places,
+                      tabController: _tabController,
+                      onPressedAdd: _onPressedAdd,
+                      removePlace: _removePlace,
+                      refresh: () {
+                        setState(() {});
+                      })
                 ],
               ));
   }
@@ -115,15 +118,10 @@ class _RoutePageState extends State<RoutePage>
                           .headline2
                           .copyWith(fontSize: 20),
                     ),
-                    Text(
-                      'If your route is a highlight, it lose this',
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
                     PrimaryButton(
                       text: 'SAVE',
                       onPressed: () {
                         if (oldAuthor) {
-                          print(route == null);
                           db.updateRoute(route);
                           db.editeRoute(db.currentUserId);
                         } else {
@@ -226,8 +224,10 @@ class _RoutePageState extends State<RoutePage>
       route.paths = paths;
       _tabController.animateTo(0);
       setState(() {});
-    } else
+    } else {
+      FocusScope.of(context).requestFocus(FocusNode());
       Toast.show('The route needs at least 3 places', context, duration: 3);
+    }
   }
 
   Future _onTapPrediction(Prediction prediction) async {
@@ -244,16 +244,21 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future _addPlace(Place place) async {
-    route.addPlace(place);
-    List<Path> paths = [];
-    for (var transport in transports) {
-      paths.add(await directionsEngine.makePath(
-          route.start, route.places, transport));
-    }
-    route.paths = paths;
-    Navigator.pop(context);
-    _tabController.animateTo(0);
-    setState(() {});
+    if (Geolocator.distanceBetween(place.latitude, place.longitude,
+            route.start.latitude, route.start.longitude) <
+        20000) {
+      route.addPlace(place);
+      List<Path> paths = [];
+      for (var transport in transports) {
+        paths.add(await directionsEngine.makePath(
+            route.start, route.places, transport));
+      }
+      route.paths = paths;
+      Navigator.pop(context);
+      _tabController.animateTo(0);
+      setState(() {});
+    } else
+      Toast.show('Away place, please select closer places', context);
   }
 
   Future _onPressedAdd() async {
@@ -275,6 +280,11 @@ class _RoutePageState extends State<RoutePage>
       );
     else
       Toast.show('The route has at most 8 places', context, duration: 3);
+  }
+
+  void _changeDuration(Place place, Duration duration) {
+    place.duration = duration;
+    setState(() {});
   }
 
   void nextTransport() {
@@ -462,8 +472,6 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     _mapController.drawPolyline(_polyline);
   }
 
-  bool _listVisible = true;
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -493,30 +501,17 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
             }
             setState(() {});
           }),
-          onCameraMoveStarted: () {
-            _listVisible = false;
-            setState(() {});
-          },
-          onCameraIdle: () {
-            _listVisible = true;
-            setState(() {});
-          },
           myLocationEnabled: true,
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
         ),
         Align(
           alignment: Alignment.bottomRight,
-          child: AnimatedOpacity(
-            opacity: _listVisible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 600),
-            curve: Curves.fastOutSlowIn,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SquareIconButton(
-                icon: Icons.list,
-                onPressed: () => widget.tabController.animateTo(1),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SquareIconButton(
+              icon: Icons.list,
+              onPressed: () => widget.tabController.animateTo(1),
             ),
           ),
         ),
@@ -562,16 +557,11 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         //   ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: AnimatedOpacity(
-            opacity: _listVisible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 600),
-            curve: Curves.fastOutSlowIn,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleIconButton(
-                type: widget.selectedPath.transport,
-                onPressed: widget.nextTransport,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleIconButton(
+              type: widget.selectedPath.transport,
+              onPressed: widget.nextTransport,
             ),
           ),
         )
@@ -653,6 +643,7 @@ class MapListView extends StatelessWidget {
     @required this.removePlace,
     @required this.onPressedAdd,
     @required TabController tabController,
+    @required this.refresh,
   }) : tabController = tabController;
 
   r.Path path;
@@ -660,6 +651,7 @@ class MapListView extends StatelessWidget {
   TabController tabController;
   Function onPressedAdd;
   Function removePlace;
+  Function refresh;
   Duration _duration;
 
   @override
@@ -721,47 +713,61 @@ class MapListView extends StatelessWidget {
                                     ' min'),
                               ],
                             ),
-                            Slidable(
-                              actionPane: SlidableDrawerActionPane(),
-                              actionExtentRatio: 0.25,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                      height: 50,
-                                      child: CircleIcon(type: place.type)),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          place.name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        Text(place.adress),
-                                        Text(place.duration.inMinutes
-                                                .toString() +
-                                            ' min')
-                                      ],
-                                    ),
-                                  )
+                            GestureDetector(
+                              child: Slidable(
+                                actionPane: SlidableDrawerActionPane(),
+                                actionExtentRatio: 0.25,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                        height: 50,
+                                        child: CircleIcon(type: place.type)),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            place.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                          Text(place.adress),
+                                          Text(place.duration.inMinutes
+                                                  .toString() +
+                                              ' min')
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                actions: <Widget>[
+                                  IconSlideAction(
+                                    caption: 'Delete',
+                                    color: Colors.transparent,
+                                    icon: Icons.delete,
+                                    foregroundColor:
+                                        Theme.of(context).primaryColor,
+                                    onTap: () async {
+                                      removePlace(place);
+                                    },
+                                  ),
                                 ],
                               ),
-                              actions: <Widget>[
-                                IconSlideAction(
-                                  caption: 'Delete',
-                                  color: Colors.transparent,
-                                  icon: Icons.delete,
-                                  foregroundColor:
-                                      Theme.of(context).primaryColor,
-                                  onTap: () async {
-                                    removePlace(place);
-                                  },
-                                ),
-                              ],
+                              onLongPress: () async {
+                                Duration duration = await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return DurationDialog(
+                                          duration: place.duration);
+                                    });
+                                if (duration != null) {
+                                  place.duration = duration;
+                                  refresh();
+                                }
+                              },
                             )
                           ],
                         );
@@ -808,5 +814,68 @@ class MapListView extends StatelessWidget {
     else
       minutes = _duration.inMinutes.remainder(60).toString();
     return hours + ':' + minutes;
+  }
+}
+
+class DurationDialog extends StatefulWidget {
+  DurationDialog({
+    @required this.duration,
+  });
+  Duration duration;
+  @override
+  _DurationDialogState createState() => _DurationDialogState();
+}
+
+class _DurationDialogState extends State<DurationDialog> {
+  Duration _duration;
+
+  @override
+  void initState() {
+    _duration = widget.duration;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        height: 300,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Change estimate place duration',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(fontSize: 18),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Expanded(
+                child: DurationPicker(
+                  duration: _duration,
+                  onChange: (duration) {
+                    if (duration < Duration(hours: 2)) {
+                      _duration = duration;
+                      setState(() {});
+                    }
+                  },
+                ),
+              ),
+              FlatButton(
+                child: Text('Save'),
+                onPressed: () {
+                  Navigator.pop(context, _duration);
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

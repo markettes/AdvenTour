@@ -44,6 +44,8 @@ dependencies:
   image_picker: ^0.6.7+14
   firebase_storage: ^5.0.1
   date_range_picker: ^1.0.5
+  country_list_pick: ^1.0.1+2
+  flutter_duration_picker: "^1.0.0"
 
 dev_dependencies:
   flutter_test:

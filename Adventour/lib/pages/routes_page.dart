@@ -1,5 +1,6 @@
 import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/route_widget.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
@@ -9,13 +10,16 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:toast/toast.dart';
 
 class RoutesPage extends StatelessWidget {
-  const RoutesPage({Key key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('My routes'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () => Navigator.pushNamed(context, '/customRoutePage'),
+        child: Icon(Icons.add,color:Colors.white,size: 30,),
       ),
       body: StreamBuilder(
         stream: db.getRoutes(db.currentUserId),
@@ -32,130 +36,218 @@ class RoutesPage extends StatelessWidget {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       r.Route route = routes[index];
-                      return Slidable(
-                        actionPane: SlidableDrawerActionPane(),
-                        actionExtentRatio: 0.25,
-                        actions: <Widget>[
-                          IconSlideAction(
-                            color: Colors.transparent,
-                            iconWidget: Icon(
-                              Icons.more_vert,
-                              size: 30,
-                            ),
-                            foregroundColor: Theme.of(context).primaryColor,
-                            onTap: () => showDialog(
-                                context: context,
-                                builder: (context) => Dialog(
-                                      child: Container(
-                                        height: 180,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            FlatButton.icon(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                Navigator.pushNamed(
-                                                    context, '/routePage',
-                                                    arguments: {
-                                                      'route': route
-                                                    });
-                                              },
-                                              icon: Icon(
-                                                Icons.edit,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 30,
-                                              ),
-                                              label: Text(
-                                                'Edit',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline2,
-                                              ),
-                                            ),
-                                            FlatButton.icon(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                db.deleteRoute(db.currentUserId, route.id);
-                                              },
-                                              icon: Icon(
-                                                Icons.delete,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                                size: 30,
-                                              ),
-                                              label: Text(
-                                                'Delete',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headline2,
-                                              ),
-                                            ),
-                                            if (!route.isRequested &&
-                                                !route.isHighlight)
-                                              FlatButton.icon(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  db.requestRoute(
-                                                      db.currentUserId,
-                                                      route.id);
-                                                },
-                                                icon: Icon(
-                                                  Icons.upload_file,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                  size: 30,
-                                                ),
-                                                label: Text(
-                                                  'Request',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headline2,
-                                                ),
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    )),
-                          ),
-                          // IconSlideAction(
-                          //   caption: 'Request',
-                          //   color: Colors.transparent,
-                          //   icon: Icons.file_upload,
-                          //   foregroundColor: Theme.of(context).primaryColor,
-                          //   onTap: () =>
-                          //       db.requestRoute(db.currentUserId, route.id),
-                          // ),
-                        ],
-                        // secondaryActions: [
-                        //   IconSlideAction(
-                        //     caption: 'Delete',
-                        //     color: Colors.transparent,
-                        //     icon: Icons.delete,
-                        //     foregroundColor: Theme.of(context).primaryColor,
-                        //     onTap: () =>
-                        //         db.deleteRoute(route.author, route.id),
-                        //   ),
-                        // ],
+                      return GestureDetector(
                         child: RouteWidget(
                           route: route,
-                          onTap: () => Navigator.pushNamed(
-                              context, '/navigationPage',
-                              arguments: {'route': route}),
+                          onTap: () => showModalBottomSheet(
+                            context: context,
+                            builder: (context) =>
+                                BottomSheetRoutes(route: route),
+                          ),
                         ),
+
+                        // onTap: () => showDialog(
+                        //         context: context,
+                        //         builder: (context) => Dialog(
+                        //               child: Container(
+                        //                 height: 180,
+                        //                 child: Column(
+                        //                   mainAxisAlignment:
+                        //                       MainAxisAlignment.center,
+                        //                   children: [
+                        //                     FlatButton.icon(
+                        //                       onPressed: () {
+                        //                         Navigator.pop(context);
+                        //                         Navigator.pushNamed(
+                        //                             context, '/routePage',
+                        //                             arguments: {
+                        //                               'route': route
+                        //                             });
+                        //                       },
+                        //                       icon: Icon(
+                        //                         Icons.edit,
+                        //                         color: Theme.of(context)
+                        //                             .primaryColor,
+                        //                         size: 30,
+                        //                       ),
+                        //                       label: Text(
+                        //                         'Edit',
+                        //                         style: Theme.of(context)
+                        //                             .textTheme
+                        //                             .headline2,
+                        //                       ),
+                        //                     ),
+                        //                     FlatButton.icon(
+                        //                       onPressed: () {
+                        //                         Navigator.pop(context);
+                        //                         db.deleteRoute(
+                        //                             db.currentUserId, route.id);
+                        //                       },
+                        //                       icon: Icon(
+                        //                         Icons.delete,
+                        //                         color: Theme.of(context)
+                        //                             .primaryColor,
+                        //                         size: 30,
+                        //                       ),
+                        //                       label: Text(
+                        //                         'Delete',
+                        //                         style: Theme.of(context)
+                        //                             .textTheme
+                        //                             .headline2,
+                        //                       ),
+                        //                     ),
+                        //                     FlatButton.icon(
+                        //                       onPressed: () {
+                        //                         Navigator.pop(context);
+                        //                         route.isPublic = !route.isPublic;
+                        //                         print(route.isPublic);
+                        //                         db.updateRoute(route);
+                        //                       },
+                        //                       icon: Icon(
+                        //                         route.isPublic
+                        //                             ? Icons.visibility
+                        //                             : Icons.visibility_off,
+                        //                         color: Theme.of(context)
+                        //                             .primaryColor,
+                        //                         size: 30,
+                        //                       ),
+                        //                       label: Text(
+                        //                         route.isPublic
+                        //                             ? 'Public'
+                        //                             : 'Private',
+                        //                         style: Theme.of(context)
+                        //                             .textTheme
+                        //                             .headline2,
+                        //                       ),
+                        //                     ),
+                        //                   ],
+                        //                 ),
+                        //               ),
+                        //             )),
                       );
                     },
                   )
                 : Center(child: Text('Empty routes')),
           );
         },
-        // builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        //   if (!snapshot.hasData) {
-        //     return Center(child: Text("There are no routes"));
-        //   }
-        //   return ListView(children: getRoutes(snapshot));
-        // },
+      ),
+    );
+  }
+}
+
+class BottomSheetRoutes extends StatelessWidget {
+  const BottomSheetRoutes({
+    @required this.route,
+  });
+
+  final r.Route route;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 280,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: route.images.isNotEmpty
+                      ? NetworkImage(searchEngine.searchPhoto(route.image))
+                      : null,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      route.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2
+                          .copyWith(fontSize: 22),
+                    ),
+                    Text(route.locationName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 15))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/navigationPage',
+                  arguments: {'route': route});
+            },
+            icon: Icon(
+              Icons.play_arrow,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Start',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/routePage',
+                  arguments: {'route': route});
+            },
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Edit',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              db.deleteRoute(db.currentUserId, route.id);
+            },
+            icon: Icon(
+              Icons.delete,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Delete',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              route.isPublic = !route.isPublic;
+              print(route.isPublic);
+              db.updateRoute(route);
+            },
+            icon: Icon(
+              route.isPublic ? Icons.visibility : Icons.visibility_off,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              route.isPublic ? 'Public' : 'Private',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+        ],
       ),
     );
   }

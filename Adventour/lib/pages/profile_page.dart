@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
+import 'package:country_list_pick/country_list_pick.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -112,6 +113,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                     return 'Username can\'t be empty';
                                   return null;
                                 },
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            CountryListPick(
+                              initialSelection: _user.countryCode,
+                              onChanged: (value) {
+                                _user.countryCode = value.code;
+                                db.updateUser(_user);
+                              },
+                              theme: CountryTheme(
+                                isShowCode: false
                               ),
                             ),
                             SizedBox(height: 10),

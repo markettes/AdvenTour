@@ -40,16 +40,16 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
-      drawer: SafeArea(
-        child: MyDrawer(),
-      ),
+      drawer: 
+        MyDrawer(),
+ 
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
             heroTag: 'route',
             backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () => Navigator.pushNamed(context, '/customRoutePage'),
+            onPressed: () => Navigator.pushNamed(context, '/routesPage'),
             child: Icon(
               Icons.flag,
               color: Theme.of(context).buttonColor,
@@ -326,33 +326,6 @@ class MyDrawer extends StatelessWidget {
                             ),
                             Text(
                               'My profile',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/routesPage');
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.flag,
-                              size: 35,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              'My routes',
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
