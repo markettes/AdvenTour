@@ -21,7 +21,7 @@ class Route {
   bool _isPublic;
   List<String> _likes;
 
-  Route(start, places, paths, author, locationName, locationId) {
+  Route(start, places, paths, locationName, locationId) {
     _start = start;
     _places = places;
     _paths = paths;
