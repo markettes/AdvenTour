@@ -6,6 +6,7 @@ const FLAG = 'flag';
 const EDIT = 'edit';
 const USER = 'user';
 const STAR = 'star';
+const FAVORITE = 'favorite';
 
 class Achievement {
   String _name;
@@ -72,6 +73,8 @@ List<Achievement> sortByCompleted(User user, List<Achievement> achievements) {
         notCompleted.add(achievement);
     } else notCompleted.add(achievement);
   }
+  notCompleted.sort((a,b)=>a.name.compareTo(b.name));
+  completed.sort((a,b)=>a.name.compareTo(b.name));
   return completed + notCompleted;
 }
 
@@ -81,6 +84,7 @@ IconData iconToIconData(String icon) {
     case EDIT: return Icons.edit;
     case USER: return Icons.person;
     case STAR: return Icons.star;
+    case FAVORITE: return Icons.favorite;
     default: return Icons.help;
   }
 }
