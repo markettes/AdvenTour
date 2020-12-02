@@ -1,9 +1,10 @@
+import 'package:Adventour/controllers/search_engine.dart';
 import 'package:google_maps_webservice/geocoding.dart';
 import 'package:google_maps_webservice/directions.dart';
 
 class Geocoding {
   final _geocoding = GoogleMapsGeocoding(
-    apiKey: "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho",
+    apiKey: API_KEY,
   );
 
   Future<Location> searchByPlaceId(String placeId) async {

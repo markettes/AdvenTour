@@ -1,10 +1,12 @@
 import 'package:Adventour/controllers/search_engine.dart';
+import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/libraries/place.dart';
-import 'package:Adventour/pages/map_page.dart';
+
+import '../app_localizations.dart';
 
 class PlacePage extends StatelessWidget {
   Place place;
@@ -39,11 +41,26 @@ class PlacePage extends StatelessWidget {
   }
 }
 
-class PlaceBodyInfo extends StatelessWidget {
+class PlaceBodyInfo extends StatefulWidget {
   PlaceBodyInfo({@required this.place, @required this.tapMap});
+
+  
 
   Place place;
   Function tapMap;
+
+  @override
+  _PlaceBodyInfoState createState() => _PlaceBodyInfoState();
+}
+
+class _PlaceBodyInfoState extends State<PlaceBodyInfo> {
+  CarouselController _carouselController = CarouselController();
+
+  @override
+  void dispose() {
+    _carouselController = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,29 +72,30 @@ class PlaceBodyInfo extends StatelessWidget {
           SizedBox(height: 5),
           Container(
               height: 200,
-              child: place.photos == null || place.photos.isEmpty
-                  ? Center(child: Text('No available photos'))
+              child: widget.place.photos == null || widget.place.photos.isEmpty
+                  ? Center(child: Text(AppLocalizations.of(context).translate('no_available')))
                   : CarouselSlider.builder(
-                      itemCount: place.photos.length,
+                    carouselController: _carouselController,
+                      itemCount: widget.place.photos.length,
                       options: CarouselOptions(
                         autoPlay: true,
                         pauseAutoPlayOnManualNavigate: true,
                         autoPlayInterval: Duration(seconds: 10),
-                        enableInfiniteScroll: place.photos.length > 1,
+                        enableInfiniteScroll: widget.place.photos.length > 1,
                         aspectRatio: size.width / 200,
                         enlargeCenterPage: true,
                       ),
                       itemBuilder: (BuildContext context, int index) =>
                           Image.network(
                         searchEngine
-                            .searchPhoto(place.photos[index].photoReference),
+                            .searchPhoto(widget.place.photos[index].photoReference),
                         fit: BoxFit.cover,
                       ),
                     )),
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(children: [
-              InfoMiddle(place: place, tapMap: tapMap),
+              InfoMiddle(place: widget.place, tapMap: widget.tapMap),
               SizedBox(
                 height: 5,
               ),
@@ -85,22 +103,23 @@ class PlaceBodyInfo extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    if (place.adress != null)
+                    if (widget.place.adress != null)
                       InfoBut(
                         icon: Icons.gps_fixed,
-                        text: place.adress,
+                        text: widget.place.adress,
                       ),
-                    if (place.telephone != null) SizedBox(height: 5),
-                    if (place.telephone != null)
-                      InfoBut(icon: Icons.local_phone, text: place.telephone),
-                    if (place.openingHours != null) SizedBox(height: 5),
-                    if (place.openingHours != null)
+                    if (widget.place.telephone != null) SizedBox(height: 5),
+                    if (widget.place.telephone != null)
+                      InfoBut(icon: Icons.local_phone, text: widget.place.telephone),
+                    if (widget.place.openingHours != null) SizedBox(height: 5),
+                    if (widget.place.openingHours != null)
                       InfoBut(
                           icon: Icons.access_alarm_outlined,
                           text:
-                              place.openingHours.openNow ? 'Opened' : 'Closed'),
-                    if (place.openingHours != null) SizedBox(height: 5),
-                    if (place.openingHours != null)
+                              widget.place.openingHours.openNow ? AppLocalizations.of(context).translate('opened') 
+                              : AppLocalizations.of(context).translate('closed')),
+                    if (widget.place.openingHours != null) SizedBox(height: 5),
+                    if (widget.place.openingHours != null)
                       InfoBut(
                         icon: Icons.calendar_today,
                         text: openAndClose(),
@@ -118,13 +137,13 @@ class PlaceBodyInfo extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Text(
-                    (place.reviews != null
-                            ? place.reviews.length.toString()
+                    (widget.place.reviews != null
+                            ? widget.place.reviews.length.toString()
                             : '0') +
-                        " opinions",
+                        AppLocalizations.of(context).translate('opinions'),
                     style: Theme.of(context).textTheme.bodyText2,
                   ),
-                  
+
                   // Expanded(
                   //   child: Row(
                   //     mainAxisAlignment: MainAxisAlignment.end,
@@ -142,17 +161,17 @@ class PlaceBodyInfo extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 5),
-              if (place.reviews != null) SizedBox(height: 5),
-              if (place.reviews != null)
+              if (widget.place.reviews != null) SizedBox(height: 5),
+              if (widget.place.reviews != null)
                 ListView.separated(
-                  itemCount: place.reviews.length,
+                  itemCount: widget.place.reviews.length,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   separatorBuilder: (context, index) => SizedBox(
                     height: 12,
                   ),
                   itemBuilder: (_, int index) {
-                    Review review = place.reviews[index];
+                    Review review = widget.place.reviews[index];
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -201,25 +220,11 @@ class PlaceBodyInfo extends StatelessWidget {
   }
 
   String openAndClose() {
-    int dia;
-    if (DateTime.now().weekday == 7) {
-      dia = 0;
-    } else {
-      dia = DateTime.now().weekday;
+    String _schedule = '';
+    for (var i = 0; i < widget.place.weekdaytext.length; i++) {
+      _schedule = _schedule + widget.place.weekdaytext[i] + '\n';
     }
-    if (place.openingHours.periods[dia].open.duration.isEmpty) {
-      return "null";
-    } else {
-      String numHorasAbierto = "${place.openingHours.periods[dia].open.duration}";
-      String horasAbierto = numHorasAbierto.substring(0, 2) +
-          ":" +
-          numHorasAbierto.substring(2, 4);
-      String numHorasCerrado = "${place.openingHours.periods[dia].close.duration}";
-      String horasCerrado = numHorasCerrado.substring(0, 2) +
-          ":" +
-          numHorasCerrado.substring(2, 4);
-      return horasAbierto + " - " + horasCerrado;
-    }
+    return _schedule;
   }
 }
 
@@ -266,7 +271,7 @@ class InfoMiddle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        if (place.icon != null)
+        if (place.type != null)
           Container(
             width: 50,
             height: 50,
@@ -274,13 +279,8 @@ class InfoMiddle extends StatelessWidget {
               borderRadius: BorderRadius.circular(40),
               color: Theme.of(context).primaryColor,
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Image.network(
-                place.icon,
-                color: Colors.white,
-                fit: BoxFit.contain,
-              ),
+            child: CircleIcon(
+              type: place.type,
             ),
           ),
         if (place.rating != null)

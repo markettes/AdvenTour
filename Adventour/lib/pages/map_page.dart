@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:Adventour/controllers/auth.dart';
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:Adventour/models/User.dart';
+import 'package:Adventour/widgets/category_checkbox.dart';
 import 'package:Adventour/widgets/input_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:geolocator/geolocator.dart';
@@ -14,6 +18,8 @@ import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:intl/intl.dart';
+import 'package:weather/weather.dart';
+import '../app_localizations.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -22,181 +28,29 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   MapController _mapController = MapController();
-  String _mapStyle;
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Position _position;
   bool _fixedPosition = false;
 
+  DateTime today = DateTime.now();
+  WeatherFactory ws = new WeatherFactory("6dfa830bb9af38b050628b6fd2701df6");
+  List<Weather> forecasts;
+
+
   TextEditingController _locationController = TextEditingController();
-
-  DateTime now;
-  String formattedDate;
-
-  @override
-  void initState() {
-    now = DateTime.now();
-    formattedDate = DateFormat('kk').format(now);
-
-    if (int.parse(formattedDate) < 20) {
-      rootBundle.loadString('assets/map_styles/light.json').then((string) {
-        _mapStyle = string;
-      });
-    } else {
-      rootBundle.loadString('assets/map_styles/dark.json').then((string) {
-        _mapStyle = string;
-      });
-    }
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    if(forecasts==null){WidgetsBinding.instance.addPostFrameCallback((_) { weatherIn(); setState(() {}); });}
+    
     final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawer: SafeArea(
-        child: Drawer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.deepOrange,
-                      image: DecorationImage(
-                        image: AssetImage('assets/drawer_background.jpg'),
-                        fit: BoxFit.cover,
-                      )),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: auth.currentUser.photoUrl != null
-                                    ? NetworkImage(
-                                        '${auth.currentUser.photoUrl}')
-                                    : AssetImage("assets/empty_photo.jpg"),
-                                fit: BoxFit.cover,
-                              ),
-                              shape: BoxShape.circle),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            "${auth.currentUser.email}",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/profile');
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.person,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Account',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/achievementsPage');
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.emoji_events,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Achievements',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Expanded(
-                          child: MaterialButton(
-                            onPressed: () {
-                              auth.signOut();
-                            },
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.logout,
-                                  size: 35,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'Logout',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+        child: MyDrawer(),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -204,7 +58,7 @@ class _MapPageState extends State<MapPage> {
           FloatingActionButton(
             heroTag: 'route',
             backgroundColor: Theme.of(context).primaryColor,
-            onPressed: () => Navigator.pushNamed(context, '/creatingRoutePage'),
+            onPressed: () => Navigator.pushNamed(context, '/customRoutePage'),
             child: Icon(
               Icons.flag,
               color: Theme.of(context).buttonColor,
@@ -215,13 +69,11 @@ class _MapPageState extends State<MapPage> {
             heroTag: 'current_location',
             backgroundColor: Theme.of(context).primaryColor,
             onPressed: () async {
-              var userController = auth.currentUser;
-              if(userController != null){
-                          userController.providerData.forEach( (profile){
-                             print(profile.providerId);
-                          });
-                        }
-              if (_position != null) {
+              if (_fixedPosition)
+                setState(() {
+                  _fixedPosition = false;
+                });
+              else if (_position != null) {
                 _mapController.goToCoordinates(
                     _position.latitude, _position.longitude, 18);
                 setState(() {
@@ -232,7 +84,7 @@ class _MapPageState extends State<MapPage> {
             child: Icon(
               Icons.gps_fixed,
               color: _fixedPosition
-                  ? Colors.blue[200]
+                  ? Colors.lightBlue
                   : Theme.of(context).buttonColor,
             ),
           ),
@@ -277,7 +129,7 @@ class _MapPageState extends State<MapPage> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Container(
-                      decoration: int.parse(formattedDate) < 20
+                      decoration: !_mapController.isNight
                           ? BoxDecoration(
                               borderRadius: BorderRadius.circular(40),
                               color: Colors.white,
@@ -309,7 +161,8 @@ class _MapPageState extends State<MapPage> {
                             child: TextField(
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'Search...',
+                                hintText: AppLocalizations.of(context)
+                                    .translate('search'),
                               ),
                               controller: _locationController,
                               onTap: () async {
@@ -344,66 +197,20 @@ class _MapPageState extends State<MapPage> {
                                           },
                                   ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.wb_sunny,
+                                size: 30,
+                              ),
+                              onPressed: showWeatherDialog,
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  // MaterialButton(
-                  //   child: Icon(
-                  //     Icons.logout,
-                  //     color: Theme.of(context).buttonColor,
-                  //   ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 53,
-                  //   shape: CircleBorder(),
-                  //   elevation: 15,
-                  //   onPressed: () async {
-                  //     auth.signOut();
-                  //   },
-                  // ),
-                  // SizedBox(height: 5),
-                  // MaterialButton(
-                  //   child: Icon(
-                  //     Icons.search,
-                  //     color: Theme.of(context).buttonColor,
-                  //   ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 53,
-                  //   shape: CircleBorder(),
-                  //   elevation: 15,
-                  //   onPressed: () async {
-                  //     setState(() {
-                  //       _fixedPosition = false;
-                  //     });
-                  //     await PlacesAutocomplete.show(
-                  //       context: context,
-                  //       onTapPrediction: _onTapPrediction,
-                  //       onSubmitted: _onSubmitted,
-                  //     );
-                  //   },
-                  // ),
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
-                  // MaterialButton(
-                  //   child: _mapController.markers.isEmpty
-                  //       ? Container()
-                  //       : Icon(
-                  //           Icons.delete,
-                  //           color: Theme.of(context).buttonColor,
-                  //         ),
-                  //   color: Theme.of(context).primaryColor,
-                  //   height: 40,
-                  //   shape: CircleBorder(),
-                  //   elevation: 15,
-                  //   onPressed: _mapController.markers.isEmpty
-                  //       ? null
-                  //       : () {
-                  //           setState(() {
-                  //             _mapController.clearMarkers();
-                  //           });
-                  //         },
-                  // ),
                 ],
               ),
             ),
@@ -427,6 +234,157 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
+
+  String fiveNextDays(int day) {
+     if(day > 7){day = day - 7;}
+    if(day == 1){return "Monday";}
+    else if(day == 2){return "Tuesday";}
+    else if(day == 3){return "Wednesday";}
+    else if(day == 4){return "Thursday";}
+    else if(day == 5){return "Friday";}
+    else if(day == 6){return "Saturday";}
+    else if(day == 7){return "Sunday";}
+    return null;
+  }
+
+  Future<void> weatherIn() async {
+    
+    await ws.fiveDayForecastByLocation(_position.latitude, _position.longitude).then((value) => forecasts=value);
+
+  }
+
+  IconData descriptionToIcon(String icon){
+    if(icon == "01n" || icon == "01d"){return Icons.wb_sunny;}
+    else if (icon == "02n" || icon == "02d"){return Icons.wb_cloudy_outlined;}
+    else if (icon == "03n" || icon == "03d"){return Icons.wb_cloudy;}
+    else if (icon == "04n" || icon == "04d"){return Icons.wb_cloudy;}
+    else if (icon == "09n" || icon == "09d"){return Icons.invert_colors;}
+    else if (icon == "10n" || icon == "10d"){return Icons.invert_colors;}
+    else if (icon == "11n" || icon == "11d"){return Icons.flash_on;}
+    else if (icon == "13n" || icon == "13d"){return Icons.ac_unit;}
+    else if (icon == "50n" || icon == "50d"){return Icons.menu;}
+  }
+
+  Future showWeatherDialog() => showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            title: Center(
+                child: Text(
+              "TODAY",
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 30),
+            )),
+            content: Builder(
+              builder: (context) {
+                return Container(
+                  height: 200,
+                  width: 400,
+                  child: Column(
+                    children: [
+                      Icon(
+                        descriptionToIcon(forecasts[0].weatherIcon),
+                        size: 100,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: Theme.of(context).primaryColor,
+                        indent: 8,
+                        endIndent: 8,
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+1),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[1].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[2].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+3),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[3].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+4),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[4].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday+5),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[5].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ));
 
   Future _onSubmitted(String value) async {
     List<Place> places = await searchEngine.searchByText(
@@ -452,6 +410,7 @@ class _MapPageState extends State<MapPage> {
 
   Future _onTapPrediction(Prediction prediction) async {
     _mapController.clearMarkers();
+
     Place place = (await searchEngine.searchByText(prediction.description,
             Location(_position.latitude, _position.longitude), 1000))
         .first;
@@ -462,6 +421,263 @@ class _MapPageState extends State<MapPage> {
     });
     Navigator.pop(context);
     _mapController.goToCoordinates(place.latitude, place.longitude, 15);
+  }
+}
+
+class MyDrawer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 180,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage('assets/drawer_background.jpg'),
+              fit: BoxFit.cover,
+            )),
+            child: StreamBuilder(
+                stream: db.getUser(db.currentUserId),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) print(snapshot.error);
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  User user = snapshot.data;
+                  print('?' + user.image);
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.transparent,
+                          backgroundImage: user.image != ''
+                              ? NetworkImage(
+                                  user.image,
+                                )
+                              : AssetImage("assets/empty_photo.jpg"),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text(
+                            user.userName,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(fontSize: 25),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/profilePage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.person,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('profile'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/routesPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.flag,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('routes'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/achievementsPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.emoji_events,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('achievements'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/historyPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.update,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('history'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: MaterialButton(
+                //         onPressed: () {
+                //           //Navigator
+                //         },
+                //         child: Row(
+                //           children: [
+                //             Icon(
+                //               Icons.star,
+                //               size: 35,
+                //               color: Theme.of(context).primaryColor,
+                //             ),
+                //             SizedBox(
+                //               width: 10,
+                //             ),
+                //             Text(
+                //               'Favourites',
+                //               style: Theme.of(context).textTheme.bodyText1,
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: MaterialButton(
+                //         onPressed: () {
+                //           //Navigator
+                //         },
+                //         child: Row(
+                //           children: [
+                //             Icon(
+                //               Icons.settings,
+                //               size: 35,
+                //               color: Theme.of(context).primaryColor,
+                //             ),
+                //             SizedBox(
+                //               width: 10,
+                //             ),
+                //             Text(
+                //               'Settings',
+                //               style: Theme.of(context).textTheme.bodyText1,
+                //             )
+                //           ],
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: MaterialButton(
+                          onPressed: () {
+                            auth.signOut();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.logout,
+                                size: 35,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Logout',
+                                style: Theme.of(context).textTheme.bodyText1,
+                                
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -495,3 +711,60 @@ class _MapPageState extends State<MapPage> {
 //     });
 //   }
 // }
+
+// MaterialButton(
+//   child: Icon(
+//     Icons.logout,
+//     color: Theme.of(context).buttonColor,
+//   ),
+//   color: Theme.of(context).primaryColor,
+//   height: 53,
+//   shape: CircleBorder(),
+//   elevation: 15,
+//   onPressed: () async {
+//     auth.signOut();
+//   },
+// ),
+// SizedBox(height: 5),
+// MaterialButton(
+//   child: Icon(
+//     Icons.search,
+//     color: Theme.of(context).buttonColor,
+//   ),
+//   color: Theme.of(context).primaryColor,
+//   height: 53,
+//   shape: CircleBorder(),
+//   elevation: 15,
+//   onPressed: () async {
+//     setState(() {
+//       _fixedPosition = false;
+//     });
+//     await PlacesAutocomplete.show(
+//       context: context,
+//       onTapPrediction: _onTapPrediction,
+//       onSubmitted: _onSubmitted,
+//     );
+//   },
+// ),
+// SizedBox(
+//   height: 5,
+// ),
+// MaterialButton(
+//   child: _mapController.markers.isEmpty
+//       ? Container()
+//       : Icon(
+//           Icons.delete,
+//           color: Theme.of(context).buttonColor,
+//         ),
+//   color: Theme.of(context).primaryColor,
+//   height: 40,
+//   shape: CircleBorder(),
+//   elevation: 15,
+//   onPressed: _mapController.markers.isEmpty
+//       ? null
+//       : () {
+//           setState(() {
+//             _mapController.clearMarkers();
+//           });
+//         },
+// ),

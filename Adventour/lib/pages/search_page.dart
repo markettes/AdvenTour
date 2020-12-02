@@ -11,8 +11,6 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:http/http.dart';
 import 'package:rxdart/rxdart.dart';
 
-String apiKey = "AIzaSyAzLMUtt6ZleHHXpB2LUaEkTjGuT8PeYho";
-
 class PlacesAutocompleteWidget extends StatefulWidget {
   final String startText;
   final String hint;
@@ -45,9 +43,10 @@ class PlacesAutocompleteWidget extends StatefulWidget {
 
   Function(String) onSubmitted;
 
+  Widget placeholder;
+
   PlacesAutocompleteWidget(
-      {
-      this.hint = "Search",
+      {this.hint = "Search",
       this.overlayBorderRadius,
       this.offset,
       this.radius,
@@ -64,6 +63,7 @@ class PlacesAutocompleteWidget extends StatefulWidget {
       this.startText,
       @required this.onTapPrediction,
       @required this.onSubmitted,
+      this.placeholder,
       this.debounce = 300})
       : super(key: key);
 
@@ -81,8 +81,7 @@ class _PlacesAutocompleteScaffoldState extends PlacesAutocompleteState {
   Widget build(BuildContext context) {
     final searchBar = AppBarPlacesAutoCompleteTextField();
     final body = PlacesAutocompleteResult(
-      onTap: widget.onTapPrediction,
-    );
+        onTap: widget.onTapPrediction, placeholder: widget.placeholder);
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: SafeArea(
@@ -111,8 +110,12 @@ class _Loader extends StatelessWidget {
 
 class PlacesAutocompleteResult extends StatefulWidget {
   final ValueChanged<Prediction> onTap;
+  Widget placeholder;
 
-  PlacesAutocompleteResult({this.onTap});
+  PlacesAutocompleteResult({
+    this.onTap,
+    this.placeholder,
+  });
 
   @override
   _PlacesAutocompleteResult createState() => _PlacesAutocompleteResult();
@@ -124,9 +127,10 @@ class _PlacesAutocompleteResult extends State<PlacesAutocompleteResult> {
     final state = PlacesAutocompleteWidget.of(context);
     assert(state != null);
 
-    if (state._queryTextController.text.isEmpty ||
-        state._response == null ||
-        state._response.predictions.isEmpty) {
+    if (state._queryTextController.text.isEmpty && widget.placeholder != null)
+      return widget.placeholder;
+
+    if (state._response == null || state._response.predictions.isEmpty) {
       final children = <Widget>[];
       if (state._searching) {
         children.add(_Loader());
@@ -259,7 +263,7 @@ abstract class PlacesAutocompleteState extends State<PlacesAutocompleteWidget> {
     _queryTextController = TextEditingController(text: widget.startText);
 
     _places = GoogleMapsPlaces(
-        apiKey: apiKey,
+        apiKey: API_KEY,
         baseUrl: widget.proxyBaseUrl,
         httpClient: widget.httpClient);
     _searching = false;
@@ -359,25 +363,26 @@ class PlacesAutocomplete {
       Client httpClient,
       @required Function(Prediction) onTapPrediction,
       @required Function(String) onSubmitted,
+      Widget placeholder,
       String startText = ""}) {
     final builder = (BuildContext ctx) => PlacesAutocompleteWidget(
-          overlayBorderRadius: overlayBorderRadius,
-          language: language,
-          sessionToken: sessionToken,
-          components: components,
-          types: types,
-          radius: radius,
-          strictbounds: strictbounds,
-          region: region,
-          offset: offset,
-          hint: hint,
-          onError: onError,
-          proxyBaseUrl: proxyBaseUrl,
-          httpClient: httpClient,
-          startText: startText,
-          onTapPrediction: onTapPrediction,
-          onSubmitted: onSubmitted,
-        );
+        overlayBorderRadius: overlayBorderRadius,
+        language: language,
+        sessionToken: sessionToken,
+        components: components,
+        types: types,
+        radius: radius,
+        strictbounds: strictbounds,
+        region: region,
+        offset: offset,
+        hint: hint,
+        onError: onError,
+        proxyBaseUrl: proxyBaseUrl,
+        httpClient: httpClient,
+        startText: startText,
+        onTapPrediction: onTapPrediction,
+        onSubmitted: onSubmitted,
+        placeholder: placeholder);
 
     return Navigator.push(context, MaterialPageRoute(builder: builder));
   }

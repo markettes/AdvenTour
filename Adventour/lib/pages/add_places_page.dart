@@ -1,7 +1,8 @@
-import 'package:Adventour/pages/creating_route_page.dart';
 import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
+
+import '../app_localizations.dart';
 
 class AddPlacesPage extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _AddPlacesPageState extends State<AddPlacesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add places'),
+        title: Text(AppLocalizations.of(context).translate('add_places')),
       ),
       body: Padding(
         padding: EdgeInsets.all(8),
@@ -42,7 +43,7 @@ class _AddPlacesPageState extends State<AddPlacesPage> {
                           child: TextField(
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: 'Search...',
+                              hintText: AppLocalizations.of(context).translate('search'),
                             ),
                             controller: _locationController,
                             onTap: () => PlacesAutocomplete.show(

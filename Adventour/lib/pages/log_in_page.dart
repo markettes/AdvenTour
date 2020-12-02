@@ -4,12 +4,15 @@ import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
+
 class LogInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Put your credentials'),
+        title: Text(
+          AppLocalizations.of(context).translate('credentials') ),
       ),
       body: Padding(padding: EdgeInsets.all(10), child: LogInForm()),
     );
@@ -46,27 +49,34 @@ class _LogInFormState extends State<LogInForm> {
             'assets/logo_adventour+titulo.png',
             height: 180,
           ),
-          InputText(
-            obscured: false,
-            icon: Icons.email,
-            labelText: 'Email',
-            errorText: _emailError,
-            controller: _emailController,
-            validator: (value) {
-              if (value.isEmpty) return 'Email can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left:10,right:10),
+            child: InputText(
+              
+              obscured: false,
+              icon: Icons.email,
+              labelText: 'Email',
+              errorText: _emailError,
+              controller: _emailController,
+              validator: (value) {
+                if (value.isEmpty) return  AppLocalizations.of(context).translate('email_cannot');
+                return null;
+              },
+            ),
           ),
-          InputText(
-            obscured: true,
-            icon: Icons.lock,
-            labelText: 'Password',
-            errorText: _passwordError,
-            controller: _passwordController,
-            validator: (value) {
-              if (value.isEmpty) return 'Password can\'t be empty';
-              return null;
-            },
+          Padding(
+            padding: const EdgeInsets.only(left:10,right:10),
+            child: InputText(
+              obscured: true,
+              icon: Icons.lock,
+              labelText:  AppLocalizations.of(context).translate('password'),
+              errorText: _passwordError,
+              controller: _passwordController,
+              validator: (value) {
+                if (value.isEmpty) return  AppLocalizations.of(context).translate('password_cannot');
+                return null;
+              },
+            ),
           ),
           // Text(
           //   'Forgot password?',
@@ -94,8 +104,8 @@ class _LogInFormState extends State<LogInForm> {
 
   void _showError(e) {
     setState(() {
-      _emailError = logInEmailError(e);
-      _passwordError = logInPasswordError(e);
+      _emailError = emailError(e);
+      _passwordError = passwordError(e);
     });
   }
 }

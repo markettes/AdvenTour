@@ -1,4 +1,7 @@
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/libraries/place.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -9,77 +12,51 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 //const CASINO = "casino";
 
 //SHORT
-const BAR = "bar"; //30
-const CAFE = "cafe"; //30
-const CHURCH = ["church", "mosque", "synagogue", "hindu_temple"]; // + 30
-const CITY_HALL = ["city_hall", "courthouse"]; //20
-const COURTHOUSE = "courthouse"; //20
-const LIBRARY = ["library", "university"]; // 30
-const MOSQUE = "mosque"; // + 30
-const MOVIE_THEATER = ["movie_theater"]; // 30
-const PARK = ["park"]; // + 20
-const STADIUM = ["stadium"]; // 20
-const SYNAGOGUE = "synagogue"; // + 30
-const TOURIST_ATTRACTION = ["tourist_attraction"]; // + 30
-const UNIVERSITY = "university"; // 20
+const PARK = "park"; // + 20
+const STADIUM = "stadium"; // 20
+const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
 //LARGE
-const ART_GALLERY = ["art_gallery", "museum"]; // 45
-const HINDU_TEMPLE = "hindu_temple"; // + 40
 const MUSEUM = "museum"; // + 45
-const NIGHT_CLUB = ["night_club"]; // + 60
-const RESTAURANT = ["restaurant", "cafe", "bar"]; // 60
-const SHOPPING_MALL = ["shopping_mall"]; // 60
+const NIGHT_CLUB = "night_club"; // + 60
+const RESTAURANT = "restaurant"; // 60
+const SHOPPING_MALL = "shopping_mall"; // 60
+const LOCALITY = "locality";
 
-List<List> places = [
+List placeTypes = [
   RESTAURANT,
-  //BAR,
-  //CAFE,
-  CITY_HALL,
-  //COURTHOUSE,
-  CHURCH,
-  //MOSQUE,
-  //SYNAGOGUE,
-  //HINDU_TEMPLE,
-  MOVIE_THEATER,
   PARK,
   STADIUM,
   TOURIST_ATTRACTION,
-  LIBRARY,
-  //UNIVERSITY,
-  ART_GALLERY,
-  //MUSEUM,
+  MUSEUM,
   NIGHT_CLUB,
-  SHOPPING_MALL
+  SHOPPING_MALL,
 ];
 
 class Place {
   bool _detailed;
   String _id;
   String _name;
-  String _icon;
+  String _type;
+  List<String> _types;
   String _adress;
   String _telephone;
-  double _latitude;
-  double _longitude;
+  LatLng _coordinates;
   num _rating;
   List<Photo> _photos;
   List<Review> _reviews;
   OpeningHoursDetail _openingHours;
   List<String> _weekdaytext;
   bool _openNow;
-  List<String> _types;
   num _userRatingsTotal;
   Duration _duration;
 
-  Place(latitude, longitude, [name, id,types,rating,icon,duration]) {
+  Place(latitude, longitude, [name, id, rating, type, duration]) {
     _detailed = false;
-    _latitude = latitude;
-    _longitude = longitude;
+    _coordinates = LatLng(latitude, longitude);
     _name = name;
     _id = id;
-    _types=types;
-    _rating=rating;
-    _icon = icon;
+    _rating = rating;
+    _type = type;
     _duration = duration;
   }
 
@@ -97,36 +74,69 @@ class Place {
     _detailed = false;
     _id = result.placeId;
     _name = result.name;
-    _icon = result.icon;
-    _latitude = result.geometry.location.lat;
-    _longitude = result.geometry.location.lng;
+    _type = googleIconToType(result.icon);
     _types = result.types;
+    _coordinates =
+        LatLng(result.geometry.location.lat, result.geometry.location.lng);
     _rating = result.rating;
     _userRatingsTotal = result.userRatingsTotal;
-     _duration = Duration(minutes: 30);
+    _adress = result.vicinity;
+    _duration = durationByType(_type);
+    _photos = result.photos;
   }
 
   Place.fromDetails(PlaceDetails details) {
     _detailed = true;
     _id = details.placeId;
     _name = details.name;
-    _icon = details.icon;
+    _type = googleIconToType(details.icon);
+    _types = details.types;
     _adress = details.vicinity;
-    _latitude = details.geometry.location.lat;
-    _longitude = details.geometry.location.lng;
+    _coordinates =
+        LatLng(details.geometry.location.lat, details.geometry.location.lng);
     _rating = details.rating;
     _photos = details.photos;
     _telephone = details.formattedPhoneNumber;
     _reviews = details.reviews;
-    // if (_reviews != null) {
+    if (_reviews != null) {
       _reviews.sort((a, b) => b.rating.compareTo(a.rating));
-    // }
-    // if (details.openingHours != null) {
+    }
+    if (details.openingHours != null) {
       _openingHours = details.openingHours;
       _weekdaytext = details.openingHours.weekdayText;
       _openNow = details.openingHours.openNow;
-    // }
-    _duration = Duration(minutes: 30);
+    }
+    _duration = durationByType(_type);
+  }
+
+  Duration durationByType(String type) {
+    switch (type) {
+      case TOURIST_ATTRACTION:
+        return Duration(minutes: 20);
+      case PARK:
+        return Duration(minutes: 20);
+      default:
+        return Duration(minutes: 30);
+    }
+  }
+
+  Map<String, dynamic> toJson() => {
+        'id': _id,
+        'latitude': _coordinates.latitude,
+        'longitude': _coordinates.longitude,
+        'name': _name,
+        'adress': _adress,
+        'type': _type,
+        'duration': _duration.inMinutes,
+      };
+
+  Place.fromJson(Map<dynamic, dynamic> data) {
+    _id = data['id'];
+    _coordinates = LatLng(data['latitude'], data['longitude']);
+    _name = data['name'];
+    _adress = data['adress'];
+    _type = data['type'];
+    _duration = Duration(minutes: data['duration']);
   }
 
   get detailed => _detailed;
@@ -135,9 +145,11 @@ class Place {
 
   get name => _name;
 
-  get latitude => _latitude;
+  get coordinates => _coordinates;
 
-  get longitude => _longitude;
+  get latitude => _coordinates.latitude;
+
+  get longitude => _coordinates.longitude;
 
   get adress => _adress;
 
@@ -145,7 +157,9 @@ class Place {
 
   num get rating => _rating;
 
-  get icon => _icon;
+  String get type => _type;
+
+  List<String> get types => _types;
 
   List<Photo> get photos => _photos;
 
@@ -157,43 +171,111 @@ class Place {
 
   get openNow => _openNow;
 
-  List<String> get types => _types;
-
   num get userRatingsTotal => _userRatingsTotal;
 
   Duration get duration => _duration;
-
-
 
   @override
   String toString() {
     return """
 id = $_id
 name = $_name
-type = $_types
+type = $_type
+photos = $_photos
     """;
   }
 }
 
-  Place getFurthestPlace(LatLng location,List<Place> places){
-    if(places.isEmpty)return null;
-    Place furthestPlace = places.first;
-    for (var place in places.sublist(1)) {
-      if(Geolocator.distanceBetween(location.latitude, location.longitude, place.latitude, place.longitude)>Geolocator.distanceBetween(location.latitude, location.longitude, furthestPlace.latitude, furthestPlace.longitude))furthestPlace = place;
-    }
-    return furthestPlace;
+Place getFurthestPlace(LatLng location, List<Place> places) {
+  if (places.isEmpty) return null;
+  Place furthestPlace = places.first;
+  for (var place in places) {
+    if (Geolocator.distanceBetween(location.latitude, location.longitude,
+            place.latitude, place.longitude) >
+        Geolocator.distanceBetween(
+            location.latitude,
+            location.longitude,
+            furthestPlace.latitude,
+            furthestPlace.longitude)) furthestPlace = place;
   }
+  return furthestPlace;
+}
 
+String googleIconToType(String icon) {
+  switch (icon) {
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png':
+      return PARK;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/worship_general-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/restaurant-71.png':
+      return RESTAURANT;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/camping-71.png':
+      return PARK;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/shopping-71.png':
+      return SHOPPING_MALL;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/school-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/museum-71.png':
+      return MUSEUM;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png':
+      return null;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/library-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/bar-71.png':
+      return NIGHT_CLUB;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/geocode-71.png':
+      return LOCALITY;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/movies-71.png':
+      return null;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/stadium-71.png':
+      return STADIUM;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/parking-71.png':
+      return null;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/cafe-71.png':
+      return RESTAURANT;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/civic_building-71.png':
+      return TOURIST_ATTRACTION;
+    case 'https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/cemetery_grave-71.png':
+      return null;
+    default:
+      throw Exception('Icon $icon not implemented');
+  }
+}
 
-// icon = $_icon
-// adress = $_adress
-// latitude = $_latitude
-// longitude = $_longitude
-// telephone = $_telephone
-// rating = $_rating
-// photos = ${_photos}
-// reviews = ${_reviews}
-// openingHours = ${_openingHours}
-// weekdaytext = ${_weekdaytext}
-// openNow = ${_openNow}
+void sortPlaceTypes(List<String> selectedTypes) {
+  List sorted = [];
+  sorted.addAll(selectedTypes);
+  for (var placeType in placeTypes) {
+    if (!sorted.contains(placeType)) sorted.add(placeType);
+  }
+  placeTypes = sorted;
+}
 
+IconData typeToIcon(String type) {
+  switch (type) {
+    case CAR:
+      return Icons.directions_car;
+    case WALK:
+      return Icons.directions_walk;
+    case BICYCLE:
+      return Icons.directions_bike;
+    case PARK:
+      return Icons.eco;
+    case RESTAURANT:
+      return Icons.restaurant;
+    case TOURIST_ATTRACTION:
+      return Icons.camera_alt;
+    case STADIUM:
+      return Icons.sports;
+    case MUSEUM:
+      return Icons.museum;
+    case NIGHT_CLUB:
+      return Icons.nightlife;
+    case SHOPPING_MALL:
+      return Icons.local_mall;
+    default:
+      throw Exception('Icon not available for $type');
+  }
+}

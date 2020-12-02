@@ -2,7 +2,11 @@ import 'package:Adventour/widgets/google_button.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 
+import '../app_localizations.dart';
+
 class InitPage extends StatelessWidget {
+  InitPage({this.allowSignUp = true});
+  bool allowSignUp;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,20 +30,22 @@ class InitPage extends StatelessWidget {
                     },
                     style: ButtonType.Normal,
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Don't you have account?",
-                      style: Theme.of(context).textTheme.bodyText1,
+                  if (allowSignUp)
+                    Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        AppLocalizations.of(context).translate('account'),
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     ),
-                  ),
-                  PrimaryButton(
-                    text: 'SIGN UP',
-                    onPressed: () {
-                      Navigator.of(context).pushNamed('/signUpPage');
-                    },
-                    style: ButtonType.Void,
-                  ),
+                  if (allowSignUp)
+                    PrimaryButton(
+                      text: 'SIGN UP',
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/signUpPage');
+                      },
+                      style: ButtonType.Void,
+                    ),
                 ],
               ),
             ),

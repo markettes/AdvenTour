@@ -1,85 +1,72 @@
 import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class CircleIconButton extends StatelessWidget {
   CircleIconButton({
-    @required this.type,
+    this.type,
     @required this.onPressed,
     this.activated = true,
-    this.icon = true,
+    this.icon,
+    this.size = 25,
   });
 
   String type;
   Function onPressed;
   bool activated;
-  bool icon;
-
-  void setIcon(bool estado) {
-    this.icon = estado;
-  }
+  double size;
+  Icon icon;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       onPressed: onPressed,
+      onLongPress: () {
+        Toast.show(_placeTypeToString(), context,
+            duration: 3, gravity: Toast.BOTTOM);
+      },
       elevation: 2.0,
       fillColor: activated
           ? Theme.of(context).primaryColor
           : Theme.of(context).disabledColor,
       constraints: BoxConstraints(minWidth: 0),
-      child: Icon(
-        toIcon(type),
-        size: 25,
-        color: Colors.white,
-      ),
+      child: type != null
+          ? Icon(
+              typeToIcon(type),
+              size: size,
+              color: Colors.white,
+            )
+          : icon,
       padding: EdgeInsets.all(10),
       shape: CircleBorder(),
     );
   }
 
-  IconData toIcon(String type) {
+  String _placeTypeToString() {
     switch (type) {
       case CAR:
-        return Icons.directions_car;
+        return 'Transport: Car';
       case WALK:
-        return Icons.directions_walk;
+        return 'Transport: Walk';
       case BICYCLE:
-        return Icons.directions_bike;
-      case PUBLIC:
-        return Icons.directions_subway;
-      case "park":
-        return Icons.park;
-      case "church":
-        return Icons.history_edu;
-      case "restaurant":
-        return Icons.restaurant;
-      case "city_hall":
-        return Icons.house_outlined;
-      case BAR:
-        return Icons.sports_bar;
-      case "tourist_attraction":
-        return Icons.camera_alt;
-      case CAFE:
-        return Icons.local_cafe;
-      case COURTHOUSE:
-        return Icons.gavel;
-      case "library":
-        return Icons.local_library;
-      case MOSQUE:
-        return Icons.location_city;
-      case "movie_theater":
-        return Icons.theater_comedy;
-      case "stadium":
-        return Icons.sports;
-      case "art_gallery":
-        return Icons.museum;
-      case "night_club":
-        return Icons.nightlife;
-      case "shopping_mall":
-        return Icons.local_mall;
+        return 'Transport: Bycicle';
+      case PARK:
+        return 'Place type: Park';
+      case RESTAURANT:
+        return 'Place type: Restaurant';
+      case TOURIST_ATTRACTION:
+        return 'Place type: Tourist attraction';
+      case STADIUM:
+        return 'Place type: Stadium';
+      case MUSEUM:
+        return 'Place type: Museum';
+      case NIGHT_CLUB:
+        return 'Place type: Night club';
+      case SHOPPING_MALL:
+        return 'Place type: Shopping mall';
       default:
-        throw Exception('Icon not available');
+        throw Exception('Icon not available for $type');
     }
   }
 }

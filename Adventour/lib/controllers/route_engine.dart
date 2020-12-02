@@ -1,34 +1,40 @@
-import 'dart:collection';
-
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/directions_engine.dart';
+import 'package:Adventour/controllers/geocoding.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart';
 import 'package:Adventour/models/Place.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/src/core.dart';
 
-const MAX_DISTANCE_WALK = 5000;
-const MAX_DISTANCE_CAR = 20000;
-const MAX_DISTANCE_BICYCLE = 10000;
-const MAX_DISTANCE_PUBLIC = 15000;
-
 class RouteEngine {
-  Future<Route> makeShortRoute(
-      Location location, List<String> types, List<String> transports) async {
-    var maxDistance = transports.contains('car')
-        ? MAX_DISTANCE_CAR
-        : transports.contains('public')
-            ? MAX_DISTANCE_PUBLIC
-            : transports.contains('bicycle')
-                ? MAX_DISTANCE_BICYCLE
-                : MAX_DISTANCE_WALK;
+  Future<Route> makeRoute(
+      String locationId, List<String> types, int radius) async {
+    Location location;
+    if (locationId == null) {
+      Position position = await Geolocator.getCurrentPosition();
+      location = Location(position.latitude, position.longitude);
+    } else {
+      location = await geocoding.searchByPlaceId(locationId);
+    }
+
+    List<Place> locationPlaces = (await searchEngine.searchByLocationWithType(
+        LOCALITY, location, 50000));
+
+    if (locationPlaces.isEmpty) return null;
+
+    locationId = locationPlaces.first.id;
+    String locationName = locationPlaces.first.name;
 
     List<Place> prePlaces = [];
 
     for (String type in types) {
-      prePlaces.addAll(await searchEngine.searchByLocationWithType(
-          type, location, maxDistance));
+      prePlaces.addAll(
+          await searchEngine.searchByLocationWithType(type, location, radius));
     }
+
+    if (prePlaces.length < 3) return null;
 
     List<Place> placesWithoutDuplicates = [];
 
@@ -42,32 +48,50 @@ class RouteEngine {
 
     placesWithoutDuplicates.removeWhere((place) =>
         place.rating == null ||
-        place.types.contains('lodging') ||
-        place.rating < 4.3 ||
+        place.type == null ||
         place.userRatingsTotal < 500);
+    if (placesWithoutDuplicates.length < 3) return null;
 
     placesWithoutDuplicates.sort((a, b) => b.rating.compareTo(a.rating));
 
     List<Place> places = [];
 
     for (String type in types) {
-      Place routePlace = placesWithoutDuplicates.firstWhere((place) {
-        return place.types.contains(type);
-      }, orElse: () {});
-      if (routePlace != null) {
-        places.add(routePlace);
-        placesWithoutDuplicates.remove(routePlace);
+      Place routePlace;
+      if (type == TOURIST_ATTRACTION || type == PARK) {
+        routePlace = placesWithoutDuplicates
+            .firstWhere((place) => place.types.contains(type), orElse: () {});
+        if (routePlace != null) {
+          places.add(routePlace);
+          placesWithoutDuplicates.remove(routePlace);
+        }
+        routePlace = placesWithoutDuplicates
+            .firstWhere((place) => place.types.contains(type), orElse: () {});
+        if (routePlace != null) {
+          places.add(routePlace);
+          placesWithoutDuplicates.remove(routePlace);
+        }
+      } else {
+        routePlace = placesWithoutDuplicates
+            .firstWhere((place) => place.types.contains(type), orElse: () {});
+        if (routePlace != null) {
+          places.add(routePlace);
+          placesWithoutDuplicates.remove(routePlace);
+        }
       }
     }
+
+    if (places.length < 3) return null;
+
     LatLng start = LatLng(location.lat, location.lng);
 
     List<Path> paths = [];
     for (var transport in transports) {
-      paths.addAll(await directionsEngine.makePaths(start, places, transport));
+      Path path = await directionsEngine.makePath(start, places, transport);
+      if (path != null) paths.add(path);
     }
-    Route route = Route(start, places, paths);
-
-    route.sortPlaces(0);
+    Route route =
+        Route(start, places, paths, db.currentUserId, locationName, locationId);
 
     return route;
   }

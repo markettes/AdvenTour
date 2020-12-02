@@ -32,6 +32,7 @@
 .pub-cache/
 .pub/
 /build/
+pubspec.lock
 
 #HERE Sdk related
 /plugins/here_sdk/ios/Frameworks/heresdk.framework/heresdk

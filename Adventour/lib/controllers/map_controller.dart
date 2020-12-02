@@ -3,56 +3,86 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/directions.dart' as directions;
+import 'package:intl/intl.dart';
 
 class MapController {
   GoogleMapController _mapController;
   Map<MarkerId, Marker> _markers = {};
   Map<PolylineId, Polyline> _polylines = {};
+  String _style;
 
   Map<PolylineId, Polyline> get polylines => _polylines;
 
   Map<MarkerId, Marker> get markers => _markers;
 
-  void onMapCreated(GoogleMapController controller,[Function then]) {
+  bool get mapCreated => _mapController != null;
+
+  bool get isNight => _style == "assets/map_styles/dark.json";
+
+  void onMapCreated(GoogleMapController controller, [Function then]) {
     _mapController = controller;
     _changeMapStyle(_mapController);
-    if(then!=null)then();
+    if (then != null) then();
   }
 
   Future _changeMapStyle(GoogleMapController controller) async {
-    String style = await rootBundle.loadString("assets/map_style.json");
-    controller.setMapStyle(style);
+    DateTime now;
+    String formattedDate;
+    
+
+    now = DateTime.now();
+    formattedDate = DateFormat('kk').format(now);
+
+    if (int.parse(formattedDate) < 20) {
+      _style = "assets/map_styles/light.json";
+    } else {
+      _style = "assets/map_styles/dark.json";
+    }
+
+    controller.setMapStyle(await rootBundle.loadString(_style));
   }
 
   drawPolyline(Polyline polyline) {
     _polylines[polyline.polylineId] = polyline;
   }
 
+  clearPolyline() {
+    _polylines = {};
+  }
+
   void addMarker(Place place, BuildContext context) {
     Marker marker = Marker(
-      markerId: MarkerId(place.name),
+      markerId: MarkerId(place.id),
       position: LatLng(place.latitude, place.longitude),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
       infoWindow: InfoWindow(
           title: place.name ?? "Unknown",
           onTap: () {
-            if (place.id == 'start')
-              return;
-            else {
+            if (place.type != LOCALITY)
               Navigator.of(context).pushNamed(
                 '/placePage',
                 arguments: {
                   'place': place,
-                  'tapMap': (){
+                  'tapMap': () {
                     goToCoordinates(place.latitude, place.longitude, 18);
                   }
                 },
               );
-            }
+            else
+              Navigator.of(context).pushNamed(
+                '/highlightPage',
+                arguments: {
+                  'place': place,
+                },
+              );
           }),
     );
 
     _markers[marker.markerId] = marker;
+  }
+
+  void clearMarker(String id) {
+    _markers.remove(MarkerId(id));
   }
 
   void clearMarkers() {
