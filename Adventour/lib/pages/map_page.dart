@@ -18,11 +18,8 @@ import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:intl/intl.dart';
-
+import 'package:weather/weather.dart';
 import '../app_localizations.dart';
-
-DateTime today = DateTime.now();
-
 
 class MapPage extends StatefulWidget {
   @override
@@ -36,10 +33,17 @@ class _MapPageState extends State<MapPage> {
   Position _position;
   bool _fixedPosition = false;
 
+  DateTime today = DateTime.now();
+  WeatherFactory ws = new WeatherFactory("6dfa830bb9af38b050628b6fd2701df6");
+  List<Weather> forecasts;
+
+
   TextEditingController _locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if(forecasts==null){WidgetsBinding.instance.addPostFrameCallback((_) { weatherIn(); setState(() {}); });}
+    
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -231,7 +235,7 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-   String fiveNextDays(int day) {
+  String fiveNextDays(int day) {
      if(day > 7){day = day - 7;}
     if(day == 1){return "Monday";}
     else if(day == 2){return "Tuesday";}
@@ -240,7 +244,25 @@ class _MapPageState extends State<MapPage> {
     else if(day == 5){return "Friday";}
     else if(day == 6){return "Saturday";}
     else if(day == 7){return "Sunday";}
+    return null;
+  }
 
+  Future<void> weatherIn() async {
+    
+    await ws.fiveDayForecastByLocation(_position.latitude, _position.longitude).then((value) => forecasts=value);
+
+  }
+
+  IconData descriptionToIcon(String icon){
+    if(icon == "01n" || icon == "01d"){return Icons.wb_sunny;}
+    else if (icon == "02n" || icon == "02d"){return Icons.wb_cloudy_outlined;}
+    else if (icon == "03n" || icon == "03d"){return Icons.wb_cloudy;}
+    else if (icon == "04n" || icon == "04d"){return Icons.wb_cloudy;}
+    else if (icon == "09n" || icon == "09d"){return Icons.invert_colors;}
+    else if (icon == "10n" || icon == "10d"){return Icons.invert_colors;}
+    else if (icon == "11n" || icon == "11d"){return Icons.flash_on;}
+    else if (icon == "13n" || icon == "13d"){return Icons.ac_unit;}
+    else if (icon == "50n" || icon == "50d"){return Icons.menu;}
   }
 
   Future showWeatherDialog() => showDialog(
@@ -262,7 +284,7 @@ class _MapPageState extends State<MapPage> {
                   child: Column(
                     children: [
                       Icon(
-                        Icons.wb_sunny,
+                        descriptionToIcon(forecasts[0].weatherIcon),
                         size: 100,
                         color: Theme.of(context).primaryColor,
                       ),
@@ -284,7 +306,7 @@ class _MapPageState extends State<MapPage> {
                                         .headline2
                                         .copyWith(fontSize: 10)),
                                 Icon(
-                                  Icons.email,
+                                  descriptionToIcon(forecasts[1].weatherIcon),
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
@@ -300,7 +322,7 @@ class _MapPageState extends State<MapPage> {
                                         .headline2
                                         .copyWith(fontSize: 10)),
                                 Icon(
-                                  Icons.email,
+                                  descriptionToIcon(forecasts[2].weatherIcon),
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
@@ -316,7 +338,7 @@ class _MapPageState extends State<MapPage> {
                                         .headline2
                                         .copyWith(fontSize: 10)),
                                 Icon(
-                                  Icons.email,
+                                  descriptionToIcon(forecasts[3].weatherIcon),
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
@@ -332,7 +354,7 @@ class _MapPageState extends State<MapPage> {
                                         .headline2
                                         .copyWith(fontSize: 10)),
                                 Icon(
-                                  Icons.email,
+                                  descriptionToIcon(forecasts[4].weatherIcon),
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
@@ -348,7 +370,7 @@ class _MapPageState extends State<MapPage> {
                                         .headline2
                                         .copyWith(fontSize: 10)),
                                 Icon(
-                                  Icons.email,
+                                  descriptionToIcon(forecasts[5].weatherIcon),
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
