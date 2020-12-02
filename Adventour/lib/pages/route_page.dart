@@ -101,42 +101,37 @@ class _RoutePageState extends State<RoutePage>
       return showDialog(
         context: context,
         builder: (context) {
-          return Dialog(
-            child: Container(
-              height: 150,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      oldAuthor
-                          ? 'Are you sure you want to edit your route?'
-                          : 'Would you like save this route?',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(fontSize: 20),
-                    ),
-                    PrimaryButton(
-                      text: 'SAVE',
-                      onPressed: () {
-                        if (oldAuthor) {
-                          db.updateRoute(route);
-                          db.editeRoute(db.currentUserId);
-                        } else {
-                          route.author = db.currentUserId;
-                          db.addRoute(route);
-                        }
-
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+          return AlertDialog(
+            title: Text(
+              oldAuthor
+                  ? 'Are you sure you want to edit your route?'
+                  : 'Would you like save this route?',
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
             ),
+            actions: [
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Save'),
+                onPressed: () {
+                  if (oldAuthor) {
+                    db.updateRoute(route);
+                    db.editeRoute(db.currentUserId);
+                  } else {
+                    route.author = db.currentUserId;
+                    db.addRoute(route);
+                  }
+
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              )
+            ],
           );
         },
       );
@@ -146,68 +141,62 @@ class _RoutePageState extends State<RoutePage>
         builder: (context) {
           TextEditingController _routeNameController = TextEditingController();
           final _formKey = GlobalKey<FormState>();
-          return Dialog(
-            child: Container(
-              height: 230,
+          return AlertDialog(
+            title: Text(
+              'Put a name to your route',
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
+            ),
+            content: Container(
+              height: 100,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Put a name to your route',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(fontSize: 20),
-                    ),
                     Form(
                       key: _formKey,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 100,
-                            child: InputText(
-                              icon: Icons.flag,
-                              labelText: 'Route name',
-                              controller: _routeNameController,
-                              maxLength: 20,
-                              validator: (value) {
-                                if (value.isEmpty)
-                                  return 'Route name can\'t be empty';
-                                return null;
-                              },
-                            ),
-                          ),
-                          PrimaryButton(
-                            text: 'SAVE',
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                route.name = _routeNameController.text;
-                                route.author = db.currentUserId;
-                                route.images = route.places
-                                    .map((place) =>
-                                        place.photos[0].photoReference)
-                                    .toList();
-
-                                db.addRoute(route);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              }
-                            },
-                          ),
-                        ],
+                      child: InputText(
+                        icon: Icons.flag,
+                        labelText: 'Route name',
+                        controller: _routeNameController,
+                        maxLength: 20,
+                        validator: (value) {
+                          if (value.isEmpty)
+                            return 'Route name can\'t be empty';
+                          return null;
+                        },
                       ),
                     )
-                    // PrimaryButton(
-                    //   text: 'SAVE',
-                    //   onPressed: () => Navigator.pop(context),
-                    // ),
                   ],
                 ),
               ),
             ),
+            actions: [
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Save'),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    route.name = _routeNameController.text;
+                    route.author = db.currentUserId;
+                    route.images = route.places
+                        .map((place) => place.photos[0].photoReference)
+                        .toList();
+
+                    db.addRoute(route);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                },
+              )
+            ],
           );
         },
       );
@@ -495,9 +484,9 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
                   'assets/marker.png',
                 ),
                 infoWindow: InfoWindow(title: "Start"));
-            _mapController.markers[mStart.markerId] = mStart;
+            _mapController.addMarker(mStart);
             for (var place in widget.places) {
-              _mapController.addMarker(place, context);
+              _mapController.addPlaceMarker(place, context);
             }
             setState(() {});
           }),
@@ -837,45 +826,34 @@ class _DurationDialogState extends State<DurationDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        height: 300,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Change estimate place duration',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(fontSize: 18),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Expanded(
-                child: DurationPicker(
-                  duration: _duration,
-                  onChange: (duration) {
-                    if (duration < Duration(hours: 2)) {
-                      _duration = duration;
-                      setState(() {});
-                    }
-                  },
-                ),
-              ),
-              FlatButton(
-                child: Text('Save'),
-                onPressed: () {
-                  Navigator.pop(context, _duration);
-                },
-              ),
-            ],
-          ),
-        ),
+    return AlertDialog(
+      title: Text(
+        'Change estimate place duration',
+        style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17),
       ),
+      content: DurationPicker(
+        duration: _duration,
+        onChange: (duration) {
+          if (duration < Duration(hours: 2)) {
+            _duration = duration;
+            setState(() {});
+          }
+        },
+      ),
+      actions: [
+        FlatButton(
+          child: Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text('Save'),
+          onPressed: () {
+            Navigator.pop(context, _duration);
+          },
+        ),
+      ],
     );
   }
 }

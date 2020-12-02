@@ -50,7 +50,9 @@ class MapController {
     _polylines = {};
   }
 
-  void addMarker(Place place, BuildContext context) {
+  void addMarker(Marker marker) => _markers[marker.markerId] = marker;
+
+  void addPlaceMarker(Place place, BuildContext context) {
     Marker marker = Marker(
       markerId: MarkerId(place.id),
       position: LatLng(place.latitude, place.longitude),
@@ -78,7 +80,7 @@ class MapController {
           }),
     );
 
-    _markers[marker.markerId] = marker;
+    addMarker(marker);
   }
 
   void clearMarker(String id) {

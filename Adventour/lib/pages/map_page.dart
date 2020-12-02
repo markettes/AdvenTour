@@ -220,7 +220,7 @@ class _MapPageState extends State<MapPage> {
         value, Location(_position.latitude, _position.longitude), 1000);
     _mapController.clearMarkers();
     for (var place in places) {
-      _mapController.addMarker(place, context);
+      _mapController.addPlaceMarker(place, context);
     }
 
     setState(() {
@@ -244,7 +244,7 @@ class _MapPageState extends State<MapPage> {
             Location(_position.latitude, _position.longitude), 1000))
         .first;
 
-    _mapController.addMarker(place, context);
+    _mapController.addPlaceMarker(place, context);
     setState(() {
       _locationController.text = prediction.description;
     });

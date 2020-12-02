@@ -196,7 +196,7 @@ class _NavigationPageState extends State<NavigationPage> {
                               _position.latitude, _position.longitude, 20);
                           // _mapController.drawPolyline(polyline);
                           for (var place in route.places) {
-                            _mapController.addMarker(place, context);
+                            _mapController.addPlaceMarker(place, context);
                           }
                           if (stopwatch.isRunning) {
                             stopwatch.stop();
