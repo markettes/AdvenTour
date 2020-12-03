@@ -2,11 +2,7 @@ import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart';
-import 'package:Adventour/pages/route_page.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:mockito/mockito.dart';
-import 'dart:math';
 
 Future<void> main() async {
   test('delete stop', () async {
