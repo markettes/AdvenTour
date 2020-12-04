@@ -52,7 +52,7 @@
     "sure_edit": "¿Estás seguro de que quieres editar la ruta?",
     "like_save": "¿Querrías guardar esta ruta?",
     "lose_this": "Si tu ruta es una ruta destacada, se pierde esto",
-    "save": "GUARDAR",
+    "save": "Guardar",
     "put_name": "Pon un nombre a tu ruta",
     "route_name": "Nombre de la ruta",
     "route_name_empty": "El nombre de la ruta no puede estar vacío",
@@ -70,5 +70,11 @@
     "Search": "Search",
     "HIGHLIGHTS": "DESTACADOS",
     "CUSTOM": "PERSONALIZAR",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "about": "Sobre nosotros",
+    "contact": "Contacto",
+    "changelanguage": "Cambiar idioma",
+    "spanish": "Español",
+    "english": "Inglés",
+    "cancel": "Cancelar"
 }

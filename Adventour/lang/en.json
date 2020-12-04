@@ -52,7 +52,7 @@
     "sure_edit": "Are you sure you want to edit your route?",
     "like_save": "Would you like save this route?",
     "lose_this": "If your route is a highlight, it lose this",
-    "save": "SAVE",
+    "save": "Save",
     "put_name": "Put a name to your route",
     "route_name": "Route name",
     "route_name_empty": "Route name cannot be empty",
@@ -70,5 +70,13 @@
     "Search": "Search",
     "HIGHLIGHTS": "HIGHLIGHTS",
     "CUSTOM": "CUSTOM",
-    "settings": "Settings"
+    "settings": "Settings",
+    "about": "About us",
+    "contact": "Contact",
+    "changelanguage": "Change language",
+    "spanish": "Spanish",
+    "english": "English",
+    "cancel": "Cancel"
+
+
 }
