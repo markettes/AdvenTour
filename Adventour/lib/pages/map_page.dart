@@ -7,7 +7,6 @@ import 'package:Adventour/controllers/route_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/User.dart';
-import 'package:Adventour/widgets/category_checkbox.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
