@@ -10,6 +10,7 @@ import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
 import 'package:Adventour/pages/route_page.dart';
 import 'package:Adventour/pages/routes_page.dart';
+import 'package:Adventour/pages/settings_page.dart';
 import 'package:Adventour/pages/sign_up_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,14 +46,15 @@ class Adventour extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      localeResolutionCallback: (locale, supportedLocales) { //Test if locale is supported
+      localeResolutionCallback: (locale, supportedLocales) {
+        //Test if locale is supported
         var supportedLocale;
-         for (supportedLocale in supportedLocales) {
-           if(supportedLocale.languageCode == locale.languageCode){
-             return supportedLocale;
-           }
-         }
-         return supportedLocales.first; //If is not supported, in english
+        for (supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first; //If is not supported, in english
       },
       routes: {
         '/initPage': (_) => InitPage(),
@@ -71,6 +73,7 @@ class Adventour extends StatelessWidget {
         '/routesPage': (_) => RoutesPage(),
         '/profilePage': (_) => ProfilePage(),
         '/navigationPage': (_) => NavigationPage(),
+        '/settingsPage': (_) => SettingsPage()
       },
     );
   }

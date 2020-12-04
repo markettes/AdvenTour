@@ -154,7 +154,8 @@ class _MapPageState extends State<MapPage> {
                             child: TextField(
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: AppLocalizations.of(context).translate('search'),
+                                hintText: AppLocalizations.of(context)
+                                    .translate('search'),
                               ),
                               controller: _locationController,
                               onTap: () async {
@@ -381,7 +382,8 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              AppLocalizations.of(context).translate('achievements'),
+                              AppLocalizations.of(context)
+                                  .translate('achievements'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
@@ -417,6 +419,34 @@ class MyDrawer extends StatelessWidget {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/settingsPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.settings,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)
+                                  .translate('settings'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 // Row(
                 //   children: [
                 //     Expanded(
@@ -436,33 +466,6 @@ class MyDrawer extends StatelessWidget {
                 //             ),
                 //             Text(
                 //               'Favourites',
-                //               style: Theme.of(context).textTheme.bodyText1,
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //     ),
-                //   ],
-                // ),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: MaterialButton(
-                //         onPressed: () {
-                //           //Navigator
-                //         },
-                //         child: Row(
-                //           children: [
-                //             Icon(
-                //               Icons.settings,
-                //               size: 35,
-                //               color: Theme.of(context).primaryColor,
-                //             ),
-                //             SizedBox(
-                //               width: 10,
-                //             ),
-                //             Text(
-                //               'Settings',
                 //               style: Theme.of(context).textTheme.bodyText1,
                 //             )
                 //           ],

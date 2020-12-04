@@ -45,8 +45,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
           stream: db.getUser(db.currentUserId),
           builder: (context, snapshot) {
             if (snapshot.hasError) print(snapshot.error);
-            if (!snapshot.hasData)
-              Center(child: CircularProgressIndicator());
+            if (!snapshot.hasData) Center(child: CircularProgressIndicator());
             User user = snapshot.data;
             return StreamBuilder(
                 stream: db.getAchievements(),
@@ -54,13 +53,12 @@ class _AchievementsPageState extends State<AchievementsPage> {
                   if (snapshot.hasError) print(snapshot.error);
                   if (!snapshot.hasData)
                     return Center(child: CircularProgressIndicator());
-                  List<Achievement> achievements = 
+                  List<Achievement> achievements =
                       sortByCompleted(user, snapshot.data);
                   return ListView.separated(
                     itemCount: achievements.length,
                     shrinkWrap: true,
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: 5),
+                    separatorBuilder: (context, index) => SizedBox(height: 5),
                     itemBuilder: (context, index) {
                       Achievement achievement = achievements[index];
 
@@ -129,12 +127,18 @@ class AchievementWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 10, left: 10),
                         child: Column(
                           children: [
-                            isCompleted?Icon(Icons.emoji_events,size: 40,): CircularProgressIndicator(
-                              value: attribute / achievement.objective,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  Theme.of(context).primaryColor),
-                              backgroundColor: Theme.of(context).accentColor,
-                            ),
+                            isCompleted
+                                ? Icon(
+                                    Icons.emoji_events,
+                                    size: 40,
+                                  )
+                                : CircularProgressIndicator(
+                                    value: attribute / achievement.objective,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Theme.of(context).primaryColor),
+                                    backgroundColor:
+                                        Theme.of(context).accentColor,
+                                  ),
                             attribute < achievement.objective
                                 ? Text(attribute.toString() +
                                     "/" +
