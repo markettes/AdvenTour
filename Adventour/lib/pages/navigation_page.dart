@@ -95,73 +95,6 @@ class _NavigationPageState extends State<NavigationPage> {
         _showCancelAlert();
       },
       child: Scaffold(
-        appBar: _finishedRoute == null
-            ? AppBar(
-                backgroundColor: Theme.of(context).primaryColor,
-                title: Text(route.name),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.more_vert),
-                    onPressed: () {},
-                  )
-                ],
-              )
-            : null,
-        bottomNavigationBar: _finishedRoute == null
-            ? Container(
-                height: 90,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                    ),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black, blurRadius: 5),
-                    ]),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      if (_nearestPlace != null) Text(_nearestPlace.name),
-                      if (_nearestPlace != null) SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            _nearestPlace != null
-                                ? typeToIcon(_nearestPlace.type)
-                                : Icons.info,
-                            color: Theme.of(context).primaryColor,
-                            size: 40,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Icon(Icons.directions_walk,
-                                      color: Theme.of(context).primaryColor),
-                                  Text('${tiempoRestante()}'),
-                                  Icon(
-                                    Icons.location_pin,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  Text(
-                                      '${route.paths[_selectedPath].stretchs.length}')
-                                ],
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            : null,
         body: _finishedRoute == null
             ? StreamBuilder(
                 stream: Geolocator.getPositionStream(),
@@ -240,7 +173,8 @@ class _NavigationPageState extends State<NavigationPage> {
                         duration: Duration(milliseconds: 600),
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                              left: 16.0, right: 8.0, top: 8.0, bottom: 124.0),
                           child: CircleIconButton(
                             type: route.paths[_selectedPath].transport,
                             onPressed: nextTransport,
@@ -255,7 +189,12 @@ class _NavigationPageState extends State<NavigationPage> {
                         duration: Duration(milliseconds: 600),
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                            left: 8.0,
+                            right: 16.0,
+                            top: 8.0,
+                            bottom: 124.0,
+                          ),
                           child: CircleIconButton(
                             icon: Icon(
                               Icons.gps_fixed,
@@ -283,12 +222,101 @@ class _NavigationPageState extends State<NavigationPage> {
                       ),
                     ),
                     Align(
-                      alignment: Alignment.topRight,
-                      child: Text(
-                        '${tiempoDurante()}',
-                        style: TextStyle(
+                      alignment: Alignment.bottomCenter,
+                      child: _finishedRoute == null
+                          ? Container(
+                              margin: EdgeInsets.all(16),
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context).backgroundColor,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black, blurRadius: 5),
+                                  ]),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    if (_nearestPlace != null)
+                                      Text(
+                                        _nearestPlace.name,
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    if (_nearestPlace != null)
+                                      SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(
+                                          _nearestPlace != null
+                                              ? typeToIcon(_nearestPlace.type)
+                                              : Icons.info,
+                                          color: Theme.of(context).primaryColor,
+                                          size: 40,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Icon(Icons.directions_walk,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                                Text(
+                                                  '${tiempoRestante()}',
+                                                ),
+                                                Icon(
+                                                  Icons.location_pin,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                                Text(
+                                                    '${route.paths[_selectedPath].stretchs.length}')
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        margin: EdgeInsets.all(30),
+                        padding: EdgeInsets.all(7),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).backgroundColor,
+                            borderRadius: BorderRadius.circular(5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3),
+                              ),
+                            ]),
+                        child: Text(
+                          '${tiempoDurante()}',
+                          style: TextStyle(
                             color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     )
                   ]);
@@ -352,8 +380,7 @@ class _NavigationPageState extends State<NavigationPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(AppLocalizations.of(context).translate('would')),
-          content: Text(
-              AppLocalizations.of(context).translate('alert')),
+          content: Text(AppLocalizations.of(context).translate('alert')),
           actions: [
             TextButton(
                 onPressed: () {
@@ -366,7 +393,8 @@ class _NavigationPageState extends State<NavigationPage> {
                   //Borrar progreso ruta actual (?)
                   Navigator.of(context).pop();
                 },
-                child: Text(AppLocalizations.of(context).translate('yes'))) //Cancelar ruta
+                child: Text(AppLocalizations.of(context)
+                    .translate('yes'))) //Cancelar ruta
           ],
         );
       },
@@ -450,10 +478,15 @@ class _FinishedRouteWidgetState extends State<FinishedRouteWidget> {
             ),
           ),
           Text(
-            widget.finishedRoute.name + ' ' + AppLocalizations.of(context).translate('finished'),
+            widget.finishedRoute.name +
+                ' ' +
+                AppLocalizations.of(context).translate('finished'),
             style: Theme.of(context).textTheme.headline2,
           ),
-          Text(AppLocalizations.of(context).translate('in') + ' ' + widget.finishedRoute.durationText,
+          Text(
+              AppLocalizations.of(context).translate('in') +
+                  ' ' +
+                  widget.finishedRoute.durationText,
               style:
                   Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 15)),
           Row(
