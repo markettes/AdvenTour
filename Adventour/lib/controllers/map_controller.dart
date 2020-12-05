@@ -11,6 +11,16 @@ class MapController {
   Map<PolylineId, Polyline> _polylines = {};
   String _style;
 
+  BitmapDescriptor _startImage;
+  BitmapDescriptor _parkImage;
+  BitmapDescriptor _restaurantImage;
+  BitmapDescriptor _touristAttractionImage;
+  BitmapDescriptor _stadiumImage;
+  BitmapDescriptor _museumImage;
+  BitmapDescriptor _nightClubImage;
+  BitmapDescriptor _shoppingMallImage;
+  BitmapDescriptor _localityImage;
+
   Map<PolylineId, Polyline> get polylines => _polylines;
 
   Map<MarkerId, Marker> get markers => _markers;
@@ -28,7 +38,6 @@ class MapController {
   Future _changeMapStyle(GoogleMapController controller) async {
     DateTime now;
     String formattedDate;
-    
 
     now = DateTime.now();
     formattedDate = DateFormat('kk').format(now);
@@ -50,13 +59,13 @@ class MapController {
     _polylines = {};
   }
 
-  void addMarker(Marker marker) => _markers[marker.markerId] = marker;
+  void _addMarker(Marker marker) => _markers[marker.markerId] = marker;
 
-  void addPlaceMarker(Place place, BuildContext context) {
+  void addPlaceMarker(Place place, BuildContext context) async {
     Marker marker = Marker(
       markerId: MarkerId(place.id),
       position: LatLng(place.latitude, place.longitude),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      icon: await _buildMarkerImage(place.type),
       infoWindow: InfoWindow(
           title: place.name ?? "Unknown",
           onTap: () {
@@ -80,7 +89,97 @@ class MapController {
           }),
     );
 
-    addMarker(marker);
+    _addMarker(marker);
+  }
+
+  void addStartMarker(LatLng position, BuildContext context) async {
+    Marker marker = Marker(
+      markerId: MarkerId('start'),
+      position: position,
+      icon: await _buildStartImage(),
+      infoWindow: InfoWindow(
+        title: 'Start',
+      ),
+    );
+
+    _addMarker(marker);
+  }
+  Future<BitmapDescriptor> _buildStartImage() async { 
+    if (_startImage == null)
+        _startImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/start.png',
+        );
+      return _startImage;
+  }
+
+  Future<BitmapDescriptor> _buildMarkerImage(String type) async {
+    if (type == PARK) {
+      if (_parkImage == null)
+        _parkImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/park.png',
+        );
+      return _parkImage;
+    }
+    if (type == RESTAURANT) if (_restaurantImage == null) {
+      _restaurantImage = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(devicePixelRatio: 2.5),
+        'assets/markers/restaurant.png',
+      );
+      return _restaurantImage;
+    }
+    if (type == STADIUM) {
+      if (_stadiumImage == null)
+        _stadiumImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/stadium.png',
+        );
+      return _stadiumImage;
+    }
+
+    if (type == NIGHT_CLUB) {
+      if (_nightClubImage == null)
+        _nightClubImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/night_mall.png',
+        );
+      return _nightClubImage;
+    }
+
+    if (type == SHOPPING_MALL) {
+      if (_shoppingMallImage == null)
+        _shoppingMallImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/shopping_mall.png',
+        );
+      return _shoppingMallImage;
+    }
+
+    if (type == MUSEUM) {
+      if (_museumImage == null)
+        _museumImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/shopping_mall.png',
+        );
+      return _museumImage;
+    }
+
+    if (type == LOCALITY) {
+      if (_localityImage == null)
+        _localityImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/locality.png',
+        );
+      return _localityImage;
+    } else {
+      if (_touristAttractionImage == null)
+        _touristAttractionImage = await BitmapDescriptor.fromAssetImage(
+          ImageConfiguration(devicePixelRatio: 2.5),
+          'assets/markers/tourist_attraction.png',
+        );
+      return _touristAttractionImage;
+    }
   }
 
   void clearMarker(String id) {

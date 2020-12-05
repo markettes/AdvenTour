@@ -260,8 +260,6 @@ IconData typeToIcon(String type) {
       return Icons.eco;
     case RESTAURANT:
       return Icons.restaurant;
-    case TOURIST_ATTRACTION:
-      return Icons.camera_alt;
     case STADIUM:
       return Icons.sports;
     case MUSEUM:
@@ -273,6 +271,6 @@ IconData typeToIcon(String type) {
     case LOCALITY:
       return Icons.location_city;
     default:
-      return Icons.business;
+      return Icons.camera_alt;
   }
 }

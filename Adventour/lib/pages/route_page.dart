@@ -469,22 +469,14 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           initialCameraPosition: CameraPosition(
             target: LatLng(
                 widget.places.first.latitude, widget.places.first.longitude),
-            zoom: 12.5,
+            zoom: 13.5,
           ),
           markers: Set<Marker>.of(_mapController.markers.values),
           polylines: Set<Polyline>.of(_mapController.polylines.values),
           onMapCreated: (googleMapController) =>
               _mapController.onMapCreated(googleMapController, () async {
             await drawPath();
-            Marker mStart = Marker(
-                markerId: MarkerId("Start"),
-                position: LatLng(widget.start.latitude, widget.start.longitude),
-                icon: await BitmapDescriptor.fromAssetImage(
-                  ImageConfiguration(devicePixelRatio: 2.5),
-                  'assets/marker.png',
-                ),
-                infoWindow: InfoWindow(title: "Start"));
-            _mapController.addMarker(mStart);
+            _mapController.addStartMarker(widget.route.start, context);
             for (var place in widget.places) {
               _mapController.addPlaceMarker(place, context);
             }
