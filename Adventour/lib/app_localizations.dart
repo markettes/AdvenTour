@@ -1,3 +1,4 @@
+import 'package:Adventour/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -22,8 +23,20 @@ class AppLocalizations {
   Future<bool> load() async {
     //TODO: Guardar los ajustes de usuario como el idioma seleccionado,
     //inicialmente no habrá seleccionado ninguno y se ejecutará la siguiente línea)
-    String jsonString =
-        await rootBundle.loadString('lang/${locale.languageCode}.json');
+    String langString, jsonString;
+
+    LanguageDialog.getLanguage().then((value) => langString);
+    switch (langString) {
+      case "lang/en.json":
+        jsonString = await rootBundle.loadString(langString);
+        break;
+      case "lang/es.json":
+        jsonString = await rootBundle.loadString(langString);
+        break;
+      default:
+        jsonString =
+            await rootBundle.loadString('lang/${locale.languageCode}.json');
+    }
 
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 

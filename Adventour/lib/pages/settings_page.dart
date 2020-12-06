@@ -19,46 +19,61 @@ class _SettingsPageState extends State<SettingsPage> {
         padding: EdgeInsets.all(8),
         child: ListView(
           children: [
-            Row(
-              children: [
-                FlatButton(
-                  child: Text(
-                    AppLocalizations.of(context).translate('changelanguage'),
+            Container(
+              margin: EdgeInsets.all(8.0),
+              alignment: Alignment.center,
+              color: Theme.of(context).buttonColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FlatButton(
+                    child: Text(
+                      AppLocalizations.of(context).translate('changelanguage'),
+                      textScaleFactor: 1.5,
+                    ),
+                    onPressed: () => _showMyDialogs('LANG'),
                   ),
-                  onPressed: () => _showMyDialogs(),
-                ),
-              ],
+                ],
+              ),
             ),
-            Row(
-              children: [
-                FlatButton(
-                  onPressed: () {},
-                  child: Text(AppLocalizations.of(context).translate('about')),
-                ), //Icono Adventour
-              ],
+            Container(
+              margin: EdgeInsets.all(8.0),
+              alignment: Alignment.center,
+              color: Theme.of(context).buttonColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FlatButton(
+                    onPressed: () => _showMyDialogs('ABOUT'),
+                    child: Text(
+                      AppLocalizations.of(context).translate('about'),
+                      textScaleFactor: 1.5,
+                    ),
+                  ), //Icono Adventour
+                ],
+              ),
             ),
-            Row(
-              children: [
-                Text(
-                  AppLocalizations.of(context).translate('contact'),
-                ),
-                IconButton(icon: Icon(Icons.contact_support), onPressed: null)
-              ],
+            Container(
+              margin: EdgeInsets.all(8.0),
+              alignment: Alignment.center,
+              color: Theme.of(context).buttonColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FlatButton(
+                    onPressed: () => _showMyDialogs('CONTACT'),
+                    child: Text(
+                      AppLocalizations.of(context).translate('contact'),
+                      textScaleFactor: 1.5,
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),
       ),
     );
-  }
-
-  Future<bool> setLanguage(String language) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString("language", language);
-  }
-
-  Future<String> getLanguage() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString("language");
   }
 
   Future<void> _showMyDialogs(String dialog) async {
@@ -73,9 +88,11 @@ class _SettingsPageState extends State<SettingsPage> {
             return AboutDialog(
               applicationIcon: Image.asset('logo_adventour.png'),
               applicationName: 'Adventour',
-              applicationVersion: '0.1.7',
+              applicationVersion: '0.8.1',
               children: [
-                Text('Developers:'),
+                Text(
+                  'Developers: \n',
+                ),
                 Text('Carlos Gálvez Aucejito\n' +
                     'Daniel Herrero Pardo\n' +
                     'Daniel Álvarez Vallejo\n' +
@@ -94,53 +111,151 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 }
 
-class ContactDialog extends StatelessWidget {
+class ContactDialog extends StatefulWidget {
+  @override
+  _ContactDialogState createState() => _ContactDialogState();
+}
+
+class _ContactDialogState extends State<ContactDialog> {
+  String dropdownValue = 'Help';
   @override
   Widget build(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (BuildContext context) => Scaffold(
-            appBar: AppBar(title: Text(AppLocalizations.of(context).translate('contact')), ,),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).translate('contact')),
+      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(AppLocalizations.of(context).translate('reason')),
+              DropdownButton(
+                items: <String>['Help', 'Suggestions', 'Business']
+                    .map<DropdownMenuItem<String>>(
+                  (String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  },
+                ).toList(),
+                onChanged: (String value) {
+                  setState(() {
+                    dropdownValue = value;
+                  });
+                },
+                value: dropdownValue,
+              )
+            ],
           ),
-          fullscreenDialog: true),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 20.0),
+          child: Flexible(
+            child: TextField(
+              maxLines: 10,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                hintText:
+                    AppLocalizations.of(context).translate('writeHere') + '...',
+              ),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RaisedButton.icon(
+                icon: Icon(
+                  Icons.send,
+                ),
+                label: Text(
+                  AppLocalizations.of(context).translate('send'),
+                ),
+                color: Theme.of(context).buttonColor,
+                onPressed: () {}), //TODO
+          ],
+        )
+      ]),
     );
   }
 }
 
-class LanguageDialog extends StatelessWidget {
+class LanguageDialog extends StatefulWidget {
   const LanguageDialog({
     Key key,
   }) : super(key: key);
 
+  static Future<bool> setLanguage(String language) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString("language", language);
+  }
+
+  static Future<String> getLanguage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString("language");
+  }
+
+  @override
+  _LanguageDialogState createState() => _LanguageDialogState();
+}
+
+class _LanguageDialogState extends State<LanguageDialog> {
+  Locale locale;
   @override
   Widget build(BuildContext context) {
+    String currentLanguage;
+    LanguageDialog.getLanguage().then((value) => currentLanguage = value);
     return AlertDialog(
       title: Text(AppLocalizations.of(context).translate('changelanguage')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            title: Text(AppLocalizations.of(context).translate('spanish')),
-            leading: Radio(
-              value: 1,
-              groupValue: 1,
-              onChanged: (_) {},
-            ),
-          ),
-          ListTile(
-            title: Text(AppLocalizations.of(context).translate('english')),
-            leading: Radio(
-              value: 0,
-              groupValue: 1,
-              onChanged: (_) {},
-            ),
+          FutureBuilder<String>(
+            future: LanguageDialog.getLanguage(),
+            initialData: 'lang/en.json',
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              return snapshot.hasData
+                  ? () => {
+                        ListTile(
+                          title: Text(AppLocalizations.of(context)
+                              .translate('spanish')),
+                          leading: Radio(
+                            value: 'lang/es.json',
+                            groupValue: currentLanguage,
+                            onChanged: (String value) {
+                              currentLanguage = value;
+                            },
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(AppLocalizations.of(context)
+                              .translate('english')),
+                          leading: Radio(
+                            value: 'lang/en.json',
+                            groupValue: currentLanguage,
+                            onChanged: (String value) {
+                              currentLanguage = value;
+                            },
+                          ),
+                        ),
+                      }
+                  : Container();
+            },
           ),
         ],
       ),
       actions: [
         FlatButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => {
+            LanguageDialog.setLanguage(currentLanguage),
+            setState(() {}),
+            Navigator.pop(context)
+          },
           child: Text(AppLocalizations.of(context).translate('save')),
         ),
         FlatButton(

@@ -76,7 +76,10 @@
     "changelanguage": "Change language",
     "spanish": "Spanish",
     "english": "English",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "reason": "Reason",
+    "writeHere": "Write here",
+    "send": "Enviar"
 
 
 }

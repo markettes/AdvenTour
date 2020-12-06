@@ -76,5 +76,8 @@
     "changelanguage": "Cambiar idioma",
     "spanish": "Español",
     "english": "Inglés",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "reason": "Motivo",
+    "writeHere": "Escribe aquí",
+    "send": "Enviar"
 }
