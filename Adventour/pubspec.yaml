@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/
     - assets/map_styles/
+    - assets/logo_adventour.png
     - assets/empty_photo.jpg
     - assets/drawer_background.jpg
     - lang/en.json

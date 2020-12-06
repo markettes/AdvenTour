@@ -15,64 +15,45 @@ class _SettingsPageState extends State<SettingsPage> {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('settings')),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView(
-          children: [
-            Container(
-              margin: EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              color: Theme.of(context).buttonColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FlatButton(
-                    child: Text(
-                      AppLocalizations.of(context).translate('changelanguage'),
-                      textScaleFactor: 1.5,
-                    ),
-                    onPressed: () => _showMyDialogs('LANG'),
+      body: ListView.separated(
+          itemCount: 3,
+          separatorBuilder: (_, _a) => Divider(
+                color: Theme.of(context).primaryColor,
+                height: 6.0,
+              ),
+          itemBuilder: (_, index) {
+            switch (index) {
+              case 0:
+                return FlatButton(
+                  height: 45.0,
+                  child: Text(
+                    AppLocalizations.of(context).translate('changelanguage'),
+                    textScaleFactor: 1.5,
                   ),
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              color: Theme.of(context).buttonColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FlatButton(
-                    onPressed: () => _showMyDialogs('ABOUT'),
-                    child: Text(
-                      AppLocalizations.of(context).translate('about'),
-                      textScaleFactor: 1.5,
-                    ),
-                  ), //Icono Adventour
-                ],
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              color: Theme.of(context).buttonColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FlatButton(
-                    onPressed: () => _showMyDialogs('CONTACT'),
-                    child: Text(
-                      AppLocalizations.of(context).translate('contact'),
-                      textScaleFactor: 1.5,
-                    ),
+                  onPressed: () => _showMyDialogs('LANG'),
+                );
+                break;
+              case 1:
+                return FlatButton(
+                  height: 45.0,
+                  onPressed: () => _showMyDialogs('ABOUT'),
+                  child: Text(
+                    AppLocalizations.of(context).translate('about'),
+                    textScaleFactor: 1.5,
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                );
+                break;
+              case 2:
+                return FlatButton(
+                  height: 45.0,
+                  onPressed: () => _showMyDialogs('CONTACT'),
+                  child: Text(
+                    AppLocalizations.of(context).translate('contact'),
+                    textScaleFactor: 1.5,
+                  ),
+                );
+            }
+          }),
     );
   }
 
@@ -86,7 +67,8 @@ class _SettingsPageState extends State<SettingsPage> {
             return LanguageDialog();
           case 'ABOUT':
             return AboutDialog(
-              applicationIcon: Image.asset('logo_adventour.png'),
+              applicationIcon:
+                  ImageIcon(AssetImage("assets/adventour_logo.png")),
               applicationName: 'Adventour',
               applicationVersion: '0.8.1',
               children: [
@@ -177,7 +159,7 @@ class _ContactDialogState extends State<ContactDialog> {
                   AppLocalizations.of(context).translate('send'),
                 ),
                 color: Theme.of(context).buttonColor,
-                onPressed: () {}), //TODO
+                onPressed: () {}), //TODO mensaje
           ],
         )
       ]),
@@ -215,37 +197,25 @@ class _LanguageDialogState extends State<LanguageDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FutureBuilder<String>(
-            future: LanguageDialog.getLanguage(),
-            initialData: 'lang/en.json',
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              return snapshot.hasData
-                  ? () => {
-                        ListTile(
-                          title: Text(AppLocalizations.of(context)
-                              .translate('spanish')),
-                          leading: Radio(
-                            value: 'lang/es.json',
-                            groupValue: currentLanguage,
-                            onChanged: (String value) {
-                              currentLanguage = value;
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(AppLocalizations.of(context)
-                              .translate('english')),
-                          leading: Radio(
-                            value: 'lang/en.json',
-                            groupValue: currentLanguage,
-                            onChanged: (String value) {
-                              currentLanguage = value;
-                            },
-                          ),
-                        ),
-                      }
-                  : Container();
-            },
+          ListTile(
+            title: Text(AppLocalizations.of(context).translate('spanish')),
+            leading: Radio(
+              value: 'lang/es.json',
+              groupValue: currentLanguage,
+              onChanged: (String value) {
+                currentLanguage = value;
+              },
+            ),
+          ),
+          ListTile(
+            title: Text(AppLocalizations.of(context).translate('english')),
+            leading: Radio(
+              value: 'lang/en.json',
+              groupValue: currentLanguage,
+              onChanged: (String value) {
+                currentLanguage = value;
+              },
+            ),
           ),
         ],
       ),
