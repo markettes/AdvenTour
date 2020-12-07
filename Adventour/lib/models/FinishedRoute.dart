@@ -19,6 +19,7 @@ class FinishedRoute {
     _places = route.places;
     _images = route.images;
     _routeId = route.id;
+    _locationName = route.locationName;
   }
 
   FinishedRoute.fromJson(DocumentSnapshot doc) {
