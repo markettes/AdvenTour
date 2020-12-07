@@ -456,7 +456,7 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     _polyline = Polyline(
         polylineId: PolylineId('Route'),
         points: routeCoords,
-        color: Colors.blue,
+        color: Theme.of(context).primaryColor,
         width: 4);
     _mapController.drawPolyline(_polyline);
   }

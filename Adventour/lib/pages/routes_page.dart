@@ -16,39 +16,58 @@ class RoutesPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('My routes'),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () => Navigator.pushNamed(context, '/customRoutePage'),
-        child: Icon(Icons.add,color:Colors.white,size: 30,),
-      ),
       body: StreamBuilder(
         stream: db.getRoutes(db.currentUserId),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           if (!snapshot.hasData) return CircularProgressIndicator();
           List<r.Route> routes = snapshot.data;
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: routes.isNotEmpty
-                ? ListView.separated(
-                    itemCount: routes.length,
-                    separatorBuilder: (context, index) => SizedBox(height: 5),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      r.Route route = routes[index];
-                      return GestureDetector(
-                        child: RouteWidget(
-                          route: route,
-                          onTap: () => showModalBottomSheet(
-                            context: context,
-                            builder: (context) =>
-                                BottomSheetRoutes(route: route),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                : Center(child: Text('Empty routes')),
+          return Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: routes.isNotEmpty
+                    ? CustomScrollView(slivers: [
+                        SliverToBoxAdapter(child: Text(routes.length.toString() + '/10 routes',textAlign: TextAlign.end,)),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                            r.Route route = routes[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: GestureDetector(
+                                child: RouteWidget(
+                                  route: route,
+                                  onTap: () => showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) =>
+                                        BottomSheetRoutes(route: route),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }, childCount: routes.length),
+                        )
+                      ])
+                    : Center(child: Text('Empty routes')),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: FloatingActionButton(
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed: () {
+          if(routes.length == 10) Toast.show('Limit of routes is 10', context);
+          else Navigator.pushNamed(context, '/customRoutePage');
+        } ,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 30,
+        ),
+      ),
+              ),
+            ],
           );
         },
       ),
