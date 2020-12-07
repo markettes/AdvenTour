@@ -18,6 +18,8 @@ import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:intl/intl.dart';
 
+import '../app_localizations.dart';
+
 class MapPage extends StatefulWidget {
   @override
   _MapPageState createState() => _MapPageState();
@@ -151,7 +153,7 @@ class _MapPageState extends State<MapPage> {
                             child: TextField(
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: 'Search...',
+                                hintText: AppLocalizations.of(context).translate('search'),
                               ),
                               controller: _locationController,
                               onTap: () async {
@@ -324,7 +326,34 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              'My profile',
+                              AppLocalizations.of(context).translate('profile'),
+                              style: Theme.of(context).textTheme.bodyText1,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/routesPage');
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.flag,
+                              size: 35,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context).translate('routes'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
@@ -351,7 +380,7 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              'Achievements',
+                              AppLocalizations.of(context).translate('achievements'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
@@ -378,7 +407,7 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              'History',
+                              AppLocalizations.of(context).translate('history'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],

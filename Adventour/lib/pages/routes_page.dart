@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:toast/toast.dart';
 
+import '../app_localizations.dart';
+
 class RoutesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My routes'),
+        title: Text(AppLocalizations.of(context).translate('routes') ),
       ),
       body: StreamBuilder(
         stream: db.getRoutes(db.currentUserId),

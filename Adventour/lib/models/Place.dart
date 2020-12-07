@@ -53,6 +53,11 @@ class Place {
     _duration = duration;
   }
 
+  @override
+  bool operator ==(other) {
+    return _coordinates == other._coordinates && (other is Place);
+  }
+
   // Place.fromGoogleMaps(Map json) {
 
   //   _id = json["place_id"];

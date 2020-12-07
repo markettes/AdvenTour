@@ -1,10 +1,8 @@
-import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/models/Achievement.dart';
 import 'package:Adventour/models/User.dart';
-import 'package:Adventour/widgets/primary_button.dart';
-import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
+import '../app_localizations.dart';
 
 class AchievementsPage extends StatefulWidget {
   @override
@@ -32,7 +30,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Achievements"),
+        title: Text(AppLocalizations.of(context).translate('achievements')),
       ),
       // body: ScrollColumnExpandable(
       //   children: [

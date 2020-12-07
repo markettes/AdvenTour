@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:Adventour/controllers/auth.dart';
 import 'package:Adventour/controllers/db.dart';
-import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/polyline_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -10,18 +8,16 @@ import 'package:Adventour/models/FinishedRoute.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/models/Route.dart';
-import 'package:Adventour/models/User.dart';
-import 'package:Adventour/pages/search_page.dart';
 import 'package:Adventour/widgets/circle_icon.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:Adventour/widgets/primary_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_map_polyline/google_map_polyline.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:toast/toast.dart';
+
+import '../app_localizations.dart';
 
 class NavigationPage extends StatefulWidget {
   @override
@@ -355,22 +351,22 @@ class _NavigationPageState extends State<NavigationPage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Would you like to cancel the route?"),
+          title: Text(AppLocalizations.of(context).translate('would')),
           content: Text(
-              "If you cancel the route you will loose all the progress. Are you sure?"),
+              AppLocalizations.of(context).translate('alert')),
           actions: [
             TextButton(
                 onPressed: () {
                   return Navigator.of(context).pop();
                 },
-                child: Text("Return")),
+                child: Text(AppLocalizations.of(context).translate('return'))),
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                   //Borrar progreso ruta actual (?)
                   Navigator.of(context).pop();
                 },
-                child: Text("Yes")) //Cancelar ruta
+                child: Text(AppLocalizations.of(context).translate('yes'))) //Cancelar ruta
           ],
         );
       },
@@ -454,10 +450,10 @@ class _FinishedRouteWidgetState extends State<FinishedRouteWidget> {
             ),
           ),
           Text(
-            widget.finishedRoute.name + ' finished',
+            widget.finishedRoute.name + ' ' + AppLocalizations.of(context).translate('finished'),
             style: Theme.of(context).textTheme.headline2,
           ),
-          Text('in ' + widget.finishedRoute.durationText,
+          Text(AppLocalizations.of(context).translate('in') + ' ' + widget.finishedRoute.durationText,
               style:
                   Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 15)),
           Row(

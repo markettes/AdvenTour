@@ -8,6 +8,7 @@ import 'package:Adventour/pages/init_page.dart';
 
 import 'package:flutter/material.dart';
 
+import '../app_localizations.dart';
 import 'map_page.dart';
 
 class RootPage extends StatelessWidget {

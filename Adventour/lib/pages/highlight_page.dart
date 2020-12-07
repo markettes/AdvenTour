@@ -8,6 +8,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
+import '../app_localizations.dart';
+
 class HighlightPage extends StatefulWidget {
   @override
   _HighlightPageState createState() => _HighlightPageState();
@@ -31,7 +33,7 @@ class _HighlightPageState extends State<HighlightPage> {
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(place.name + ' highlights'),
+        title: Text(place.name + AppLocalizations.of(context).translate('highlights')),
       ),
       body: CustomScrollView(
         slivers: [
@@ -48,7 +50,7 @@ class _HighlightPageState extends State<HighlightPage> {
                       return Container(
                         height: 200,
                         child: place.photos == null || place.photos.isEmpty
-                            ? Center(child: Text('No available photos'))
+                            ? Center(child: Text(AppLocalizations.of(context).translate('no_available')))
                             : CarouselSlider.builder(
                                 itemCount: place.photos.length,
                                 carouselController: _carouselController,
@@ -97,7 +99,11 @@ class _HighlightPageState extends State<HighlightPage> {
                                 );
                               },
                             )
-                          : Text('Empty highlights'),
+                          : Column(
+                              children: [
+                                Text(AppLocalizations.of(context).translate('no_highlights')),
+                              ],
+                            ),
                     );
                   },
                 ),

@@ -3,12 +3,13 @@ import 'package:Adventour/controllers/storage.dart';
 import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
 import 'package:country_list_pick/country_list_pick.dart';
+
+import '../app_localizations.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -42,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text("Profile"),
+        title: Text(AppLocalizations.of(context).translate('Profile')),
       ),
       body: StreamBuilder(
           stream: db.getUser(db.currentUserId),
@@ -107,10 +108,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: InputText(
                                 controller: _userNameController,
                                 icon: Icons.person,
-                                labelText: 'Username',
+                                labelText: AppLocalizations.of(context).translate('username') ,
                                 validator: (value) {
                                   if (value.isEmpty)
-                                    return 'Username can\'t be empty';
+                                    return AppLocalizations.of(context).translate('username_cannot') ;
                                   return null;
                                 },
                               ),
@@ -126,7 +127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             SizedBox(height: 10),
                             PrimaryButton(
-                              text: 'EDIT',
+                              text: AppLocalizations.of(context).translate('edit') ,
                               icon: Icons.edit,
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
@@ -147,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               FlatButton(
                                 onPressed: showEmailDialog,
                                 child: Text(
-                                  'Change email',
+                                  AppLocalizations.of(context).translate('change_email') ,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2
@@ -158,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               FlatButton(
                                 onPressed: showPasswordDialog,
                                 child: Text(
-                                  'Change password',
+                                  AppLocalizations.of(context).translate('change_password') ,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline2
