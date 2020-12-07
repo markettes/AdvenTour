@@ -340,33 +340,6 @@ class MyDrawer extends StatelessWidget {
                     Expanded(
                       child: MaterialButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, '/routesPage');
-                        },
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.flag,
-                              size: 35,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              AppLocalizations.of(context).translate('routes'),
-                              style: Theme.of(context).textTheme.bodyText1,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        onPressed: () {
                           Navigator.pushNamed(context, '/achievementsPage');
                         },
                         child: Row(
