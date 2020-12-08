@@ -37,13 +37,17 @@ class _MapPageState extends State<MapPage> {
   WeatherFactory ws = new WeatherFactory("6dfa830bb9af38b050628b6fd2701df6");
   List<Weather> forecasts;
 
-
   TextEditingController _locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    if(forecasts==null){WidgetsBinding.instance.addPostFrameCallback((_) { weatherIn(); setState(() {}); });}
-    
+    if (forecasts == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        weatherIn();
+        setState(() {});
+      });
+    }
+
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -236,33 +240,53 @@ class _MapPageState extends State<MapPage> {
   }
 
   String fiveNextDays(int day) {
-     if(day > 7){day = day - 7;}
-    if(day == 1){return "Monday";}
-    else if(day == 2){return "Tuesday";}
-    else if(day == 3){return "Wednesday";}
-    else if(day == 4){return "Thursday";}
-    else if(day == 5){return "Friday";}
-    else if(day == 6){return "Saturday";}
-    else if(day == 7){return "Sunday";}
+    if (day > 7) {
+      day = day - 7;
+    }
+    if (day == 1) {
+      return "Monday";
+    } else if (day == 2) {
+      return "Tuesday";
+    } else if (day == 3) {
+      return "Wednesday";
+    } else if (day == 4) {
+      return "Thursday";
+    } else if (day == 5) {
+      return "Friday";
+    } else if (day == 6) {
+      return "Saturday";
+    } else if (day == 7) {
+      return "Sunday";
+    }
     return null;
   }
 
   Future<void> weatherIn() async {
-    
-    await ws.fiveDayForecastByLocation(_position.latitude, _position.longitude).then((value) => forecasts=value);
-
+    await ws
+        .fiveDayForecastByLocation(_position.latitude, _position.longitude)
+        .then((value) => forecasts = value);
   }
 
-  IconData descriptionToIcon(String icon){
-    if(icon == "01n" || icon == "01d"){return Icons.wb_sunny;}
-    else if (icon == "02n" || icon == "02d"){return Icons.wb_cloudy_outlined;}
-    else if (icon == "03n" || icon == "03d"){return Icons.wb_cloudy;}
-    else if (icon == "04n" || icon == "04d"){return Icons.wb_cloudy;}
-    else if (icon == "09n" || icon == "09d"){return Icons.invert_colors;}
-    else if (icon == "10n" || icon == "10d"){return Icons.invert_colors;}
-    else if (icon == "11n" || icon == "11d"){return Icons.flash_on;}
-    else if (icon == "13n" || icon == "13d"){return Icons.ac_unit;}
-    else if (icon == "50n" || icon == "50d"){return Icons.menu;}
+  IconData descriptionToIcon(String icon) {
+    if (icon == "01n" || icon == "01d") {
+      return Icons.wb_sunny;
+    } else if (icon == "02n" || icon == "02d") {
+      return Icons.wb_cloudy_outlined;
+    } else if (icon == "03n" || icon == "03d") {
+      return Icons.wb_cloudy;
+    } else if (icon == "04n" || icon == "04d") {
+      return Icons.wb_cloudy;
+    } else if (icon == "09n" || icon == "09d") {
+      return Icons.invert_colors;
+    } else if (icon == "10n" || icon == "10d") {
+      return Icons.invert_colors;
+    } else if (icon == "11n" || icon == "11d") {
+      return Icons.flash_on;
+    } else if (icon == "13n" || icon == "13d") {
+      return Icons.ac_unit;
+    } else if (icon == "50n" || icon == "50d") {
+      return Icons.menu;
+    }
   }
 
   Future showWeatherDialog() => showDialog(
@@ -279,7 +303,7 @@ class _MapPageState extends State<MapPage> {
             content: Builder(
               builder: (context) {
                 return Container(
-                  height: 200,
+                  height: 225,
                   width: 400,
                   child: Column(
                     children: [
@@ -287,6 +311,14 @@ class _MapPageState extends State<MapPage> {
                         descriptionToIcon(forecasts[0].weatherIcon),
                         size: 100,
                         color: Theme.of(context).primaryColor,
+                      ),
+                      Text(
+                        "${forecasts[0].temperature.celsius}".substring(0, 4) +
+                            " °C",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2
+                            .copyWith(fontSize: 15),
                       ),
                       Divider(
                         thickness: 2,
@@ -300,7 +332,7 @@ class _MapPageState extends State<MapPage> {
                           Expanded(
                             child: Column(
                               children: [
-                                Text(fiveNextDays(today.weekday+1),
+                                Text(fiveNextDays(today.weekday + 1),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -310,13 +342,22 @@ class _MapPageState extends State<MapPage> {
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
+                                Text(
+                                  "${forecasts[1].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
                               ],
                             ),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                Text(fiveNextDays(today.weekday+2),
+                                Text(fiveNextDays(today.weekday + 2),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -326,13 +367,22 @@ class _MapPageState extends State<MapPage> {
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
+                                Text(
+                                  "${forecasts[2].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
                               ],
                             ),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                Text(fiveNextDays(today.weekday+3),
+                                Text(fiveNextDays(today.weekday + 3),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -342,13 +392,22 @@ class _MapPageState extends State<MapPage> {
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
+                                Text(
+                                  "${forecasts[3].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
                               ],
                             ),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                Text(fiveNextDays(today.weekday+4),
+                                Text(fiveNextDays(today.weekday + 4),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -358,13 +417,22 @@ class _MapPageState extends State<MapPage> {
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
                                 ),
+                                Text(
+                                  "${forecasts[4].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
                               ],
                             ),
                           ),
                           Expanded(
                             child: Column(
                               children: [
-                                Text(fiveNextDays(today.weekday+5),
+                                Text(fiveNextDays(today.weekday + 5),
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline2
@@ -373,6 +441,15 @@ class _MapPageState extends State<MapPage> {
                                   descriptionToIcon(forecasts[5].weatherIcon),
                                   size: 30,
                                   color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  "${forecasts[5].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
                                 ),
                               ],
                             ),
@@ -663,7 +740,6 @@ class MyDrawer extends StatelessWidget {
                               Text(
                                 'Logout',
                                 style: Theme.of(context).textTheme.bodyText1,
-                                
                               )
                             ],
                           ),
