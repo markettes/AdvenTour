@@ -1,0 +1,39 @@
+import 'package:Adventour/controllers/auth.dart';
+import 'package:adventour_company/controllers/db.dart';
+import 'package:adventour_company/pages/log_in_page.dart';
+import 'package:adventour_company/pages/route_request_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:Adventour/pages/init_page.dart';
+import 'package:flutter/material.dart';
+
+class RootPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          if (!snapshot.hasData) return CircularProgressIndicator();
+          auth = Auth();
+          db = DB();
+          return StreamBuilder(
+            stream: auth.authStatusChanges,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) print(snapshot.error);
+              if (!snapshot.hasData) return LogInPage();
+              var user = snapshot.data;
+              return StreamBuilder(
+                stream: db.getRouteRequests(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) print(snapshot.error);
+                  if (!snapshot.hasData) return CircularProgressIndicator();
+                  var requests = snapshot.data;
+                  print(requests);
+                  return RouteRequestPage(requests: requests);
+                });
+            },
+          );
+        });
+  }
+
+}
