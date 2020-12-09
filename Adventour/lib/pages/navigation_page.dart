@@ -174,7 +174,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 16.0, right: 8.0, top: 8.0, bottom: 124.0),
+                              left: 16.0, right: 8.0, top: 8.0, bottom: 174.0),
                           child: CircleIconButton(
                             type: route.paths[_selectedPath].transport,
                             onPressed: nextTransport,
@@ -190,11 +190,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            left: 8.0,
-                            right: 16.0,
-                            top: 8.0,
-                            bottom: 124.0,
-                          ),
+                              left: 8.0, right: 16.0, top: 8.0, bottom: 174.0),
                           child: CircleIconButton(
                             icon: Icon(
                               Icons.gps_fixed,
@@ -224,73 +220,121 @@ class _NavigationPageState extends State<NavigationPage> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: _finishedRoute == null
-                          ? Container(
-                              margin: EdgeInsets.all(16),
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).backgroundColor,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black, blurRadius: 5),
-                                  ]),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
+                          ? AnimatedOpacity(
+                              opacity: _listVisible ? 1.0 : 0.0,
+                              duration: Duration(milliseconds: 600),
+                              curve: Curves.fastOutSlowIn,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    if (_nearestPlace != null)
-                                      Text(
-                                        _nearestPlace.name,
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    if (_nearestPlace != null)
-                                      SizedBox(height: 5),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          _nearestPlace != null
-                                              ? typeToIcon(_nearestPlace.type)
-                                              : Icons.info,
-                                          color: Theme.of(context).primaryColor,
-                                          size: 40,
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Icon(Icons.directions_walk,
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 0),
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .backgroundColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8.0)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey,
+                                                  blurRadius: 3),
+                                            ]),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            children: [
+                                              if (_nearestPlace != null)
+                                                Text(
+                                                  _nearestPlace.name,
+                                                  style:
+                                                      TextStyle(fontSize: 18),
+                                                ),
+                                              if (_nearestPlace != null)
+                                                SizedBox(height: 5),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Icon(
+                                                    _nearestPlace != null
+                                                        ? typeToIcon(
+                                                            _nearestPlace.type)
+                                                        : Icons.info,
                                                     color: Theme.of(context)
-                                                        .primaryColor),
-                                                Text(
-                                                  '${tiempoRestante()}',
-                                                ),
-                                                Icon(
-                                                  Icons.location_pin,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                                Text(
-                                                    '${route.paths[_selectedPath].stretchs.length}')
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                                                        .primaryColor,
+                                                    size: 40,
+                                                  ),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          Icon(
+                                                              Icons
+                                                                  .directions_walk,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor),
+                                                          Text(
+                                                            '${tiempoRestante()}',
+                                                          ),
+                                                          Icon(
+                                                            Icons.location_pin,
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                          ),
+                                                          Text(
+                                                              '${route.paths[_selectedPath].stretchs.length}')
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(75, 8.0, 75, 8.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: RaisedButton(
+                                              onPressed: () =>
+                                                  _showCancelAlert(),
+                                              child: Text(
+                                                "Exit Route",
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .buttonColor),
+                                              ),
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              8.0))),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
                             )
                           : null,
                     ),
