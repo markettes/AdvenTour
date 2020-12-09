@@ -61,6 +61,18 @@ class DB {
         .update({'editedRoutes': FieldValue.increment(1)});
   }
 
+    Future<void> likeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'likes': FieldValue.increment(1)});
+  }
+
+      Future<void> unlikeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'likes': FieldValue.increment(-1)});
+  }
+
 //----------------------------ROUTES-----------------------------------
 
   Stream<List<Route>> getRoutes(String userId) => _firestore

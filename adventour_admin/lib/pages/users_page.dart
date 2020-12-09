@@ -37,7 +37,7 @@ class _UsersPageState extends State<UsersPage> {
                   if (users.isEmpty)
                     return Center(
                       child: Text(
-                        'Empty requests',
+                        'There are not users',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                     );

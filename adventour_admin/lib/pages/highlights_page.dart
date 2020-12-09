@@ -37,7 +37,7 @@ class _HighlightsPageState extends State<HighlightsPage> {
                   if(highlights.isEmpty)
                   return Center(
                       child: Text(
-                        'Empty requests',
+                        'There are not highlights',
                         style: Theme.of(context).textTheme.headline2,
                       ),
                     );

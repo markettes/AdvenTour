@@ -138,10 +138,14 @@ class _RouteWidgetState extends State<RouteWidget> {
                             : () {
                                 bool contains = widget.route.likes
                                     .contains(db.currentUserId);
-                                contains
-                                    ? widget.route.likes
-                                        .remove(db.currentUserId)
-                                    : widget.route.likes.add(db.currentUserId);
+                                    if(contains){
+                                      widget.route.likes
+                                        .remove(db.currentUserId);
+                                        db.unlikeRoute(widget.route.author);
+                                    } else {
+                                      widget.route.likes.add(db.currentUserId);
+                                      db.likeRoute(widget.route.author);
+                                    } 
                                 db.updateRoute(widget.route);
                               }),
                   )
