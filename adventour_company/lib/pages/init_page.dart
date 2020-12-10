@@ -60,7 +60,8 @@ class InitPage extends StatelessWidget {
                     endIndent: 25,
                     thickness: 1,
                   ),
-                  GoogleButton()
+                  GoogleButton(),
+                  
                 ],
               ),
             ),
