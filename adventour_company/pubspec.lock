@@ -141,13 +141,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  country_list_pick:
-    dependency: transitive
-    description:
-      name: country_list_pick
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1+2"
   crypto:
     dependency: transitive
     description:
@@ -300,13 +293,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_duration_picker:
-    dependency: transitive
-    description:
-      name: flutter_duration_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   flutter_google_places:
     dependency: transitive
     description:
@@ -364,13 +350,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.8"
-  get_it:
-    dependency: "direct main"
-    description:
-      name: get_it
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.1"
   glob:
     dependency: transitive
     description:
