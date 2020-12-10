@@ -43,7 +43,7 @@ class _NavigationPageState extends State<NavigationPage> {
   bool _fixedPosition = true;
   FinishedRoute _finishedRoute;
   Place _nearestPlace;
-  double _totalDistance;
+  double _totalDistance = 0;
 
   Map<String, IconData> iconMapping = {
     'car': Icons.directions_car,
@@ -182,7 +182,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 16.0, right: 8.0, top: 8.0, bottom: 174.0),
+                              left: 16.0, right: 8.0, top: 8.0, bottom: 8.0),
                           child: CircleIconButton(
                             type: route.paths[_selectedPath].transport,
                             onPressed: nextTransport,
@@ -198,7 +198,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 8.0, right: 16.0, top: 8.0, bottom: 174.0),
+                              left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
                           child: CircleIconButton(
                             icon: Icon(
                               Icons.gps_fixed,
@@ -229,7 +229,7 @@ class _NavigationPageState extends State<NavigationPage> {
                       alignment: Alignment.bottomCenter,
                       child: _finishedRoute == null
                           ? AnimatedOpacity(
-                              opacity: _listVisible ? 1.0 : 0.0,
+                              opacity: _listVisible ? 0.9 : 0.0,
                               duration: Duration(milliseconds: 600),
                               curve: Curves.fastOutSlowIn,
                               child: Column(
@@ -253,21 +253,23 @@ class _NavigationPageState extends State<NavigationPage> {
                                             ]),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Column(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
                                             children: [
-                                              if (_nearestPlace != null)
-                                                Text(
-                                                  _nearestPlace.name,
-                                                  style:
-                                                      TextStyle(fontSize: 18),
-                                                ),
-                                              if (_nearestPlace != null)
-                                                SizedBox(height: 5),
-                                              Row(
+                                              Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
+                                                  if (_nearestPlace != null)
+                                                    Text(
+                                                      _nearestPlace.name,
+                                                      style: TextStyle(
+                                                          fontSize: 18),
+                                                    ),
+                                                  if (_nearestPlace != null)
+                                                    SizedBox(height: 5),
                                                   Icon(
                                                     _nearestPlace != null
                                                         ? typeToIcon(
@@ -277,41 +279,67 @@ class _NavigationPageState extends State<NavigationPage> {
                                                         .primaryColor,
                                                     size: 40,
                                                   ),
+                                                ],
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
                                                   Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
                                                             .spaceEvenly,
                                                     children: [
                                                       Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceEvenly,
-                                                        children: [
-                                                          Icon(
-                                                              iconMapping[route
-                                                                  .paths[
-                                                                      _selectedPath]
-                                                                  .transport],
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Icon(
+                                                                iconMapping[route
+                                                                    .paths[
+                                                                        _selectedPath]
+                                                                    .transport],
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                size: 35),
+                                                            if (_totalDistance !=
+                                                                null)
+                                                              Text(
+                                                                '${(_totalDistance / 1000).toStringAsFixed(1)} km',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18),
+                                                              ),
+                                                          ]),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .location_pin,
                                                               color: Theme.of(
                                                                       context)
-                                                                  .primaryColor),
-                                                          Text(
-                                                            '${(_totalDistance / 1000).toStringAsFixed(1)} km',
-                                                          ),
-                                                          Icon(
-                                                            Icons.location_pin,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor,
-                                                          ),
-                                                          Text(
-                                                              '${route.paths[_selectedPath].stretchs.length}')
-                                                        ],
-                                                      ),
+                                                                  .primaryColor,
+                                                              size: 35,
+                                                            ),
+                                                            Text(
+                                                              '${route.paths[_selectedPath].stretchs.length}',
+                                                              style: TextStyle(
+                                                                  fontSize: 18),
+                                                            ),
+                                                          ]),
                                                     ],
-                                                  )
+                                                  ),
                                                 ],
-                                              ),
+                                              )
                                             ],
                                           ),
                                         ),
@@ -319,7 +347,7 @@ class _NavigationPageState extends State<NavigationPage> {
                                     ),
                                     Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(75, 8.0, 75, 8.0),
+                                          EdgeInsets.fromLTRB(90, 8.0, 90, 8.0),
                                       child: Row(
                                         children: [
                                           Expanded(
