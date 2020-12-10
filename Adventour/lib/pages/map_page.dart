@@ -17,7 +17,7 @@ import 'package:Adventour/pages/search_page.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:google_maps_webservice/src/places.dart';
 import 'package:intl/intl.dart';
-
+import 'package:weather/weather.dart';
 import '../app_localizations.dart';
 
 class MapPage extends StatefulWidget {
@@ -32,18 +32,27 @@ class _MapPageState extends State<MapPage> {
   Position _position;
   bool _fixedPosition = false;
 
+  DateTime today = DateTime.now();
+  WeatherFactory ws = new WeatherFactory("6dfa830bb9af38b050628b6fd2701df6");
+  List<Weather> forecasts;
+
   TextEditingController _locationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (forecasts == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        weatherIn();
+        setState(() {});
+      });
+    }
+
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
-      drawer: 
-        MyDrawer(),
- 
+      drawer: MyDrawer(),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -153,7 +162,8 @@ class _MapPageState extends State<MapPage> {
                             child: TextField(
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: AppLocalizations.of(context).translate('search'),
+                                hintText: AppLocalizations.of(context)
+                                    .translate('search'),
                               ),
                               controller: _locationController,
                               onTap: () async {
@@ -188,6 +198,16 @@ class _MapPageState extends State<MapPage> {
                                           },
                                   ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.wb_sunny,
+                                size: 30,
+                              ),
+                              onPressed: showWeatherDialog,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -215,6 +235,230 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
+
+  String fiveNextDays(int day) {
+    if (day > 7) {
+      day = day - 7;
+    }
+    if (day == 1) {
+      return "Monday";
+    } else if (day == 2) {
+      return "Tuesday";
+    } else if (day == 3) {
+      return "Wednesday";
+    } else if (day == 4) {
+      return "Thursday";
+    } else if (day == 5) {
+      return "Friday";
+    } else if (day == 6) {
+      return "Saturday";
+    } else if (day == 7) {
+      return "Sunday";
+    }
+    return null;
+  }
+
+  Future<void> weatherIn() async {
+    await ws
+        .fiveDayForecastByLocation(_position.latitude, _position.longitude)
+        .then((value) => forecasts = value);
+  }
+
+  IconData descriptionToIcon(String icon) {
+    if (icon == "01n" || icon == "01d") {
+      return Icons.wb_sunny;
+    } else if (icon == "02n" || icon == "02d") {
+      return Icons.wb_cloudy_outlined;
+    } else if (icon == "03n" || icon == "03d") {
+      return Icons.wb_cloudy;
+    } else if (icon == "04n" || icon == "04d") {
+      return Icons.wb_cloudy;
+    } else if (icon == "09n" || icon == "09d") {
+      return Icons.invert_colors;
+    } else if (icon == "10n" || icon == "10d") {
+      return Icons.invert_colors;
+    } else if (icon == "11n" || icon == "11d") {
+      return Icons.flash_on;
+    } else if (icon == "13n" || icon == "13d") {
+      return Icons.ac_unit;
+    } else if (icon == "50n" || icon == "50d") {
+      return Icons.menu;
+    }
+  }
+
+  Future showWeatherDialog() => showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0))),
+            title: Center(
+                child: Text(
+              "TODAY",
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 30),
+            )),
+            content: Builder(
+              builder: (context) {
+                return Container(
+                  height: 225,
+                  width: 400,
+                  child: Column(
+                    children: [
+                      Icon(
+                        descriptionToIcon(forecasts[0].weatherIcon),
+                        size: 100,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      Text(
+                        "${forecasts[0].temperature.celsius}".substring(0, 4) +
+                            " °C",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline2
+                            .copyWith(fontSize: 15),
+                      ),
+                      Divider(
+                        thickness: 2,
+                        color: Theme.of(context).primaryColor,
+                        indent: 8,
+                        endIndent: 8,
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday + 1),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[1].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  "${forecasts[1].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday + 2),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[2].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  "${forecasts[2].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday + 3),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[3].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  "${forecasts[3].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday + 4),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[4].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  "${forecasts[4].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(fiveNextDays(today.weekday + 5),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline2
+                                        .copyWith(fontSize: 10)),
+                                Icon(
+                                  descriptionToIcon(forecasts[5].weatherIcon),
+                                  size: 30,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                Text(
+                                  "${forecasts[5].temperature.celsius}"
+                                          .substring(0, 4) +
+                                      " °C",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline2
+                                      .copyWith(fontSize: 11),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ));
 
   Future _onSubmitted(String value) async {
     List<Place> places = await searchEngine.searchByText(
@@ -353,7 +597,8 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              AppLocalizations.of(context).translate('achievements'),
+                              AppLocalizations.of(context)
+                                  .translate('achievements'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],
