@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/polyline_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -42,7 +43,14 @@ class _NavigationPageState extends State<NavigationPage> {
   bool _fixedPosition = true;
   FinishedRoute _finishedRoute;
   Place _nearestPlace;
-  double totalDistance;
+  double _totalDistance;
+
+  Map<String, IconData> iconMapping = {
+    'car': Icons.directions_car,
+    'walk': Icons.directions_walk,
+    'bicycle': Icons.directions_bike,
+  };
+
   // double bearing;
 
   // @override
@@ -280,13 +288,15 @@ class _NavigationPageState extends State<NavigationPage> {
                                                                 .spaceEvenly,
                                                         children: [
                                                           Icon(
-                                                              Icons
-                                                                  .directions_walk,
+                                                              iconMapping[route
+                                                                  .paths[
+                                                                      _selectedPath]
+                                                                  .transport],
                                                               color: Theme.of(
                                                                       context)
                                                                   .primaryColor),
                                                           Text(
-                                                            '${tiempoRestante()}',
+                                                            '${(_totalDistance / 1000).toStringAsFixed(1)} km',
                                                           ),
                                                           Icon(
                                                             Icons.location_pin,
@@ -406,6 +416,26 @@ class _NavigationPageState extends State<NavigationPage> {
         points: routeCoords,
         color: Colors.blue,
         width: 4);
+
+    if (_polyline.points.isNotEmpty) {
+      _totalDistance = Geolocator.distanceBetween(
+        position.latitude,
+        position.longitude,
+        _polyline.points[0].latitude,
+        _polyline.points[0].longitude,
+      );
+
+      for (int i = 0; i < _polyline.points.length - 1; i++) {
+        LatLng ini = _polyline.points[i];
+        LatLng fin = _polyline.points[i + 1];
+        _totalDistance += Geolocator.distanceBetween(
+          ini.latitude,
+          ini.longitude,
+          fin.latitude,
+          fin.longitude,
+        );
+      }
+    }
     _mapController.drawPolyline(_polyline);
   }
 
