@@ -43,35 +43,35 @@ class DB {
   Future updateUser(User user) =>
       _firestore.doc('Users/${user.id}').update(user.toJson());
 
-  Future<void> changeLook(String userId) {
+  Future<void> changeLook(String userId) =>
     _firestore
         .doc('Users/$userId')
         .update({'changeLook': FieldValue.increment(1)});
-  }
+  
 
-  Future<void> completeRoute(String userId) {
+  Future<void> completeRoute(String userId) =>
     _firestore
         .doc('Users/$userId')
         .update({'completedRoutes': FieldValue.increment(1)});
-  }
+  
 
-  Future<void> editeRoute(String userId) {
+  Future<void> editeRoute(String userId) =>
     _firestore
         .doc('Users/$userId')
         .update({'editedRoutes': FieldValue.increment(1)});
-  }
+  
 
-    Future<void> likeRoute(String userId) {
+    Future<void> likeRoute(String userId) =>
     _firestore
         .doc('Users/$userId')
         .update({'likes': FieldValue.increment(1)});
-  }
+  
 
-      Future<void> unlikeRoute(String userId) {
+      Future<void> unlikeRoute(String userId) =>
     _firestore
         .doc('Users/$userId')
         .update({'likes': FieldValue.increment(-1)});
-  }
+  
 
 //----------------------------ROUTES-----------------------------------
 
