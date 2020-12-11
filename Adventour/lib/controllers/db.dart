@@ -43,35 +43,25 @@ class DB {
   Future updateUser(User user) =>
       _firestore.doc('Users/${user.id}').update(user.toJson());
 
-  Future<void> changeLook(String userId) =>
-    _firestore
-        .doc('Users/$userId')
-        .update({'changeLook': FieldValue.increment(1)});
-  
+  Future<void> changeLook(String userId) => _firestore
+      .doc('Users/$userId')
+      .update({'changeLook': FieldValue.increment(1)});
 
-  Future<void> completeRoute(String userId) =>
-    _firestore
-        .doc('Users/$userId')
-        .update({'completedRoutes': FieldValue.increment(1)});
-  
+  Future<void> completeRoute(String userId) => _firestore
+      .doc('Users/$userId')
+      .update({'completedRoutes': FieldValue.increment(1)});
 
-  Future<void> editeRoute(String userId) =>
-    _firestore
-        .doc('Users/$userId')
-        .update({'editedRoutes': FieldValue.increment(1)});
-  
+  Future<void> editeRoute(String userId) => _firestore
+      .doc('Users/$userId')
+      .update({'editedRoutes': FieldValue.increment(1)});
 
-    Future<void> likeRoute(String userId) =>
-    _firestore
-        .doc('Users/$userId')
-        .update({'likes': FieldValue.increment(1)});
-  
+  Future<void> likeRoute(String userId) => _firestore
+      .doc('Users/$userId')
+      .update({'likes': FieldValue.increment(1)});
 
-      Future<void> unlikeRoute(String userId) =>
-    _firestore
-        .doc('Users/$userId')
-        .update({'likes': FieldValue.increment(-1)});
-  
+  Future<void> unlikeRoute(String userId) => _firestore
+      .doc('Users/$userId')
+      .update({'likes': FieldValue.increment(-1)});
 
 //----------------------------ROUTES-----------------------------------
 
@@ -79,6 +69,9 @@ class DB {
       .collection('Users/$userId/Routes')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
+
+  Future<Route> getRoute(String userId, String routeId) async => Route.fromJson(
+      await _firestore.doc('Users/$userId/Routes/$routeId').get());
 
   Future addRoute(Route route) =>
       _firestore.collection('Users/$_currentUserId/Routes').add(route.toJson());
@@ -89,7 +82,6 @@ class DB {
   Future updateRoute(Route route) => _firestore
       .doc('Users/${route.author}/Routes/${route.id}')
       .update(route.toJson());
-
 
   Stream<List<Route>> getHighlights(String locationId) => _firestore
       .collectionGroup('Routes')

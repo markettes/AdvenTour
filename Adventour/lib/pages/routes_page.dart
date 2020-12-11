@@ -8,6 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:toast/toast.dart';
+import 'package:Adventour/controllers/dynamic_links.dart';
+import 'package:flutter/services.dart';
+import 'package:toast/toast.dart';
 
 import '../app_localizations.dart';
 
@@ -16,7 +19,7 @@ class RoutesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('routes') ),
+        title: Text(AppLocalizations.of(context).translate('routes')),
       ),
       body: StreamBuilder(
         stream: db.getRoutes(db.currentUserId),
@@ -31,7 +34,11 @@ class RoutesPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: routes.isNotEmpty
                     ? CustomScrollView(slivers: [
-                        SliverToBoxAdapter(child: Text(routes.length.toString() + '/10 routes',textAlign: TextAlign.end,)),
+                        SliverToBoxAdapter(
+                            child: Text(
+                          routes.length.toString() + '/10 routes',
+                          textAlign: TextAlign.end,
+                        )),
                         SliverList(
                           delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
@@ -57,17 +64,19 @@ class RoutesPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: FloatingActionButton(
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          if(routes.length == 10) Toast.show('Limit of routes is 10', context);
-          else Navigator.pushNamed(context, '/customRoutePage');
-        } ,
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 30,
-        ),
-      ),
+                  backgroundColor: Theme.of(context).primaryColor,
+                  onPressed: () {
+                    if (routes.length == 10)
+                      Toast.show('Limit of routes is 10', context);
+                    else
+                      Navigator.pushNamed(context, '/customRoutePage');
+                  },
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                ),
               ),
             ],
           );
@@ -78,16 +87,17 @@ class RoutesPage extends StatelessWidget {
 }
 
 class BottomSheetRoutes extends StatelessWidget {
-  const BottomSheetRoutes({
+   BottomSheetRoutes({
     @required this.route,
   });
 
-  final r.Route route;
+   r.Route route;
+  var _link;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 280,
+      height: 320,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,6 +196,26 @@ class BottomSheetRoutes extends StatelessWidget {
             ),
             label: Text(
               route.isPublic ? 'Public' : 'Private',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () async {
+              if(_link == null) {
+                _link = await dynamicLinks.dynamicLink(true, route);
+                
+              }
+              Clipboard.setData(ClipboardData(text: _link));
+              Navigator.pop(context);
+              Toast.show('Route link copied to clipboard', context);
+            },
+            icon: Icon(
+              Icons.share,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Share',
               style: Theme.of(context).textTheme.headline2,
             ),
           ),

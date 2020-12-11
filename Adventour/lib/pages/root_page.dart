@@ -12,8 +12,11 @@ import '../app_localizations.dart';
 import 'map_page.dart';
 
 class RootPage extends StatelessWidget {
+  RootPage({@required this.navigatorKey});
+  var navigatorKey;
   @override
   Widget build(BuildContext context) {
+
     return FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
@@ -28,7 +31,9 @@ class RootPage extends StatelessWidget {
               if (!snapshot.hasData) return InitPage();
               var user = snapshot.data;
               signIn(user.email, context);
-              return MapPage();
+              return MapPage(
+                navigatorKey:navigatorKey
+              );
             },
           );
         });
