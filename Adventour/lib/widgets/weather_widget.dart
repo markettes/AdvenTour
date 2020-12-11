@@ -6,27 +6,128 @@ class WeatherWidget extends StatelessWidget {
   WeatherWidget({@required this.position});
   Position position;
 
-  DateTime _today = DateTime.now();
   WeatherFactory _ws = WeatherFactory("6dfa830bb9af38b050628b6fd2701df6");
   List<Weather> _forecasts;
+  Weather _weatherNow;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 5, right: 5),
-      child: IconButton(
-          icon: Icon(
-            Icons.wb_sunny,
-            size: 30,
-          ),
-          onPressed: () async {
-            await _weatherIn();
-            _showWeatherDialog(context);
+      child: FutureBuilder(
+          future: _ws.currentWeatherByLocation(
+              position.latitude, position.longitude),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            if (!snapshot.hasData) return Container();
+            _weatherNow = snapshot.data;
+            return GestureDetector(
+              child: SizedBox(
+                  height: 50,
+                  child: NetworkImageShadow(
+                      image: 'http://openweathermap.org/img/wn/' +
+                          _weatherNow.weatherIcon +
+                          '@2x.png')),
+              onTap: () async {
+                await _weatherIn();
+                _showWeatherDialog(context);
+              },
+            );
           }),
     );
   }
 
-  String fiveNextDays(int day) {
+  Future<void> _weatherIn() async {
+    _forecasts = await _ws.fiveDayForecastByLocation(
+        position.latitude, position.longitude);
+    print('?'+_forecasts.length.toString());
+  }
+
+  Future _showWeatherDialog(context) => showDialog(
+        context: context,
+        builder: (context) => WeatherDialog(
+          forecasts: _forecasts,
+          weatherNow: _weatherNow,
+        ),
+      );
+}
+
+class WeatherDialog extends StatelessWidget {
+  const WeatherDialog({
+    @required this.forecasts,
+    @required this.weatherNow
+  }) ;
+
+  final List<Weather> forecasts;
+  final Weather weatherNow;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: AlertDialog(
+        backgroundColor: Theme.of(context).backgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        title: Center(
+            child: Text(
+          "NOW",
+          style: Theme.of(context).textTheme.headline2.copyWith(fontSize: 30),
+        )),
+        content: Container(
+          height: 300,
+          child: Column(
+            children: [
+              Expanded(
+                  child: DayWidget(
+                weather: weatherNow,
+                showWeekday: false,
+              )),
+              Divider(
+                thickness: 2,
+                color: Theme.of(context).primaryColor,
+                indent: 8,
+                endIndent: 8,
+                height: 30,
+              ),
+              Expanded(
+                child: Row(children: [
+                  Expanded(
+                    child: DayWidget(weather: forecasts[0]),
+                  ),
+                  Expanded(
+                    child: DayWidget(weather: forecasts[8]),
+                  ),
+                  Expanded(
+                    child: DayWidget(weather: forecasts[16]),
+                  ),
+                  Expanded(
+                    child: DayWidget(weather: forecasts[24]),
+                  ),
+                  Expanded(
+                    child: DayWidget(weather: forecasts[32]),
+                  ),
+                ]),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class DayWidget extends StatelessWidget {
+
+  DayWidget(
+      {@required this.weather,
+      this.showWeekday = true,
+      this.showTemperature = true});
+
+  Weather weather;
+  bool showWeekday;
+  bool showTemperature;
+
+  String _fiveNextDays(int day) {
     if (day > 7) {
       day = day - 7;
     }
@@ -48,204 +149,47 @@ class WeatherWidget extends StatelessWidget {
     return null;
   }
 
-  Future<void> _weatherIn() async {
-    _forecasts = await _ws.fiveDayForecastByLocation(
-        position.latitude, position.longitude);
-  }
-
-  IconData _descriptionToIcon(String icon) {
-    if (icon == "01n" || icon == "01d") {
-      return Icons.wb_sunny;
-    } else if (icon == "02n" || icon == "02d") {
-      return Icons.wb_cloudy_outlined;
-    } else if (icon == "03n" || icon == "03d") {
-      return Icons.wb_cloudy;
-    } else if (icon == "04n" || icon == "04d") {
-      return Icons.wb_cloudy;
-    } else if (icon == "09n" || icon == "09d") {
-      return Icons.invert_colors;
-    } else if (icon == "10n" || icon == "10d") {
-      return Icons.invert_colors;
-    } else if (icon == "11n" || icon == "11d") {
-      return Icons.flash_on;
-    } else if (icon == "13n" || icon == "13d") {
-      return Icons.ac_unit;
-    } else if (icon == "50n" || icon == "50d") {
-      return Icons.menu;
-    }
-  }
-
-  Future _showWeatherDialog(context) => showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            title: Center(
-                child: Text(
-              "TODAY",
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        if (showWeekday)
+          Text(_fiveNextDays(weather.date.weekday),
               style:
-                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 30),
-            )),
-            content: Builder(
-              builder: (context) {
-                return Container(
-                  height: 225,
-                  width: 400,
-                  child: Column(
-                    children: [
-                      Icon(
-                        _descriptionToIcon(_forecasts[0].weatherIcon),
-                        size: 100,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      Text(
-                        "${_forecasts[0].temperature.celsius}".substring(0, 4) +
-                            " °C",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline2
-                            .copyWith(fontSize: 15),
-                      ),
-                      Divider(
-                        thickness: 2,
-                        color: Theme.of(context).primaryColor,
-                        indent: 8,
-                        endIndent: 8,
-                        height: 30,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(fiveNextDays(_today.weekday + 1),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        .copyWith(fontSize: 10)),
-                                Icon(
-                                  _descriptionToIcon(_forecasts[1].weatherIcon),
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Text(
-                                  "${_forecasts[1].temperature.celsius}"
-                                          .substring(0, 4) +
-                                      " °C",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(fontSize: 11),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(fiveNextDays(_today.weekday + 2),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        .copyWith(fontSize: 10)),
-                                Icon(
-                                  _descriptionToIcon(_forecasts[2].weatherIcon),
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Text(
-                                  "${_forecasts[2].temperature.celsius}"
-                                          .substring(0, 4) +
-                                      " °C",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(fontSize: 11),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(fiveNextDays(_today.weekday + 3),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        .copyWith(fontSize: 10)),
-                                Icon(
-                                  _descriptionToIcon(_forecasts[3].weatherIcon),
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Text(
-                                  "${_forecasts[3].temperature.celsius}"
-                                          .substring(0, 4) +
-                                      " °C",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(fontSize: 11),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(fiveNextDays(_today.weekday + 4),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        .copyWith(fontSize: 10)),
-                                Icon(
-                                  _descriptionToIcon(_forecasts[4].weatherIcon),
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Text(
-                                  "${_forecasts[4].temperature.celsius}"
-                                          .substring(0, 4) +
-                                      " °C",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(fontSize: 11),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(fiveNextDays(_today.weekday + 5),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        .copyWith(fontSize: 10)),
-                                Icon(
-                                  _descriptionToIcon(_forecasts[5].weatherIcon),
-                                  size: 30,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                Text(
-                                  "${_forecasts[5].temperature.celsius}"
-                                          .substring(0, 4) +
-                                      " °C",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline2
-                                      .copyWith(fontSize: 11),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ));
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 12)),
+        NetworkImageShadow(
+            image: 'http://openweathermap.org/img/wn/' +
+                weather.weatherIcon +
+                '@2x.png'),
+        if (showTemperature)
+          Text(
+            "${weather.temperature.celsius}".substring(0, 4) + " °C",
+            style: Theme.of(context).textTheme.headline2.copyWith(fontSize: 12),
+          ),
+      ],
+    );
+  }
+}
+
+class NetworkImageShadow extends StatelessWidget {
+  const NetworkImageShadow({
+    @required this.image,
+  });
+
+  final String image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Image.network(
+          image,
+        ),
+        Image.network(
+          image,
+          color: Theme.of(context).primaryColor.withAlpha(70),
+        ),
+      ],
+    );
+  }
 }

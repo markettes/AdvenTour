@@ -188,7 +188,24 @@ class _MapPageState extends State<MapPage> {
                                           },
                                   ),
                           ),
-                          WeatherWidget(position: _position,),
+                          StreamBuilder(
+                            stream: Geolocator.getPositionStream(
+                                desiredAccuracy: LocationAccuracy.medium),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) print(snapshot.error);
+                              if (!snapshot.hasData) return Container();
+                              _position = snapshot.data;
+                              if (_fixedPosition) {
+                                _mapController.goToCoordinates(
+                                    _position.latitude,
+                                    _position.longitude,
+                                    18);
+                              }
+                              return WeatherWidget(
+                                position: _position,
+                              );
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -196,21 +213,6 @@ class _MapPageState extends State<MapPage> {
                 ],
               ),
             ),
-          ),
-          StreamBuilder(
-            stream: Geolocator.getPositionStream(
-                desiredAccuracy: LocationAccuracy.medium),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) print(snapshot.error);
-              if (!snapshot.hasData)
-                return Center(child: CircularProgressIndicator());
-              _position = snapshot.data;
-              if (_fixedPosition) {
-                _mapController.goToCoordinates(
-                    _position.latitude, _position.longitude, 18);
-              }
-              return Container();
-            },
           ),
         ],
       ),
@@ -254,8 +256,6 @@ class _MapPageState extends State<MapPage> {
     _mapController.goToCoordinates(place.latitude, place.longitude, 15);
   }
 }
-
-
 
 class MyDrawer extends StatelessWidget {
   @override
