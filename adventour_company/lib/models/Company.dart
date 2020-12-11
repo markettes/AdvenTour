@@ -8,11 +8,11 @@ class Company {
   int _timesAdded;
 
 
-  Company(companyName, email, timesSuggested, timesAdded) {
+  Company(companyName, email) {
     _companyName = companyName;
     _email = email;
-    _timesSuggested = timesSuggested;
-    _timesAdded = timesAdded;
+    _timesSuggested = 0;
+    _timesAdded = 0;
   }
 
   Company.fromFirestore(DocumentSnapshot snapshot) {

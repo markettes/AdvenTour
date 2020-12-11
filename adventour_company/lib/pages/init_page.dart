@@ -1,6 +1,6 @@
 
-import 'package:adventour_company/pages/widgets/google_button.dart';
-import 'package:adventour_company/pages/widgets/primary_button.dart';
+import 'package:adventour_company/widgets/google_button.dart';
+import 'package:adventour_company/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 
