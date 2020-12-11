@@ -2,11 +2,10 @@ import 'package:Adventour/models/Place.dart';
 import 'package:google_maps_webservice/src/core.dart';
 import 'package:Adventour/libraries/place.dart';
 
-String API_KEY = "AIzaSyD3tJNw9gvqyeBxcqAYbPEYMOBAfIprRds";
+String API_KEY = "AIzaSyAA895iggCHlkO6Eq09V00kdfCOQWtUep8";
 
 class SearchEngine {
-  GoogleMapsPlaces _googleMapsPlaces =
-      GoogleMapsPlaces(apiKey: API_KEY);
+  GoogleMapsPlaces _googleMapsPlaces = GoogleMapsPlaces(apiKey: API_KEY);
 
   Future<List<Place>> searchByLocation(Location location, int radius) async {
     PlacesSearchResponse response =
