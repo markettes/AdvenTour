@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:Adventour/pages/init_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:Adventour/controllers/dynamic_links.dart';
 
 import '../app_localizations.dart';
 import 'map_page.dart';
@@ -16,6 +17,7 @@ class RootPage extends StatelessWidget {
   var navigatorKey;
   @override
   Widget build(BuildContext context) {
+    dynamicLinks.initDynamicLinks(navigatorKey,context);
 
     return FutureBuilder(
         future: Firebase.initializeApp(),

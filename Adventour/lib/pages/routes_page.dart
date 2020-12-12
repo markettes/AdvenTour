@@ -3,10 +3,7 @@ import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/route_widget.dart';
-import 'package:Adventour/widgets/scroll_column_expandable.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:toast/toast.dart';
 import 'package:Adventour/controllers/dynamic_links.dart';
 import 'package:flutter/services.dart';
@@ -92,7 +89,7 @@ class BottomSheetRoutes extends StatelessWidget {
   });
 
    r.Route route;
-  var _link;
+  String _link;
 
   @override
   Widget build(BuildContext context) {

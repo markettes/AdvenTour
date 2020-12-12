@@ -24,7 +24,7 @@ import 'package:Adventour/controllers/dynamic_links.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({@required this.navigatorKey});
-  var navigatorKey;
+  GlobalKey<NavigatorState> navigatorKey;
   @override
   _MapPageState createState() => _MapPageState();
 }
@@ -37,19 +37,6 @@ class _MapPageState extends State<MapPage> {
   bool _fixedPosition = false;
 
   TextEditingController _locationController = TextEditingController();
-
-  @override
-  void initState() {
-    dynamicLinks.initDynamicLinks(goRoute);
-    super.initState();
-  }
-
-  Future goRoute(Uri link) async {
-    Map linkParameters = link.queryParameters;
-    var route =
-        await db.getRoute(linkParameters['author'], linkParameters['id']);
-    widget.navigatorKey.currentState.pushNamed('/routePage', arguments: {'route':route});
-  }
 
   @override
   Widget build(BuildContext context) {

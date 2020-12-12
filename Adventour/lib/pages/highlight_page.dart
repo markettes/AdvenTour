@@ -7,6 +7,8 @@ import 'package:Adventour/widgets/route_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
+import 'package:Adventour/controllers/dynamic_links.dart';
+import 'package:flutter/services.dart';
 
 import '../app_localizations.dart';
 
@@ -117,16 +119,17 @@ class _HighlightPageState extends State<HighlightPage> {
 }
 
 class BottomSheetHighlight extends StatelessWidget {
-  const BottomSheetHighlight({
+  BottomSheetHighlight({
     @required this.route,
   });
 
   final r.Route route;
+  String _link;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220,
+      height: 250,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,6 +196,26 @@ class BottomSheetHighlight extends StatelessWidget {
             ),
             label: Text(
               'Start',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () async {
+              if(_link == null) {
+                _link = await dynamicLinks.dynamicLink(true, route);
+                
+              }
+              Clipboard.setData(ClipboardData(text: _link));
+              Navigator.pop(context);
+              Toast.show('Route link copied to clipboard', context);
+            },
+            icon: Icon(
+              Icons.share,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Share',
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
