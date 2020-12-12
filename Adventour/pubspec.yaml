@@ -47,6 +47,7 @@ dependencies:
   firebase_storage: ^5.0.1
   date_range_picker: ^1.0.5
   shared_preferences: ^0.5.12+4
+  provider: ^4.3.2+3
 
 dev_dependencies:
   flutter_test:
@@ -71,7 +72,6 @@ flutter:
   assets:
     - assets/
     - assets/map_styles/
-    - assets/logo_adventour.png
     - assets/empty_photo.jpg
     - assets/drawer_background.jpg
     - lang/en.json

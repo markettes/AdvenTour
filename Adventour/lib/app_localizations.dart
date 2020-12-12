@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/my_shared_preferences.dart';
 import 'package:Adventour/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,8 +7,12 @@ import 'package:flutter/services.dart';
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AppLocalizations {
   final Locale locale;
+  MySharedPreferences _myPrefs = MySharedPreferences();
+  String lanCode;
 
   AppLocalizations(this.locale);
 
@@ -23,20 +28,18 @@ class AppLocalizations {
   Future<bool> load() async {
     //TODO: Guardar los ajustes de usuario como el idioma seleccionado,
     //inicialmente no habrá seleccionado ninguno y se ejecutará la siguiente línea)
-    String langString, jsonString;
+    String jsonString;
 
-    LanguageDialog.getLanguage().then((value) => langString);
-    switch (langString) {
-      case "lang/en.json":
-        jsonString = await rootBundle.loadString(langString);
-        break;
-      case "lang/es.json":
-        jsonString = await rootBundle.loadString(langString);
-        break;
-      default:
-        jsonString =
-            await rootBundle.loadString('lang/${locale.languageCode}.json');
-    }
+    _myPrefs.initPreferences().then(
+        (value) => {_myPrefs.myLanguage = 'es', lanCode = _myPrefs.myLanguage});
+
+    lanCode = 'es';
+    print("hola: " + lanCode);
+
+    lanCode == ''
+        ? jsonString =
+            await rootBundle.loadString('lang/${locale.languageCode}.json')
+        : jsonString = await rootBundle.loadString("lang/" + lanCode + ".json");
 
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
