@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Adventour/controllers/db.dart';
+import 'package:Adventour/controllers/directions_engine.dart';
 import 'package:Adventour/controllers/map_controller.dart';
 import 'package:Adventour/controllers/polyline_engine.dart';
 import 'package:Adventour/controllers/search_engine.dart';
@@ -42,7 +43,14 @@ class _NavigationPageState extends State<NavigationPage> {
   bool _fixedPosition = true;
   FinishedRoute _finishedRoute;
   Place _nearestPlace;
-  double totalDistance;
+  double _totalDistance = 0;
+
+  Map<String, IconData> iconMapping = {
+    'car': Icons.directions_car,
+    'walk': Icons.directions_walk,
+    'bicycle': Icons.directions_bike,
+  };
+
   // double bearing;
 
   // @override
@@ -174,7 +182,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                              left: 16.0, right: 8.0, top: 8.0, bottom: 124.0),
+                              left: 16.0, right: 8.0, top: 8.0, bottom: 8.0),
                           child: CircleIconButton(
                             type: route.paths[_selectedPath].transport,
                             onPressed: nextTransport,
@@ -190,11 +198,7 @@ class _NavigationPageState extends State<NavigationPage> {
                         curve: Curves.fastOutSlowIn,
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            left: 8.0,
-                            right: 16.0,
-                            top: 8.0,
-                            bottom: 124.0,
-                          ),
+                              left: 8.0, right: 16.0, top: 8.0, bottom: 8.0),
                           child: CircleIconButton(
                             icon: Icon(
                               Icons.gps_fixed,
@@ -224,73 +228,151 @@ class _NavigationPageState extends State<NavigationPage> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: _finishedRoute == null
-                          ? Container(
-                              margin: EdgeInsets.all(16),
-                              height: 100,
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).backgroundColor,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    topRight: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
-                                    bottomRight: Radius.circular(8),
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black, blurRadius: 5),
-                                  ]),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
+                          ? AnimatedOpacity(
+                              opacity: _listVisible ? 0.9 : 0.0,
+                              duration: Duration(milliseconds: 600),
+                              curve: Curves.fastOutSlowIn,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
-                                    if (_nearestPlace != null)
-                                      Text(
-                                        _nearestPlace.name,
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    if (_nearestPlace != null)
-                                      SizedBox(height: 5),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Icon(
-                                          _nearestPlace != null
-                                              ? typeToIcon(_nearestPlace.type)
-                                              : Icons.info,
-                                          color: Theme.of(context).primaryColor,
-                                          size: 40,
-                                        ),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                Icon(Icons.directions_walk,
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 0),
+                                      child: Container(
+                                        margin:
+                                            EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                .backgroundColor,
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8.0)),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey,
+                                                  blurRadius: 3),
+                                            ]),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  if (_nearestPlace != null)
+                                                    Text(
+                                                      _nearestPlace.name,
+                                                      style: TextStyle(
+                                                          fontSize: 18),
+                                                    ),
+                                                  if (_nearestPlace != null)
+                                                    SizedBox(height: 5),
+                                                  Icon(
+                                                    _nearestPlace != null
+                                                        ? typeToIcon(
+                                                            _nearestPlace.type)
+                                                        : Icons.info,
                                                     color: Theme.of(context)
-                                                        .primaryColor),
-                                                Text(
-                                                  '${tiempoRestante()}',
-                                                ),
-                                                Icon(
-                                                  Icons.location_pin,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                                Text(
-                                                    '${route.paths[_selectedPath].stretchs.length}')
-                                              ],
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                                                        .primaryColor,
+                                                    size: 40,
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Icon(
+                                                                iconMapping[route
+                                                                    .paths[
+                                                                        _selectedPath]
+                                                                    .transport],
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                size: 35),
+                                                            if (_totalDistance !=
+                                                                null)
+                                                              Text(
+                                                                '${(_totalDistance / 1000).toStringAsFixed(1)} km',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        18),
+                                                              ),
+                                                          ]),
+                                                      Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceEvenly,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .location_pin,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              size: 35,
+                                                            ),
+                                                            Text(
+                                                              '${route.paths[_selectedPath].stretchs.length}',
+                                                              style: TextStyle(
+                                                                  fontSize: 18),
+                                                            ),
+                                                          ]),
+                                                    ],
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(90, 8.0, 90, 8.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: RaisedButton(
+                                              onPressed: () =>
+                                                  _showCancelAlert(),
+                                              child: Text(
+                                                "Exit Route",
+                                                style: TextStyle(
+                                                    color: Theme.of(context)
+                                                        .buttonColor),
+                                              ),
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              8.0))),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]),
                             )
                           : null,
                     ),
@@ -362,6 +444,26 @@ class _NavigationPageState extends State<NavigationPage> {
         points: routeCoords,
         color: Colors.blue,
         width: 4);
+
+    if (_polyline.points.isNotEmpty) {
+      _totalDistance = Geolocator.distanceBetween(
+        position.latitude,
+        position.longitude,
+        _polyline.points[0].latitude,
+        _polyline.points[0].longitude,
+      );
+
+      for (int i = 0; i < _polyline.points.length - 1; i++) {
+        LatLng ini = _polyline.points[i];
+        LatLng fin = _polyline.points[i + 1];
+        _totalDistance += Geolocator.distanceBetween(
+          ini.latitude,
+          ini.longitude,
+          fin.latitude,
+          fin.longitude,
+        );
+      }
+    }
     _mapController.drawPolyline(_polyline);
   }
 
