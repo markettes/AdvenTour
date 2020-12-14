@@ -22,7 +22,7 @@ class RoutesPage extends StatelessWidget {
         stream: db.getRoutes(db.currentUserId),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
-          if (!snapshot.hasData) return CircularProgressIndicator();
+          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
           List<r.Route> routes = snapshot.data;
           return Stack(
             alignment: Alignment.bottomRight,
