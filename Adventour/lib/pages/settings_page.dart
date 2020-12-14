@@ -15,7 +15,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('settings')),
+        title: Text(AppLocalizations.of(context).translate('help')),
       ),
       body: ListView.separated(
           itemCount: 3,
@@ -26,28 +26,6 @@ class _SettingsPageState extends State<SettingsPage> {
           itemBuilder: (_, index) {
             switch (index) {
               case 0:
-                return Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.of(context).translate('language'),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600),
-                            textScaleFactor: 1.5,
-                          ),
-                        ),
-                      ),
-                      LanguageButton()
-                    ],
-                  ),
-                );
-                break;
-              case 1:
                 return FlatButton(
                   height: 45.0,
                   onPressed: () => _showMyDialogs('ABOUT'),
@@ -57,7 +35,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                 );
                 break;
-              case 2:
+              case 1:
                 return FlatButton(
                   height: 45.0,
                   onPressed: () => _showMyDialogs('CONTACT'),
@@ -103,79 +81,6 @@ class _SettingsPageState extends State<SettingsPage> {
             return ContactDialog();
         }
       },
-    );
-  }
-}
-
-class LanguageButton extends StatefulWidget {
-  const LanguageButton({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _LanguageButtonState createState() => _LanguageButtonState();
-}
-
-class _LanguageButtonState extends State<LanguageButton> {
-  MySharedPreferences _myPrefs = MySharedPreferences();
-  String lanCode;
-  // switch(lanCode){
-  //   case 'en':
-  //     return AppLocalizations.of(context).translate('english');
-  //   case 'es':
-  //     return AppLocalizations.of(context).translate('spanish');
-  // }
-
-  List<String> languages = ['English', 'Spanish'];
-
-  Future<String> lang() async {
-    await _myPrefs.initPreferences();
-    lanCode = _myPrefs.myLanguage;
-    return lanCode;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    lang().then(
-        (value) => value == 'es' ? lanCode = 'Español' : lanCode = 'English');
-    return Expanded(
-      flex: 2,
-      child: Center(
-        child: DropdownButton(
-          value: lanCode,
-          underline: Container(
-            height: 2,
-            color: Theme.of(context).primaryColor,
-          ),
-          iconEnabledColor: Theme.of(context).primaryColor,
-          dropdownColor: Theme.of(context).accentColor,
-          items: <String>['English', 'Español']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-          onChanged: (String newValue) {
-            setState(() {
-              print("HOLAAAAAAAAAAAA");
-              lanCode = newValue;
-              switch (newValue) {
-                case 'English':
-                case 'Inglés':
-                  return _myPrefs.myLanguage = 'en';
-                  break;
-                case 'Spanish':
-                case 'Español':
-                  return _myPrefs.myLanguage = 'es';
-                  break;
-                default:
-                  return '';
-              }
-            });
-          },
-        ),
-      ),
     );
   }
 }

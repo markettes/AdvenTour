@@ -429,7 +429,7 @@ class MyDrawer extends StatelessWidget {
                         child: Row(
                           children: [
                             Icon(
-                              Icons.settings,
+                              Icons.help,
                               size: 35,
                               color: Theme.of(context).primaryColor,
                             ),
@@ -437,8 +437,7 @@ class MyDrawer extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              AppLocalizations.of(context)
-                                  .translate('settings'),
+                              AppLocalizations.of(context).translate('help'),
                               style: Theme.of(context).textTheme.bodyText1,
                             )
                           ],

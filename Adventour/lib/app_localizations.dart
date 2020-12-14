@@ -11,8 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLocalizations {
   final Locale locale;
-  MySharedPreferences _myPrefs = MySharedPreferences();
-  String lanCode;
 
   AppLocalizations(this.locale);
 
@@ -26,18 +24,8 @@ class AppLocalizations {
   Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
-    //TODO: Guardar los ajustes de usuario como el idioma seleccionado,
-    //inicialmente no habrá seleccionado ninguno y se ejecutará la siguiente línea)
-    String jsonString;
-
-    await _myPrefs.initPreferences();
-
-    lanCode = _myPrefs.myLanguage;
-
-    lanCode == ''
-        ? jsonString =
-            await rootBundle.loadString('lang/${locale.languageCode}.json')
-        : jsonString = await rootBundle.loadString("lang/" + lanCode + ".json");
+    String jsonString =
+        await rootBundle.loadString('lang/${locale.languageCode}.json');
 
     Map<String, dynamic> jsonMap = json.decode(jsonString);
 
