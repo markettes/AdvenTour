@@ -49,6 +49,9 @@ dependencies:
   shared_preferences: ^0.5.12+4
   provider: ^4.3.2+3
   flutter_email_sender: ^4.0.0
+  country_list_pick: ^1.0.1+2
+  flutter_duration_picker: "^1.0.0"
+  weather: ^1.2.4
 
 dev_dependencies:
   flutter_test:
@@ -73,10 +76,8 @@ flutter:
   assets:
     - assets/
     - assets/map_styles/
-    - assets/empty_photo.jpg
-    - assets/drawer_background.jpg
-    - lang/en.json
-    - lang/es.json
+    - assets/markers/
+    - lang/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

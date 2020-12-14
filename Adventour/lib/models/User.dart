@@ -9,7 +9,8 @@ class User {
   int _changeLook;
   int _completedRoutes;
   int _editedRoutes;
-  int _routesHighlight;
+  String _countryCode;
+  int _likes;
 
   User(userName, email, [image = '']) {
     _userName = userName;
@@ -18,7 +19,7 @@ class User {
     _changeLook = 0;
     _completedRoutes = 0;
     _editedRoutes = 0;
-    _routesHighlight = 0;
+    _likes = 0;
   }
 
   User.fromFirestore(DocumentSnapshot snapshot) {
@@ -30,7 +31,8 @@ class User {
     _changeLook = data['changeLook'];
     _completedRoutes = data['completedRoutes'];
     _editedRoutes = data['editedRoutes'];
-    _routesHighlight = data['routesHighlight'];
+    _likes = data['likes'];
+    _countryCode = data['countryCode'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -40,7 +42,8 @@ class User {
         'changeLook': _changeLook,
         'completedRoutes': _completedRoutes,
         'editedRoutes': _editedRoutes,
-        "routesHighlight": _routesHighlight,
+        'likes': _likes,
+        'countryCode':_countryCode
       };
 
   get id => _id;
@@ -63,7 +66,11 @@ class User {
 
   get editedRoutes => _editedRoutes;
 
-  get routesHighlight => _routesHighlight;
+  get likes => _likes;
+
+  get countryCode => _countryCode;
+
+  set countryCode(String countryCode) => _countryCode = countryCode;
 
   int getAttribute(String affected) {
     switch (affected) {
@@ -73,18 +80,11 @@ class User {
         return _completedRoutes;
       case "editedRoutes":
         return _editedRoutes;
-      case "routesHighlight":
-        return _routesHighlight;
+      case "likes":
+        return _likes;
       default:
         return null;
     }
-  }
-
-  @override
-  String toString() {
-    return """
-completedRoutes = $_completedRoutes
-    """;
   }
 }
 

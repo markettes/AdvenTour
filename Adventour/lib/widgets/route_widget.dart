@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
@@ -115,17 +116,41 @@ class _RouteWidgetState extends State<RouteWidget> {
                 ],
               ),
             ),
-            if(widget.route.isRequested) IconButton(icon: Icon(Icons.upload_file),onPressed: () => Toast.show('Waiting for acceptance', context),),
-            if(widget.route.isHighlight)
-            Row(
-              children: [
-                Text(widget.route.likes.toString()),
-                SizedBox(
-                  width: 5,
-                ),
-                Icon(Icons.favorite)
-              ],
-            ),
+            if (widget.route.isPublic)
+              Row(
+                children: [
+                  Text(widget.route.likes.length.toString()),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  SizedBox(
+                    width: 28,
+                    child: IconButton(
+                        icon: Icon(
+                          widget.route.author == db.currentUserId ||
+                                  widget.route.likes.contains(db.currentUserId)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                        ),
+                        disabledColor: Theme.of(context).primaryColor,
+                        onPressed: widget.route.author == db.currentUserId
+                            ? null
+                            : () {
+                                bool contains = widget.route.likes
+                                    .contains(db.currentUserId);
+                                    if(contains){
+                                      widget.route.likes
+                                        .remove(db.currentUserId);
+                                        db.unlikeRoute(widget.route.author);
+                                    } else {
+                                      widget.route.likes.add(db.currentUserId);
+                                      db.likeRoute(widget.route.author);
+                                    } 
+                                db.updateRoute(widget.route);
+                              }),
+                  )
+                ],
+              ),
           ],
         ),
       ),

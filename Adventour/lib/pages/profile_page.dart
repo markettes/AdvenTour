@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:Adventour/controllers/auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:toast/toast.dart';
+import 'package:country_list_pick/country_list_pick.dart';
 
 import '../app_localizations.dart';
 
@@ -116,6 +117,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             SizedBox(height: 10),
+                            CountryListPick(
+                              initialSelection: _user.countryCode,
+                              onChanged: (value) {
+                                _user.countryCode = value.code;
+                                db.updateUser(_user);
+                              },
+                              theme: CountryTheme(isShowCode: false),
+                            ),
+                            SizedBox(height: 10),
                             PrimaryButton(
                               text: AppLocalizations.of(context).translate('edit') ,
                               icon: Icons.edit,
@@ -180,97 +190,90 @@ class _ProfilePageState extends State<ProfilePage> {
 
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
-              return Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 300,
-                    child: Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).translate('put_password') ,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2
-                              .copyWith(fontSize: 20),
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Container(
-                                  height: 100,
-                                  child: InputText(
-                                    icon: Icons.lock,
-                                    labelText: AppLocalizations.of(context).translate('password') ,
-                                    errorText: _passwordError,
-                                    controller: _passwordController,
-                                    obscured: true,
-                                    validator: (value) {
-                                      if (value.isEmpty)
-                                        return AppLocalizations.of(context).translate('password_cannot') ;
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Container(
-                                  height: 100,
-                                  child: InputText(
-                                    icon: Icons.lock,
-                                    labelText: AppLocalizations.of(context).translate('new_password') ,
-                                    errorText: _newPasswordError,
-                                    controller: _newPasswordController,
-                                    obscured: true,
-                                    validator: (value) {
-                                      if (value.isEmpty)
-                                        return AppLocalizations.of(context).translate('new_password_cannot') ;
-                                      print('?' +
-                                          value +
-                                          ' ' +
-                                          _passwordController.text);
-                                      if (value == _passwordController.text)
-                                        return AppLocalizations.of(context).translate('new_password_same') ;
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              PrimaryButton(
-                                text: 'OK',
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    try {
-                                      await auth.reauthCurrentUser(
-                                          _passwordController.text);
-                                      await auth.changePassword(
-                                          _newPasswordController.text);
-                                      Navigator.pop(context);
-                                      Toast.show(AppLocalizations.of(context).translate('password_change') , context,
-                                          duration: 3);
-                                    } catch (e) {
-                                      print('?error');
-                                      print('?' + e.code);
-                                      setState(() {
-                                        _passwordError = passwordError(e);
-                                      });
-                                    }
-                                  }
-                                },
-                              ),
-                            ],
+              return AlertDialog(
+                title: Text(
+                  'Put a new password',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline2
+                      .copyWith(fontSize: 20),
+                ),
+                content: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.lock,
+                            labelText: 'Password',
+                            errorText: _passwordError,
+                            controller: _passwordController,
+                            obscured: true,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'Password can\'t be empty';
+                              return null;
+                            },
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.lock,
+                            labelText: 'New password',
+                            errorText: _newPasswordError,
+                            controller: _newPasswordController,
+                            obscured: true,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'New password can\'t be empty';
+                              print(
+                                  '?' + value + ' ' + _passwordController.text);
+                              if (value == _passwordController.text)
+                                return 'New password can\'t be the same password';
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                actions: [
+                  FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Edit'),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        try {
+                          await auth
+                              .reauthCurrentUser(_passwordController.text);
+                          await auth
+                              .changePassword(_newPasswordController.text);
+                          Navigator.pop(context);
+                          Toast.show('Password changed', context, duration: 3);
+                        } catch (e) {
+                          print('?error');
+                          print('?' + e.code);
+                          setState(() {
+                            _passwordError = passwordError(e);
+                          });
+                        }
+                      }
+                    },
+                  ),
+                ],
               );
             },
           );
@@ -289,96 +292,91 @@ class _ProfilePageState extends State<ProfilePage> {
 
           return StatefulBuilder(
             builder: (BuildContext context, setState) {
-              return Dialog(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 300,
-                    child: Column(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context).translate('new_email') ,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline2
-                              .copyWith(fontSize: 20),
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Container(
-                                  height: 100,
-                                  child: InputText(
-                                    icon: Icons.lock,
-                                    labelText: AppLocalizations.of(context).translate('password') ,
-                                    errorText: _passwordError,
-                                    controller: _passwordController,
-                                    obscured: true,
-                                    validator: (value) {
-                                      if (value.isEmpty)
-                                        return AppLocalizations.of(context).translate('password_cannot') ;
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Container(
-                                  height: 100,
-                                  child: InputText(
-                                    icon: Icons.email,
-                                    labelText: AppLocalizations.of(context).translate('new_email') ,
-                                    errorText: _emailError,
-                                    controller: _emailController,
-                                    obscured: false,
-                                    validator: (value) {
-                                      if (value.isEmpty)
-                                        return AppLocalizations.of(context).translate('new_email_cannot') ;
-                                      if (value == _email)
-                                        return AppLocalizations.of(context).translate('new_email_same') ;
-                                      return null;
-                                    },
-                                  ),
-                                ),
-                              ),
-                              PrimaryButton(
-                                text: 'OK',
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    try {
-                                      await auth.reauthCurrentUser(
-                                          _passwordController.text);
-                                      await auth.changeEmail(
-                                        _emailController.text,
-                                      );
-                                      _user.email = _emailController.text;
-                                      db.updateUser(_user);
-                                      Navigator.pop(context);
-                                      Toast.show(AppLocalizations.of(context).translate('mail_changed') , context,
-                                          duration: 3);
-                                    } catch (e) {
-                                      print('?' + e.code);
-                                      setState(() {
-                                        _emailError = emailError(e);
-                                        _passwordError = passwordError(e);
-                                      });
-                                    }
-                                  }
-                                },
-                              ),
-                            ],
+              return AlertDialog(
+                title: Text(
+                  'Put a new email',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline2
+                      .copyWith(fontSize: 20),
+                ),
+                content: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.lock,
+                            labelText: 'Password',
+                            errorText: _passwordError,
+                            controller: _passwordController,
+                            obscured: true,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'Password can\'t be empty';
+                              return null;
+                            },
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, right: 10),
+                        child: Container(
+                          height: 100,
+                          child: InputText(
+                            icon: Icons.email,
+                            labelText: 'New email',
+                            errorText: _emailError,
+                            controller: _emailController,
+                            obscured: false,
+                            validator: (value) {
+                              if (value.isEmpty)
+                                return 'New email can\'t be empty';
+                              if (value == _email)
+                                return 'New email can\'t be the same email';
+                              return null;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                actions: [
+                  FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Edit'),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        try {
+                          await auth
+                              .reauthCurrentUser(_passwordController.text);
+                          await auth.changeEmail(
+                            _emailController.text,
+                          );
+                          _user.email = _emailController.text;
+                          db.updateUser(_user);
+                          Navigator.pop(context);
+                          Toast.show('Email changed', context, duration: 3);
+                        } catch (e) {
+                          print('?' + e.code);
+                          setState(() {
+                            _emailError = emailError(e);
+                            _passwordError = passwordError(e);
+                          });
+                        }
+                      }
+                    },
+                  ),
+                ],
               );
             },
           );

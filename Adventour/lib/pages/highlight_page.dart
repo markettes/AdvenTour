@@ -2,9 +2,11 @@ import 'package:Adventour/controllers/db.dart';
 import 'package:Adventour/controllers/search_engine.dart';
 import 'package:Adventour/models/Place.dart';
 import 'package:Adventour/models/Route.dart' as r;
+import 'package:Adventour/models/User.dart';
 import 'package:Adventour/widgets/route_widget.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 import '../app_localizations.dart';
 
@@ -87,7 +89,14 @@ class _HighlightPageState extends State<HighlightPage> {
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
                                 r.Route route = routes[index];
-                                return RouteWidget(route:route,onTap: ()=>Navigator.pushNamed(context, '/navigationPage',arguments: {'route':route}),);
+                                return RouteWidget(
+                                  route: route,
+                                  onTap: () => showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) =>
+                                        BottomSheetHighlight(route: route),
+                                  ),
+                                );
                               },
                             )
                           : Column(
@@ -99,6 +108,117 @@ class _HighlightPageState extends State<HighlightPage> {
                   },
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomSheetHighlight extends StatelessWidget {
+  const BottomSheetHighlight({
+    @required this.route,
+  });
+
+  final r.Route route;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 220,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundImage: route.images.isNotEmpty
+                      ? NetworkImage(searchEngine.searchPhoto(route.image))
+                      : null,
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      route.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline2
+                          .copyWith(fontSize: 22),
+                    ),
+                    Text(route.locationName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(fontSize: 15))
+                  ],
+                ),
+              ],
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/routePage',
+                  arguments: {'route': route});
+            },
+            icon: Icon(
+              Icons.visibility,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Show',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, '/navigationPage',
+                  arguments: {'route': route});
+            },
+            icon: Icon(
+              Icons.flag,
+              color: Theme.of(context).primaryColor,
+              size: 30,
+            ),
+            label: Text(
+              'Start',
+              style: Theme.of(context).textTheme.headline2,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right:10),
+            child: StreamBuilder(
+              stream: db.getUser(route.author),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                if (!snapshot.hasData)
+                  return Center(child: CircularProgressIndicator());
+                User user = snapshot.data;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CircleAvatar(
+                      radius: 15,
+                      backgroundImage: user.image != null
+                          ? NetworkImage(user.image)
+                          : AssetImage('assets/empty_photo.jpg'),
+                    ),
+                    SizedBox(width: 5,),
+                    Text(user.userName),
+                  ],
+                );
+              },
             ),
           ),
         ],

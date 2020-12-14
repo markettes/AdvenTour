@@ -61,6 +61,18 @@ class DB {
         .update({'editedRoutes': FieldValue.increment(1)});
   }
 
+    Future<void> likeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'likes': FieldValue.increment(1)});
+  }
+
+      Future<void> unlikeRoute(String userId) {
+    _firestore
+        .doc('Users/$userId')
+        .update({'likes': FieldValue.increment(-1)});
+  }
+
 //----------------------------ROUTES-----------------------------------
 
   Stream<List<Route>> getRoutes(String userId) => _firestore
@@ -78,14 +90,11 @@ class DB {
       .doc('Users/${route.author}/Routes/${route.id}')
       .update(route.toJson());
 
-  Future requestRoute(String userId, String routeId) => _firestore
-      .doc('Users/$userId/Routes/$routeId')
-      .update({'requested': 'true'});
 
   Stream<List<Route>> getHighlights(String locationId) => _firestore
       .collectionGroup('Routes')
       .where('locationId', isEqualTo: locationId)
-      .where('isHighlight', isEqualTo: 'true')
+      .where('isPublic', isEqualTo: 'true')
       .orderBy('likes')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));

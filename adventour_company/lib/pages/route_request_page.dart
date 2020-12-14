@@ -3,21 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:Adventour/models/Route.dart' as r;
 import 'package:Adventour/widgets/route_widget.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:adventour_admin/controllers/db.dart';
+import 'package:adventour_company/controllers/db.dart';
 
-class RouteRequestPage extends StatefulWidget {
-  @override
-  _RouteRequestPageState createState() => _RouteRequestPageState();
-}
-
-class _RouteRequestPageState extends State<RouteRequestPage> {
+class RouteRequestPage extends StatelessWidget {
+  RouteRequestPage({@required this.requests});
   List<r.Route> requests;
 
   @override
   Widget build(BuildContext context) {
-    Map arguments = ModalRoute.of(context).settings.arguments;
-    requests = arguments['requests'];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Route requests'),

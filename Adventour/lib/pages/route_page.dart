@@ -19,6 +19,7 @@ import 'package:Adventour/widgets/place_widget.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/square_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_duration_picker/flutter_duration_picker.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -84,12 +85,14 @@ class _RoutePageState extends State<RoutePage>
                     route: route,
                   ),
                   MapListView(
-                    path: route.paths[_selectedPath],
-                    places: route.places,
-                    tabController: _tabController,
-                    onPressedAdd: _onPressedAdd,
-                    removePlace: removePlace,
-                  )
+                      path: route.paths[_selectedPath],
+                      places: route.places,
+                      tabController: _tabController,
+                      onPressedAdd: _onPressedAdd,
+                      removePlace: _removePlace,
+                      refresh: () {
+                        setState(() {});
+                      })
                 ],
               ));
   }
@@ -100,47 +103,37 @@ class _RoutePageState extends State<RoutePage>
       return showDialog(
         context: context,
         builder: (context) {
-          return Dialog(
-            child: Container(
-              height: 150,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      oldAuthor
-                          ? AppLocalizations.of(context).translate('sure_edit')
-                          : AppLocalizations.of(context).translate('like_save'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(fontSize: 20),
-                    ),
-                    Text(
-                      AppLocalizations.of(context).translate('lose_this'),
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                    PrimaryButton(
-                      text: AppLocalizations.of(context).translate('save'),
-                      onPressed: () {
-                        if (oldAuthor) {
-                          print(route == null);
-                          db.updateRoute(route);
-                          db.editeRoute(db.currentUserId);
-                        } else {
-                          route.author = db.currentUserId;
-                          db.addRoute(route);
-                        }
-
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+          return AlertDialog(
+            title: Text(
+              oldAuthor
+                  ? 'Are you sure you want to edit your route?'
+                  : 'Would you like save this route?',
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
             ),
+            actions: [
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Save'),
+                onPressed: () {
+                  if (oldAuthor) {
+                    db.updateRoute(route);
+                    db.editeRoute(db.currentUserId);
+                  } else {
+                    route.author = db.currentUserId;
+                    db.addRoute(route);
+                  }
+
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              )
+            ],
           );
         },
       );
@@ -150,77 +143,68 @@ class _RoutePageState extends State<RoutePage>
         builder: (context) {
           TextEditingController _routeNameController = TextEditingController();
           final _formKey = GlobalKey<FormState>();
-          return Dialog(
-            child: Container(
-              height: 230,
+          return AlertDialog(
+            title: Text(
+              'Put a name to your route',
+              style:
+                  Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
+            ),
+            content: Container(
+              height: 100,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      AppLocalizations.of(context).translate('put_name'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline2
-                          .copyWith(fontSize: 20),
-                    ),
                     Form(
                       key: _formKey,
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 100,
-                            child: InputText(
-                              icon: Icons.flag,
-                              labelText: AppLocalizations.of(context)
-                                  .translate('route_name'),
-                              controller: _routeNameController,
-                              maxLength: 20,
-                              validator: (value) {
-                                if (value.isEmpty)
-                                  return AppLocalizations.of(context)
-                                      .translate('route_name_empty');
-                                return null;
-                              },
-                            ),
-                          ),
-                          PrimaryButton(
-                            text:
-                                AppLocalizations.of(context).translate('save'),
-                            onPressed: () {
-                              if (_formKey.currentState.validate()) {
-                                route.name = _routeNameController.text;
-                                route.author = db.currentUserId;
-                                route.images = route.places
-                                    .map((place) =>
-                                        place.photos[0].photoReference)
-                                    .toList();
-
-                                db.addRoute(route);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              }
-                            },
-                          ),
-                        ],
+                      child: InputText(
+                        icon: Icons.flag,
+                        labelText: 'Route name',
+                        controller: _routeNameController,
+                        maxLength: 20,
+                        validator: (value) {
+                          if (value.isEmpty)
+                            return 'Route name can\'t be empty';
+                          return null;
+                        },
                       ),
                     )
-                    // PrimaryButton(
-                    //   text: 'SAVE',
-                    //   onPressed: () => Navigator.pop(context),
-                    // ),
                   ],
                 ),
               ),
             ),
+            actions: [
+              FlatButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                child: Text('Save'),
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    route.name = _routeNameController.text;
+                    route.author = db.currentUserId;
+                    route.images = route.places
+                        .map((place) => place.photos[0].photoReference)
+                        .toList();
+
+                    db.addRoute(route);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  }
+                },
+              )
+            ],
           );
         },
       );
   }
 
-  Future removePlace(Place place) async {
+  Future _removePlace(Place place) async {
     if (route.places.length > 3) {
       route.removePlace(place);
       List<Path> paths = [];
@@ -231,9 +215,10 @@ class _RoutePageState extends State<RoutePage>
       route.paths = paths;
       _tabController.animateTo(0);
       setState(() {});
-    } else
-      Toast.show(AppLocalizations.of(context).translate('3_places'), context,
-          duration: 3);
+    } else {
+      FocusScope.of(context).requestFocus(FocusNode());
+      Toast.show('The route needs at least 3 places', context, duration: 3);
+    }
   }
 
   Future _onTapPrediction(Prediction prediction) async {
@@ -252,16 +237,21 @@ class _RoutePageState extends State<RoutePage>
   }
 
   Future _addPlace(Place place) async {
-    route.addPlace(place);
-    List<Path> paths = [];
-    for (var transport in transports) {
-      paths.add(await directionsEngine.makePath(
-          route.start, route.places, transport));
-    }
-    route.paths = paths;
-    Navigator.pop(context);
-    _tabController.animateTo(0);
-    setState(() {});
+    if (Geolocator.distanceBetween(place.latitude, place.longitude,
+            route.start.latitude, route.start.longitude) <
+        20000) {
+      route.addPlace(place);
+      List<Path> paths = [];
+      for (var transport in transports) {
+        paths.add(await directionsEngine.makePath(
+            route.start, route.places, transport));
+      }
+      route.paths = paths;
+      Navigator.pop(context);
+      _tabController.animateTo(0);
+      setState(() {});
+    } else
+      Toast.show('Away place, please select closer places', context);
   }
 
   Future _onPressedAdd() async {
@@ -284,6 +274,11 @@ class _RoutePageState extends State<RoutePage>
     else
       Toast.show(AppLocalizations.of(context).translate('route_most'), context,
           duration: 3);
+  }
+
+  void _changeDuration(Place place, Duration duration) {
+    place.duration = duration;
+    setState(() {});
   }
 
   void nextTransport() {
@@ -467,12 +462,10 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
     _polyline = Polyline(
         polylineId: PolylineId('Route'),
         points: routeCoords,
-        color: Colors.blue,
+        color: Theme.of(context).primaryColor,
         width: 4);
     _mapController.drawPolyline(_polyline);
   }
-
-  bool _listVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -482,51 +475,30 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           initialCameraPosition: CameraPosition(
             target: LatLng(
                 widget.places.first.latitude, widget.places.first.longitude),
-            zoom: 12.5,
+            zoom: 13.5,
           ),
           markers: Set<Marker>.of(_mapController.markers.values),
           polylines: Set<Polyline>.of(_mapController.polylines.values),
           onMapCreated: (googleMapController) =>
               _mapController.onMapCreated(googleMapController, () async {
             await drawPath();
-            Marker mStart = Marker(
-                markerId: MarkerId("Start"),
-                position: LatLng(widget.start.latitude, widget.start.longitude),
-                icon: await BitmapDescriptor.fromAssetImage(
-                  ImageConfiguration(devicePixelRatio: 2.5),
-                  'assets/marker.png',
-                ),
-                infoWindow: InfoWindow(title: "Start"));
-            _mapController.markers[mStart.markerId] = mStart;
+            _mapController.addStartMarker(widget.route.start, context);
             for (var place in widget.places) {
-              _mapController.addMarker(place, context);
+              _mapController.addPlaceMarker(place, context);
             }
             setState(() {});
           }),
-          onCameraMoveStarted: () {
-            _listVisible = false;
-            setState(() {});
-          },
-          onCameraIdle: () {
-            _listVisible = true;
-            setState(() {});
-          },
           myLocationEnabled: true,
           myLocationButtonEnabled: false,
           zoomControlsEnabled: false,
         ),
         Align(
           alignment: Alignment.bottomRight,
-          child: AnimatedOpacity(
-            opacity: _listVisible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 600),
-            curve: Curves.fastOutSlowIn,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SquareIconButton(
-                icon: Icons.list,
-                onPressed: () => widget.tabController.animateTo(1),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SquareIconButton(
+              icon: Icons.list,
+              onPressed: () => widget.tabController.animateTo(1),
             ),
           ),
         ),
@@ -572,16 +544,11 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
         //   ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: AnimatedOpacity(
-            opacity: _listVisible ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 600),
-            curve: Curves.fastOutSlowIn,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleIconButton(
-                type: widget.selectedPath.transport,
-                onPressed: widget.nextTransport,
-              ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CircleIconButton(
+              type: widget.selectedPath.transport,
+              onPressed: widget.nextTransport,
             ),
           ),
         )
@@ -663,6 +630,7 @@ class MapListView extends StatelessWidget {
     @required this.removePlace,
     @required this.onPressedAdd,
     @required TabController tabController,
+    @required this.refresh,
   }) : tabController = tabController;
 
   r.Path path;
@@ -670,6 +638,7 @@ class MapListView extends StatelessWidget {
   TabController tabController;
   Function onPressedAdd;
   Function removePlace;
+  Function refresh;
   Duration _duration;
 
   @override
@@ -731,48 +700,61 @@ class MapListView extends StatelessWidget {
                                     ' min'),
                               ],
                             ),
-                            Slidable(
-                              actionPane: SlidableDrawerActionPane(),
-                              actionExtentRatio: 0.25,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                      height: 50,
-                                      child: CircleIcon(type: place.type)),
-                                  SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          place.name,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        Text(place.adress),
-                                        Text(place.duration.inMinutes
-                                                .toString() +
-                                            ' min')
-                                      ],
-                                    ),
-                                  )
+                            GestureDetector(
+                              child: Slidable(
+                                actionPane: SlidableDrawerActionPane(),
+                                actionExtentRatio: 0.25,
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                        height: 50,
+                                        child: CircleIcon(type: place.type)),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            place.name,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                          Text(place.adress),
+                                          Text(place.duration.inMinutes
+                                                  .toString() +
+                                              ' min')
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                actions: <Widget>[
+                                  IconSlideAction(
+                                    caption: 'Delete',
+                                    color: Colors.transparent,
+                                    icon: Icons.delete,
+                                    foregroundColor:
+                                        Theme.of(context).primaryColor,
+                                    onTap: () async {
+                                      removePlace(place);
+                                    },
+                                  ),
                                 ],
                               ),
-                              actions: <Widget>[
-                                IconSlideAction(
-                                  caption: AppLocalizations.of(context)
-                                      .translate('Delete'),
-                                  color: Colors.transparent,
-                                  icon: Icons.delete,
-                                  foregroundColor:
-                                      Theme.of(context).primaryColor,
-                                  onTap: () async {
-                                    removePlace(place);
-                                  },
-                                ),
-                              ],
+                              onLongPress: () async {
+                                Duration duration = await showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return DurationDialog(
+                                          duration: place.duration);
+                                    });
+                                if (duration != null) {
+                                  place.duration = duration;
+                                  refresh();
+                                }
+                              },
                             )
                           ],
                         );
@@ -819,5 +801,57 @@ class MapListView extends StatelessWidget {
     else
       minutes = _duration.inMinutes.remainder(60).toString();
     return hours + ':' + minutes;
+  }
+}
+
+class DurationDialog extends StatefulWidget {
+  DurationDialog({
+    @required this.duration,
+  });
+  Duration duration;
+  @override
+  _DurationDialogState createState() => _DurationDialogState();
+}
+
+class _DurationDialogState extends State<DurationDialog> {
+  Duration _duration;
+
+  @override
+  void initState() {
+    _duration = widget.duration;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Change estimate place duration',
+        style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 17),
+      ),
+      content: DurationPicker(
+        duration: _duration,
+        onChange: (duration) {
+          if (duration < Duration(hours: 2)) {
+            _duration = duration;
+            setState(() {});
+          }
+        },
+      ),
+      actions: [
+        FlatButton(
+          child: Text('Cancel'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        FlatButton(
+          child: Text('Save'),
+          onPressed: () {
+            Navigator.pop(context, _duration);
+          },
+        ),
+      ],
+    );
   }
 }

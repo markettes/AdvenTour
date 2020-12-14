@@ -51,52 +51,40 @@ class RootPage extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 200,
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(context).translate('put_username') ,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline2
-                        .copyWith(fontSize: 20),
+        return AlertDialog(
+          title: Text(
+            'Put a username',
+            style: Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
+          ),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 100,
+                  child: InputText(
+                    icon: Icons.person,
+                    labelText: 'Username',
+                    controller: _userNameController,
+                    validator: (value) {
+                      if (value.isEmpty) return 'Username can\'t be empty';
+                      return null;
+                    },
                   ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 100,
-                          child: InputText(
-                            icon: Icons.person,
-                            labelText: AppLocalizations.of(context).translate('username') ,
-                            controller: _userNameController,
-                            validator: (value) {
-                              if (value.isEmpty)
-                                return AppLocalizations.of(context).translate('username_cannot') ;
-                              return null;
-                            },
-                          ),
-                        ),
-                        PrimaryButton(
-                          text: 'OK',
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              Navigator.pop(context, _userNameController.text);
-                            }
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
           ),
+          actions: [
+            FlatButton(
+              child: Text('Continue'),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  Navigator.pop(context, _userNameController.text);
+                }
+              },
+            ),
+          ],
         );
       },
     );

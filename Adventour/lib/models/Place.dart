@@ -5,21 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-// NO EN RUTAS PERO IMPLEMENTAR DE OTRA FROMA
-// const ZOO = "zoo";
-// const AMUSEMENT_PARK = "amusement_park";
-// const AQUARIUM = "aquarium";
-//const CASINO = "casino";
 
-//SHORT
-const PARK = "park"; // + 20
-const STADIUM = "stadium"; // 20
-const TOURIST_ATTRACTION = "tourist_attraction"; // + 30
-//LARGE
-const MUSEUM = "museum"; // + 45
-const NIGHT_CLUB = "night_club"; // + 60
-const RESTAURANT = "restaurant"; // 60
-const SHOPPING_MALL = "shopping_mall"; // 60
+const PARK = "park"; 
+const STADIUM = "stadium"; 
+const TOURIST_ATTRACTION = "tourist_attraction";
+const MUSEUM = "museum";
+const NIGHT_CLUB = "night_club";
+const RESTAURANT = "restaurant";
+const SHOPPING_MALL = "shopping_mall";
 const LOCALITY = "locality";
 
 List placeTypes = [
@@ -180,6 +173,8 @@ class Place {
 
   Duration get duration => _duration;
 
+  set duration(Duration duration)=>_duration = duration;
+
   @override
   String toString() {
     return """
@@ -270,8 +265,6 @@ IconData typeToIcon(String type) {
       return Icons.eco;
     case RESTAURANT:
       return Icons.restaurant;
-    case TOURIST_ATTRACTION:
-      return Icons.camera_alt;
     case STADIUM:
       return Icons.sports;
     case MUSEUM:
@@ -280,7 +273,9 @@ IconData typeToIcon(String type) {
       return Icons.nightlife;
     case SHOPPING_MALL:
       return Icons.local_mall;
+    case LOCALITY:
+      return Icons.location_city;
     default:
-      throw Exception('Icon not available for $type');
+      return Icons.camera_alt;
   }
 }

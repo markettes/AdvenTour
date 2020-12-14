@@ -18,8 +18,7 @@ class Route {
   DateTime _creationDate;
   String _locationName;
   String _locationId;
-  bool _requested;
-  bool _isHighlight;
+  bool _isPublic;
   List<String> _likes;
 
   Route(start, places, paths, locationName, locationId) {
@@ -29,8 +28,7 @@ class Route {
     _creationDate = DateTime.now();
     _locationName = locationName;
     _locationId = locationId;
-    _requested = false;
-    _isHighlight = false;
+    _isPublic = false;
     _likes = [];
   }
 
@@ -45,9 +43,8 @@ class Route {
         'creationDate': _creationDate,
         'locationName': _locationName,
         'locationId': _locationId,
-        'requested': 'false',
+        'isPublic':_isPublic.toString(),
         'likes': _likes,
-        'isHighlight': 'false'
       };
 
   Route.fromJson(DocumentSnapshot doc) {
@@ -68,8 +65,7 @@ class Route {
     _creationDate = (data['creationDate'] as Timestamp).toDate();
     _locationName = data['locationName'];
     _locationId = data['locationId'];
-    _requested = data['requested'] == 'true';
-    _isHighlight = data['isHighlight'] == 'true';
+    _isPublic = data['isPublic'] == 'true';
     _likes = List<String>.from(data['likes']);
   }
 
@@ -105,11 +101,11 @@ class Route {
 
   String get image => _images[0];
 
-  int get likes => _likes.length;
+  List get likes => _likes;
 
-  bool get isHighlight => _isHighlight;
+  bool get isPublic => _isPublic;
 
-  bool get isRequested => _requested;
+  set isPublic(bool isPublic) => _isPublic = isPublic;
 
   List<String> types() {
     List<String> types = [];
