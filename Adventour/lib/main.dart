@@ -1,3 +1,4 @@
+import 'package:Adventour/controllers/my_shared_preferences.dart';
 import 'package:Adventour/pages/achievements_page.dart';
 import 'package:Adventour/pages/add_places_page.dart';
 import 'package:Adventour/pages/highlight_page.dart';

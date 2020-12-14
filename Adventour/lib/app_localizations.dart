@@ -30,11 +30,9 @@ class AppLocalizations {
     //inicialmente no habrá seleccionado ninguno y se ejecutará la siguiente línea)
     String jsonString;
 
-    _myPrefs.initPreferences().then(
-        (value) => {_myPrefs.myLanguage = 'es', lanCode = _myPrefs.myLanguage});
+    await _myPrefs.initPreferences();
 
-    lanCode = 'es';
-    print("hola: " + lanCode);
+    lanCode = _myPrefs.myLanguage;
 
     lanCode == ''
         ? jsonString =

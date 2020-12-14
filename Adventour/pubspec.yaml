@@ -48,6 +48,7 @@ dependencies:
   date_range_picker: ^1.0.5
   shared_preferences: ^0.5.12+4
   provider: ^4.3.2+3
+  flutter_email_sender: ^4.0.0
 
 dev_dependencies:
   flutter_test:

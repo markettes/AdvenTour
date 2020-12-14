@@ -1,6 +1,7 @@
 import 'package:Adventour/controllers/my_shared_preferences.dart';
 import 'package:Adventour/widgets/circle_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../app_localizations.dart';
 
@@ -33,8 +34,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         flex: 2,
                         child: Center(
                           child: Text(
-                            AppLocalizations.of(context)
-                                .translate('changelanguage'),
+                            AppLocalizations.of(context).translate('language'),
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.w600),
@@ -127,20 +127,22 @@ class _LanguageButtonState extends State<LanguageButton> {
   // }
 
   List<String> languages = ['English', 'Spanish'];
-  String dropdownValue = 'English';
 
   Future<String> lang() async {
-    _myPrefs.initPreferences();
-    lanCode = await _myPrefs.myLanguage;
+    await _myPrefs.initPreferences();
+    lanCode = _myPrefs.myLanguage;
+    return lanCode;
   }
 
   @override
   Widget build(BuildContext context) {
+    lang().then(
+        (value) => value == 'es' ? lanCode = 'Español' : lanCode = 'English');
     return Expanded(
       flex: 2,
       child: Center(
         child: DropdownButton(
-          value: dropdownValue,
+          value: lanCode,
           underline: Container(
             height: 2,
             color: Theme.of(context).primaryColor,
@@ -156,14 +158,17 @@ class _LanguageButtonState extends State<LanguageButton> {
           }).toList(),
           onChanged: (String newValue) {
             setState(() {
-              dropdownValue = newValue;
+              print("HOLAAAAAAAAAAAA");
+              lanCode = newValue;
               switch (newValue) {
                 case 'English':
                 case 'Inglés':
                   return _myPrefs.myLanguage = 'en';
+                  break;
                 case 'Spanish':
                 case 'Español':
-                  return _myPrefs.myLanguage = 'en';
+                  return _myPrefs.myLanguage = 'es';
+                  break;
                 default:
                   return '';
               }
@@ -182,6 +187,10 @@ class ContactDialog extends StatefulWidget {
 
 class _ContactDialogState extends State<ContactDialog> {
   String dropdownValue = 'Help';
+
+  Email _email;
+  TextEditingController _myTextController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -219,6 +228,7 @@ class _ContactDialogState extends State<ContactDialog> {
           padding: EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 20.0),
           child: Flexible(
             child: TextField(
+              controller: _myTextController,
               maxLines: 10,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -241,7 +251,13 @@ class _ContactDialogState extends State<ContactDialog> {
                   AppLocalizations.of(context).translate('send'),
                 ),
                 color: Theme.of(context).buttonColor,
-                onPressed: () {}), //TODO mensaje
+                onPressed: () async {
+                  _email = Email(
+                      body: _myTextController.text,
+                      subject: dropdownValue.toString(),
+                      recipients: ['adventourpin@gmail.com']);
+                  await FlutterEmailSender.send(_email);
+                }), //TODO mensaje
           ],
         )
       ]),
