@@ -1,6 +1,7 @@
 
-import 'package:Adventour/controllers/auth.dart';
+import 'package:adventour_company/controllers/auth.dart';
 import 'package:Adventour/models/User.dart';
+import 'package:adventour_company/models/Company.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
@@ -98,10 +99,10 @@ class _SignInFormState extends State<SignInForm> {
             text: 'SIGN UP',
             onPressed: () async {
               if (_formKey.currentState.validate()) {
-                User user =
-                    User(_userNameController.text, _emailController.text);
+                Company company =
+                    Company(_userNameController.text, _emailController.text);
                 try {
-                  await auth.registerUser(user, _passwordController.text);
+                  await auth.registerCompany(company, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {
                   _showError(e);
