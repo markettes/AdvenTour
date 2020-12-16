@@ -22,13 +22,13 @@ class DB {
   }
 
     Stream<Company> getCompany(String companyId) => _firestore
-      .doc('Company/$companyId')
+      .doc('Companys/$companyId')
       .snapshots()
       .map((doc) => Company.fromFirestore(doc));
 
     Future<String> companySignIn(String email) async {
     QueryDocumentSnapshot snapshot = (await _firestore
-            .collection('Company')
+            .collection('Companys')
             .where('email', isEqualTo: email)
             .get())
         .docs

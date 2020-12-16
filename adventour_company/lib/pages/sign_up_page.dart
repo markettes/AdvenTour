@@ -13,7 +13,7 @@ class SignUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("credentials"),
+        title: Text("Credentials"),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),

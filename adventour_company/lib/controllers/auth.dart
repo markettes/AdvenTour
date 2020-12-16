@@ -26,7 +26,7 @@ class Auth {
         email: company.email, password: password);
 
     db.addCompany(company);
-    //userSignIn(company.email, password);
+    companySignIn(company.email, password);
     return result;
   }
  

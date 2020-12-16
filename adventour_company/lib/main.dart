@@ -21,7 +21,7 @@ class AdventourAdminApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      initialRoute: '/welcomePage',
+      initialRoute: '/initPage',
       routes: {
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
