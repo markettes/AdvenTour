@@ -1,3 +1,4 @@
+import 'package:Adventour/app_localizations.dart';
 import 'package:Adventour/controllers/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,7 @@ class GoogleButton extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                'Continue with google',
+                AppLocalizations.of(context).translate('continue_with_google'),
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

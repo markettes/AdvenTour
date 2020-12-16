@@ -27,7 +27,7 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
   String _locationName;
   String _locationId;
   TextEditingController _locationController =
-      TextEditingController(text: "Your location");
+      TextEditingController(text: "Tu ubicación");
 
   @override
   void initState() {
@@ -59,7 +59,8 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                   Expanded(
                     child: InputText(
                       controller: _locationController,
-                      labelText: AppLocalizations.of(context).translate('route_zone'),
+                      labelText:
+                          AppLocalizations.of(context).translate('route_zone'),
                       icon: Icons.location_on,
                       onTap: () => PlacesAutocomplete.show(
                         context: context,
@@ -82,7 +83,9 @@ class _CustomRoutePageState extends State<CustomRoutePage> {
                       children: [
                         Align(
                             alignment: Alignment.topLeft,
-                            child: Text(AppLocalizations.of(context).translate('place_types'),
+                            child: Text(
+                                AppLocalizations.of(context)
+                                    .translate('place_types'),
                                 style: Theme.of(context).textTheme.headline2)),
                         Expanded(
                           child: Padding(

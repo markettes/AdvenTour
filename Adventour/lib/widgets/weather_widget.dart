@@ -1,3 +1,4 @@
+import 'package:Adventour/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/weather.dart';
@@ -40,7 +41,7 @@ class WeatherWidget extends StatelessWidget {
   Future<void> _weatherIn() async {
     _forecasts = await _ws.fiveDayForecastByLocation(
         position.latitude, position.longitude);
-    print('?'+_forecasts.length.toString());
+    print('?' + _forecasts.length.toString());
   }
 
   Future _showWeatherDialog(context) => showDialog(
@@ -53,10 +54,7 @@ class WeatherWidget extends StatelessWidget {
 }
 
 class WeatherDialog extends StatelessWidget {
-  const WeatherDialog({
-    @required this.forecasts,
-    @required this.weatherNow
-  }) ;
+  const WeatherDialog({@required this.forecasts, @required this.weatherNow});
 
   final List<Weather> forecasts;
   final Weather weatherNow;
@@ -70,7 +68,7 @@ class WeatherDialog extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
         title: Center(
             child: Text(
-          "NOW",
+          AppLocalizations.of(context).translate('now'),
           style: Theme.of(context).textTheme.headline2.copyWith(fontSize: 30),
         )),
         content: Container(
@@ -92,7 +90,9 @@ class WeatherDialog extends StatelessWidget {
               Expanded(
                 child: Row(children: [
                   Expanded(
-                    child: DayWidget(weather: forecasts[0]),
+                    child: DayWidget(
+                      weather: forecasts[0],
+                    ),
                   ),
                   Expanded(
                     child: DayWidget(weather: forecasts[8]),
@@ -117,7 +117,6 @@ class WeatherDialog extends StatelessWidget {
 }
 
 class DayWidget extends StatelessWidget {
-
   DayWidget(
       {@required this.weather,
       this.showWeekday = true,

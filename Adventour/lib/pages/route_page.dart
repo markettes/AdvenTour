@@ -106,20 +106,24 @@ class _RoutePageState extends State<RoutePage>
           return AlertDialog(
             title: Text(
               oldAuthor
-                  ? 'Are you sure you want to edit your route?'
-                  : 'Would you like save this route?',
+                  ? AppLocalizations.of(context).translate('are_you_sure')
+                  : AppLocalizations.of(context).translate('would_you_like'),
               style:
                   Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
             ),
             actions: [
               FlatButton(
-                child: Text('Cancel'),
+                child: Text(
+                  AppLocalizations.of(context).translate('cancel'),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text('Save'),
+                child: Text(
+                  AppLocalizations.of(context).translate('save'),
+                ),
                 onPressed: () {
                   if (oldAuthor) {
                     db.updateRoute(route);
@@ -145,7 +149,8 @@ class _RoutePageState extends State<RoutePage>
           final _formKey = GlobalKey<FormState>();
           return AlertDialog(
             title: Text(
-              'Put a name to your route',
+              AppLocalizations.of(context)
+                  .translate('put_a_name_to_your_route'),
               style:
                   Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
             ),
@@ -160,7 +165,8 @@ class _RoutePageState extends State<RoutePage>
                       key: _formKey,
                       child: InputText(
                         icon: Icons.flag,
-                        labelText: 'Route name',
+                        labelText: AppLocalizations.of(context)
+                            .translate('route_name'),
                         controller: _routeNameController,
                         maxLength: 20,
                         validator: (value) {
@@ -176,13 +182,17 @@ class _RoutePageState extends State<RoutePage>
             ),
             actions: [
               FlatButton(
-                child: Text('Cancel'),
+                child: Text(
+                  AppLocalizations.of(context).translate('cancel'),
+                ),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
               FlatButton(
-                child: Text('Save'),
+                child: Text(
+                  AppLocalizations.of(context).translate('save'),
+                ),
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
                     route.name = _routeNameController.text;

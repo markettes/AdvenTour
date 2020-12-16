@@ -204,10 +204,10 @@ class _MapPageState extends State<MapPage> {
                                     _position.longitude,
                                     18);
                               }
-                              if(_locationController.text.isEmpty)
-                              return WeatherWidget(
-                                position: _position,
-                              );
+                              if (_locationController.text.isEmpty)
+                                return WeatherWidget(
+                                  position: _position,
+                                );
                               return Container();
                             },
                           ),
@@ -472,7 +472,8 @@ class MyDrawer extends StatelessWidget {
                                 width: 10,
                               ),
                               Text(
-                                'Logout',
+                                AppLocalizations.of(context)
+                                    .translate('logout'),
                                 style: Theme.of(context).textTheme.bodyText1,
                               )
                             ],

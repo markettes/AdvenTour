@@ -57,7 +57,10 @@ class RoutesPage extends StatelessWidget {
                           }, childCount: routes.length),
                         )
                       ])
-                    : Center(child: Text('Empty routes')),
+                    : Center(
+                        child: Text(
+                        AppLocalizations.of(context).translate('empty_routes'),
+                      )),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -65,7 +68,10 @@ class RoutesPage extends StatelessWidget {
                   backgroundColor: Theme.of(context).primaryColor,
                   onPressed: () {
                     if (routes.length == 10)
-                      Toast.show('Limit of routes is 10', context);
+                      Toast.show(
+                          AppLocalizations.of(context)
+                              .translate('limit_of_routes'),
+                          context);
                     else
                       Navigator.pushNamed(context, '/customRoutePage');
                   },
@@ -145,7 +151,7 @@ class BottomSheetRoutes extends StatelessWidget {
               size: 30,
             ),
             label: Text(
-              'Start',
+              AppLocalizations.of(context).translate('start'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
@@ -161,7 +167,7 @@ class BottomSheetRoutes extends StatelessWidget {
               size: 30,
             ),
             label: Text(
-              'Edit',
+              AppLocalizations.of(context).translate('edit_'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
@@ -176,7 +182,7 @@ class BottomSheetRoutes extends StatelessWidget {
               size: 30,
             ),
             label: Text(
-              'Delete',
+              AppLocalizations.of(context).translate('Delete'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
@@ -193,7 +199,9 @@ class BottomSheetRoutes extends StatelessWidget {
               size: 30,
             ),
             label: Text(
-              route.isPublic ? 'Private' : 'Public',
+              route.isPublic
+                  ? AppLocalizations.of(context).translate('private')
+                  : AppLocalizations.of(context).translate('public'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
@@ -204,7 +212,8 @@ class BottomSheetRoutes extends StatelessWidget {
               }
               Clipboard.setData(ClipboardData(text: _link));
               Navigator.pop(context);
-              Toast.show('Route link copied to clipboard', context);
+              Toast.show(AppLocalizations.of(context).translate('route_link'),
+                  context);
             },
             icon: Icon(
               Icons.share,
@@ -212,7 +221,7 @@ class BottomSheetRoutes extends StatelessWidget {
               size: 30,
             ),
             label: Text(
-              'Share',
+              AppLocalizations.of(context).translate('share'),
               style: Theme.of(context).textTheme.headline2,
             ),
           ),

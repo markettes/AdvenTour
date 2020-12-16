@@ -5,7 +5,7 @@
     "password_cannot": "La constraseña no puede estar vacía",
     "achievements": "Logros",
     "add_places": "Añadir lugares",
-    "search": "Busca...",
+    "search": "Buscar...",
     "no_available": "No hay fotos disponibles",
     "opened": "Abierto",
     "closed": "Cerrado",
@@ -79,5 +79,18 @@
     "cancel": "Cancelar",
     "reason": "Motivo",
     "writeHere": "Escribe aquí",
-    "send": "Enviar"
+    "send": "Enviar",
+    "logout": "Cerrar sesión",
+    "continue_with_google": "Continuar con Google",
+    "now": "AHORA",
+    "put_a_name_to_your_route": "Pon un nombre a tu ruta",
+    "are_you_sure": "¿Quieres editar la ruta?",
+    "would_you_like": "¿Te gustaría guardar esta ruta?",
+    "/10_routes":  "/10 rutas",
+    "limit_of_routes": "El límite de rutas es 10",
+    "private": "Privado",
+    "public": "Público",
+    "route_link": "Link de la ruta copiado",
+    "share": "Compartir",
+    "exit_route": "Salir de la ruta"
 }
