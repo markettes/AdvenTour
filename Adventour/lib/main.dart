@@ -28,7 +28,7 @@ class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark));

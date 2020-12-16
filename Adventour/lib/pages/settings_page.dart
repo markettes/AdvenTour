@@ -134,7 +134,7 @@ class _ContactDialogState extends State<ContactDialog> {
           child: Flexible(
             child: TextField(
               controller: _myTextController,
-              maxLines: 10,
+              maxLines: 5,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.black),

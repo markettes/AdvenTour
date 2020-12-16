@@ -9,7 +9,7 @@ class CircleIconButton extends StatelessWidget {
     @required this.onPressed,
     this.activated = true,
     this.icon,
-    this.size = 25,
+    this.size = 32,
   });
 
   String type;

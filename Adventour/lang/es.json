@@ -79,5 +79,6 @@
     "cancel": "Cancelar",
     "reason": "Motivo",
     "writeHere": "Escribe aquí",
-    "send": "Enviar"
+    "send": "Enviar",
+    "logout": "Cerrar sesión"
 }

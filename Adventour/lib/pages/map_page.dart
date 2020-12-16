@@ -472,7 +472,8 @@ class MyDrawer extends StatelessWidget {
                                 width: 10,
                               ),
                               Text(
-                                'Logout',
+                                AppLocalizations.of(context)
+                                    .translate('logout'),
                                 style: Theme.of(context).textTheme.bodyText1,
                               )
                             ],
