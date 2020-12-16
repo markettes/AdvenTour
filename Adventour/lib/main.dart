@@ -5,7 +5,6 @@ import 'package:Adventour/pages/highlight_page.dart';
 import 'package:Adventour/pages/history_page.dart';
 import 'package:Adventour/pages/init_page.dart';
 import 'package:Adventour/pages/log_in_page.dart';
-import 'package:Adventour/pages/map_page.dart';
 import 'package:Adventour/pages/navigation_page.dart';
 import 'package:Adventour/pages/place_page.dart';
 import 'package:Adventour/pages/root_page.dart';
@@ -28,6 +27,8 @@ void main() {
 class Adventour extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark));
@@ -37,6 +38,7 @@ class Adventour extends StatelessWidget {
       theme: themeData,
       darkTheme: themeData,
       initialRoute: '/',
+      navigatorKey: _navigatorKey,
       supportedLocales: [
         const Locale('en', ''),
         const Locale('es', ''),
@@ -63,8 +65,7 @@ class Adventour extends StatelessWidget {
         '/historyPage': (_) => HistoryPage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),
-        '/': (_) => RootPage(),
-        '/mapPage': (_) => MapPage(),
+        '/': (_) => RootPage(navigatorKey: _navigatorKey),
         '/placePage': (_) => PlacePage(),
         '/achievementsPage': (_) => AchievementsPage(),
         '/customRoutePage': (_) => CustomRoutePage(),

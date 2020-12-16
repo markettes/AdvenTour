@@ -7,13 +7,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:Adventour/pages/init_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:Adventour/controllers/dynamic_links.dart';
 
 import '../app_localizations.dart';
 import 'map_page.dart';
 
 class RootPage extends StatelessWidget {
+  RootPage({@required this.navigatorKey});
+  var navigatorKey;
   @override
   Widget build(BuildContext context) {
+    dynamicLinks.initDynamicLinks(navigatorKey,context);
+
     return FutureBuilder(
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
@@ -28,7 +33,9 @@ class RootPage extends StatelessWidget {
               if (!snapshot.hasData) return InitPage();
               var user = snapshot.data;
               signIn(user.email, context);
-              return MapPage();
+              return MapPage(
+                navigatorKey:navigatorKey
+              );
             },
           );
         });
@@ -56,23 +63,26 @@ class RootPage extends StatelessWidget {
             'Put a username',
             style: Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
           ),
-          content: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 100,
-                  child: InputText(
-                    icon: Icons.person,
-                    labelText: 'Username',
-                    controller: _userNameController,
-                    validator: (value) {
-                      if (value.isEmpty) return 'Username can\'t be empty';
-                      return null;
-                    },
+          content: SizedBox(
+            height: 250,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 100,
+                    child: InputText(
+                      icon: Icons.person,
+                      labelText: 'Username',
+                      controller: _userNameController,
+                      validator: (value) {
+                        if (value.isEmpty) return 'Username can\'t be empty';
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           actions: [

@@ -142,7 +142,7 @@ class MapController {
       if (_nightClubImage == null)
         _nightClubImage = await BitmapDescriptor.fromAssetImage(
           ImageConfiguration(devicePixelRatio: 2.5),
-          'assets/markers/night_mall.png',
+          'assets/markers/night_life.png',
         );
       return _nightClubImage;
     }
@@ -160,7 +160,7 @@ class MapController {
       if (_museumImage == null)
         _museumImage = await BitmapDescriptor.fromAssetImage(
           ImageConfiguration(devicePixelRatio: 2.5),
-          'assets/markers/shopping_mall.png',
+          'assets/markers/museum.png',
         );
       return _museumImage;
     }
