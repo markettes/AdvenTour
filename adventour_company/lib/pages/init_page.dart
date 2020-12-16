@@ -37,7 +37,7 @@ class InitPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       child: Text(
-                        "Don't you have an account",
+                        "¿Don't you have an account?",
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     ),
