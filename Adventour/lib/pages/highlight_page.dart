@@ -81,6 +81,7 @@ class _HighlightPageState extends State<HighlightPage> {
                     if (snapshot.hasError) print('error');
                     if (!snapshot.hasData) return CircularProgressIndicator();
                     List<r.Route> routes = snapshot.data;
+                    routes.sort((a, b) => b.likes.length.compareTo(a.likes.length));
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: routes.isNotEmpty
@@ -93,6 +94,7 @@ class _HighlightPageState extends State<HighlightPage> {
                                 r.Route route = routes[index];
                                 return RouteWidget(
                                   route: route,
+                                  showCity: false,
                                   onTap: () => showModalBottomSheet(
                                     context: context,
                                     builder: (context) =>

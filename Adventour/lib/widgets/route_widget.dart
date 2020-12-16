@@ -10,40 +10,34 @@ import 'package:toast/toast.dart';
 
 import 'place_types_list.dart';
 
-class RouteWidget extends StatefulWidget {
+class RouteWidget extends StatelessWidget {
   r.Route route;
   Function onTap;
+  bool showCity;
   RouteWidget({
     this.route,
     this.onTap,
+    this.showCity = true
   });
 
-  @override
-  _RouteWidgetState createState() => _RouteWidgetState();
-}
-
-class _RouteWidgetState extends State<RouteWidget> {
   int _selectedPath = 0;
   List<String> _types = [];
 
-  @override
-  void initState() {
-    _types = widget.route.types();
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
+    _types = route.types();
     return GestureDetector(
-      onTap: widget.onTap,
+      onTap: onTap,
       child: SizedBox(
         height: 75,
         child: Row(
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundImage: widget.route.images.isNotEmpty
-                  ? NetworkImage(searchEngine.searchPhoto(widget.route.image))
+              backgroundImage: route.images.isNotEmpty
+                  ? NetworkImage(searchEngine.searchPhoto(route.image))
                   : null,
             ),
             SizedBox(
@@ -56,14 +50,15 @@ class _RouteWidgetState extends State<RouteWidget> {
                   Expanded(
                     child: RichText(
                       text: TextSpan(
-                          text: widget.route.name,
+                          text: route.name,
                           style: Theme.of(context)
                               .textTheme
                               .headline2
                               .copyWith(fontSize: 20),
                           children: <TextSpan>[
+                            if(showCity)
                             TextSpan(
-                                text: ' ' + widget.route.locationName,
+                                text: ' ' + route.locationName,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText2
@@ -82,8 +77,8 @@ class _RouteWidgetState extends State<RouteWidget> {
                           width: 5,
                         ),
                         Text(
-                          formatDuration(widget.route.paths[_selectedPath]
-                              .duration(widget.route.places
+                          formatDuration(route.paths[_selectedPath]
+                              .duration(route.places
                                   .map((place) => place.duration)
                                   .reduce(
                                       (value, element) => value + element))),
@@ -91,7 +86,7 @@ class _RouteWidgetState extends State<RouteWidget> {
                         SizedBox(
                           width: 5,
                         ),
-                        // CircleIconButton(type:widget.route.paths[_selectedPath].transport , onPressed: nextTransport)
+                        // CircleIconButton(type:route.paths[_selectedPath].transport , onPressed: nextTransport)
                       ],
                     ),
                   ),
@@ -116,53 +111,49 @@ class _RouteWidgetState extends State<RouteWidget> {
                 ],
               ),
             ),
-            if (widget.route.isPublic)
-              Row(
-                children: [
-                  Text(widget.route.likes.length.toString()),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  SizedBox(
-                    width: 28,
-                    child: IconButton(
-                        icon: Icon(
-                          widget.route.author == db.currentUserId ||
-                                  widget.route.likes.contains(db.currentUserId)
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                        ),
-                        disabledColor: Theme.of(context).primaryColor,
-                        onPressed: widget.route.author == db.currentUserId
-                            ? null
-                            : () {
-                                bool contains = widget.route.likes
-                                    .contains(db.currentUserId);
-                                    if(contains){
-                                      widget.route.likes
-                                        .remove(db.currentUserId);
-                                        db.unlikeRoute(widget.route.author);
-                                    } else {
-                                      widget.route.likes.add(db.currentUserId);
-                                      db.likeRoute(widget.route.author);
-                                    } 
-                                db.updateRoute(widget.route);
-                              }),
-                  )
-                ],
+            if (route.isPublic)
+              Padding(
+                padding: const EdgeInsets.only(right:8),
+                child: Row(
+                  children: [
+                    Text(route.likes.length.toString(),style:Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 16)),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    SizedBox(
+                      width: 30,
+                      child: IconButton(
+                          icon: Icon(
+                            route.author == db.currentUserId ||
+                                    route.likes.contains(db.currentUserId)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                                size: 30,
+                          ),
+                          disabledColor: Theme.of(context).primaryColor,
+                          onPressed: route.author == db.currentUserId
+                              ? null
+                              : () {
+                                  bool contains = route.likes
+                                      .contains(db.currentUserId);
+                                      if(contains){
+                                        route.likes
+                                          .remove(db.currentUserId);
+                                          db.unlikeRoute(route.author);
+                                      } else {
+                                        route.likes.add(db.currentUserId);
+                                        db.likeRoute(route.author);
+                                      } 
+                                  db.updateRoute(route);
+                                }),
+                    )
+                  ],
+                ),
               ),
           ],
         ),
       ),
     );
-  }
-
-  void nextTransport() {
-    if (_selectedPath == widget.route.paths.length - 1)
-      _selectedPath = 0;
-    else
-      _selectedPath++;
-    setState(() {});
   }
 
   String formatDuration(Duration duration) {

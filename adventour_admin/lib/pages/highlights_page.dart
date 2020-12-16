@@ -34,6 +34,7 @@ class _HighlightsPageState extends State<HighlightsPage> {
                   if(snapshot.hasError) print(snapshot.error);
                   if(!snapshot.hasData) return CircularProgressIndicator();
                   List<r.Route> highlights = snapshot.data;
+                  highlights.sort((a, b) => b.likes.length.compareTo(a.likes.length));
                   if(highlights.isEmpty)
                   return Center(
                       child: Text(
