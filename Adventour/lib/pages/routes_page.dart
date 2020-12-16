@@ -22,7 +22,8 @@ class RoutesPage extends StatelessWidget {
         stream: db.getRoutes(db.currentUserId),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
-          if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData)
+            return Center(child: CircularProgressIndicator());
           List<r.Route> routes = snapshot.data;
           return Stack(
             alignment: Alignment.bottomRight,
@@ -84,11 +85,11 @@ class RoutesPage extends StatelessWidget {
 }
 
 class BottomSheetRoutes extends StatelessWidget {
-   BottomSheetRoutes({
+  BottomSheetRoutes({
     @required this.route,
   });
 
-   r.Route route;
+  r.Route route;
   String _link;
 
   @override
@@ -187,20 +188,19 @@ class BottomSheetRoutes extends StatelessWidget {
               db.updateRoute(route);
             },
             icon: Icon(
-              route.isPublic ? Icons.visibility : Icons.visibility_off,
+              route.isPublic ? Icons.visibility_off : Icons.visibility,
               color: Theme.of(context).primaryColor,
               size: 30,
             ),
             label: Text(
-              route.isPublic ? 'Public' : 'Private',
+              route.isPublic ? 'Private' : 'Public',
               style: Theme.of(context).textTheme.headline2,
             ),
           ),
           FlatButton.icon(
             onPressed: () async {
-              if(_link == null) {
+              if (_link == null) {
                 _link = await dynamicLinks.dynamicLink(true, route);
-                
               }
               Clipboard.setData(ClipboardData(text: _link));
               Navigator.pop(context);
