@@ -1,9 +1,6 @@
-
 import 'package:adventour_company/widgets/google_button.dart';
 import 'package:adventour_company/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
-
-
 
 class WelcomePage extends StatelessWidget {
   WelcomePage({this.allowSignUp = true});
@@ -12,7 +9,7 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Welcome, '),
+        title: Text('Welcome'),
       ),
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -35,7 +32,6 @@ class WelcomePage extends StatelessWidget {
                     icon: Icons.add_outlined,
                     style: ButtonType.Normal,
                   ),
-                  
                   if (allowSignUp)
                     PrimaryButton(
                       text: 'Stats',
@@ -45,17 +41,14 @@ class WelcomePage extends StatelessWidget {
                       icon: Icons.bar_chart,
                       style: ButtonType.Normal,
                     ),
-                 
                   FloatingActionButton(
                       onPressed: null,
                       child: Icon(
-                      Icons.logout,
-                    )
-                   ),
+                        Icons.logout,
+                      )),
                 ],
               ),
             ),
-            
           ],
         ),
       ),
