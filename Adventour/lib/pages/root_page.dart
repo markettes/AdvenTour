@@ -63,27 +63,29 @@ class RootPage extends StatelessWidget {
             'Put a username',
             style: Theme.of(context).textTheme.headline2.copyWith(fontSize: 20),
           ),
-          content: SizedBox(
-            height: 250,
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 100,
-                    child: InputText(
-                      icon: Icons.person,
-                      labelText: 'Username',
-                      controller: _userNameController,
-                      validator: (value) {
-                        if (value.isEmpty) return 'Username can\'t be empty';
-                        return null;
-                      },
+          content: Builder(
+            builder: (context) {
+              return Container(
+                height: 100,
+                child: Form(
+                  key: _formKey,
+                  child: Column(children: [
+                    SizedBox(
+                      height: 100,
+                      child: InputText(
+                        icon: Icons.person,
+                        labelText: 'Username',
+                        controller: _userNameController,
+                        validator: (value) {
+                          if (value.isEmpty) return 'Username can\'t be empty';
+                          return null;
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
+                  ]),
+                ),
+              );
+            },
           ),
           actions: [
             FlatButton(

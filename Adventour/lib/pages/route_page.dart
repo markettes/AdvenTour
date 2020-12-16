@@ -506,8 +506,13 @@ class _MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin {
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: SquareIconButton(
-              icon: Icons.list,
+            child: FloatingActionButton(
+              child: Icon(
+                Icons.list,
+                size: 32,
+                color: Colors.white,
+              ),
+              backgroundColor: Theme.of(context).primaryColor,
               onPressed: () => widget.tabController.animateTo(1),
             ),
           ),

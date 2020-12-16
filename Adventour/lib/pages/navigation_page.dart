@@ -265,6 +265,8 @@ class _NavigationPageState extends State<NavigationPage> {
                                                   if (_nearestPlace != null)
                                                     Text(
                                                       _nearestPlace.name,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                       style: TextStyle(
                                                           fontSize: 18),
                                                     ),
