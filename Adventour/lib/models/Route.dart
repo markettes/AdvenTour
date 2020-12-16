@@ -28,7 +28,7 @@ class Route {
     _creationDate = DateTime.now();
     _locationName = locationName;
     _locationId = locationId;
-    _isPublic = false;
+    _isPublic = true;
     _likes = [];
   }
 

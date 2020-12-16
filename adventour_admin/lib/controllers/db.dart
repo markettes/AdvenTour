@@ -8,7 +8,6 @@ class DB {
 Stream<List<Route>> getHighlights() => _firestore
       .collectionGroup('Routes')
       .where('isPublic', isEqualTo: 'true')
-      .orderBy('likes')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
 

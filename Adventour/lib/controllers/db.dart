@@ -87,7 +87,6 @@ class DB {
       .collectionGroup('Routes')
       .where('locationId', isEqualTo: locationId)
       .where('isPublic', isEqualTo: 'true')
-      .orderBy('likes')
       .snapshots()
       .map((snap) => toRoutes(snap.docs));
 

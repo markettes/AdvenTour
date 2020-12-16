@@ -204,9 +204,11 @@ class _MapPageState extends State<MapPage> {
                                     _position.longitude,
                                     18);
                               }
+                              if(_locationController.text.isEmpty)
                               return WeatherWidget(
                                 position: _position,
                               );
+                              return Container();
                             },
                           ),
                         ],
