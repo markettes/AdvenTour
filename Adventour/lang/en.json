@@ -80,7 +80,16 @@
     "reason": "Reason",
     "writeHere": "Write here",
     "send": "Enviar",
-    "logout": "logout"
-
-
+    "logout": "logout",
+    "continue_with_google": "Continue with Google",
+    "now": "NOW",
+    "put_a_name_to_your_route": "Put a name to your route",
+    "are_you_sure": "Do you want to edit the route?",
+    "would_you_like": "Would you like to save this route?",
+    "limit_of_routes": "The route limit is 10",
+    "private": "Private",
+    "public": "Public",
+    "route_link": "Route link copied",
+    "share": "Share",
+    "exit_route": "Exit the route"
 }
