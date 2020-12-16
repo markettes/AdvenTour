@@ -2,6 +2,7 @@ import 'package:Adventour/main.dart';
 import 'package:adventour_company/controllers/db.dart';
 import 'package:adventour_company/pages/init_page.dart';
 import 'package:adventour_company/pages/log_in_page.dart';
+import 'package:adventour_company/pages/root_page.dart';
 import 'package:adventour_company/pages/sign_up_page.dart';
 import 'package:adventour_company/pages/welcome_page.dart';
 import 'package:adventour_company/pages/stats_page.dart';
@@ -19,8 +20,9 @@ class AdventourAdminApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: themeData,
-      initialRoute: '/initPage',
+      initialRoute: '/',
       routes: {
+        '/': (_) => RootPage(),
         '/initPage': (_) => InitPage(),
         '/logInPage': (_) => LogInPage(),
         '/signUpPage': (_) => SignUpPage(),

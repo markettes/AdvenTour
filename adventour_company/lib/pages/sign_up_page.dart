@@ -1,4 +1,3 @@
-
 import 'package:adventour_company/controllers/auth.dart';
 import 'package:Adventour/models/User.dart';
 import 'package:adventour_company/models/Company.dart';
@@ -6,7 +5,6 @@ import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
 import 'package:Adventour/widgets/scroll_column_expandable.dart';
 import 'package:flutter/material.dart';
-
 
 class SignUpPage extends StatelessWidget {
   @override
@@ -58,11 +56,11 @@ class _SignInFormState extends State<SignInForm> {
             padding: const EdgeInsets.only(left: 10, right: 10),
             child: InputText(
               icon: Icons.person,
-              labelText: 'Company Name' ,
+              labelText: 'Company Name',
               maxLength: 15,
               controller: _userNameController,
               validator: (value) {
-                if (value.isEmpty) return 'username_cannot' ;
+                if (value.isEmpty) return 'username_cannot';
                 return null;
               },
             ),
@@ -76,7 +74,7 @@ class _SignInFormState extends State<SignInForm> {
               errorText: _emailError,
               controller: _emailController,
               validator: (value) {
-                if (value.isEmpty) return 'email_cannot' ;
+                if (value.isEmpty) return 'email_cannot';
                 return null;
               },
             ),
@@ -86,11 +84,11 @@ class _SignInFormState extends State<SignInForm> {
             child: InputText(
               obscured: true,
               icon: Icons.lock,
-              labelText: 'Password' ,
+              labelText: 'Password',
               errorText: _passwordError,
               controller: _passwordController,
               validator: (value) {
-                if (value.isEmpty) return 'password_cannot' ;
+                if (value.isEmpty) return 'password_cannot';
                 return null;
               },
             ),
@@ -101,10 +99,13 @@ class _SignInFormState extends State<SignInForm> {
               if (_formKey.currentState.validate()) {
                 Company company =
                     Company(_userNameController.text, _emailController.text);
+                print(company.companyName);
                 try {
+                  print(auth);
                   await auth.registerCompany(company, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {
+                  print(e);
                   _showError(e);
                 }
               }

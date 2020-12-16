@@ -1,3 +1,4 @@
+import 'package:adventour_company/controllers/auth.dart';
 import 'package:adventour_company/widgets/google_button.dart';
 import 'package:adventour_company/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,9 @@ class WelcomePage extends StatelessWidget {
                       style: ButtonType.Normal,
                     ),
                   FloatingActionButton(
-                      onPressed: null,
+                      onPressed: () {
+                        auth.signOut();
+                      },
                       child: Icon(
                         Icons.logout,
                       )),

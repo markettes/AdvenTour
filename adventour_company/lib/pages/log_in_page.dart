@@ -1,4 +1,4 @@
-import 'package:Adventour/controllers/auth.dart';
+import 'package:adventour_company/controllers/auth.dart';
 import 'package:Adventour/widgets/google_button.dart';
 import 'package:Adventour/widgets/input_text.dart';
 import 'package:Adventour/widgets/primary_button.dart';
@@ -48,7 +48,7 @@ class _LogInFormState extends State<LogInForm> {
             height: 180,
           ),
           Padding(
-            padding: const EdgeInsets.only(left:10,right:10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: InputText(
               obscured: false,
               icon: Icons.email,
@@ -62,7 +62,7 @@ class _LogInFormState extends State<LogInForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left:10,right:10),
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: InputText(
               obscured: true,
               icon: Icons.lock,
@@ -85,7 +85,7 @@ class _LogInFormState extends State<LogInForm> {
             onPressed: () async {
               if (_formKey.currentState.validate()) {
                 try {
-                  await auth.signIn(
+                  await auth.companySignIn(
                       _emailController.text, _passwordController.text);
                   Navigator.pop(context);
                 } catch (e) {

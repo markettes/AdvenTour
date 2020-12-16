@@ -1,15 +1,17 @@
-
+import 'package:adventour_company/controllers/auth.dart';
+import 'package:adventour_company/controllers/db.dart';
 import 'package:adventour_company/widgets/google_button.dart';
 import 'package:adventour_company/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
-
-
 class InitPage extends StatelessWidget {
   InitPage({this.allowSignUp = true});
   bool allowSignUp;
+
   @override
   Widget build(BuildContext context) {
+    auth = Auth();
+    db = DB();
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(10),
@@ -47,21 +49,6 @@ class InitPage extends StatelessWidget {
                       },
                       style: ButtonType.Void,
                     ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Divider(
-                    color: Theme.of(context).dividerColor,
-                    indent: 25,
-                    endIndent: 25,
-                    thickness: 1,
-                  ),
-                  GoogleButton(),
-                  
                 ],
               ),
             ),
