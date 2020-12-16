@@ -79,7 +79,8 @@
     "cancel": "Cancel",
     "reason": "Reason",
     "writeHere": "Write here",
-    "send": "Enviar"
+    "send": "Enviar",
+    "logout": "logout"
 
 
 }
